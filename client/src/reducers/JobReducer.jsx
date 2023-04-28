@@ -17,7 +17,12 @@ const jobSlice = createSlice({
     jobs: fakeJobs,
     selectedJob: null
   },
-  reducers: {}
+  reducers: {
+    loadJobsFromSelectedBoard: (state, action) => {
+      console.log('yooooooo');
+    }
+  }
 });
 
+export const { loadJobsFromSelectedBoard } = jobSlice.actions;
 export default jobSlice.reducer;

@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
+import HomePage from './components/pages/Home/HomePage';
+import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 
 function App() {
-  const jobs = useSelector(state => state.jobs.jobs);
-  console.log(jobs);
   return (
-    <>
-      <p>app</p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<HomePage />}></Route>
+        <Route path='/jobtracker' element={<JobTrackerPage />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
