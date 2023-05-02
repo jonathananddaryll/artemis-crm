@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadJobsFromSelectedBoard } from '../../../reducers/JobReducer';
 
+import KanbanBoard from './KanbanBoard';
+
 const JobTrackerPage = () => {
+  // Delete this later
+
   const jobs = useSelector(state => state.jobs.jobs);
   const dispatch = useDispatch();
-
-  console.log(jobs);
   return (
+    // <div>
+    //   <p>JobTrackerPage</p>
+    //   <button onClick={() => dispatch(loadJobsFromSelectedBoard())}>
+    //     Load jobs
+    //   </button>
+    // </div>
     <div>
-      <p>JobTrackerPage</p>
-      <button onClick={() => dispatch(loadJobsFromSelectedBoard())}>
-        Load jobs
-      </button>
+      <KanbanBoard />
     </div>
   );
 };
