@@ -4,7 +4,7 @@ import { loadJobsFromSelectedBoard } from '../../../reducers/JobReducer';
 
 import KanbanBoard from './KanbanBoard';
 
-const JobTrackerPage = () => {
+export default function JobTrackerPage() {
   // Delete this later
 
   const jobs = useSelector(state => state.jobs.jobs);
@@ -20,6 +20,4 @@ const JobTrackerPage = () => {
       <KanbanBoard />
     </div>
   );
-};
-
-export default JobTrackerPage;
+}
