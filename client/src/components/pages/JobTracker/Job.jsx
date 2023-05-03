@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   border-radius: 10px;
-  padding: 80px;
+  padding: 8px;
   color: #000;
   margin-bottom: 8px;
   min-height: 90px;
@@ -21,7 +21,7 @@ const TextContent = styled.div``;
 
 export default function Job({ job, index }) {
   return (
-    <Draggable draggableId={`draggable-${job.id}`} key={job.id} index={index}>
+    <Draggable draggableId={`${job.id}`} key={job.id} index={index}>
       {(provided, snapshot) => (
         <Container
           {...provided.draggableProps}
