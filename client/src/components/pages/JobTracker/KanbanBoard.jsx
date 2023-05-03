@@ -4,7 +4,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { fakej, boards } from './jobs';
 import Column from './Column';
 
-const KanbanBoard = () => {
+export default function KanbanBoard() {
   const [fakejobs, setFakejobs] = useState(fakej);
   const [selectedBoard, setSelectedBoard] = useState(boards[0]);
 
@@ -12,8 +12,12 @@ const KanbanBoard = () => {
   const [applied, setApplied] = useState([]);
   const [interviewing, setInterviewing] = useState([]);
 
+  const handleDragEnd = result => {
+    console.log('fsafsa');
+  };
+
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.board_name}</h2>
       <div
         style={{
@@ -27,6 +31,4 @@ const KanbanBoard = () => {
       </div>
     </DragDropContext>
   );
-};
-
-export default KanbanBoard;
+}
