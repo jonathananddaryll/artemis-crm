@@ -33,7 +33,7 @@ export default function Job({ job, index }) {
             <p>{job.title}</p>
             <p>{job.company}</p>
           </TextContent>
-          {/* {provided.placeholder} */}
+          {provided.placeholder}
         </Container>
       )}
     </Draggable>

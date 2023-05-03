@@ -12,8 +12,12 @@ export default function KanbanBoard() {
   const [applied, setApplied] = useState([]);
   const [interviewing, setInterviewing] = useState([]);
 
+  const handleDragEnd = result => {
+    console.log('fsafsa');
+  };
+
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.board_name}</h2>
       <div
         style={{

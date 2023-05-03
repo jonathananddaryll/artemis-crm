@@ -28,7 +28,7 @@ export default function ({ title, jobs, id }) {
     <Container>
       <Title>{title}</Title>
       <Droppable droppableId={id}>
-        {(provided, snapshot) => {
+        {(provided, snapshot) => (
           <JobList
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -36,10 +36,14 @@ export default function ({ title, jobs, id }) {
           >
             {jobs.map((jjob, index) => (
               <Job job={jjob} index={index} key={index} />
-            ))}{' '}
-            {/* {provided.placeholder} */}
-          </JobList>;
-        }}
+            ))}
+            {/* <Job
+              job={{ id: 123, title: 'softwre engineer', company: 'google' }}
+              index='1'
+            /> */}
+            {provided.placeholder}
+          </JobList>
+        )}
       </Droppable>
     </Container>
   );
