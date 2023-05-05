@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
 // Delete this later
 const fakeJobs = [
   {
@@ -11,15 +13,33 @@ const fakeJobs = [
   }
 ];
 
+// add getjobswithBoardId later
+export const getJobs = createAsyncThunk('job/getJobs', async () => {
+  try {
+    const res = await axios.get('/api/jobs');
+    return res.data;
+  } catch (err) {
+    // have a better error catch later
+    console.log(err);
+  }
+});
+
 const jobSlice = createSlice({
-  name: 'jobs',
+  name: 'job',
   initialState: {
-    jobs: fakeJobs,
+    jobs: [],
     selectedJob: null
   },
+
   reducers: {
     loadJobsFromSelectedBoard: (state, action) => {
       console.log('yooooooo');
+    }
+  },
+
+  extraReducers: {
+    [getJobs.fulfilled]: (state, action) => {
+      state.jobs = [action.payload];
     }
   }
 });
