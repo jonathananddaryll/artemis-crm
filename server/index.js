@@ -8,6 +8,8 @@ app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use('/api/jobs', require('./routes/api/jobs'));
+app.use('/api/contacts', require('./routes/api/contacts'));
+app.use('/api/boards', require('./routes/api/boards'));
 
 const PORT = process.env.PORT || 5000;
 

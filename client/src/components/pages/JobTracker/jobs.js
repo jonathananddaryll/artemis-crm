@@ -1,9 +1,9 @@
 export const fakej = [
-  { id: 1, title: 'software engineer', company: 'Google', status: 'saved' },
-  { id: 2, title: 'frontend developer', company: 'Meta', status: 'applied' },
-  { id: 3, title: 'software engineer', company: 'Amazon', status: 'applied' },
+  { id: 122, title: 'software engineer', company: 'Google', status: 'saved' },
+  { id: 221, title: 'frontend developer', company: 'Meta', status: 'applied' },
+  { id: 33, title: 'software engineer', company: 'Amazon', status: 'applied' },
   {
-    id: 4,
+    id: 444,
     title: 'react developer',
     company: 'Microsoft',
     status: 'interviewing'
