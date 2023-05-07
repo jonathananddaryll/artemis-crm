@@ -12,7 +12,7 @@ export default function JobTrackerPage() {
   const dispatch = useDispatch();
   return (
     <>
-      <button onClick={() => getJobs()}>getalljobs</button>
+      {/* <button onClick={() => getJobs()}>getalljobs</button> */}
       <div>
         {jobs.length > 0 && (
           <div>
