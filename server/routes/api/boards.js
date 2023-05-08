@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('../../config/db');
+// import 'dotenv/config';
+// const pkg = require('@clerk/clerk-sdk-node');
+// import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
 
 router.get('/', async (req, res) => {
   // load the current logged in user id later on
