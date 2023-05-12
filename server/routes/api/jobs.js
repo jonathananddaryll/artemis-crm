@@ -4,6 +4,7 @@ const sql = require('../../config/db');
 
 // Going to change this to SELECT * FROM JOBS WHERE boardId is the current selectedBoard and userId is the current loggedIn user id
 router.get('/', async (req, res) => {
+  console.log('jobs api hits');
   try {
     const jobs = await sql`SELECT * FROM JOB`;
 
