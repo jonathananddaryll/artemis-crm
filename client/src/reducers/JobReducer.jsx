@@ -13,14 +13,27 @@ const fakeJobs = [
   }
 ];
 
-// Create action
-// and then call the action inwide extraReducer.
-// add getjobswithBoardId later
+// // Create action
+// // and then call the action inwide extraReducer.
+// // add getjobswithBoardId later
+// export const getjobswithBoardId = createAsyncThunk(
+//   'job/getAllJobs',
+//   async () => {
+//     try {
+//       const res = await axios.get('/api/jobs');
+//       return res.data;
+//     } catch (err) {
+//       // have a better error catch later
+//       console.log(err);
+//     }
+//   }
+// );
+
 export const getjobswithBoardId = createAsyncThunk(
   'job/getAllJobs',
-  async () => {
+  async (board_id, thunkAPI) => {
     try {
-      const res = await axios.get('/api/jobs');
+      const res = await axios.get(`/api/jobs/board/${board_id}`);
       return res.data;
     } catch (err) {
       // have a better error catch later
@@ -34,7 +47,7 @@ const jobSlice = createSlice({
   initialState: {
     jobs: [],
     selectedJob: null,
-    loading: false
+    loading: true
   },
 
   extraReducers: builder => {
@@ -49,5 +62,4 @@ const jobSlice = createSlice({
   }
 });
 
-export const { loadJobsFromSelectedBoard } = jobSlice.actions;
 export default jobSlice.reducer;

@@ -8,13 +8,14 @@ import KanbanBoard from './KanbanBoard';
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
   const { jobs, loading } = useSelector(state => ({ ...state.job }));
+  const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
   // get all the jobs
   useEffect(() => {
-    dispatch(getjobswithBoardId());
+    dispatch(getjobswithBoardId(2));
   }, []);
 
   return (

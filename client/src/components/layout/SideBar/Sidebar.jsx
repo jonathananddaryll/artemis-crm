@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './SideBar.module.css';
 import {
   useClerk,
@@ -25,6 +26,7 @@ import { NavLink } from 'react-router-dom';
 // }
 
 export default function SideBar() {
+  const { boards, loading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
   const { user } = useUser();
   return (
@@ -49,6 +51,19 @@ export default function SideBar() {
         </li>
         <li>
           <NavLink to='/jobtracker'>documents</NavLink>
+        </li>
+        <li>
+          {/* will change this and combined boards with jobtracker */}
+          <NavLink to='/boards'>Boards</NavLink>
+          {!loading && boards.length > 0 && (
+            <ul>
+              {boards.map(board => (
+                <li key={board.id}>
+                  <NavLink to={`/boards/${board.id}`}>{board.title}</NavLink>
+                </li>
+              ))}
+            </ul>
+          )}
         </li>
       </ul>
     </div>
