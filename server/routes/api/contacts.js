@@ -1,28 +1,45 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
+=======
+const Client = require('../../config/db');
+const format = require('pg-format');
+>>>>>>> 05be52a (added more client query structure)
 
-// @ROUTE  /api/contacts/
+// @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts
 // @ACCESS Private
 router.get('/', async (req, res) => {
     try{
         // SELECT * FROM contacts WHERE user_id = ${req.user_id}
         // Frontend search form should have 2 parameters, first and last name
-        // pass parameters as single strings into array, pass the array in the request
-        // Order by: timestamp
+        // pass parameters as single strings into identifiers object, pass the object in the request,
+        // if not present, do not create the key for that identifier.
+        // also, order results by timestamp
         let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
+        let firstAndLast = req.identifiers.first && req.identifiers.last
         if(req.identifiers.first){
             queryStarter = queryStarter + ` AND first_name = %L`
         }
         if(req.identifiers.last){
             queryStarter = queryStarter + ` AND last_name = %L`
         }
-        const query = format(queryStarter + `ORDER BY timestamp DESC;`, 'contacts', req.user_id, req.identifiers.first, req.identifiers.last)
-        const contacts = await sql`${query}`
-        if(!contacts){
-            return res.status(400).json({ msg: 'no contacts found' })
+        if(firstAndLast){
+            const query = format(queryStarter + `ORDER BY timestamp DESC;`, 'contacts', req.user_id)
         }
-        res.json(contacts)
+        const query = format(queryStarter + `ORDER BY timestamp DESC;`, 'contacts', req.user_id)
+        const client = new Client()
+        client.connect()
+        client.query(query, (err, response) => {
+            if(err) {
+                console.error(err)
+            }
+            if(!response.length){
+                res.status(400).json({msg: 'contact not found'})
+            }
+            res.json(response)
+            client.end()
+        })
     }catch (err) {
         console.error(err)
         res.status(500).json({msg: 'server error'})
