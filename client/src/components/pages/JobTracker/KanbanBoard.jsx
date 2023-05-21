@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { fakej, boards } from './jobs';
 import Column from './Column';
 
 export default function KanbanBoard() {
+  const { jobs, loading } = useSelector(state => ({ ...state.job }));
+  // const { selectedBoard } = useSelector(state => ({ ...state.board }));
+
   const [selectedBoard, setSelectedBoard] = useState(boards[0]);
 
-  const [saved, setSaved] = useState(fakej.filter(j => j.status === 'saved'));
+  // HAVE A FUNCTION THAT LOADS THIS AND SET ALL THE STATS WHEN JOB IS DONE LOADING. OR MAYBE DONT DO USESTATE. MAKE IT A JOB BOARD STATE IN REDUX
+
+  const [saved, setSaved] = useState(
+    jobs.filter(job => job.status === 'saved')
+  );
   const [applied, setApplied] = useState(
-    fakej.filter(j => j.status === 'applied')
+    jobs.filter(job => job.status === 'applied')
   );
   const [interviewing, setInterviewing] = useState(
-    fakej.filter(j => j.status === 'interviewing')
+    jobs.filter(job => job.status === 'interviewing')
   );
 
   const handleDragEnd = result => {

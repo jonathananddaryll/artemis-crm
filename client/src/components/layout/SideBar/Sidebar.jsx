@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './SideBar.module.css';
 import {
@@ -9,6 +9,7 @@ import {
   useUser
 } from '@clerk/clerk-react';
 import { NavLink } from 'react-router-dom';
+import { getAllBoards } from '../../../reducers/BoardReducer';
 
 // function SignInButton() {
 //   const clerk = useClerk();
@@ -29,6 +30,21 @@ export default function SideBar() {
   const { boards, loading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
   const { user } = useUser();
+
+  // this is how to use the action in the extrareducer.
+  const dispatch = useDispatch();
+
+  if (loading && userId !== null) {
+    // change the 111 to userId from clerk or sql user table later
+    dispatch(getAllBoards(111));
+  }
+
+  // get all the jobs
+  // useEffect(() => {
+  //   // this will be loaded with the current loggedIn user's id or clerk_id
+  //   dispatch(getAllBoards());
+  // }, []);
+
   return (
     <div className={styles.container}>
       <p>sidebar</p>
@@ -46,9 +62,9 @@ export default function SideBar() {
         <li>
           <NavLink to='/contacts'>contacts</NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to='/jobtracker'>job tracker</NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to='/jobtracker'>documents</NavLink>
         </li>
@@ -59,7 +75,9 @@ export default function SideBar() {
             <ul>
               {boards.map(board => (
                 <li key={board.id}>
-                  <NavLink to={`/boards/${board.id}`}>{board.title}</NavLink>
+                  <NavLink to={`/boards/${board.id}/jobs`}>
+                    {board.title}
+                  </NavLink>
                 </li>
               ))}
             </ul>

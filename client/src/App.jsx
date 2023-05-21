@@ -48,7 +48,7 @@ function App() {
             <Route path='/boards' element={<BoardsPage />}></Route>
 
             <Route
-              path='/jobtracker'
+              path='/boards/:board_id/jobs'
               element={
                 <>
                   <SignedIn>
