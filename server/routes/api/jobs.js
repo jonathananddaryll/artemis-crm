@@ -27,10 +27,15 @@ router.get('/board/:board_id', async (req, res) => {
   //check the board_id and check if it belongs to the current loggedin user and then if it does, go fetch it
   console.log('jobs api hits');
   const boardId = req.params.board_id;
+
   try {
-    const jobs = await sql`SELECT * FROM JOB WHERE board_id = ${boardId}`;
-    // const query = format('SELECT * FROM JOB');
+    // const jobs = await sql`SELECT * FROM JOB WHERE board_id = ${boardId}`;
+    // const query = format(`SELECT * FROM JOB WHERE board_id = ${boardId}`);
+
+    // console.log(query);
     // const jobs = await sql`${query}`;
+
+    const jobs = await sql`SELECT * FROM JOB WHERE board_id = ${boardId}`;
 
     if (!jobs) {
       return res.status(400).json({ msg: 'No jobs found' });
