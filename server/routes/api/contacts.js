@@ -11,37 +11,52 @@ const format = require('pg-format');
 // @ACCESS Private
 router.get('/', async (req, res) => {
     try{
-        // SELECT * FROM contacts WHERE user_id = ${req.user_id}
-        // Frontend search form should have 2 parameters, first and last name
-        // pass parameters as single strings into identifiers object, pass the object in the request,
-        // if not present, do not create the key for that identifier.
-        // also, order results by timestamp
+        // This query is a straightforward match, which means if searching for 'joh', 'john' will not be in the results, and 
+        // neither will jo.
+        // Likely to just use LIKE, as in, first_name LIKE '<first_name>%', or LIKE '%<first_name>' for misspellings or similar names, etc
         let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
-        let firstAndLast = req.identifiers.first && req.identifiers.last
-        if(req.identifiers.first){
+        if(req.query.first && req.query.last){
+            const query = format(queryStarter = queryStarter + ` AND first_name = %L  AND last_name = %L ORDER BY timestamp DESC;`, 'contact', req.query.user_id, req.query.first, req.query.last)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'})
+                }
+                res.status(200).json(response)
+                client.end()
+            })
+        }else if(req.query.first){
             queryStarter = queryStarter + ` AND first_name = %L`
+            const query = format(queryStarter + ` ORDER BY timestamp DESC;`, 'contact', req.query.user_id, req.query.first)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'});
+                }
+                res.status(200).json(response)
+                client.end()
+            })
+        }else if(req.query.last){
+            queryStarter = queryStarter + ` AND last_name = %L`;
+            const query = format(queryStarter + ` ORDER BY timestamp DESC;`, 'contact', req.query.user_id, req.query.last)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'})
+                }
+                res.status(200).json(response)
+                client.end()
+            })
+        }else{
+            return res.status(400).json({msg: 'not found'})
         }
-        if(req.identifiers.last){
-            queryStarter = queryStarter + ` AND last_name = %L`
-        }
-        if(firstAndLast){
-            const query = format(queryStarter + `ORDER BY timestamp DESC;`, 'contacts', req.user_id)
-        }
-        const query = format(queryStarter + `ORDER BY timestamp DESC;`, 'contacts', req.user_id)
-        const client = new Client()
-        client.connect()
-        client.query(query, (err, response) => {
-            if(err) {
-                console.error(err)
-            }
-            if(!response.length){
-                res.status(400).json({msg: 'contact not found'})
-            }
-            res.json(response)
-            client.end()
-        })
     }catch (err) {
-        console.error(err)
         res.status(500).json({msg: 'server error'})
     }
 });
@@ -51,18 +66,23 @@ router.get('/', async (req, res) => {
 // @ACCESS Private
 router.post('/', async (req, res) => {
     try{
-        // validate inputs here - check that values were provided, and omit the rows that weren't from both
-        // the contact() parameter as well as the VALUES() parameters. This is a fix until the 'pg' library
-        // is used which parameterizes everything for us.
-        const {
-            rows_names
-        } = req.names;
-        const {
-            rows_values
-        } = req.values
-        const query = `INSERT INTO contact() VALUES(${rows_values.join(", ")});`
-        const results = await sql`${query}`
-        res.status(200).json({contacts: results.rows})
+        // Should have client side input checks, and server side input validation.
+        // Filter inputs for SQL special characters, keywords?
+        // an array of the identifiers
+        // needs secure parameterization for when adding the user_id to the query
+        const names = JSON.parse(req.query.names);
+        const values = JSON.parse(req.query.values);
+        const query = format(`INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${req.query.user_id}, %L);`, 'contact', values)
+        const client = new Client(config)
+        client.connect()
+        client.query(query, (err, response) => {
+            if(err) {
+                console.error(err)
+                res.status(500).json({msg: 'query error'})
+            }
+            res.json(response)
+            client.end()
+        })
     }catch (err) {
         console.error(err)
         res.status(500).json({msg: 'server error'})
