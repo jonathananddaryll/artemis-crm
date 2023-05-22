@@ -21,6 +21,7 @@
     "postgres": "^3.3.4"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1"
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22"
   }
 }
