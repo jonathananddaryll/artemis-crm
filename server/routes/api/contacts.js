@@ -58,7 +58,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @ROUTE  /api/contacts/
+// @ROUTE  POST /api/contacts/
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
 router.post('/', async (req, res) => {
@@ -86,20 +86,56 @@ router.post('/', async (req, res) => {
     }
 });
 
-// @ROUTE  /api/contacts/
+// @ROUTE  PATCH /api/contacts/
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
 router.patch('/', async (req, res) => {
     try{
-        // Needs input validation and parsing for updating multiple rows at a time
-        const { updateWhat, updateFrom, updateTo } = req
-        const query = `UPDATE contact SET ${updateWhat} = ${updateTo} WHERE ${updateWhat} = ${updateFrom};`;
-        const response = sql`${query}`
-        res.status(200).json({contacts: results. rows})
+        // request needs to send JSON.stringified arrays as parts of the body,
+        // names array = ["first_name", "last_name"], newValues array = ["new value", "new value"]
+        const updateWhat = JSON.parse(req.query.names);
+        const updateTo = JSON.parse(req.query.newValues);
+        // merge two arrays strings, together throwing in the formatting for SQL updates
+        const setUpdate = updateWhat.map((element, index, array) => {
+            return `${element} = '${updateTo[index]}'`
+        })
+        const query = `UPDATE contact SET ${setUpdate.join(", ")} WHERE user_id = ${req.query.user_id} AND id = ${req.query.id};`;
+        const client = new Client(config)
+        client.connect()
+        client.query(query, (err, response) => {
+            if(err) {
+                console.error(err)
+                res.status(500).json({msg: 'query error'})
+            }
+            res.status(200).json(response);
+            client.end()
+        })
     }catch (err) {
         console.error(err)
         res.status(500).json({msg: 'server error'})
     }
 });
+
+// @ROUTE  DELETE /api/contacts/
+// @DESC   DELETE api for individual users contacts
+// @ACCESS Private
+router.delete('/', async (req, res) => {
+    try{
+        const query = `DELETE FROM contact WHERE user_id = ${req.query.user_id} AND id = ${req.query.id};`;
+        const client = new Client(config)
+        client.connect()
+        client.query(query, (err, response) => {
+            if(err) {
+                console.error(err)
+                res.status(500).json({msg: 'query error'})
+            }
+            res.status(200).json(response);
+            client.end()
+        })
+    }catch (err){
+        console.error(err)
+        res.status(500).json({msg: 'server error'})
+    }
+})
 
 module.exports = router;
