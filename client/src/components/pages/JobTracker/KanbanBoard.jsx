@@ -7,9 +7,10 @@ import Column from './Column';
 
 export default function KanbanBoard() {
   const { jobs, loading } = useSelector(state => ({ ...state.job }));
+  const { boards, selectedBoard } = useSelector(state => ({ ...state.board }));
   // const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
-  const [selectedBoard, setSelectedBoard] = useState(boards[0]);
+  // const [selectedBoard, setSelectedBoard] = useState(boards[0]);
 
   // HAVE A FUNCTION THAT LOADS THIS AND SET ALL THE STATS WHEN JOB IS DONE LOADING. OR MAYBE DONT DO USESTATE. MAKE IT A JOB BOARD STATE IN REDUX
 
@@ -76,9 +77,16 @@ export default function KanbanBoard() {
           flexDirection: 'row'
         }}
       >
-        <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
+        {/* CHANGE THIS TO SELECTED BOARD LATER */}
+        {Object.keys(selectedBoard)
+          .filter(key => key.includes('column') && selectedBoard[key] !== null)
+          .map((keyName, i) => (
+            <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
+          ))}
+
+        {/* <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
         <Column title={selectedBoard.column2} jobs={applied} id={'2'} />
-        <Column title={selectedBoard.column3} jobs={interviewing} id={'3'} />
+        <Column title={selectedBoard.column3} jobs={interviewing} id={'3'} /> */}
       </div>
     </DragDropContext>
   );

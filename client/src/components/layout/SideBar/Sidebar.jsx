@@ -9,7 +9,7 @@ import {
   useUser
 } from '@clerk/clerk-react';
 import { NavLink } from 'react-router-dom';
-import { getAllBoards } from '../../../reducers/BoardReducer';
+import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
 
 // function SignInButton() {
 //   const clerk = useClerk();
@@ -45,6 +45,9 @@ export default function SideBar() {
   //   dispatch(getAllBoards());
   // }, []);
 
+  const handleLink = board => {
+    dispatch(changeBoard(board));
+  };
   return (
     <div className={styles.container}>
       <p>sidebar</p>
@@ -74,7 +77,7 @@ export default function SideBar() {
           {!loading && boards.length > 0 && (
             <ul>
               {boards.map(board => (
-                <li key={board.id}>
+                <li key={board.id} onClick={() => handleLink(board)}>
                   <NavLink to={`/boards/${board.id}/jobs`}>
                     {board.title}
                   </NavLink>

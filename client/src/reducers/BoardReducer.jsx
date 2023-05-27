@@ -17,12 +17,34 @@ export const getAllBoards = createAsyncThunk(
   }
 );
 
+// @TODO:
+// 1. create a getSelectedBoard with Id that calls the in api with the id. usually dont do this unless the page is refreshed
 const boardSlice = createSlice({
   name: 'board',
   initialState: {
     boards: [],
     selectedBoard: null,
+    selectedBoardStatusCols: [],
     loading: true
+  },
+  reducers: {
+    changeBoard: (state, action) => {
+      state.selectedBoard = action.payload;
+      const board = action.payload;
+      const newColumns = [];
+      Object.keys(board)
+        .filter(key => key.includes('column') && board[key] !== null)
+        .forEach((keyName, i) => {
+          newColumns.push(board[keyName]);
+        });
+
+      state.selectedBoardStatusCols = newColumns;
+      // Object.keys(selectedBoard)
+      //   .filter(key => key.includes('column') && selectedBoard[key] !== null)
+      //   .map((keyName, i) => (
+      //     <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
+      //   ));
+    }
   },
 
   extraReducers: builder => {
@@ -38,3 +60,4 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
+export const { changeBoard } = boardSlice.actions;
