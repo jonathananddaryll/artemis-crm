@@ -27,6 +27,10 @@ export default function KanbanBoard() {
   //   dispatch(getBoard(board_id));
   // }
 
+  const populateBoard = jobs => {
+    selectedBoardStatusCols.map();
+  };
+
   const [saved, setSaved] = useState(
     jobs.filter(job => job.status === 'saved')
   );

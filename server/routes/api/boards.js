@@ -91,6 +91,8 @@ router.post(
     client.connect();
     const { title } = req.body;
 
+    console('create board api triggered!fas fsa fsafs');
+
     //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
 
     const query = format(

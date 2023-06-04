@@ -22,8 +22,27 @@ export const getBoard = createAsyncThunk(
   async (user_id, board_id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/boards/${user_id}/board/${board_id}`);
-      // return res.data;
     } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+export const createBoard = createAsyncThunk(
+  'board/createBoard',
+  async (title, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    console.log('it got here');
+
+    try {
+      const res = await axios.post('/api/boards', title, config);
+    } catch (error) {
       // have a better error catch later
       console.log(err);
     }
@@ -74,6 +93,10 @@ const boardSlice = createSlice({
       state.selectedBoard = action.payload;
       // delete this later. it's just to check if this triggers
       console.log('getAllBoards is triggered');
+    });
+    builder.addCase(createBoard.fulfilled, (state, action) => {
+      state.boards = [...state.boards, action.payload];
+      console.log('create board triggered');
     });
   }
 });
