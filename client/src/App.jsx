@@ -45,7 +45,19 @@ function App() {
               element={<SignUp routing='path' path='/sign-up' />}
             />
             <Route path='/' element={<HomePage />}></Route>
-            <Route path='/boards' element={<BoardsPage />}></Route>
+            <Route
+              path='/boards'
+              element={
+                <>
+                  <SignedIn>
+                    <BoardsPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn></RedirectToSignIn>
+                  </SignedOut>
+                </>
+              }
+            ></Route>
 
             <Route
               path='/boards/:board_id/jobs'

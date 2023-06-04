@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { getBoard } from '../../../reducers/BoardReducer';
 
 import { fakej, boards } from './jobs';
 import Column from './Column';
 
 export default function KanbanBoard() {
   const { jobs, loading } = useSelector(state => ({ ...state.job }));
-  const { boards, selectedBoard } = useSelector(state => ({ ...state.board }));
+  const { boards, selectedBoard, selectedBoardStatusCols } = useSelector(
+    state => ({ ...state.board })
+  );
+
+  const dispatch = useDispatch();
+
   // const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
   // const [selectedBoard, setSelectedBoard] = useState(boards[0]);
 
   // HAVE A FUNCTION THAT LOADS THIS AND SET ALL THE STATS WHEN JOB IS DONE LOADING. OR MAYBE DONT DO USESTATE. MAKE IT A JOB BOARD STATE IN REDUX
+  // const { board_id } = useParams();
+
+  // if (selectedBoard === null) {
+  //   console.log(board_id);
+  //   dispatch(getBoard(board_id));
+  // }
 
   const [saved, setSaved] = useState(
     jobs.filter(job => job.status === 'saved')
@@ -69,25 +82,25 @@ export default function KanbanBoard() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.board_name}</h2>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row'
-        }}
-      >
-        {/* CHANGE THIS TO SELECTED BOARD LATER */}
-        {Object.keys(selectedBoard)
-          .filter(key => key.includes('column') && selectedBoard[key] !== null)
-          .map((keyName, i) => (
-            <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
+      {selectedBoard !== null && selectedBoardStatusCols.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}
+        >
+          {/* CHANGE THIS TO SELECTED BOARD LATER */}
+          {selectedBoardStatusCols.map((col, idx) => (
+            <Column title={col} jobs={applied} id={idx} />
           ))}
 
-        {/* <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
+          {/* <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
         <Column title={selectedBoard.column2} jobs={applied} id={'2'} />
         <Column title={selectedBoard.column3} jobs={interviewing} id={'3'} /> */}
-      </div>
+        </div>
+      )}
     </DragDropContext>
   );
 }

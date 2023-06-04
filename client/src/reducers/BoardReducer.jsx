@@ -17,6 +17,19 @@ export const getAllBoards = createAsyncThunk(
   }
 );
 
+export const getBoard = createAsyncThunk(
+  'board/getBoardwithBoardId',
+  async (user_id, board_id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/boards/${user_id}/board/${board_id}`);
+      // return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 // @TODO:
 // 1. create a getSelectedBoard with Id that calls the in api with the id. usually dont do this unless the page is refreshed
 const boardSlice = createSlice({
@@ -53,6 +66,12 @@ const boardSlice = createSlice({
     builder.addCase(getAllBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
       state.loading = false;
+      // delete this later. it's just to check if this triggers
+      console.log('getAllBoards is triggered');
+    });
+    builder.addCase(getBoard.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.selectedBoard = action.payload;
       // delete this later. it's just to check if this triggers
       console.log('getAllBoards is triggered');
     });

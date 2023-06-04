@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const sql = require('../../config/db');
+const format = require('pg-format');
+const { Client, config } = require('../../config/db');
 
 router.get('/', () => {
   try {
