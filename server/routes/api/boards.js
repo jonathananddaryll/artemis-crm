@@ -133,8 +133,9 @@ router.patch('/:board_id/add', async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
-  const { columnStatus, columnToAdd } = req.body;
+  const { columnStatus, totalCols } = req.body;
   const boardId = req.params.board_id;
+  const columnToAdd = 'column'.concat(totalCols + 1);
 
   const query = format(
     `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s`,
