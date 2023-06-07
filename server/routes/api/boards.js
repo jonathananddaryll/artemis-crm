@@ -91,36 +91,36 @@ router.post(
     client.connect();
     const { title } = req.body;
 
-    console('create board api triggered!fas fsa fsafs');
+    console.log('create board api triggered!fas fsa fsafs');
 
     //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
 
-    const query = format(
-      'INSERT INTO board (title, user_id) VALUES(%L, %s)',
-      title,
-      111
-    );
+    // const query = format(
+    //   'INSERT INTO board (title, user_id) VALUES(%L, %s)',
+    //   title,
+    //   111
+    // );
 
-    // returns errors to use for Alert components later
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    // // returns errors to use for Alert components later
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
 
-    try {
-      client.query(query, (err, response) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ msg: 'query error' });
-        }
+    // try {
+    //   client.query(query, (err, response) => {
+    //     if (err) {
+    //       console.error(err);
+    //       res.status(500).json({ msg: 'query error' });
+    //     }
 
-        // return the new column status that is added
-        // res.status(200).json(response.rows[0]);
-        client.end();
-      });
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
+    //     // return the new column status that is added
+    //     // res.status(200).json(response.rows[0]);
+    //     client.end();
+    //   });
+    // } catch (err) {
+    //   console.error(err.message);
+    //   res.status(500).send('Server Error');
+    // }
   }
 );
 
@@ -134,6 +134,56 @@ router.patch('/:board_id/add', async (req, res) => {
   const client = new Client(config);
   client.connect();
   const { columnStatus, totalCols } = req.body;
+  const newTotalCols = totalCols + 1;
+  const boardId = req.params.board_id;
+  const columnToAdd = 'column'.concat(newTotalCols);
+
+  const query = format(
+    `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %s`,
+    columnToAdd,
+    columnStatus,
+    'total_cols',
+    newTotalCols,
+    boardId,
+    111
+  );
+
+  // remove this later
+  console.log(query);
+
+  if (totalCols === 10) {
+    return res
+      .status(405)
+      .json({ msg: 'Error. Only 10 column is allowed per board' });
+  }
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      // return the new column status that is added
+      res.status(200).json(response);
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     POST api/boards/:id/remove
+// @desc      remove a column status
+// @access    Private
+router.patch('/:board_id/remove', async (req, res) => {
+  // do the calculating of what colum to add to. have a keeper of first empty column in redux
+
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { columnToRemove, totalCols } = req.body;
   const boardId = req.params.board_id;
   const columnToAdd = 'column'.concat(totalCols + 1);
 
@@ -145,7 +195,9 @@ router.patch('/:board_id/add', async (req, res) => {
     111
   );
 
-  console.log(query);
+  if (totalCols === 0) {
+    return res.status(405).json({ msg: 'Error. No column to remove' });
+  }
 
   try {
     client.query(query, (err, response) => {
@@ -155,7 +207,7 @@ router.patch('/:board_id/add', async (req, res) => {
       }
 
       // return the new column status that is added
-      // res.status(200).json(response.rows[0]);
+      res.status(200).json(response);
       client.end();
     });
   } catch (err) {

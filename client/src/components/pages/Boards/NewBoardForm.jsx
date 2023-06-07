@@ -10,8 +10,8 @@ export default function NewBoardForm({ toggleHandler }) {
     e.preventDefault();
 
     dispatch(createBoard(title));
-    console.log('create board clicked');
   };
+
   return (
     <div>
       <form onSubmit={e => onSubmitHandler(e)}>

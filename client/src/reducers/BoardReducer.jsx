@@ -39,9 +39,16 @@ export const createBoard = createAsyncThunk(
     };
 
     console.log('it got here');
+    console.log('hereeeee from frontend ' + title);
+
+    const formData = {
+      title: title
+    };
+
+    console.log(formData);
 
     try {
-      const res = await axios.post('/api/boards', title, config);
+      const res = await axios.post('/api/boards', formData, config);
     } catch (error) {
       // have a better error catch later
       console.log(err);
