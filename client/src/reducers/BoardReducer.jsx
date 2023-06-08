@@ -63,21 +63,45 @@ const boardSlice = createSlice({
   initialState: {
     boards: [],
     selectedBoard: null,
-    selectedBoardStatusCols: [],
+    // selectedBoardStatusCols: [],
+    // selectedBoardStatusCols: {},
+    selectedBoardStatusCols: null,
+    selectedBoardLoading: true,
     loading: true
   },
   reducers: {
+    // changeBoard: (state, action) => {
+    //   state.selectedBoard = action.payload;
+    //   const board = action.payload;
+    //   const newColumns = [];
+    //   Object.keys(board)
+    //     .filter(key => key.includes('column') && board[key] !== null)
+    //     .forEach((keyName, i) => {
+    //       newColumns.push(board[keyName]);
+    //     });
+
+    //   state.selectedBoardStatusCols = newColumns;
+    //   // Object.keys(selectedBoard)
+    //   //   .filter(key => key.includes('column') && selectedBoard[key] !== null)
+    //   //   .map((keyName, i) => (
+    //   //     <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
+    //   //   ));
+    // }
+    // Changing it to object
     changeBoard: (state, action) => {
       state.selectedBoard = action.payload;
       const board = action.payload;
       const newColumns = [];
+      const newColObj = {};
       Object.keys(board)
         .filter(key => key.includes('column') && board[key] !== null)
         .forEach((keyName, i) => {
-          newColumns.push(board[keyName]);
+          // newColumns.push(board[keyName]);
+          newColObj[i] = { title: board[keyName], items: [] };
         });
 
-      state.selectedBoardStatusCols = newColumns;
+      state.selectedBoardStatusCols = newColObj;
+      state.selectedBoardLoading = false;
       // Object.keys(selectedBoard)
       //   .filter(key => key.includes('column') && selectedBoard[key] !== null)
       //   .map((keyName, i) => (

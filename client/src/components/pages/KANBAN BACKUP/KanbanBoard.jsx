@@ -86,7 +86,6 @@ export default function KanbanBoard() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.board_name}</h2>
-      {/*       
       {selectedBoard !== null && selectedBoardStatusCols.length > 0 && (
         <div
           style={{
@@ -96,36 +95,11 @@ export default function KanbanBoard() {
             flexDirection: 'row'
           }}
         >
-          //  CHANGE THIS TO SELECTED BOARD LATER 
+          {/* CHANGE THIS TO SELECTED BOARD LATER */}
           {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />
           ))}
 
-
-        </div>
-      )} */}
-
-      {selectedBoard !== null && selectedBoardStatusCols !== null && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row'
-          }}
-        >
-          {/* CHANGE THIS TO SELECTED BOARD LATER */}
-          {/* {selectedBoardStatusCols.map((col, idx) => (
-            <Column title={col} jobs={applied} id={idx} />
-          ))} */}
-          {Object.keys(selectedBoardStatusCols).map((keyName, i) => (
-            <Column
-              title={selectedBoardStatusCols[keyName].title}
-              jobs={applied}
-              id={i}
-            />
-          ))}
-          ;
           {/* <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
         <Column title={selectedBoard.column2} jobs={applied} id={'2'} />
         <Column title={selectedBoard.column3} jobs={interviewing} id={'3'} /> */}
