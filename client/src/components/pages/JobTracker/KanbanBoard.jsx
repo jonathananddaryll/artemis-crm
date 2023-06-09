@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBoard } from '../../../reducers/BoardReducer';
+import {
+  getBoard,
+  removeFromStatus,
+  addToStatus
+} from '../../../reducers/BoardReducer';
 
 import Column from './Column';
 
@@ -25,19 +29,9 @@ export default function KanbanBoard() {
   //   dispatch(getBoard(board_id));
   // }
 
-  const populateBoard = jobs => {
-    selectedBoardStatusCols.map();
-  };
-
-  const [saved, setSaved] = useState(
-    jobs.filter(job => job.status === 'saved')
-  );
-  const [applied, setApplied] = useState(
-    jobs.filter(job => job.status === 'applied')
-  );
-  const [interviewing, setInterviewing] = useState(
-    jobs.filter(job => job.status === 'interviewing')
-  );
+  // const populateBoard = jobs => {
+  //   selectedBoardStatusCols.map();
+  // };
 
   const handleDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -109,7 +103,8 @@ export default function KanbanBoard() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            flexDirection: 'row'
+            flexDirection: 'row',
+            padding: '10px 30px'
           }}
         >
           {/* CHANGE THIS TO SELECTED BOARD LATER */}
@@ -123,10 +118,9 @@ export default function KanbanBoard() {
               id={i}
             />
           ))}
-          ;
-          {/* <Column title={selectedBoard.column1} jobs={saved} id={'1'} />
-        <Column title={selectedBoard.column2} jobs={applied} id={'2'} />
-        <Column title={selectedBoard.column3} jobs={interviewing} id={'3'} /> */}
+          <div className='addlist-column'>
+            <button>Add list</button>
+          </div>
         </div>
       )}
     </DragDropContext>

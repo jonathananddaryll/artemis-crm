@@ -126,7 +126,17 @@ const boardSlice = createSlice({
     fillBoardWithJobs: (state, action) => {
       const jobs = action.payload;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
-      console.log('ayoooooo');
+    },
+    removeFromStatus: (state, action) => {
+      const job = action.payload;
+      state.selectedBoardStatusCols[job.status].filter(
+        job1 => job1.id !== job.id
+      );
+    },
+    addToStatus: (state, action) => {
+      // const job = action.payload;
+      // state.selectedBoardStatusCols
+      console.log(action);
     }
   },
 
@@ -171,4 +181,5 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
-export const { changeBoard, fillBoardWithJobs } = boardSlice.actions;
+export const { changeBoard, fillBoardWithJobs, removeFromStatus, addToStatus } =
+  boardSlice.actions;

@@ -23,20 +23,8 @@ export default function JobTrackerPage() {
   // check the params in the query in the browser. then compare it if it's not the same as the selectedBoard, call the getjobswithboardid.. or just call it everytime on the page load.
 
   return (
-    <>
-      {/* <button onClick={() => getJobs()}>getalljobs</button> */}
-      <div>
-        {jobs.length > 0 && !jobsLoading && (
-          <div>
-            {jobs.map(job => (
-              <p>{job.job_title}</p>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className={styles.container}>
-        <KanbanBoard />
-      </div>
-    </>
+    <div className={styles.container}>
+      <KanbanBoard />
+    </div>
   );
 }

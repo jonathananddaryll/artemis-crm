@@ -37,15 +37,15 @@ export default function BoardsPage() {
               <p onClick={() => handleBoardClick(board)}>{board.title}</p>
             </div>
           ))}
-          <div className={styles.newboard_box}>
-            {!formToggle ? (
-              <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
-            ) : (
-              <NewBoardForm toggleHandler={toggleHandler} />
-            )}
-          </div>
         </div>
       )}
+      <div className={styles.newboard_box}>
+        {!formToggle ? (
+          <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
+        ) : (
+          <NewBoardForm toggleHandler={toggleHandler} />
+        )}
+      </div>
     </div>
   );
 }
