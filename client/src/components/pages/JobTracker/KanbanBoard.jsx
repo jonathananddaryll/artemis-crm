@@ -4,12 +4,10 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getBoard } from '../../../reducers/BoardReducer';
 
-import { fakej, boards } from './jobs';
 import Column from './Column';
 
 export default function KanbanBoard() {
-  const { jobs, loading } = useSelector(state => ({ ...state.job }));
-  const { boards, selectedBoard, selectedBoardStatusCols } = useSelector(
+  const { jobs, boards, selectedBoard, selectedBoardStatusCols } = useSelector(
     state => ({ ...state.board })
   );
 
@@ -120,8 +118,8 @@ export default function KanbanBoard() {
           ))} */}
           {Object.keys(selectedBoardStatusCols).map((keyName, i) => (
             <Column
-              title={selectedBoardStatusCols[keyName].title}
-              jobs={applied}
+              title={keyName}
+              jobs={selectedBoardStatusCols[keyName]}
               id={i}
             />
           ))}

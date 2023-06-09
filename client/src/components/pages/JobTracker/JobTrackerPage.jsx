@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getjobswithBoardId } from '../../../reducers/JobReducer';
+import { getjobswithBoardId } from '../../../reducers/BoardReducer';
 import styles from './JobTrackerPage.module.css';
 
 import KanbanBoard from './KanbanBoard';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
-  const { jobs, loading } = useSelector(state => ({ ...state.job }));
-  const { selectedBoard } = useSelector(state => ({ ...state.board }));
+  const { selectedBoard, jobs, jobsLoading } = useSelector(state => ({
+    ...state.board
+  }));
   const { board_id } = useParams();
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function JobTrackerPage() {
     <>
       {/* <button onClick={() => getJobs()}>getalljobs</button> */}
       <div>
-        {jobs.length > 0 && !loading && (
+        {jobs.length > 0 && !jobsLoading && (
           <div>
             {jobs.map(job => (
               <p>{job.job_title}</p>
