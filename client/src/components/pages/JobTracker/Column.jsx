@@ -37,10 +37,7 @@ export default function ({ title, jobs, id }) {
             {jobs.map((jjob, index) => (
               <Job job={jjob} index={index} key={index} />
             ))}
-            {/* <Job
-              job={{ id: 123, title: 'softwre engineer', company: 'google' }}
-              index='1'
-            /> */}
+
             {provided.placeholder}
           </JobList>
         )}

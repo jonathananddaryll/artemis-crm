@@ -30,7 +30,7 @@ export default function Job({ job, index }) {
           isDragging={snapshot.isDragging}
         >
           <TextContent>
-            <p>{job.title}</p>
+            <p>{job.job_title}</p>
             <p>{job.company}</p>
           </TextContent>
           {provided.placeholder}

@@ -6,7 +6,7 @@ import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
 
 export default function BoardsPage() {
-  const { boards, loading } = useSelector(state => ({ ...state.board }));
+  const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const [formToggle, setFormToggle] = useState(false);
 
   const toggleHandler = () => {
@@ -30,7 +30,7 @@ export default function BoardsPage() {
   return (
     <div className={styles.page_wrapper}>
       <h3>My boards</h3>
-      {!loading && (
+      {!boardsLoading && (
         <div className={styles.boards_container}>
           {boards.map(board => (
             <div key={board.id} className={styles.board_box}>

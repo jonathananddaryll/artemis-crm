@@ -79,7 +79,7 @@ const boardSlice = createSlice({
     selectedBoard: null,
     selectedBoardStatusCols: null,
     selectedBoardLoading: true,
-    loading: true,
+    boardsLoading: true,
     jobsLoading: true
   },
   reducers: {
@@ -128,15 +128,37 @@ const boardSlice = createSlice({
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
     },
     removeFromStatus: (state, action) => {
-      const job = action.payload;
-      state.selectedBoardStatusCols[job.status].filter(
-        job1 => job1.id !== job.id
+      // const newArr = state.selectedBoardStatusCols[action.payload[1]];
+      // newArr.filter(job => job.id !== action.payload[2]);
+      // console.log(
+      //   action.payload[0] + ' ' + action.payload[1] + ' ' + action.payload[2]
+      // );
+
+      // state.selectedBoardStatusCols[action.payload[1]] = newArr;
+      state.selectedBoardStatusCols[action.payload[1]].splice(
+        state.selectedBoardStatusCols[action.payload[1]].findIndex(
+          job => job.id === parseInt(action.payload[2])
+        ),
+        1
       );
+
+      // state.selectedBoardStatusCols['screening'] = 'yfhgasfafsa';
     },
     addToStatus: (state, action) => {
-      // const job = action.payload;
-      // state.selectedBoardStatusCols
-      console.log(action);
+      // // const job = action.payload;
+      // // state.selectedBoardStatusCols
+      const job = state.selectedBoardStatusCols[action.payload[1]].find(
+        item => item.id === parseInt(action.payload[2])
+      );
+
+      console.log('jobbbbbb is ' + job);
+
+      // state.selectedBoardStatusCols[action.payload[0]] = {
+      //   ...state.selectedBoardStatusCols[action.payload[0]],
+      //   job
+      // };
+
+      state.selectedBoardStatusCols[action.payload[0]].push(job);
     }
   },
 
@@ -145,7 +167,7 @@ const boardSlice = createSlice({
     // .fulfilled is if the action is successful, basically
     builder.addCase(getAllBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
-      state.loading = false;
+      state.boardsLoading = false;
       // delete this later. it's just to check if this triggers
       console.log('getAllBoards is triggered');
     });

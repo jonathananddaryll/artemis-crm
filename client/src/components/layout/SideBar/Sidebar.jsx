@@ -32,14 +32,14 @@ import {
 // }
 
 export default function SideBar() {
-  const { boards, loading } = useSelector(state => ({ ...state.board }));
+  const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
   const { user } = useUser();
 
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
-  if (loading && userId !== null) {
+  if (boardsLoading && userId !== null) {
     // change the 111 to userId from clerk or sql user table later
     dispatch(getAllBoards(111));
   }
@@ -81,7 +81,7 @@ export default function SideBar() {
         <li>
           {/* will change this and combined boards with jobtracker */}
           <NavLink to='/boards'>Boards</NavLink>
-          {!loading && boards.length > 0 && (
+          {!boardsLoading && boards.length > 0 && (
             <ul>
               {boards.map(board => (
                 <li key={board.id} onClick={() => handleLink(board)}>

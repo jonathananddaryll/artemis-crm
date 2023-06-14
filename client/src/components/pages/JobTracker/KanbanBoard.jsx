@@ -33,37 +33,22 @@ export default function KanbanBoard() {
   //   selectedBoardStatusCols.map();
   // };
 
-  const handleDragEnd = result => {
+  const handleDragEnd = (result, selectedBoardStatusCols) => {
     const { destination, source, draggableId } = result;
+    console.log(result);
     if (source.droppableId == destination.droppableId) return;
 
-    // Remove from source array
-    if (source.droppableId == 1) {
-      setSaved(removeItemById(draggableId, saved));
-    } else if (source.droppableId == 2) {
-      setApplied(removeItemById(draggableId, applied));
-    } else {
-      setInterviewing(removeItemById(draggableId, interviewing));
-    }
+    dispatch(
+      addToStatus([destination.droppableId, source.droppableId, draggableId])
+    );
 
-    // Get Item
-    const job = findItemById(draggableId, [
-      ...saved,
-      ...applied,
-      ...interviewing
-    ]);
-
-    // Add Item
-    if (destination.droppableId == 1) {
-      setSaved([{ ...job, saved: !job.saved }, ...saved]);
-    } else if (destination.droppableId == 2) {
-      setApplied([{ ...job, applied: !job.applied }, ...applied]);
-    } else {
-      setInterviewing([
-        { ...job, interviewing: !job.interviewing },
-        ...interviewing
-      ]);
-    }
+    dispatch(
+      removeFromStatus([
+        destination.droppableId,
+        source.droppableId,
+        draggableId
+      ])
+    );
   };
 
   // Find item by id
@@ -111,11 +96,12 @@ export default function KanbanBoard() {
           {/* {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />
           ))} */}
-          {Object.keys(selectedBoardStatusCols).map((keyName, i) => (
+          {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
             <Column
               title={keyName}
               jobs={selectedBoardStatusCols[keyName]}
-              id={i}
+              id={keyName}
+              key={index}
             />
           ))}
           <div className='addlist-column'>
