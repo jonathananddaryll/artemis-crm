@@ -96,7 +96,7 @@ router.post(
     //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
 
     const query = format(
-      'INSERT INTO board (title, user_id) VALUES(%L, %s)',
+      'INSERT INTO board (title, user_id) VALUES(%L, %s) RETURNING *',
       title,
       111
     );
@@ -115,7 +115,9 @@ router.post(
 
         // return the new column status that is added
         // res.status(200).json(response.rows[0]);
-        console.log(response);
+        // console.log(response.rows[0]);
+        res.status(200).json(response.rows[0]);
+
         client.end();
       });
     } catch (err) {

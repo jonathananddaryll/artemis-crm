@@ -27,6 +27,7 @@ export default function ({ title, jobs, id }) {
   return (
     <Container>
       <Title>{title}</Title>
+      <button> + </button>
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
           <JobList

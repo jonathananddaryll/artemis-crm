@@ -10,6 +10,10 @@ export default function NewBoardForm({ toggleHandler }) {
     e.preventDefault();
 
     dispatch(createBoard(title));
+
+    // Clears the form then close it
+    setTitle('');
+    toggleHandler();
   };
 
   return (

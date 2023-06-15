@@ -49,6 +49,7 @@ export const createBoard = createAsyncThunk(
 
     try {
       const res = await axios.post('/api/boards', formData, config);
+      return res.data;
     } catch (error) {
       // have a better error catch later
       console.log(err);
@@ -80,61 +81,34 @@ const boardSlice = createSlice({
     selectedBoardStatusCols: null,
     selectedBoardLoading: true,
     boardsLoading: true,
-    jobsLoading: true
+    jobsLoading: true,
+    selectedJob: null
   },
   reducers: {
-    // changeBoard: (state, action) => {
-    //   state.selectedBoard = action.payload;
-    //   const board = action.payload;
-    //   const newColumns = [];
-    //   Object.keys(board)
-    //     .filter(key => key.includes('column') && board[key] !== null)
-    //     .forEach((keyName, i) => {
-    //       newColumns.push(board[keyName]);
-    //     });
-
-    //   state.selectedBoardStatusCols = newColumns;
-    //   // Object.keys(selectedBoard)
-    //   //   .filter(key => key.includes('column') && selectedBoard[key] !== null)
-    //   //   .map((keyName, i) => (
-    //   //     <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
-    //   //   ));
-    // }
     // Changing it to object
+    changeSelectedJob: (state, action) => {
+      state.selectedJob = action.payload;
+    },
     changeBoard: (state, action) => {
       state.selectedBoardLoading = true;
       state.selectedBoard = action.payload;
       const board = action.payload;
-      const newColumns = [];
       const newColObj = {};
       Object.keys(board)
         .filter(key => key.includes('column') && board[key] !== null)
         .forEach((keyName, i) => {
-          // newColumns.push(board[keyName]);
-          // newColObj[i] = { title: board[keyName], items: [] };
           newColObj[board[keyName]] = [];
         });
 
       state.selectedBoardStatusCols = newColObj;
       state.selectedBoardLoading = false;
-      // Object.keys(selectedBoard)
-      //   .filter(key => key.includes('column') && selectedBoard[key] !== null)
-      //   .map((keyName, i) => (
-      //     <Column title={selectedBoard[keyName]} jobs={applied} id={i} />
-      //   ));
     },
     fillBoardWithJobs: (state, action) => {
       const jobs = action.payload;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
     },
+    // Remove job from the status array
     removeFromStatus: (state, action) => {
-      // const newArr = state.selectedBoardStatusCols[action.payload[1]];
-      // newArr.filter(job => job.id !== action.payload[2]);
-      // console.log(
-      //   action.payload[0] + ' ' + action.payload[1] + ' ' + action.payload[2]
-      // );
-
-      // state.selectedBoardStatusCols[action.payload[1]] = newArr;
       state.selectedBoardStatusCols[action.payload[1]].splice(
         state.selectedBoardStatusCols[action.payload[1]].findIndex(
           job => job.id === parseInt(action.payload[2])
@@ -144,20 +118,14 @@ const boardSlice = createSlice({
 
       // state.selectedBoardStatusCols['screening'] = 'yfhgasfafsa';
     },
+    // Add the job dragged into the new status
     addToStatus: (state, action) => {
-      // // const job = action.payload;
-      // // state.selectedBoardStatusCols
+      // Get the job that the user is dragging
       const job = state.selectedBoardStatusCols[action.payload[1]].find(
         item => item.id === parseInt(action.payload[2])
       );
 
-      console.log('jobbbbbb is ' + job);
-
-      // state.selectedBoardStatusCols[action.payload[0]] = {
-      //   ...state.selectedBoardStatusCols[action.payload[0]],
-      //   job
-      // };
-
+      // Add the job that was removed from previous status to the new status
       state.selectedBoardStatusCols[action.payload[0]].push(job);
     }
   },
@@ -203,5 +171,10 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
-export const { changeBoard, fillBoardWithJobs, removeFromStatus, addToStatus } =
-  boardSlice.actions;
+export const {
+  changeBoard,
+  fillBoardWithJobs,
+  removeFromStatus,
+  addToStatus,
+  changeSelectedJob
+} = boardSlice.actions;
