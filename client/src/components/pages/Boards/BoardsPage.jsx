@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
-import { getAllBoards } from '../../../reducers/BoardReducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
+import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
 
@@ -14,7 +15,7 @@ export default function BoardsPage() {
   };
 
   // this is how to use the action in the extrareducer.
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // // get all the jobs
   // useEffect(() => {
@@ -25,6 +26,7 @@ export default function BoardsPage() {
   const handleBoardClick = board => {
     console.log('yeeee handle boardclick');
     console.log(board);
+    dispatch(changeBoard(board));
   };
 
   return (
@@ -33,9 +35,11 @@ export default function BoardsPage() {
       {!boardsLoading && (
         <div className={styles.boards_container}>
           {boards.map(board => (
-            <div key={board.id} className={styles.board_box}>
-              <p onClick={() => handleBoardClick(board)}>{board.title}</p>
-            </div>
+            <Link to={`/boards/${board.id}/jobs`}>
+              <div key={board.id} className={styles.board_box}>
+                <p onClick={() => handleBoardClick(board)}>{board.title}</p>
+              </div>
+            </Link>
           ))}
         </div>
       )}

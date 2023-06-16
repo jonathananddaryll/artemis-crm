@@ -5,12 +5,17 @@ import { getjobswithBoardId } from '../../../reducers/BoardReducer';
 import styles from './JobTrackerPage.module.css';
 
 import KanbanBoard from './KanbanBoard';
+import AddListForm from './AddListForm';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
   const { selectedBoard, jobs, jobsLoading } = useSelector(state => ({
     ...state.board
   }));
+
+  // toggle for the Add List form
+  const [addListToggle, setAddListToggle] = useState(false);
+
   const { board_id } = useParams();
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
@@ -24,7 +29,13 @@ export default function JobTrackerPage() {
 
   return (
     <div className={styles.container}>
-      <KanbanBoard />
+      <KanbanBoard setAddListToggle={setAddListToggle} />
+      {addListToggle && (
+        <AddListForm
+          setAddListToggle={setAddListToggle}
+          selectedBoard={selectedBoard}
+        />
+      )}
     </div>
   );
 }

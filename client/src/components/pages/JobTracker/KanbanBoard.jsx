@@ -10,7 +10,7 @@ import {
 
 import Column from './Column';
 
-export default function KanbanBoard() {
+export default function KanbanBoard({ setAddListToggle }) {
   const { jobs, boards, selectedBoard, selectedBoardStatusCols } = useSelector(
     state => ({ ...state.board })
   );
@@ -105,7 +105,7 @@ export default function KanbanBoard() {
             />
           ))}
           <div className='addlist-column'>
-            <button>Add list</button>
+            <button onClick={() => setAddListToggle(true)}>Add list</button>
           </div>
         </div>
       )}

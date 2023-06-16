@@ -38,18 +38,39 @@ export const createBoard = createAsyncThunk(
       }
     };
 
-    console.log('it got here');
-    console.log('hereeeee from frontend ' + title);
-
+    // Makes the string an obj to send a json to the post route
     const formData = {
       title: title
     };
 
-    console.log(formData);
-
     try {
       const res = await axios.post('/api/boards', formData, config);
       return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+export const addColumn = createAsyncThunk(
+  'board/addColumn',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/boards/${formData.id}/upate`,
+        formData,
+        config
+      );
+
+      // return res.data;
+      return formData.columnStatus;
     } catch (error) {
       // have a better error catch later
       console.log(err);
@@ -166,6 +187,14 @@ const boardSlice = createSlice({
       const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
       console.log('getjobswithboardID is triggered');
+    });
+
+    //ADD COLUMN
+    builder.addCase(addColumn.fulfilled, (state, action) => {
+      state.selectedBoardStatusCols = {
+        ...state.selectedBoardStatusCols,
+        [action.payload]: []
+      };
     });
   }
 });

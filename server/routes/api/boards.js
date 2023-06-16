@@ -143,7 +143,7 @@ router.patch('/:board_id/upate', async (req, res) => {
   const columnToAdd = 'column'.concat(newTotalCols);
 
   const query = format(
-    `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %s`,
+    `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %s RETURNING *`,
     columnToAdd,
     columnStatus,
     'total_cols',
@@ -169,7 +169,8 @@ router.patch('/:board_id/upate', async (req, res) => {
       }
 
       // return the new column status that is added
-      res.status(200).json(response);
+      console.log(response);
+      res.status(200).json(response.rows[0]);
       client.end();
     });
   } catch (err) {
