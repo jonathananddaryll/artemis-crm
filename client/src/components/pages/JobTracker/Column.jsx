@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 300px;
   height: 475px;
   border: 1px solid gray;
+  float: left;
 `;
 
 const Title = styled.h3`
@@ -27,6 +28,7 @@ export default function ({ title, jobs, id }) {
   return (
     <Container>
       <Title>{title}</Title>
+      <button> + </button>
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
           <JobList
@@ -37,10 +39,7 @@ export default function ({ title, jobs, id }) {
             {jobs.map((jjob, index) => (
               <Job job={jjob} index={index} key={index} />
             ))}
-            {/* <Job
-              job={{ id: 123, title: 'softwre engineer', company: 'google' }}
-              index='1'
-            /> */}
+
             {provided.placeholder}
           </JobList>
         )}

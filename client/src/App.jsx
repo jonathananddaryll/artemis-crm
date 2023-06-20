@@ -14,6 +14,7 @@ import {
 import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
+import BoardsPage from './components/pages/Boards/BoardsPage';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 //   throw new Error('Missing Publishable Key');
@@ -44,9 +45,22 @@ function App() {
               element={<SignUp routing='path' path='/sign-up' />}
             />
             <Route path='/' element={<HomePage />}></Route>
+            <Route
+              path='/boards'
+              element={
+                <>
+                  <SignedIn>
+                    <BoardsPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn></RedirectToSignIn>
+                  </SignedOut>
+                </>
+              }
+            ></Route>
 
             <Route
-              path='/jobtracker'
+              path='/boards/:board_id/jobs'
               element={
                 <>
                   <SignedIn>
