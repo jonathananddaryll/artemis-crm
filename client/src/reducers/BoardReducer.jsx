@@ -64,7 +64,7 @@ export const addColumn = createAsyncThunk(
 
     try {
       const res = await axios.patch(
-        `/api/boards/${formData.id}/upate`,
+        `/api/boards/${formData.id}/add`,
         formData,
         config
       );
@@ -78,8 +78,34 @@ export const addColumn = createAsyncThunk(
   }
 );
 
+export const updateJobStatus = createAsyncThunk(
+  'board/updateJobStatus',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    console.log(formData);
+
+    try {
+      const res = await axios.patch(
+        `/api/jobs/${formData.job_id}/status`,
+        formData,
+        config
+      );
+
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 export const getjobswithBoardId = createAsyncThunk(
-  'board/getAllJobswithBoardId',
+  'board/getJobswithBoardId',
   async (board_id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/jobs/board/${board_id}`);
@@ -179,7 +205,8 @@ const boardSlice = createSlice({
     //   console.log('getjobswithboardID PENDING is triggered');
     // });
     builder.addCase(getjobswithBoardId.fulfilled, (state, action) => {
-      state.jobs = action.payload;
+      // @@@@@@@@ I MIGHT NOT NEED TO KEEP TRACK OF JOBS STATES SINCE IT'S ALREADY IN THE STATUS COLUMN INSIDE BOARD
+      // state.jobs = action.payload;
       state.jobsLoading = false;
 
       // delete this later. it's just to check if this triggers
@@ -189,12 +216,19 @@ const boardSlice = createSlice({
       console.log('getjobswithboardID is triggered');
     });
 
-    //ADD COLUMN
+    // ADD COLUMN
     builder.addCase(addColumn.fulfilled, (state, action) => {
       state.selectedBoardStatusCols = {
         ...state.selectedBoardStatusCols,
         [action.payload]: []
       };
+    });
+
+    // UPDATE JOB STATUS
+    builder.addCase(updateJobStatus.fulfilled, (state, action) => {
+      // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
+      // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
+      console.log('successfully updated the job status');
     });
   }
 });

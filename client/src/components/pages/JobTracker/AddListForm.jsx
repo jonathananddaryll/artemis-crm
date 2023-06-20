@@ -11,8 +11,7 @@ export default function AddListForm({
   const [formData, setFormData] = useState({
     id: id,
     totalCols: total_cols,
-    columnStatus: '',
-    action: 'addcolumn'
+    columnStatus: ''
   });
 
   const { columnStatus } = formData;
@@ -24,6 +23,7 @@ export default function AddListForm({
     e.preventDefault();
 
     dispatch(addColumn(formData));
+    setAddListToggle(false);
 
     // CALL THE ACTION REDUCER here
   };
@@ -41,6 +41,7 @@ export default function AddListForm({
         />
         <input type='submit' value='Add List' />
       </form>
+      <button onClick={() => setAddListToggle(false)}>Cancel</button>
     </div>
   );
 }

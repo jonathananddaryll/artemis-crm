@@ -3,6 +3,6 @@
   width: 100%-300px;
   margin-left: 300px;
   height: 100vh;
-  overflow-x: scroll;
+  /* overflow-x: hidden; */
   /* padding: 20px 0 20px 10px; */
 }

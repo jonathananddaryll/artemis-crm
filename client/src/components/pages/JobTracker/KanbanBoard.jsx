@@ -5,17 +5,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   getBoard,
   removeFromStatus,
-  addToStatus
+  addToStatus,
+  updateJobStatus
 } from '../../../reducers/BoardReducer';
 
 import Column from './Column';
+import styles from './JobTrackerPage.module.css';
 
 export default function KanbanBoard({ setAddListToggle }) {
-  const { jobs, boards, selectedBoard, selectedBoardStatusCols } = useSelector(
-    state => ({ ...state.board })
-  );
+  const { selectedBoard, selectedBoardStatusCols } = useSelector(state => ({
+    ...state.board
+  }));
 
   const dispatch = useDispatch();
+
+  const { board_id } = useParams();
 
   // const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
@@ -38,6 +42,12 @@ export default function KanbanBoard({ setAddListToggle }) {
     console.log(result);
     if (source.droppableId == destination.droppableId) return;
 
+    const formData = {
+      newStatus: destination.droppableId,
+      boardId: board_id,
+      job_id: draggableId
+    };
+
     dispatch(
       addToStatus([destination.droppableId, source.droppableId, draggableId])
     );
@@ -49,6 +59,9 @@ export default function KanbanBoard({ setAddListToggle }) {
         draggableId
       ])
     );
+
+    // THIS IS WHERE THE API CALL IS HAPPENING.. THINK OF A WAY TO MERGE THE addToStatus with this later on
+    dispatch(updateJobStatus(formData));
   };
 
   // Find item by id
@@ -62,7 +75,7 @@ export default function KanbanBoard({ setAddListToggle }) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <h2 style={{ textAlign: 'center' }}>{selectedBoard.board_name}</h2>
+      <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2>
       {/*       
       {selectedBoard !== null && selectedBoardStatusCols.length > 0 && (
         <div
@@ -82,33 +95,34 @@ export default function KanbanBoard({ setAddListToggle }) {
         </div>
       )} */}
 
-      {selectedBoard !== null && selectedBoardStatusCols !== null && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            padding: '10px 30px'
-          }}
-        >
-          {/* CHANGE THIS TO SELECTED BOARD LATER */}
-          {/* {selectedBoardStatusCols.map((col, idx) => (
+      {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexDirection: 'row',
+          padding: '10px 30px'
+          // width: '150%'
+        }}
+      >
+        {/* CHANGE THIS TO SELECTED BOARD LATER */}
+        {/* {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />
           ))} */}
-          {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
-            <Column
-              title={keyName}
-              jobs={selectedBoardStatusCols[keyName]}
-              id={keyName}
-              key={index}
-            />
-          ))}
-          <div className='addlist-column'>
-            <button onClick={() => setAddListToggle(true)}>Add list</button>
-          </div>
+        {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
+          <Column
+            title={keyName}
+            jobs={selectedBoardStatusCols[keyName]}
+            id={keyName}
+            key={index}
+          />
+        ))}
+        <div className='addlist-column'>
+          <button onClick={() => setAddListToggle(true)}>Add list</button>
         </div>
-      )}
+      </div>
+      {/* )} */}
     </DragDropContext>
   );
 }

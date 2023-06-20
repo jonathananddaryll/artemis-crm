@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 300px;
   height: 475px;
   border: 1px solid gray;
+  float: left;
 `;
 
 const Title = styled.h3`

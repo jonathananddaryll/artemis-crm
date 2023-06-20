@@ -76,6 +76,45 @@ router.get('/board/:board_id', async (req, res) => {
   }
 });
 
+// @route     POST api/jobs/:job_id/status
+// @desc      update status
+// @access    Private
+router.patch('/:job_id/status', async (req, res) => {
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+
+  const { newStatus, boardId } = req.body;
+  const jobId = req.params.job_id;
+
+  // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
+  const query = format(
+    `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *`,
+    newStatus,
+    jobId,
+    boardId
+  );
+
+  console.log(query);
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      // return the updated job
+      console.log(response.rows[0]);
+      res.status(200).json(response.rows[0]);
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Add authentication and input validation later
 // router.post('/', async (req, res) => {
 //   const newJob =

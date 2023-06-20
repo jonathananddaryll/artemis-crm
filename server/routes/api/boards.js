@@ -127,18 +127,18 @@ router.post(
   }
 );
 
-// @route     POST api/boards/:id/upate
+// @route     POST api/boards/:id/add
 // @desc      Add a new column
 // @access    Private
-router.patch('/:board_id/upate', async (req, res) => {
+router.patch('/:board_id/add', async (req, res) => {
   // do the calculating of what colum to add to. have a keeper of first empty column in redux
 
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
-  const { columnStatus, totalCols, action } = req.body;
+  const { columnStatus, totalCols } = req.body;
   // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
-  const newTotalCols = action === 'addcolumn' ? totalCols + 1 : totalCols;
+  const newTotalCols = totalCols + 1;
   const boardId = req.params.board_id;
   const columnToAdd = 'column'.concat(newTotalCols);
 
@@ -160,6 +160,43 @@ router.patch('/:board_id/upate', async (req, res) => {
       .status(405)
       .json({ msg: 'Error. Only 10 column is allowed per board' });
   }
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      // return the new column status that is added
+      console.log(response);
+      res.status(200).json(response.rows[0]);
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     POST api/boards/:id/update
+// @desc      update column
+// @access    Private
+router.patch('/:board_id/update', async (req, res) => {
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { columnStatus, columnToUpdate } = req.body;
+  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+  const boardId = req.params.board_id;
+
+  const query = format(
+    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s RETURNING *`,
+    columnToUpdate,
+    columnStatus,
+    boardId,
+    111
+  );
 
   try {
     client.query(query, (err, response) => {
