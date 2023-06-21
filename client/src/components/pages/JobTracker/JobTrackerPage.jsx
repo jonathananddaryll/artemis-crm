@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getjobswithBoardId } from '../../../reducers/BoardReducer';
+import {
+  getjobswithBoardId,
+  handleToggleForm
+} from '../../../reducers/BoardReducer';
 import styles from './JobTrackerPage.module.css';
 
 import KanbanBoard from './KanbanBoard';
 import AddListForm from './AddListForm';
+import NewJobForm from './NewJobForm/NewJobForm';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
-  const { selectedBoard, jobs, jobsLoading, selectedBoardStatusCols } =
-    useSelector(state => ({
-      ...state.board
-    }));
+  const {
+    selectedBoard,
+    jobs,
+    jobsLoading,
+    selectedBoardStatusCols,
+    toggleJobForm
+  } = useSelector(state => ({
+    ...state.board
+  }));
 
   // toggle for the Add List form
   const [addListToggle, setAddListToggle] = useState(false);
@@ -43,6 +52,7 @@ export default function JobTrackerPage() {
               selectedBoard={selectedBoard}
             />
           )}
+          {toggleJobForm && <NewJobForm />}
         </>
       )}
     </div>

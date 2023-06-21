@@ -129,10 +129,16 @@ const boardSlice = createSlice({
     selectedBoardLoading: true,
     boardsLoading: true,
     jobsLoading: true,
-    selectedJob: null
+    selectedJob: null,
+    toggleJobForm: false,
+    selectedStatusToAdd: null
   },
   reducers: {
     // Changing it to object
+    handleToggleForm: (state, action) => {
+      state.toggleJobForm = action.payload[0];
+      state.selectedStatusToAdd = action.payload[1];
+    },
     changeSelectedJob: (state, action) => {
       state.selectedJob = action.payload;
     },
@@ -238,5 +244,6 @@ export const {
   fillBoardWithJobs,
   removeFromStatus,
   addToStatus,
-  changeSelectedJob
+  changeSelectedJob,
+  handleToggleForm
 } = boardSlice.actions;

@@ -2,6 +2,8 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Job from './Job';
 import styled from 'styled-components';
+import { handleToggleForm } from '../../../reducers/BoardReducer';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Container = styled.div`
   background-color: #e6eefb;
@@ -58,12 +60,16 @@ const AddButton = styled.button`
 `;
 
 export default function ({ title, jobs, id }) {
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <Status>
         <Title>{title}</Title>
         <TotalJobs> {jobs.length} </TotalJobs>
-        <AddButton> + </AddButton>
+        <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
+          +
+        </AddButton>
       </Status>
 
       <Droppable droppableId={id}>

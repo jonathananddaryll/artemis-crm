@@ -13,11 +13,35 @@ const Container = styled.div`
   background-color: white;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
 `;
 
-const TextContent = styled.div``;
+const CompanyLogo = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgb(145, 145, 180);
+`;
+
+const TextContent = styled.div`
+  text-align: left;
+  margin-left: 15px;
+  text-transform: capitalize;
+`;
+
+const TitleText = styled.p`
+  margin: 2px 0;
+  font-weight: bold;
+`;
+
+const CompanyText = styled.p`
+  margin: 2px 0;
+`;
+
+const LocationText = styled.p`
+  margin: 2px 0;
+`;
 
 export default function Job({ job, index }) {
   return (
@@ -29,9 +53,11 @@ export default function Job({ job, index }) {
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
         >
+          <CompanyLogo />
           <TextContent>
-            <p>{job.job_title}</p>
-            <p>{job.company}</p>
+            <TitleText>{job.job_title}</TitleText>
+            <CompanyText>{job.company}</CompanyText>
+            <LocationText>{job.location}</LocationText>
           </TextContent>
           {provided.placeholder}
         </Container>

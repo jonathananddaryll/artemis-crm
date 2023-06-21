@@ -61,7 +61,7 @@ export default function SideBar() {
       {isLoaded && <UserButton />}
       {userId !== null && user !== undefined && (
         <>
-          <p>{userId}</p>
+          {/* <p>{userId}</p> */}
           <p>{user.firstName}</p>
           <p>{user.lastName}</p>
           <SignOutButton />
