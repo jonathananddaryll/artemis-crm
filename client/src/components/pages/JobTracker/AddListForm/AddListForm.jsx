@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './AddListForm.module.css';
 import { useDispatch } from 'react-redux';
-import { addColumn } from '../../../reducers/BoardReducer';
+import { addColumn } from '../../../../reducers/BoardReducer';
 
 export default function AddListForm({
   setAddListToggle,

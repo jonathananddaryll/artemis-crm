@@ -1,13 +1,13 @@
 import React from 'react';
 import styles from './NewJobForm.module.css';
 
-import { useDispatch } from 'react-redux';
-import {
-  handleToggleForm,
-  selectedBoardStatusCols
-} from '../../../../reducers/BoardReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleToggleForm } from '../../../../reducers/BoardReducer';
 
 export default function NewJobForm() {
+  const { selectedBoardStatusCols } = useSelector(state => ({
+    ...state.board
+  }));
   const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
