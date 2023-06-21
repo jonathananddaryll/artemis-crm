@@ -32,7 +32,6 @@ const config = {
   port: 5432,
   host: process.env.PGHOST,
   ssl: true
-
 };
 
 module.exports = {
