@@ -10,7 +10,7 @@ const Container = styled.div`
   min-height: 90px;
   margin-left: 10px;
   margin-right: 10px;
-  background-color: green;
+  background-color: white;
   cursor: pointer;
   display: flex;
   justify-content: space-between;

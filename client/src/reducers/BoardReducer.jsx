@@ -209,11 +209,10 @@ const boardSlice = createSlice({
       // state.jobs = action.payload;
       state.jobsLoading = false;
 
-      // delete this later. it's just to check if this triggers
       const jobs = action.payload;
       const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
-      console.log('getjobswithboardID is triggered');
+      console.log('getjobswithboardID is triggered fsafaasffsafs');
     });
 
     // ADD COLUMN

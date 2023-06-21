@@ -1,8 +1,19 @@
 .container {
-  background-color: red;
+  background-color: #f8fbfe;
   width: 100%-300px;
   margin-left: 300px;
-  height: 100vh;
-  /* overflow-x: hidden; */
+  height: 100%;
+  overflow-x: scroll;
   /* padding: 20px 0 20px 10px; */
+}
+
+.kanban_container {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* flex-direction: row; */
+  padding: 10px 30px;
+  overflow: hidden;
+  /* display: inline-block; */
+  width: max-content;
 }

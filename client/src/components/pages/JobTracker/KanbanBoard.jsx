@@ -76,36 +76,9 @@ export default function KanbanBoard({ setAddListToggle }) {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2>
-      {/*       
-      {selectedBoard !== null && selectedBoardStatusCols.length > 0 && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row'
-          }}
-        >
-          //  CHANGE THIS TO SELECTED BOARD LATER 
-          {selectedBoardStatusCols.map((col, idx) => (
-            <Column title={col} jobs={applied} id={idx} />
-          ))}
-
-
-        </div>
-      )} */}
 
       {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row',
-          padding: '10px 30px'
-          // width: '150%'
-        }}
-      >
+      <div className={styles.kanban_container}>
         {/* CHANGE THIS TO SELECTED BOARD LATER */}
         {/* {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />

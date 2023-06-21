@@ -34,8 +34,8 @@ export default function BoardsPage() {
       <h3>My boards</h3>
       {!boardsLoading && (
         <div className={styles.boards_container}>
-          {boards.map(board => (
-            <Link to={`/boards/${board.id}/jobs`}>
+          {boards.map((board, idx) => (
+            <Link to={`/boards/${board.id}/jobs`} key={idx}>
               <div key={board.id} className={styles.board_box}>
                 <p onClick={() => handleBoardClick(board)}>{board.title}</p>
               </div>
