@@ -11,7 +11,7 @@ export default function NewJobForm() {
   const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
-      <div>
+      <div className={styles.modal}>
         <button onClick={() => dispatch(handleToggleForm([false, null]))}>
           CANCEL NEW JOB FORM
         </button>
