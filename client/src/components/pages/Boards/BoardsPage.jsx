@@ -30,20 +30,20 @@ export default function BoardsPage() {
   };
 
   return (
-    <div className={styles.page_wrapper}>
+    <div className={styles.pageWrapper}>
       <h3>My boards</h3>
       {!boardsLoading && (
-        <div className={styles.boards_container}>
+        <div className={styles.boardsContainer}>
           {boards.map((board, idx) => (
             <Link to={`/boards/${board.id}/jobs`} key={idx}>
-              <div key={board.id} className={styles.board_box}>
+              <div key={board.id} className={styles.boardBox}>
                 <p onClick={() => handleBoardClick(board)}>{board.title}</p>
               </div>
             </Link>
           ))}
         </div>
       )}
-      <div className={styles.newboard_box}>
+      <div className={styles.newboardBox}>
         {!formToggle ? (
           <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
         ) : (

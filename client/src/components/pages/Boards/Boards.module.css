@@ -1,15 +1,15 @@
 /* make this global later on since we are gonna reuse this a lot */
-.page_wrapper {
+.pageWrapper {
   margin-left: 305px;
 }
 
-.boards_container {
+.boardsContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.board_box {
+.boardBox {
   width: 350px;
   height: 200px;
   background-color: red;
@@ -17,7 +17,7 @@
   cursor: pointer;
 }
 
-.newboard_box {
+.newboardBox {
   width: 350px;
   height: 200px;
   background-color: grey;

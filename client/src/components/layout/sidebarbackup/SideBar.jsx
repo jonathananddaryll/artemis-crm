@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './SideBar.module.css';
 import {
@@ -41,16 +41,9 @@ import {
 // }
 
 export default function SideBar() {
-  const [isExpanded, setIsExpanded] = useState(true);
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
   const { user } = useUser();
-
-  const menuItems = [
-    { text: 'Contacts', icon: 'icons/phone.svg' },
-    { text: 'Documents', icon: 'icons/file.svg' },
-    { text: 'Boards', icon: 'icons/table.svg' }
-  ];
 
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
@@ -72,47 +65,22 @@ export default function SideBar() {
   };
 
   return (
-    <div
-      className={
-        styles.navContainer + ' ' + (!isExpanded && styles.navContainerNX)
-      }
-    >
-      <div className={styles.navUpper}>
-        <div className={styles.navHeading}>
-          {isExpanded && (
-            <div className={styles.navBrand}>
-              <p className={styles.logoImage}>O</p>
-              <h2 className={styles.logoText}>Artemis</h2>
-            </div>
-          )}
-          <button
-            className={
-              styles.hamburger +
-              ' ' +
-              (isExpanded ? styles.hamburgerIn : styles.hamburgerOut)
-            }
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-        <div className={styles.navMenu}>
-          {menuItems.map(({ text, icon }) => (
-            <a
-              href='#'
-              className={
-                styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
-              }
-            >
-              <img src={icon} alt='' srcset='' />
-              {isExpanded && <p>{text}</p>}
-              {!isExpanded && <div className={styles.tooltip}>{text}</div>}
-            </a>
-          ))}
-        </div>
+    <div className={styles.container}>
+      <div className={styles.loboBox}>
+        <p className={styles.logoImage}>O</p>
+        <p className={styles.logoText}>Artemis</p>
       </div>
+      {/* <p>sidebar</p> */}
+      {/* {isLoaded && <UserButton />} */}
+
+      {/* {userId !== null && user !== undefined && ( */}
+      {/* <> */}
+      {/* <p>{userId}</p> */}
+      {/* <p>{user.firstName}</p> */}
+      {/* <p>{user.lastName}</p> */}
+      {/* <SignOutButton /> */}
+      {/* </> */}
+      {/* )} */}
 
       <ul className={styles.navItems}>
         <li className={styles.navItem}>
@@ -121,6 +89,9 @@ export default function SideBar() {
             contacts
           </NavLink>
         </li>
+        {/* <li>
+          <NavLink to='/jobtracker'>job tracker</NavLink>
+        </li> */}
         <li className={styles.navItem}>
           <FontAwesomeIcon className={styles.navItemIcon} icon={faFile} />
           <NavLink className={styles.navItemText} to='/jobtracker'>

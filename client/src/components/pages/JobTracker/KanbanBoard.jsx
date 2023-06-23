@@ -78,7 +78,7 @@ export default function KanbanBoard({ setAddListToggle }) {
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2>
 
       {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
-      <div className={styles.kanban_container}>
+      <div className={styles.kanbanContainer}>
         {/* CHANGE THIS TO SELECTED BOARD LATER */}
         {/* {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />
@@ -91,9 +91,12 @@ export default function KanbanBoard({ setAddListToggle }) {
             key={index}
           />
         ))}
-        <div className='addlist-column'>
-          <button onClick={() => setAddListToggle(true)}>Add list</button>
-        </div>
+        {/* Add list column only shows when there's less than 10 total status columns */}
+        {selectedBoard.total_cols < 10 && (
+          <div className={styles.addlistContainer}>
+            <button onClick={() => setAddListToggle(true)}>Add list</button>
+          </div>
+        )}
       </div>
       {/* )} */}
     </DragDropContext>
