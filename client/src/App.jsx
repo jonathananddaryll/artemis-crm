@@ -18,6 +18,7 @@ import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
+import Contacts from './components/pages/Contacts/ContactsPage';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 //   throw new Error('Missing Publishable Key');
@@ -77,7 +78,17 @@ function App() {
                   </>
                 }
               ></Route>
-            </Routes>
+              <Route path='/contacts' element={<Contacts />}>
+              <>
+              <SignedIn>
+                < ContactsPage />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn></RedirectToSignIn>
+              </SignedOut>
+              </>
+            </Route>
+          </Routes>
           </div>
         </ClerkProvider>
       </BrowserRouter>
