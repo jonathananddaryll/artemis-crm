@@ -47,9 +47,9 @@ export default function SideBar() {
   const { user } = useUser();
 
   const menuItems = [
-    { text: 'Contacts', icon: 'icons/phone.svg' },
-    { text: 'Documents', icon: 'icons/file.svg' },
-    { text: 'Boards', icon: 'icons/table.svg' }
+    { text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
+    { text: 'Documents', icon: '/icons/file.svg', link: '/documents' },
+    { text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
   ];
 
   // this is how to use the action in the extrareducer.
@@ -99,17 +99,19 @@ export default function SideBar() {
           </button>
         </div>
         <div className={styles.navMenu}>
-          {menuItems.map(({ text, icon }) => (
-            <a
-              href='#'
-              className={
-                styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
-              }
-            >
-              <img src={icon} alt='' srcset='' />
-              {isExpanded && <p>{text}</p>}
-              {!isExpanded && <div className={styles.tooltip}>{text}</div>}
-            </a>
+          {menuItems.map(({ text, icon, link }) => (
+            <NavLink to={link}>
+              <a
+                href='#'
+                className={
+                  styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
+                }
+              >
+                <img src={icon} alt='' srcSet='' />
+                {isExpanded && <p>{text}</p>}
+                {!isExpanded && <div className={styles.tooltip}>{text}</div>}
+              </a>
+            </NavLink>
           ))}
         </div>
       </div>
