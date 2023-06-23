@@ -17,7 +17,6 @@ const Container = styled.div`
 
 const Status = styled.div`
   display: flex;
-  // justify-content: space-between;
   padding: 18px 15px;
   align-items: center;
   position: relative;

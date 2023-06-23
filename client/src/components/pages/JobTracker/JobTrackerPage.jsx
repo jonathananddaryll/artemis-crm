@@ -43,13 +43,13 @@ export default function JobTrackerPage() {
       {selectedBoardStatusCols !== null && (
         <>
           <KanbanBoard setAddListToggle={setAddListToggle} />
-          {addListToggle && (
+          {/* {addListToggle && (
             <AddListForm
               setAddListToggle={setAddListToggle}
               selectedBoard={selectedBoard}
             />
           )}
-          {toggleJobForm && <NewJobForm />}
+          {toggleJobForm && <NewJobForm />} */}
         </>
       )}
     </div>

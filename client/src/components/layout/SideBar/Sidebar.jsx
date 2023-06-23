@@ -15,14 +15,6 @@ import {
   getjobswithBoardId
 } from '../../../reducers/BoardReducer';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPhoneFlip,
-  faHouse,
-  faTableColumns,
-  faFile
-} from '@fortawesome/free-solid-svg-icons';
-
 // import { getjobswithBoardId } from '../../../reducers/JobReducer';
 
 // function SignInButton() {
@@ -47,9 +39,14 @@ export default function SideBar() {
   const { user } = useUser();
 
   const menuItems = [
-    { text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
-    { text: 'Documents', icon: '/icons/file.svg', link: '/documents' },
-    { text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
+    { index: 1, text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
+    {
+      index: 2,
+      text: 'Documents',
+      icon: '/icons/file.svg',
+      link: '/documents'
+    },
+    { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
   ];
 
   // this is how to use the action in the extrareducer.
@@ -99,10 +96,9 @@ export default function SideBar() {
           </button>
         </div>
         <div className={styles.navMenu}>
-          {menuItems.map(({ text, icon, link }) => (
-            <NavLink to={link}>
-              <a
-                href='#'
+          {menuItems.map(({ index, text, icon, link }) => (
+            <NavLink key={index} to={link}>
+              <div
                 className={
                   styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
                 }
@@ -110,7 +106,7 @@ export default function SideBar() {
                 <img src={icon} alt='' srcSet='' />
                 {isExpanded && <p>{text}</p>}
                 {!isExpanded && <div className={styles.tooltip}>{text}</div>}
-              </a>
+              </div>
             </NavLink>
           ))}
         </div>
@@ -118,23 +114,18 @@ export default function SideBar() {
 
       <ul className={styles.navItems}>
         <li className={styles.navItem}>
-          <FontAwesomeIcon className={styles.navItemIcon} icon={faPhoneFlip} />
           <NavLink className={styles.navItemText} to='/contacts'>
             contacts
           </NavLink>
         </li>
         <li className={styles.navItem}>
-          <FontAwesomeIcon className={styles.navItemIcon} icon={faFile} />
           <NavLink className={styles.navItemText} to='/jobtracker'>
             documents
           </NavLink>
         </li>
         <li className={styles.navItem}>
           {/* will change this and combined boards with jobtracker */}
-          <FontAwesomeIcon
-            className={styles.navItemIcon}
-            icon={faTableColumns}
-          />
+
           <NavLink className={styles.navItemText} to='/boards'>
             Boards
           </NavLink>
