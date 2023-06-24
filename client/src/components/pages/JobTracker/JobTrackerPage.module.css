@@ -5,6 +5,7 @@
   height: 100%;
   width: 100%;
   overflow-x: scroll;
+  padding: 5px 30px;
   /* padding: 20px 0 20px 10px; */
 }
 
@@ -13,7 +14,7 @@
   /* justify-content: space-between; */
   /* align-items: center; */
   /* flex-direction: row; */
-  padding: 5px 30px;
+
   overflow: hidden;
   /* display: inline-block; */
   width: max-content;

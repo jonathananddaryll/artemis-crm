@@ -1,5 +1,5 @@
 .navContainer {
-  width: 250px;
+  width: 205px;
   background-color: rgb(20, 19, 19);
   height: 100vh;
   position: relative;
@@ -10,7 +10,6 @@
   color: white;
 
   transition: 0.4s;
-  padding-top: 10px;
 }
 
 /* Not expanded */
@@ -29,18 +28,23 @@
   grid-template-columns: 2fr, 1fr;
   grid-template-rows: 1fr;
   height: 75px;
+  padding-top: 10px;
 }
 
 .navBrand {
   display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .logoText {
-  font-size: 25px;
+  font-size: 23px;
+  letter-spacing: 2px;
 }
 
 .logoImage {
-  width: 40px;
+  width: 35px;
+  height: 35px;
   padding: 0 10px;
 }
 
@@ -109,8 +113,13 @@
   margin-top: 50px;
 }
 
+/* NavLink to remove underline on visited links */
+.navMenuLink {
+  text-decoration: none;
+}
+
 .menuItem {
-  height: 57px;
+  height: 48px;
   /* width: 16em; */
   display: flex;
   color: white;
@@ -133,11 +142,14 @@
 
 .menuItem img {
   width: 20px;
+  height: 20px;
   padding: 0 20px;
 }
 
 .menuItem p {
-  margin: 0;
+  /* margin: 0; */
+  font-size: 14px;
+  letter-spacing: 1px;
 }
 
 .menuItem:hover > .tooltip {

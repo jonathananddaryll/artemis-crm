@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const sql = require('../../config/db');
 const { check, validationResult } = require('express-validator');
 const format = require('pg-format');
 const { Client, config } = require('../../config/db');
@@ -44,6 +43,36 @@ router.get('/:user_id', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// THIS IS THE GET ROUTE WITH EXPRESSREQUIREAUTH. NOT WORKING RIGHT NOW.
+// router.get('/:user_id', clerk.expressRequireAuth({}), async (req, res) => {
+//   console.log('boards api getall hits');
+//   // const user = await clerk.users.getUser(req.auth.userId);
+
+//   // console.log('user is ' + user);
+
+//   // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
+//   // load the current logged in user id later on
+//   const userId = req.params.user_id;
+//   const query = format('SELECT * FROM board WHERE user_id = %s', userId);
+//   const client = new Client(config);
+//   client.connect();
+
+//   try {
+//     client.query(query, (err, response) => {
+//       if (err) {
+//         console.error(err);
+//         res.status(500).json({ msg: 'query error' });
+//       }
+
+//       res.status(200).json(response.rows);
+//       client.end();
+//     });
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send('Server Error');
+//   }
+// });
 
 // @route     GET api/boards/:user_id/board/:board_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
 // @desc      get boards for the user_id with board_id
@@ -183,6 +212,43 @@ router.patch('/:board_id/add', async (req, res) => {
 // @desc      update column
 // @access    Private
 router.patch('/:board_id/update', async (req, res) => {
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { columnStatus, columnToUpdate } = req.body;
+  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+  const boardId = req.params.board_id;
+
+  const query = format(
+    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s RETURNING *`,
+    columnToUpdate,
+    columnStatus,
+    boardId,
+    111
+  );
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      // return the new column status that is added
+      console.log(response);
+      res.status(200).json(response.rows[0]);
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     POST api/boards/:id/updatename
+// @desc      update board name
+// @access    Private
+router.patch('/:board_id/updatename', async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();

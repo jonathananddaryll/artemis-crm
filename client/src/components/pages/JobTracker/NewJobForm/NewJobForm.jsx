@@ -1,17 +1,127 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './NewJobForm.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { handleToggleForm } from '../../../../reducers/BoardReducer';
 
 export default function NewJobForm() {
-  const { selectedBoardStatusCols } = useSelector(state => ({
-    ...state.board
-  }));
+  const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =
+    useSelector(state => ({
+      ...state.board
+    }));
+
+  const [formData, setFormData] = useState({
+    company: '',
+    job_title: '',
+    status: selectedStatusToAdd,
+    job_url: '',
+    board_id: selectedBoard.id,
+    location: '',
+    rate_of_pay: '',
+    main_contact: ''
+  });
+
+  const {
+    company,
+    job_title,
+    status,
+    job_url,
+    board_id,
+    location,
+    rate_of_pay,
+    main_contact
+  } = formData;
+
+  const onChangeHandler = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmitHandler = e => {
+    e.preventDefault();
+
+    // dispatch(createBoard(title));
+
+    // Clears the form then close it
+    const clearedForm = {
+      company: '',
+      job_title: '',
+      status: selectedStatusToAdd,
+      job_url: '',
+      board_id: selectedBoard.id,
+      location: '',
+      rate_of_pay: '',
+      main_contact: ''
+    };
+
+    setFormData(clearedForm);
+    dispatch(handleToggleForm([false, null]));
+  };
+
   const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
       <div className={styles.modal}>
+        <form>
+          <div className={styles.formGroup}>
+            <label>Company</label>
+            <input
+              type='text'
+              name='company'
+              value={company}
+              onChange={e => onChangeHandler(e)}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Job Title</label>
+            <input
+              type='text'
+              name='job_title'
+              value={job_title}
+              onChange={e => onChangeHandler(e)}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Location</label>
+            <input
+              type='text'
+              name='location'
+              value={location}
+              onChange={e => onChangeHandler(e)}
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Job URL</label>
+            <input
+              type='text'
+              name='job_url'
+              value={job_url}
+              onChange={e => onChangeHandler(e)}
+            />
+          </div>
+          {/* ADD a dropdown for main contact later  */}
+          <div className={styles.formFlex}>
+            <div className={styles.formGroup}>
+              {/* HAVE THE BOARD NAME AS THE LABEL BUT VALUE WILL BE BOARD_ID*/}
+              <label>Board</label>
+              <input
+                type='text'
+                name='board_id'
+                value={board_id}
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Status</label>
+              <input
+                type='text'
+                name='status'
+                value={status}
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <input type='submit' value='Save Job' />
+          </div>
+        </form>
+
         <button onClick={() => dispatch(handleToggleForm([false, null]))}>
           CANCEL NEW JOB FORM
         </button>

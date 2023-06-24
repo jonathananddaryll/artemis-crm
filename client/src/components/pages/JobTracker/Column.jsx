@@ -11,7 +11,7 @@ const Container = styled.div`
   overflow: hidden;
   margin-right: 5px;
   width: 300px;
-  min-height: 90vh;
+  min-height: 92vh;
   float: left;
 `;
 

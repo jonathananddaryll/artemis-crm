@@ -34,22 +34,27 @@ export default function BoardsPage() {
       <h3>My boards</h3>
       {!boardsLoading && (
         <div className={styles.boardsContainer}>
+          <div className={styles.flexBox}>
+            <div className={styles.newBoardBox}>
+              {!formToggle ? (
+                <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
+              ) : (
+                <NewBoardForm toggleHandler={toggleHandler} />
+              )}
+            </div>
+          </div>
           {boards.map((board, idx) => (
-            <Link to={`/boards/${board.id}/jobs`} key={idx}>
-              <div key={board.id} className={styles.boardBox}>
-                <p onClick={() => handleBoardClick(board)}>{board.title}</p>
-              </div>
-            </Link>
+            <div key={board.id} className={styles.flexBox}>
+              <Link to={`/boards/${board.id}/jobs`} key={idx}>
+                <div className={styles.boardBox}>
+                  <p onClick={() => handleBoardClick(board)}>{board.title}</p>
+                  <p>{board.date_created}</p>
+                </div>
+              </Link>{' '}
+            </div>
           ))}
         </div>
       )}
-      <div className={styles.newboardBox}>
-        {!formToggle ? (
-          <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
-        ) : (
-          <NewBoardForm toggleHandler={toggleHandler} />
-        )}
-      </div>
     </div>
   );
 }

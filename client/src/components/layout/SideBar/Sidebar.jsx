@@ -78,7 +78,7 @@ export default function SideBar() {
         <div className={styles.navHeading}>
           {isExpanded && (
             <div className={styles.navBrand}>
-              <p className={styles.logoImage}>O</p>
+              <img src='/icons/deer.png' className={styles.logoImage} />
               <h2 className={styles.logoText}>Artemis</h2>
             </div>
           )}
@@ -97,7 +97,7 @@ export default function SideBar() {
         </div>
         <div className={styles.navMenu}>
           {menuItems.map(({ index, text, icon, link }) => (
-            <NavLink key={index} to={link}>
+            <NavLink key={index} to={link} className={styles.navMenuLink}>
               <div
                 className={
                   styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
