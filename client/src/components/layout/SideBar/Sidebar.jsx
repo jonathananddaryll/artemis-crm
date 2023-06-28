@@ -111,7 +111,7 @@ export default function SideBar() {
           ))}
         </div>
       </div>
-
+      <SignOutButton />
       <ul className={styles.navItems}>
         <li className={styles.navItem}>
           <NavLink className={styles.navItemText} to='/contacts'>

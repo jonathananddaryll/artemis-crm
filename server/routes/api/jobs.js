@@ -48,6 +48,11 @@ router.get('/:user_id', async (req, res) => {
   }
 });
 
+// this is just to test the webhook on clerk on account creation
+router.post('/yooo/yooo', async (req, res) => {
+  console.log('USER CREATION YOOOOOOOO JUST GOT HIT');
+});
+
 // Going to change this to SELECT * FROM JOBS WHERE boardId is the current selectedBoard and userId is the current loggedIn user id
 // '/:user_id/board/:board_id/jobs' ---> maybe change to this later
 router.get('/board/:board_id', async (req, res) => {
