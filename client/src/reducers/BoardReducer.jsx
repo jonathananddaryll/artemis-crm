@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useSession } from '@clerk/clerk-react';
 
 // Create action
 export const getAllBoards = createAsyncThunk(
@@ -35,8 +34,6 @@ export const createBoard = createAsyncThunk(
   async (formData, thunkAPI) => {
     // console.log(session);
 
-    // const { session } = useSession();
-
     console.log('create board triggered asffsafs ' + formData.token);
 
     const config = {
@@ -63,10 +60,11 @@ export const createBoard = createAsyncThunk(
 
 export const addColumn = createAsyncThunk(
   'board/addColumn',
-  async (formData, thunkAPI) => {
+  async (formData, token, thunkAPI) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       }
     };
 

@@ -2,31 +2,37 @@ import React, { useState } from 'react';
 import styles from './AddListForm.module.css';
 import { useDispatch } from 'react-redux';
 import { addColumn } from '../../../../reducers/BoardReducer';
+import { useSession } from '@clerk/clerk-react';
 
 export default function AddListForm({
   setAddListToggle,
-  selectedBoard: { id, total_cols }
+  selectedBoard: { id, total_cols, user_id }
 }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     id: id,
     totalCols: total_cols,
-    columnStatus: ''
+    columnStatus: '',
+    userId: user_id
   });
+
+  const { session } = useSession();
 
   const { columnStatus } = formData;
 
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  async function onSubmit(e) {
     e.preventDefault();
 
-    dispatch(addColumn(formData));
+    const token = await session.getToken();
+
+    dispatch(addColumn(formData, token));
     setAddListToggle(false);
 
     // CALL THE ACTION REDUCER here
-  };
+  }
 
   return (
     <div className={styles.form_wrapper}>

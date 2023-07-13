@@ -5,27 +5,16 @@ import { useSession } from '@clerk/clerk-react';
 
 export default function NewBoardForm({ toggleHandler }) {
   const [title, setTitle] = useState('');
-  const [token, setToken] = useState('');
   const dispatch = useDispatch();
 
   const { session } = useSession();
 
-  async function getsess() {
-    const sessToken = await session.getToken();
-
-    setToken(sessToken);
-  }
-
-  useEffect(() => {
-    getsess();
-  }, []);
-
-  const onSubmitHandler = e => {
+  async function onSubmitHandler(e) {
     e.preventDefault();
 
     const formData = {
       title: title,
-      token: token
+      token: await session.getToken()
     };
 
     dispatch(createBoard(formData));
@@ -35,7 +24,7 @@ export default function NewBoardForm({ toggleHandler }) {
     // Clears the form then close it
     setTitle('');
     toggleHandler();
-  };
+  }
 
   return (
     <div>

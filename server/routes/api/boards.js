@@ -3,11 +3,14 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const format = require('pg-format');
 const { Client, config } = require('../../config/db');
+// const clerk = require('@clerk/clerk-sdk-node');
+const {
+  myRequestHeaders,
+  validateRequest
+} = require('../../middleware/validators');
 
+const { decodeToken } = require('../../middleware/decodeToken');
 // import 'dotenv/config';
-// const pkg = require('@clerk/clerk-sdk-node');
-// const clerk = pkg.default;
-const clerk = require('@clerk/clerk-sdk-node');
 
 // @TODO:
 // 1. Create Board route
@@ -25,7 +28,7 @@ router.get('/:user_id', async (req, res) => {
   // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
   // load the current logged in user id later on
   const userId = req.params.user_id;
-  const query = format('SELECT * FROM board WHERE user_id = %s', userId);
+  const query = format('SELECT * FROM board WHERE user_id = %L', userId);
   const client = new Client(config);
   client.connect();
 
@@ -85,10 +88,11 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
   const userId = req.params.user_id;
   const boardId = req.params.board_id;
   const query = format(
-    'SELECT * FROM board WHERE user_id = %s and id = %s',
+    'SELECT * FROM board WHERE user_id = %L and id = %s',
     userId,
     boardId
   );
+
   const client = new Client(config);
   client.connect();
 
@@ -109,120 +113,52 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
   }
 });
 
-// // @route     POST api/boards
-// // @desc      Add a new board
-// // @access    Private
-// router.post(
-//   '/',
-//   [check('title', 'Title of the board is required').not().isEmpty()],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     const client = new Client(config);
-//     client.connect();
-//     const { title } = req.body;
-
-//     // console.log('authorization token = ' + req.headers.authorization);
-
-//     // const user = await clerk.users.getUser(req.auth.userId);
-//     // console.log(user);
-
-//     console.log('create board api triggered!');
-
-//     //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
-
-//     const query = format(
-//       'INSERT INTO board (title, user_id) VALUES(%L, %s) RETURNING *',
-//       title,
-//       111
-//     );
-
-//     // returns errors to use for Alert components later
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     try {
-//       client.query(query, (err, response) => {
-//         if (err) {
-//           console.error(err);
-//           res.status(500).json({ msg: 'query error' });
-//         }
-
-//         // return the new column status that is added
-//         // res.status(200).json(response.rows[0]);
-//         // console.log(response.rows[0]);
-//         res.status(200).json(response.rows[0]);
-
-//         client.end();
-//       });
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send('Server Error');
-//     }
-//   }
-// );
-
-// THIS IS THE WORKING POST ROUTE...
 // @route     POST api/boards
 // @desc      Add a new board
 // @access    Private
-router.post(
-  '/',
-  [check('title', 'Title of the board is required').not().isEmpty()],
-  async (req, res) => {
-    const errors = validationResult(req);
-    const client = new Client(config);
-    client.connect();
-    const { title } = req.body;
+// [check('title', 'Title of the board is required').not().isEmpty()],
+router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+  const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { title } = req.body;
 
-    console.log('create board api triggered!');
+  console.log('create board api triggered!');
 
-    const token = req.headers.authorization;
+  // Decode the token
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
 
-    console.log('authorization: ' + token);
-    const clerkToken = req.headers.authorization.replace('Bearer ', '');
-    const decodeInfo = clerk.decodeJwt(clerkToken);
+  const query = format(
+    'INSERT INTO board (title, user_id) VALUES(%L, %L) RETURNING *',
+    title,
+    userId
+  );
 
-    // session id
-    const sessionId = decodeInfo.payload.sid;
-
-    // user/clerk id
-    const userId = decodeInfo.payload.id;
-    console.log(sessionId);
-
-    //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
-
-    const query = format(
-      'INSERT INTO board (title, user_id) VALUES(%L, %s) RETURNING *',
-      title,
-      111
-    );
-
-    // returns errors to use for Alert components later
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    // try {
-    //   client.query(query, (err, response) => {
-    //     if (err) {
-    //       console.error(err);
-    //       res.status(500).json({ msg: 'query error' });
-    //     }
-
-    //     // return the new column status that is added
-    //     // res.status(200).json(response.rows[0]);
-    //     // console.log(response.rows[0]);
-    //     res.status(200).json(response.rows[0]);
-
-    //     client.end();
-    //   });
-    // } catch (err) {
-    //   console.error(err.message);
-    //   res.status(500).send('Server Error');
-    // }
+  // returns errors to use for Alert components later
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
-);
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      // return the new column status that is added
+      // res.status(200).json(response.rows[0]);
+      // console.log(response.rows[0]);
+      res.status(200).json(response.rows[0]);
+
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route     POST api/boards/:id/add
 // @desc      Add a new column

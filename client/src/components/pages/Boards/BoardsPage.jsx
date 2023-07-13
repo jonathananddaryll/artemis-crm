@@ -5,6 +5,7 @@ import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
+import { useUser } from '@clerk/clerk-react';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));

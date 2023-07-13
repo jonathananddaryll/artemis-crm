@@ -11,7 +11,7 @@ import {
   UserButton
 } from '@clerk/clerk-react';
 
-import SideBar from './components/layout/SideBar/Sidebar';
+import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';

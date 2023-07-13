@@ -5,8 +5,7 @@ import {
   useClerk,
   UserButton,
   useAuth,
-  SignOutButton,
-  useUser
+  SignOutButton
 } from '@clerk/clerk-react';
 import { NavLink } from 'react-router-dom';
 import {
@@ -36,7 +35,6 @@ export default function SideBar() {
   const [isExpanded, setIsExpanded] = useState(true);
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
-  const { user } = useUser();
 
   const menuItems = [
     { index: 1, text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
@@ -54,7 +52,7 @@ export default function SideBar() {
 
   if (boardsLoading && userId !== null) {
     // change the 111 to userId from clerk or sql user table later
-    dispatch(getAllBoards(111));
+    dispatch(getAllBoards(userId));
   }
 
   // get all the jobs
@@ -113,7 +111,7 @@ export default function SideBar() {
       </div>
       <SignOutButton />
       <ul className={styles.navItems}>
-        <li className={styles.navItem}>
+        {/* <li className={styles.navItem}>
           <NavLink className={styles.navItemText} to='/contacts'>
             contacts
           </NavLink>
@@ -122,7 +120,7 @@ export default function SideBar() {
           <NavLink className={styles.navItemText} to='/jobtracker'>
             documents
           </NavLink>
-        </li>
+        </li> */}
         <li className={styles.navItem}>
           {/* will change this and combined boards with jobtracker */}
 
