@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useSession } from '@clerk/clerk-react';
 
 // Create action
 export const getAllBoards = createAsyncThunk(
@@ -31,17 +32,24 @@ export const getBoard = createAsyncThunk(
 
 export const createBoard = createAsyncThunk(
   'board/createBoard',
-  async (title, thunkAPI) => {
+  async (formData, thunkAPI) => {
+    // console.log(session);
+
+    // const { session } = useSession();
+
+    console.log('create board triggered asffsafs ' + formData.token);
+
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
       }
     };
 
     // Makes the string an obj to send a json to the post route
-    const formData = {
-      title: title
-    };
+    // const formData = {
+    //   title: title
+    // };
 
     try {
       const res = await axios.post('/api/boards', formData, config);

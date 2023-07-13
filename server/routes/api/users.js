@@ -20,9 +20,14 @@ router.post('/new', async (req, res) => {
   console.log('create user after creating clerk account is triggered');
 
   const query = format(
-    'INSERT INTO users (clerk_id) VALUES(%L) RETURNING *',
+    'INSERT INTO users (user_id) VALUES(%L) RETURNING *',
     clerk_id
   );
+
+  // const query = format(
+  //   'INSERT INTO users (clerk_id) VALUES(%L) ON CONFLICT RETURNING *',
+  //   clerk_id
+  // );
 
   try {
     client.query(query, (err, response) => {
