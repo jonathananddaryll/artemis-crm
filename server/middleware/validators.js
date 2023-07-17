@@ -8,9 +8,19 @@ const myRequestHeaders = [
     .bail() // not necessary, but it stops execution if previous validation failed
     //you can chain different validation rules
     .contains('Bearer')
-    .withMessage('Authorization Token is not Bearer'),
-  check('title', 'Title of the board is required').not().isEmpty()
+    .withMessage('Authorization Token is not Bearer')
 ];
+
+// const myRequestHeadersWithChecks= [
+//   header('authorization')
+//     .exists({ checkFalsy: true })
+//     .withMessage('Missing Authorization Header') // you can specify the message to show if a validation has failed
+//     .bail() // not necessary, but it stops execution if previous validation failed
+//     //you can chain different validation rules
+//     .contains('Bearer')
+//     .withMessage('Authorization Token is not Bearer'),
+//   check('title', 'Title of the board is required').not().isEmpty()
+// ];
 
 // export const myRequestHeaders1 = [
 //   header('authorization')

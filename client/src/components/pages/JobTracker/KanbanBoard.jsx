@@ -9,6 +9,8 @@ import {
   updateJobStatus
 } from '../../../reducers/BoardReducer';
 
+import { useSession } from '@clerk/clerk-react';
+
 import Column from './Column';
 import styles from './JobTrackerPage.module.css';
 
@@ -20,6 +22,8 @@ export default function KanbanBoard({ setAddListToggle }) {
   const dispatch = useDispatch();
 
   const { board_id } = useParams();
+
+  const { session } = useSession();
 
   // const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
@@ -37,7 +41,7 @@ export default function KanbanBoard({ setAddListToggle }) {
   //   selectedBoardStatusCols.map();
   // };
 
-  const handleDragEnd = (result, selectedBoardStatusCols) => {
+  async function handleDragEnd(result, selectedBoardStatusCols) {
     const { destination, source, draggableId } = result;
     console.log(result);
     if (source.droppableId == destination.droppableId) return;
@@ -45,7 +49,9 @@ export default function KanbanBoard({ setAddListToggle }) {
     const formData = {
       newStatus: destination.droppableId,
       boardId: board_id,
-      job_id: draggableId
+      job_id: draggableId,
+      selectedBoard_userId: selectedBoard.user_id,
+      token: await session.getToken()
     };
 
     dispatch(
@@ -61,8 +67,9 @@ export default function KanbanBoard({ setAddListToggle }) {
     );
 
     // THIS IS WHERE THE API CALL IS HAPPENING.. THINK OF A WAY TO MERGE THE addToStatus with this later on
+    // ADD TOKEN HERE
     dispatch(updateJobStatus(formData));
-  };
+  }
 
   // Find item by id
   function findItemById(id, array) {

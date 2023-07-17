@@ -137,12 +137,7 @@ export default function NewJobForm() {
             <div className={styles.formGroup}>
               {/* HAVE THE BOARD NAME AS THE LABEL BUT VALUE WILL BE BOARD_ID*/}
               <label>Board</label>
-              <input
-                type='text'
-                name='board_id'
-                value={board_id}
-                onChange={e => onChangeHandler(e)}
-              />
+              <input type='text' name='board_id' value={board_id} readonly />
             </div>
             <div className={styles.formGroup}>
               <label>Status</label>

@@ -26,9 +26,12 @@ export default function AddListForm({
   async function onSubmit(e) {
     e.preventDefault();
 
-    const token = await session.getToken();
+    // const token = await session.getToken();
+    const formD = formData;
+    formD['token'] = await session.getToken();
+    console.log(formD);
 
-    dispatch(addColumn(formData, token));
+    dispatch(addColumn(formD));
     setAddListToggle(false);
 
     // CALL THE ACTION REDUCER here

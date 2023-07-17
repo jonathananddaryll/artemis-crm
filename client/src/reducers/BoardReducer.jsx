@@ -85,13 +85,16 @@ export const addJob = createAsyncThunk(
 
 export const addColumn = createAsyncThunk(
   'board/addColumn',
-  async (formData, token, thunkAPI) => {
+  async (formData, thunkAPI) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${formData.token}`
       }
     };
+
+    console.log('token sent from addColumn: ' + formData.token);
+    // console.log(token);
 
     try {
       const res = await axios.patch(
@@ -114,11 +117,13 @@ export const updateJobStatus = createAsyncThunk(
   async (formData, thunkAPI) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
       }
     };
 
     console.log(formData);
+    console.log(formData.token);
 
     try {
       const res = await axios.patch(
