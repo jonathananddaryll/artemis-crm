@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import styles from './NewJobForm.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { handleToggleForm } from '../../../../reducers/BoardReducer';
+import { useSession } from '@clerk/clerk-react';
+
+import { handleToggleForm, addJob } from '../../../../reducers/BoardReducer';
 
 export default function NewJobForm() {
   const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =
@@ -10,15 +12,28 @@ export default function NewJobForm() {
       ...state.board
     }));
 
+  // const [formData, setFormData] = useState({
+  //   company: '',
+  //   job_title: '',
+  //   status: selectedStatusToAdd,
+  //   job_url: '',
+  //   board_id: selectedBoard.id,
+  //   location: '',
+  //   rate_of_pay: '',
+  //   main_contact: '',
+  //   selectedboard_user_id: selectedBoard.user_id
+  // });
+
   const [formData, setFormData] = useState({
-    company: '',
-    job_title: '',
+    company: 'google',
+    job_title: 'software engineer',
     status: selectedStatusToAdd,
     job_url: '',
     board_id: selectedBoard.id,
-    location: '',
+    location: 'remote',
     rate_of_pay: '',
-    main_contact: ''
+    main_contact: '',
+    selectedboard_user_id: selectedBoard.user_id
   });
 
   const {
@@ -29,16 +44,32 @@ export default function NewJobForm() {
     board_id,
     location,
     rate_of_pay,
-    main_contact
+    main_contact,
+    selectedboard_user_id
   } = formData;
+
+  const { session } = useSession();
 
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmitHandler = e => {
+  async function onSubmitHandler(e) {
     e.preventDefault();
 
     // dispatch(createBoard(title));
+
+    // const token = await session.getToken();
+
+    const formD = {
+      company: company,
+      job_title: job_title,
+      status: status,
+      job_url: job_url,
+      board_id: board_id,
+      location: location,
+      selectedboard_user_id: selectedboard_user_id,
+      token: await session.getToken()
+    };
 
     // Clears the form then close it
     const clearedForm = {
@@ -52,15 +83,19 @@ export default function NewJobForm() {
       main_contact: ''
     };
 
+    dispatch(addJob(formD));
+    // console.log(foformDrmData);
+    // console.log(token);
+
     setFormData(clearedForm);
     dispatch(handleToggleForm([false, null]));
-  };
+  }
 
   const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
       <div className={styles.modal}>
-        <form>
+        <form onSubmit={e => onSubmitHandler(e)}>
           <div className={styles.formGroup}>
             <label>Company</label>
             <input

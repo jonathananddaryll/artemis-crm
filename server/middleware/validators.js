@@ -1,5 +1,6 @@
 const { header, validationResult, check } = require('express-validator');
 
+// MAKE SURE TO MODULARIZE THIS LATER ON WITH HEADER and then wahtever the input validator that we need
 const myRequestHeaders = [
   header('authorization')
     .exists({ checkFalsy: true })

@@ -32,9 +32,7 @@ export const getBoard = createAsyncThunk(
 export const createBoard = createAsyncThunk(
   'board/createBoard',
   async (formData, thunkAPI) => {
-    // console.log(session);
-
-    console.log('create board triggered asffsafs ' + formData.token);
+    console.log('create board triggered in createBoard redux reducer');
 
     const config = {
       headers: {
@@ -50,6 +48,33 @@ export const createBoard = createAsyncThunk(
 
     try {
       const res = await axios.post('/api/boards', formData, config);
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+export const addJob = createAsyncThunk(
+  'job/addJob',
+  async (formData, thunkAPI) => {
+    // console.log('addJob triggered in redux reducer: ' + formData.token);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    // Makes the string an obj to send a json to the post route
+    // const formData = {
+    //   title: title
+    // };
+
+    try {
+      const res = await axios.post('/api/jobs', formData, config);
       return res.data;
     } catch (error) {
       // have a better error catch later
@@ -207,6 +232,10 @@ const boardSlice = createSlice({
     builder.addCase(createBoard.fulfilled, (state, action) => {
       state.boards = [...state.boards, action.payload];
       console.log('create board triggered');
+    });
+    builder.addCase(addJob.fulfilled, (state, action) => {
+      state.selectedBoardStatusCols[action.payload.status].push(action.payload);
+      // state.boards = [...state.boards, action.payload];
     });
     // JOBS EXTRA REDUCER
     // call the action here and then action.payload is whatever the returned value from the action (res.data).

@@ -93,6 +93,8 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
     boardId
   );
 
+  console.log('userId: ' + userId + ' and boardId: ' + boardId);
+
   const client = new Client(config);
   client.connect();
 
@@ -118,7 +120,7 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
 // @access    Private
 // [check('title', 'Title of the board is required').not().isEmpty()],
 router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
   const { title } = req.body;
@@ -136,9 +138,9 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   );
 
   // returns errors to use for Alert components later
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() });
+  // }
 
   try {
     client.query(query, (err, response) => {
@@ -148,7 +150,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       }
 
       // return the new column status that is added
-      // res.status(200).json(response.rows[0]);
       // console.log(response.rows[0]);
       res.status(200).json(response.rows[0]);
 
