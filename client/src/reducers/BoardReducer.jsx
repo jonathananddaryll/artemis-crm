@@ -192,10 +192,10 @@ const boardSlice = createSlice({
       state.selectedBoardStatusCols = newColObj;
       state.selectedBoardLoading = false;
     },
-    fillBoardWithJobs: (state, action) => {
-      const jobs = action.payload;
-      jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
-    },
+    // fillBoardWithJobs: (state, action) => {
+    //   const jobs = action.payload;
+    //   jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
+    // },
     // Remove job from the status array
     removeFromStatus: (state, action) => {
       state.selectedBoardStatusCols[action.payload[1]].splice(

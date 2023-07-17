@@ -8,6 +8,7 @@ import {
   SignOutButton,
   useUser
 } from '@clerk/clerk-react';
+
 import { NavLink } from 'react-router-dom';
 import {
   getAllBoards,
