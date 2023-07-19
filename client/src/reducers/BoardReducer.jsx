@@ -267,6 +267,10 @@ const boardSlice = createSlice({
         ...state.selectedBoardStatusCols,
         [action.payload]: []
       };
+      const newCol = 'column' + (state.selectedBoard.total_cols + 1);
+      console.log('new column is: ' + newCol);
+      state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
+      state.selectedBoard[newCol] = action.payload;
     });
 
     // UPDATE JOB STATUS
