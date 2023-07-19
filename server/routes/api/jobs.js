@@ -217,6 +217,58 @@ router.patch(
   }
 );
 
+// @route     DELETE /api/jobs/:id
+// @desc      delete a job
+// @access    Private
+router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
+  const client = new Client(config);
+  client.connect();
+
+  const { selectedBoard_userId, selectedBoard_id } = req.body;
+  const id = req.params.id;
+
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
+  console.log('user id is:' + userId);
+  console.log('selectedBoard_userId: ' + selectedBoard_userId);
+
+  // Checks if the loggedIn user owns the board
+  if (userId === undefined || selectedBoard_userId !== userId) {
+    return res
+      .status(405)
+      .json({ msg: 'Error: The user does not own the board and the job' });
+  } else {
+    // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
+    const query = format(
+      `DELETE FROM job WHERE id = %s and board_id = %s`,
+      id,
+      selectedBoard_id
+    );
+
+    // delete this later
+    console.log(query);
+
+    try {
+      client.query(query, (err, response) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ msg: 'query error' });
+        }
+
+        // return the updated job
+        // console.log(response.rows[0]);
+        // res.status(200).json(response.rows[0]);
+
+        console.log(response);
+        res.status(200).json(response);
+        client.end();
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+});
 // Add authentication and input validation later
 // router.post('/', async (req, res) => {
 //   const newJob =

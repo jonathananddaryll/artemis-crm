@@ -10,6 +10,8 @@ function decodeToken(jwtToken) {
   // user/clerk id
   const userId = decodeInfo.payload.id;
 
+  console.log('ayoo decoded info userID: ' + decodeInfo.payload.id);
+
   const decodedToken = {
     sessionId: sessionId,
     userId: userId
