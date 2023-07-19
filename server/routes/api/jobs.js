@@ -240,7 +240,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   } else {
     // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
     const query = format(
-      `DELETE FROM job WHERE id = %s and board_id = %s`,
+      `DELETE FROM job WHERE id = %s and board_id = %s RETURNING *`,
       id,
       selectedBoard_id
     );
@@ -259,8 +259,13 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
         // console.log(response.rows[0]);
         // res.status(200).json(response.rows[0]);
 
-        console.log(response);
-        res.status(200).json(response);
+        // Find a way to send a response and console log that the query got 0 result
+        // if (response === undefined) {
+        //   console.log('didnt find the row to delete');
+        // }
+
+        console.log(response.rows[0]);
+        res.status(200).json(response.rows[0]);
         client.end();
       });
     } catch (err) {

@@ -48,36 +48,6 @@ router.get('/:user_id', async (req, res) => {
   }
 });
 
-// THIS IS THE GET ROUTE WITH EXPRESSREQUIREAUTH. NOT WORKING RIGHT NOW.
-// router.get('/:user_id', clerk.expressRequireAuth({}), async (req, res) => {
-//   console.log('boards api getall hits');
-//   // const user = await clerk.users.getUser(req.auth.userId);
-
-//   // console.log('user is ' + user);
-
-//   // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   const query = format('SELECT * FROM board WHERE user_id = %s', userId);
-//   const client = new Client(config);
-//   client.connect();
-
-//   try {
-//     client.query(query, (err, response) => {
-//       if (err) {
-//         console.error(err);
-//         res.status(500).json({ msg: 'query error' });
-//       }
-
-//       res.status(200).json(response.rows);
-//       client.end();
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
 // @route     GET api/boards/:user_id/board/:board_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
 // @desc      get boards for the user_id with board_id
 // @access    public ----> will probably make this private later with userid
@@ -302,7 +272,8 @@ router.patch('/:board_id/updatename', async (req, res) => {
   }
 });
 
-// @route     POST api/boards/:id/remove
+// -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
+// @route     POST api/boards/:board_id/remove
 // @desc      remove a column status
 // @access    Private
 router.patch('/:board_id/remove', async (req, res) => {
@@ -344,193 +315,67 @@ router.patch('/:board_id/remove', async (req, res) => {
   }
 });
 
-/////////////////////////////// THIS IS THE OLD ONE TO REVERT BACK TO IF IT DOESNT WORK
-// // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get all boards for the user_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id', async (req, res) => {
-//   console.log('boards api getall hits');
+// @route     DELETE api/boards/:id
+// @desc      delete a board
+// @access    Private
+router.delete(
+  '/:board_id',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    const client = new Client(config);
+    client.connect();
 
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   try {
-//     const query = format('SELECT * FROM BOARD WHERE %s', userId);
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-//     console.log(query);
+    const { selectedBoard_userId } = req.body;
+    const id = req.params.board_id;
 
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+    console.log('user id is:' + userId);
+    console.log('selectedBoard_userId: ' + selectedBoard_userId);
 
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
-//     const query1 = ('SELECT * FROM board WHERE user_id = $1', [userId]);
-//     // const boards = await sql`${query1}`;
+    // Checks if the loggedIn user owns the board
+    if (userId === undefined || selectedBoard_userId !== userId) {
+      console.log('invalid user');
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `DELETE FROM board WHERE id = %s and NOT EXISTS (SELECT * FROM job WHERE board.id = job.board_id) RETURNING *`,
+        id
+      );
 
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
+      console.log(query);
 
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
 
-// // @route     GET api/boards/:user_id/board/:board_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get boards for the user_id with board_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id/board/:board_id', async (req, res) => {
-//   console.log('get board with boardId hits');
+          // console.log(response.rows[0]);
+          // res.status(200).json(response.rows[0]);
 
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   const boardId = req.params.board_id;
-//   try {
-//     const board = await sql`SELECT * FROM BOARD WHERE user_id = 111 and id = 1`;
+          // ------------------------------- ADD A RETURN IF THE QUERY DOESNT RETURN ANYTHIHNG
+          console.log(response);
+          res.status(200).json(response);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
 
-//     if (!board) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
+    //check authorization header
 
-//     res.json(board);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
+    // check if there are any jobs in the board with the board_id
 
-// // @route     POST api/boards
-// // @desc      Add a new board
-// // @access    Private
-// router.post(
-//   '/',
-//   [check('title', 'Title of the board is required').not().isEmpty()],
-//   async (req, res) => {
-//     const errors = validationResult(req);
+    // throws an error if there is,
 
-//     // returns errors to use for Alert components later
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     const { title } = req.body;
-
-//     try {
-//       // have a userid later pull from the user table
-//       await sql`INSERT INTO BOARD (title, user_id) VALUES(${title}, 111)`;
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send('Server Error');
-//     }
-//   }
-// );
-
-// // @route     POST api/boards/:id/add
-// // @desc      Add a new column
-// // @access    Private
-// router.patch('/:board_id/add', async (req, res) => {
-//   // do the calculating of what colum to add to. have a keeper of first empty column in redux
-//   const { columnStatus, columnToAdd } = req.body;
-//   const boardId = req.params.board_id;
-//   console.log(req.body);
-
-//   try {
-//     // const query = format(`SELECT * FROM JOB WHERE board_id = ${boardId}`);
-//     const query = format(
-//       `UPDATE BOARD SET %I = %L WHERE id = %I and user_id = %L`,
-//       columnToAdd,
-//       columnStatus,
-//       boardId,
-//       111
-//     );
-//     console.log(query);
-//     // await sql`UPDATE BOARD SET ${columnToAdd} = ${columnStatus}, WHERE id = ${boardId} AND user_id = 111,`;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
-
-// {
-//     "columnStatus": "applied",
-//     "columnToAdd": "column2",
-// }
-
-// @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// @desc      get all boards for the user_id
-// @access    public ----> will probably make this private later with userid
-// router.get('/', clerk.expressRequireAuth({}), async (req, res) => {
-//   console.log('boards api getall hits');
-
-//   // load the current logged in user id later on
-//   // const userId = req.params.user_id;
-//   try {
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
-
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
-
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
-// router.get('/', async (req, res) => {
-//   // load the current logged in user id later on
-//   const userId = 111;
-//   try {
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
-
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
-// Add authentication and input validation later
-// router.post('/', async (req, res) => {
-//   const newBoard =
-// })
-
-// // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get all boards for the user_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id', async (req, res) => {
-//   console.log('boards api getall hits');
-
-//   const client = new Client(config);
-//   await client.connect();
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   try {
-//     const query = format('SELECT * FROM BOARD WHERE user_id = %s', userId);
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-
-//     client.query(query, (err, response) => {
-//       if (err) {
-//         console.error(err);
-//         res.status(500).json({ msg: 'query error' });
-//       }
-
-//       res.status(200).json(response);
-//       client.end();
-//     });
-
-//     // if (!boards) {
-//     //   return res.status(400).json({ msg: 'No boards found' });
-//     // }
-
-//     // res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
+    // DELETE the board if it meets all condition
+  }
+);
 module.exports = router;
