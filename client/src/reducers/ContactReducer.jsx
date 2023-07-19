@@ -23,7 +23,7 @@ const fakeContacts = [
       instagram: 'https://instagram.com/apollotheoracle',
       other_social: 'https://olympus.social/gods/apollo',
       personal_site: 'https://www.averterofevil.org',
-      linked_job_opening: 'https://www.averterofevil.org/jobs/mortal/engineering/uxdesigner',
+      fk_linked_job: 1,
       timestamp: '2023-05-30 00:00:01',
     },
     {
@@ -41,7 +41,7 @@ const fakeContacts = [
       instagram: 'https://instagram.com/cthonic',
       other_social: 'https://hades.social/goddess/hera/minions/python',
       personal_site: 'https://www.learntocode.org',
-      linked_job_opening: 'https://www.learntocode.org/jobs/engineering/engineerintesting',
+      fk_linked_job: 1,
       timestamp: '2023-03-21 10:50:05',
     },
     {
@@ -59,7 +59,7 @@ const fakeContacts = [
       instagram: 'https://instagram.com/heqet',
       other_social: 'https://olympus.social/gods/heqet',
       personal_site: '',
-      linked_job_opening: 'https://crossroads.time/jobs/immortal/engineering/pixelwizard',
+      fk_linked_job: 1,
       timestamp: '2023-01-09 16:30:49',
     },
 ]
@@ -128,8 +128,8 @@ export const updateContactWithUserId = createAsyncThunk(
         },
         params: {
           user_id,
-          first,
-          last
+          updateRows,
+          updateValues
         }
       });
       // return res.data;
@@ -147,6 +147,20 @@ export const createNewContactWithUserId = createAsyncThunk(
       console.log(user_id, contactRows, contactValues)
       // const res = await axios.post('api/contacts/');
       // return res.data;
+      const res = await axios.create({
+        method: 'CREATE',
+        url: '/api/contacts/',
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        params: {
+          user_id,
+          contactRows,
+          contactValues
+        }
+      });
     }catch(err){
       console.log(err);
     }

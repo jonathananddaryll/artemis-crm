@@ -70,8 +70,8 @@ router.get('/', async (req, res) => {
 // @ACCESS Private
 router.post('/', async (req, res) => {
     try{
-        // Should have client side input checks, and server side input validation.
-        // Integrate express validator
+        // Should have client side input checks, and server side input validation. Does not verify minimum requirements
+        // to create a new contact, will only return error.
         // an array of the identifiers
         // needs secure parameterization for when adding the user_id to the query
         const { names, values } = req.body;
