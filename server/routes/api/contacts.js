@@ -6,6 +6,8 @@ const Client = require('../../config/db');
 const format = require('pg-format');
 >>>>>>> 05be52a (added more client query structure)
 
+// Testing new git token
+
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts
 // @ACCESS Private
