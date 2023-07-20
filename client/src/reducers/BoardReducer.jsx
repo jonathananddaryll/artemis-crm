@@ -167,7 +167,9 @@ const boardSlice = createSlice({
     jobsLoading: true,
     selectedJob: null,
     toggleJobForm: false,
-    selectedStatusToAdd: null
+    selectedStatusToAdd: null,
+    toggleSelectedJobModal: false,
+    selectedJob: null
   },
   reducers: {
     // Changing it to object
@@ -176,7 +178,8 @@ const boardSlice = createSlice({
       state.selectedStatusToAdd = action.payload[1];
     },
     changeSelectedJob: (state, action) => {
-      state.selectedJob = action.payload;
+      state.toggleSelectedJobModal = action.payload[0];
+      state.selectedJob = action.payload[1];
     },
     changeBoard: (state, action) => {
       state.selectedBoardLoading = true;

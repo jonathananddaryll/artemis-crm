@@ -2,6 +2,12 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
+import {
+  handleToggleForm,
+  changeSelectedJob
+} from '../../../reducers/BoardReducer';
+import { useDispatch } from 'react-redux';
+
 const Container = styled.div`
   border-radius: 10px;
   padding: 8px;
@@ -44,6 +50,7 @@ const LocationText = styled.p`
 `;
 
 export default function Job({ job, index }) {
+  const dispatch = useDispatch();
   return (
     <Draggable draggableId={`${job.id}`} key={job.id} index={index}>
       {(provided, snapshot) => (
@@ -52,6 +59,7 @@ export default function Job({ job, index }) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
+          onClick={() => dispatch(changeSelectedJob([true, job]))}
         >
           <CompanyLogo />
           <TextContent>

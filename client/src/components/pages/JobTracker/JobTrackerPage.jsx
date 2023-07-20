@@ -7,6 +7,7 @@ import styles from './JobTrackerPage.module.css';
 import KanbanBoard from './KanbanBoard';
 import AddListForm from './AddListForm/AddListForm';
 import NewJobForm from './NewJobForm/NewJobForm';
+import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
@@ -15,7 +16,8 @@ export default function JobTrackerPage() {
     jobs,
     jobsLoading,
     toggleJobForm,
-    selectedBoardStatusCols
+    selectedBoardStatusCols,
+    toggleSelectedJobModal
   } = useSelector(state => ({
     ...state.board
   }));
@@ -50,6 +52,7 @@ export default function JobTrackerPage() {
             />
           )}
           {toggleJobForm && <NewJobForm />}
+          {toggleSelectedJobModal && <SelectedJobModal />}
         </>
       )}
     </div>
