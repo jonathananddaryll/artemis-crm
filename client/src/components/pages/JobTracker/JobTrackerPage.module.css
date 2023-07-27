@@ -1,8 +1,31 @@
 .container {
-  background-color: red;
-  width: 100%-300px;
-  margin-left: 300px;
-  height: 100vh;
-  /* overflow-x: hidden; */
+  background-color: #f8fbfe;
+  /* width: 100%-250px;
+  margin-left: 250px; */
+  height: 100%;
+  width: 100%;
+  overflow-x: scroll;
+  padding: 5px 30px;
   /* padding: 20px 0 20px 10px; */
+}
+
+.kanbanContainer {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* flex-direction: row; */
+
+  overflow: hidden;
+  /* display: inline-block; */
+  width: max-content;
+}
+
+.addlistContainer {
+  background-color: #f2f3f5;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 5px;
+  width: 300px;
+  min-height: 90vh;
+  float: left;
 }

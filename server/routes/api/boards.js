@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
-// const sql = require('../../config/db');
 const { check, validationResult } = require('express-validator');
 const format = require('pg-format');
 const { Client, config } = require('../../config/db');
+// const clerk = require('@clerk/clerk-sdk-node');
+const {
+  myRequestHeaders,
+  validateRequest
+} = require('../../middleware/validators');
 
+const { decodeToken } = require('../../middleware/decodeToken');
 // import 'dotenv/config';
-const pkg = require('@clerk/clerk-sdk-node');
-const clerk = pkg.default;
 
 // @TODO:
 // 1. Create Board route
@@ -25,7 +28,10 @@ router.get('/:user_id', async (req, res) => {
   // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
   // load the current logged in user id later on
   const userId = req.params.user_id;
-  const query = format('SELECT * FROM board WHERE user_id = %s', userId);
+  const query = format(
+    'SELECT * FROM board WHERE user_id = %L ORDER BY date_created ASC',
+    userId
+  );
   const client = new Client(config);
   client.connect();
 
@@ -55,10 +61,13 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
   const userId = req.params.user_id;
   const boardId = req.params.board_id;
   const query = format(
-    'SELECT * FROM board WHERE user_id = %s and id = %s',
+    'SELECT * FROM board WHERE user_id = %L and id = %s',
     userId,
     boardId
   );
+
+  // console.log('userId: ' + userId + ' and boardId: ' + boardId);
+
   const client = new Client(config);
   client.connect();
 
@@ -68,6 +77,8 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'query error' });
       }
+
+      // console.log(response.rows[0]);
 
       // Returns the board obj
       res.status(200).json(response.rows[0]);
@@ -82,141 +93,224 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
 // @route     POST api/boards
 // @desc      Add a new board
 // @access    Private
-router.post(
-  '/',
-  [check('title', 'Title of the board is required').not().isEmpty()],
-  async (req, res) => {
-    const errors = validationResult(req);
-    const client = new Client(config);
-    client.connect();
-    const { title } = req.body;
+// [check('title', 'Title of the board is required').not().isEmpty()],
+router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { title } = req.body;
 
-    console.log('create board api triggered!fas fsa fsafs');
+  console.log('create board api triggered!');
 
-    //VALIDATE THAT THE BOARD BELONGS TO THE CURRENT LOGGED IN USER THAT IS ADDING A NEW COLUMN IN THE BOARD. instead of hard codding the user_id (111), make sure it's pulling it from the current logged in user
+  // Decode the token
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
 
-    const query = format(
-      'INSERT INTO board (title, user_id) VALUES(%L, %s) RETURNING *',
-      title,
-      111
-    );
+  const query = format(
+    'INSERT INTO board (title, user_id) VALUES(%L, %L) RETURNING *',
+    title,
+    userId
+  );
 
-    // returns errors to use for Alert components later
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+  // returns errors to use for Alert components later
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() });
+  // }
 
-    try {
-      client.query(query, (err, response) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ msg: 'query error' });
-        }
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
 
-        // return the new column status that is added
-        // res.status(200).json(response.rows[0]);
-        // console.log(response.rows[0]);
-        res.status(200).json(response.rows[0]);
+      // return the new column status that is added
+      // console.log(response.rows[0]);
+      res.status(200).json(response.rows[0]);
 
-        client.end();
-      });
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
-);
+});
 
 // @route     POST api/boards/:id/add
 // @desc      Add a new column
 // @access    Private
-router.patch('/:board_id/add', async (req, res) => {
-  // do the calculating of what colum to add to. have a keeper of first empty column in redux
+router.patch(
+  '/:board_id/add',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // do the calculating of what colum to add to. have a keeper of first empty column in redux
 
-  // const errors = validationResult(req);
-  const client = new Client(config);
-  client.connect();
-  const { columnStatus, totalCols } = req.body;
-  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
-  const newTotalCols = totalCols + 1;
-  const boardId = req.params.board_id;
-  const columnToAdd = 'column'.concat(newTotalCols);
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const { columnStatus, totalCols, userId } = req.body;
+    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+    const newTotalCols = totalCols + 1;
+    const boardId = req.params.board_id;
+    const columnToAdd = 'column'.concat(newTotalCols);
 
-  const query = format(
-    `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %s RETURNING *`,
-    columnToAdd,
-    columnStatus,
-    'total_cols',
-    newTotalCols,
-    boardId,
-    111
-  );
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
 
-  // remove this later
-  console.log(query);
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *`,
+        columnToAdd,
+        columnStatus,
+        'total_cols',
+        newTotalCols,
+        boardId,
+        decodedUserId
+      );
 
-  if (totalCols === 10) {
-    return res
-      .status(405)
-      .json({ msg: 'Error. Only 10 column is allowed per board' });
-  }
+      // remove this later
+      console.log(query);
 
-  try {
-    client.query(query, (err, response) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+      if (totalCols === 10) {
+        return res
+          .status(405)
+          .json({ msg: 'Error. Only 10 column is allowed per board' });
       }
 
-      // return the new column status that is added
-      console.log(response);
-      res.status(200).json(response.rows[0]);
-      client.end();
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
 
-// @route     POST api/boards/:id/update
+          // return the new column status that is added
+          console.log(response);
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
+
+// @route     POST api/boards/:id/update/column
 // @desc      update column
 // @access    Private
-router.patch('/:board_id/update', async (req, res) => {
-  // const errors = validationResult(req);
-  const client = new Client(config);
-  client.connect();
-  const { columnStatus, columnToUpdate } = req.body;
-  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
-  const boardId = req.params.board_id;
+router.patch(
+  '/:board_id/update/column',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const { columnStatus, columnToUpdate, userId } = req.body;
+    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+    const boardId = req.params.board_id;
 
-  const query = format(
-    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s RETURNING *`,
-    columnToUpdate,
-    columnStatus,
-    boardId,
-    111
-  );
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
 
-  try {
-    client.query(query, (err, response) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+    // if user do not own the board
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING *`,
+        columnToUpdate,
+        columnStatus,
+        boardId,
+        'user_2SWlvSMY0DKPuKthQBIRgFoDvdi'
+      );
+
+      console.log(query);
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the updated column
+          console.log(response.rows[0]);
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
       }
-
-      // return the new column status that is added
-      console.log(response);
-      res.status(200).json(response.rows[0]);
-      client.end();
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    }
   }
-});
+);
 
-// @route     POST api/boards/:id/remove
+// @route     POST api/boards/:id/update/name
+// @desc      update board name
+// @access    Private
+router.patch(
+  '/:board_id/update/name',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const { title, userId } = req.body;
+    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+    const boardId = req.params.board_id;
+
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
+
+    // if user do not own the board
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE BOARD SET title = %L WHERE id = %s and user_id = %L RETURNING *`,
+        title,
+        boardId,
+        userId
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the updated board
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
+
+// -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
+// @route     POST api/boards/:board_id/remove
 // @desc      remove a column status
 // @access    Private
 router.patch('/:board_id/remove', async (req, res) => {
@@ -258,193 +352,67 @@ router.patch('/:board_id/remove', async (req, res) => {
   }
 });
 
-/////////////////////////////// THIS IS THE OLD ONE TO REVERT BACK TO IF IT DOESNT WORK
-// // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get all boards for the user_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id', async (req, res) => {
-//   console.log('boards api getall hits');
+// @route     DELETE api/boards/:id
+// @desc      delete a board
+// @access    Private
+router.delete(
+  '/:board_id',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    const client = new Client(config);
+    client.connect();
 
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   try {
-//     const query = format('SELECT * FROM BOARD WHERE %s', userId);
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-//     console.log(query);
+    const { selectedBoard_userId } = req.body;
+    const id = req.params.board_id;
 
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+    console.log('user id is:' + userId);
+    console.log('selectedBoard_userId: ' + selectedBoard_userId);
 
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
-//     const query1 = ('SELECT * FROM board WHERE user_id = $1', [userId]);
-//     // const boards = await sql`${query1}`;
+    // Checks if the loggedIn user owns the board
+    if (userId === undefined || selectedBoard_userId !== userId) {
+      console.log('invalid user');
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `DELETE FROM board WHERE id = %s and NOT EXISTS (SELECT * FROM job WHERE board.id = job.board_id) RETURNING *`,
+        id
+      );
 
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
+      console.log(query);
 
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
 
-// // @route     GET api/boards/:user_id/board/:board_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get boards for the user_id with board_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id/board/:board_id', async (req, res) => {
-//   console.log('get board with boardId hits');
+          // console.log(response.rows[0]);
+          // res.status(200).json(response.rows[0]);
 
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   const boardId = req.params.board_id;
-//   try {
-//     const board = await sql`SELECT * FROM BOARD WHERE user_id = 111 and id = 1`;
+          // ------------------------------- ADD A RETURN IF THE QUERY DOESNT RETURN ANYTHIHNG
+          console.log(response);
+          res.status(200).json(response);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
 
-//     if (!board) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
+    //check authorization header
 
-//     res.json(board);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
+    // check if there are any jobs in the board with the board_id
 
-// // @route     POST api/boards
-// // @desc      Add a new board
-// // @access    Private
-// router.post(
-//   '/',
-//   [check('title', 'Title of the board is required').not().isEmpty()],
-//   async (req, res) => {
-//     const errors = validationResult(req);
+    // throws an error if there is,
 
-//     // returns errors to use for Alert components later
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     const { title } = req.body;
-
-//     try {
-//       // have a userid later pull from the user table
-//       await sql`INSERT INTO BOARD (title, user_id) VALUES(${title}, 111)`;
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send('Server Error');
-//     }
-//   }
-// );
-
-// // @route     POST api/boards/:id/add
-// // @desc      Add a new column
-// // @access    Private
-// router.patch('/:board_id/add', async (req, res) => {
-//   // do the calculating of what colum to add to. have a keeper of first empty column in redux
-//   const { columnStatus, columnToAdd } = req.body;
-//   const boardId = req.params.board_id;
-//   console.log(req.body);
-
-//   try {
-//     // const query = format(`SELECT * FROM JOB WHERE board_id = ${boardId}`);
-//     const query = format(
-//       `UPDATE BOARD SET %I = %L WHERE id = %I and user_id = %L`,
-//       columnToAdd,
-//       columnStatus,
-//       boardId,
-//       111
-//     );
-//     console.log(query);
-//     // await sql`UPDATE BOARD SET ${columnToAdd} = ${columnStatus}, WHERE id = ${boardId} AND user_id = 111,`;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// });
-
-// {
-//     "columnStatus": "applied",
-//     "columnToAdd": "column2",
-// }
-
-// @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// @desc      get all boards for the user_id
-// @access    public ----> will probably make this private later with userid
-// router.get('/', clerk.expressRequireAuth({}), async (req, res) => {
-//   console.log('boards api getall hits');
-
-//   // load the current logged in user id later on
-//   // const userId = req.params.user_id;
-//   try {
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = 111`;
-
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
-
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
-// router.get('/', async (req, res) => {
-//   // load the current logged in user id later on
-//   const userId = 111;
-//   try {
-//     const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-
-//     if (!boards) {
-//       return res.status(400).json({ msg: 'No boards found' });
-//     }
-
-//     res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
-// Add authentication and input validation later
-// router.post('/', async (req, res) => {
-//   const newBoard =
-// })
-
-// // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// // @desc      get all boards for the user_id
-// // @access    public ----> will probably make this private later with userid
-// router.get('/:user_id', async (req, res) => {
-//   console.log('boards api getall hits');
-
-//   const client = new Client(config);
-//   await client.connect();
-//   // load the current logged in user id later on
-//   const userId = req.params.user_id;
-//   try {
-//     const query = format('SELECT * FROM BOARD WHERE user_id = %s', userId);
-//     // const boards = await sql`SELECT * FROM BOARD WHERE user_id = ${userId}`;
-
-//     client.query(query, (err, response) => {
-//       if (err) {
-//         console.error(err);
-//         res.status(500).json({ msg: 'query error' });
-//       }
-
-//       res.status(200).json(response);
-//       client.end();
-//     });
-
-//     // if (!boards) {
-//     //   return res.status(400).json({ msg: 'No boards found' });
-//     // }
-
-//     // res.json(boards);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
+    // DELETE the board if it meets all condition
+  }
+);
 module.exports = router;

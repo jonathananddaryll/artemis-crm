@@ -9,6 +9,8 @@ import {
   updateJobStatus
 } from '../../../reducers/BoardReducer';
 
+import { useSession } from '@clerk/clerk-react';
+
 import Column from './Column';
 import styles from './JobTrackerPage.module.css';
 
@@ -20,6 +22,8 @@ export default function KanbanBoard({ setAddListToggle }) {
   const dispatch = useDispatch();
 
   const { board_id } = useParams();
+
+  const { session } = useSession();
 
   // const { selectedBoard } = useSelector(state => ({ ...state.board }));
 
@@ -37,7 +41,7 @@ export default function KanbanBoard({ setAddListToggle }) {
   //   selectedBoardStatusCols.map();
   // };
 
-  const handleDragEnd = (result, selectedBoardStatusCols) => {
+  async function handleDragEnd(result, selectedBoardStatusCols) {
     const { destination, source, draggableId } = result;
     console.log(result);
     if (source.droppableId == destination.droppableId) return;
@@ -45,7 +49,9 @@ export default function KanbanBoard({ setAddListToggle }) {
     const formData = {
       newStatus: destination.droppableId,
       boardId: board_id,
-      job_id: draggableId
+      job_id: draggableId,
+      selectedBoard_userId: selectedBoard.user_id,
+      token: await session.getToken()
     };
 
     dispatch(
@@ -61,8 +67,9 @@ export default function KanbanBoard({ setAddListToggle }) {
     );
 
     // THIS IS WHERE THE API CALL IS HAPPENING.. THINK OF A WAY TO MERGE THE addToStatus with this later on
+    // ADD TOKEN HERE
     dispatch(updateJobStatus(formData));
-  };
+  }
 
   // Find item by id
   function findItemById(id, array) {
@@ -76,36 +83,9 @@ export default function KanbanBoard({ setAddListToggle }) {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2>
-      {/*       
-      {selectedBoard !== null && selectedBoardStatusCols.length > 0 && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row'
-          }}
-        >
-          //  CHANGE THIS TO SELECTED BOARD LATER 
-          {selectedBoardStatusCols.map((col, idx) => (
-            <Column title={col} jobs={applied} id={idx} />
-          ))}
-
-
-        </div>
-      )} */}
 
       {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row',
-          padding: '10px 30px'
-          // width: '150%'
-        }}
-      >
+      <div className={styles.kanbanContainer}>
         {/* CHANGE THIS TO SELECTED BOARD LATER */}
         {/* {selectedBoardStatusCols.map((col, idx) => (
             <Column title={col} jobs={applied} id={idx} />
@@ -118,9 +98,12 @@ export default function KanbanBoard({ setAddListToggle }) {
             key={index}
           />
         ))}
-        <div className='addlist-column'>
-          <button onClick={() => setAddListToggle(true)}>Add list</button>
-        </div>
+        {/* Add list column only shows when there's less than 10 total status columns */}
+        {selectedBoard.total_cols < 10 && (
+          <div className={styles.addlistContainer}>
+            <button onClick={() => setAddListToggle(true)}>Add list</button>
+          </div>
+        )}
       </div>
       {/* )} */}
     </DragDropContext>

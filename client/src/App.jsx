@@ -33,7 +33,7 @@ function App() {
   return (
     <BrowserRouter>
       <ClerkProvider publishableKey={clerkPubKey} navigate={to => navigate(to)}>
-        <>
+        <div className='flex'>
           <SideBar />
           <Routes>
             <Route
@@ -73,7 +73,7 @@ function App() {
               }
             ></Route>
           </Routes>
-        </>
+        </div>
       </ClerkProvider>
     </BrowserRouter>
   );

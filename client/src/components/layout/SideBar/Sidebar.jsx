@@ -1,19 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './SideBar.module.css';
 import {
   useClerk,
   UserButton,
   useAuth,
-  SignOutButton,
-  useUser
+  SignOutButton
 } from '@clerk/clerk-react';
+
 import { NavLink } from 'react-router-dom';
 import {
   getAllBoards,
   changeBoard,
   getjobswithBoardId
 } from '../../../reducers/BoardReducer';
+
 // import { getjobswithBoardId } from '../../../reducers/JobReducer';
 
 // function SignInButton() {
@@ -32,17 +33,29 @@ import {
 // }
 
 export default function SideBar() {
+  const [isExpanded, setIsExpanded] = useState(true);
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const { isLoaded, userId, firstName } = useAuth();
-  const { user } = useUser();
+
+  const menuItems = [
+    { index: 1, text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
+    {
+      index: 2,
+      text: 'Documents',
+      icon: '/icons/file.svg',
+      link: '/documents'
+    },
+    { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
+  ];
 
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
-  if (boardsLoading && userId !== null) {
-    // change the 111 to userId from clerk or sql user table later
-    dispatch(getAllBoards(111));
-  }
+  // LOAD ALL THE BOARDS... MAYBE ADD THIS / UNCOMMENT THIS LATER
+  // if (boardsLoading && userId !== null) {
+  //   // change the 111 to userId from clerk or sql user table later
+  //   dispatch(getAllBoards(userId));
+  // }
 
   // get all the jobs
   // useEffect(() => {
@@ -51,48 +64,84 @@ export default function SideBar() {
   // }, []);
 
   const handleLink = board => {
-    dispatch(changeBoard(board));
+    // dispatch(changeBoard(board));
     // dispatch(getjobswithBoardId(board.id));
   };
 
   return (
-    <div className={styles.container}>
-      <p>sidebar</p>
-      {isLoaded && <UserButton />}
-      {userId !== null && user !== undefined && (
-        <>
-          <p>{userId}</p>
-          <p>{user.firstName}</p>
-          <p>{user.lastName}</p>
-          <SignOutButton />
-        </>
-      )}
-
-      <ul>
-        <li>
-          <NavLink to='/contacts'>contacts</NavLink>
+    <div
+      className={
+        styles.navContainer + ' ' + (!isExpanded && styles.navContainerNX)
+      }
+    >
+      <div className={styles.navUpper}>
+        <div className={styles.navHeading}>
+          {isExpanded && (
+            <div className={styles.navBrand}>
+              <img src='/icons/deer.png' className={styles.logoImage} />
+              <h2 className={styles.logoText}>Artemis</h2>
+            </div>
+          )}
+          <button
+            className={
+              styles.hamburger +
+              ' ' +
+              (isExpanded ? styles.hamburgerIn : styles.hamburgerOut)
+            }
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div className={styles.navMenu}>
+          {menuItems.map(({ index, text, icon, link }) => (
+            <NavLink key={index} to={link} className={styles.navMenuLink}>
+              <div
+                className={
+                  styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
+                }
+              >
+                <img src={icon} alt='' srcSet='' />
+                {isExpanded && <p>{text}</p>}
+                {!isExpanded && <div className={styles.tooltip}>{text}</div>}
+              </div>
+            </NavLink>
+          ))}
+        </div>
+      </div>
+      <SignOutButton />
+      <ul className={styles.navItems}>
+        {/* <li className={styles.navItem}>
+          <NavLink className={styles.navItemText} to='/contacts'>
+            contacts
+          </NavLink>
         </li>
-        {/* <li>
-          <NavLink to='/jobtracker'>job tracker</NavLink>
+        <li className={styles.navItem}>
+          <NavLink className={styles.navItemText} to='/jobtracker'>
+            documents
+          </NavLink>
         </li> */}
-        <li>
-          <NavLink to='/jobtracker'>documents</NavLink>
-        </li>
-        <li>
-          {/* will change this and combined boards with jobtracker */}
-          <NavLink to='/boards'>Boards</NavLink>
+        {/* <li className={styles.navItem}>
+          <NavLink className={styles.navItemText} to='/boards'>
+            Boards
+          </NavLink>
           {!boardsLoading && boards.length > 0 && (
-            <ul>
+            <ul className={styles.navItems}>
               {boards.map(board => (
                 <li key={board.id} onClick={() => handleLink(board)}>
-                  <NavLink to={`/boards/${board.id}/jobs`}>
+                  <NavLink
+                    className={styles.navItemTextSub}
+                    to={`/boards/${board.id}/jobs`}
+                  >
                     {board.title}
                   </NavLink>
                 </li>
               ))}
             </ul>
           )}
-        </li>
+        </li> */}
       </ul>
     </div>
   );
