@@ -46,11 +46,11 @@ export default function JobTrackerPage() {
   // DONT NEED THIS SINCE ALL THE LOADING IS DONE BY THE 3 CONDITIONAL STATEMENT BELOW
   useEffect(() => {
     //
-    if (selectedBoardStatusCols !== null && loadStart1) {
+    if (selectedBoardStatusCols !== null && selectedBoard !== null) {
       console.log('yoooooo this triggered just now');
       dispatch(getjobswithBoardId(board_id));
     }
-  }, [board_id]);
+  }, []);
 
   // Board Loading
   if (
@@ -69,7 +69,13 @@ export default function JobTrackerPage() {
   }
 
   // jobs loading
-  if (jobsLoading && board_id !== null && loadStart1) {
+  if (
+    jobsLoading &&
+    board_id !== null &&
+    loadStart1 &&
+    selectedBoardStatusCols === null &&
+    selectedBoard !== null
+  ) {
     dispatch(getjobswithBoardId(board_id));
     console.log('ayoooooooooooooooo this ssssss hits');
     setLoadStart1(false);
