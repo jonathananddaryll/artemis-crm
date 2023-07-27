@@ -63,7 +63,7 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
     boardId
   );
 
-  console.log('userId: ' + userId + ' and boardId: ' + boardId);
+  // console.log('userId: ' + userId + ' and boardId: ' + boardId);
 
   const client = new Client(config);
   client.connect();
@@ -75,7 +75,7 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
         res.status(500).json({ msg: 'query error' });
       }
 
-      console.log(response.rows[0]);
+      // console.log(response.rows[0]);
 
       // Returns the board obj
       res.status(200).json(response.rows[0]);

@@ -33,20 +33,23 @@ export default function JobTrackerPage() {
 
   // toggle for the Add List form
   const [addListToggle, setAddListToggle] = useState(false);
-  const [loadStart, setLoadStart] = useState(true);
-  const [loadStart1, setLoadStart1] = useState(true);
+
+  // @TODO: RENAME THESE TWO TO A BETTER NAME LATER ON.. NAME IT SOMETHING THAT MAKE SENSE
+  const [loadStart, setLoadStart] = useState(true); // for  board
+  const [loadStart1, setLoadStart1] = useState(true); // for jobs
 
   const { board_id } = useParams();
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
   // get all the jobs
+  // DONT NEED THIS SINCE ALL THE LOADING IS DONE BY THE 3 CONDITIONAL STATEMENT BELOW
   useEffect(() => {
     if (selectedBoardStatusCols !== null) {
       console.log('yoooooo this triggered just now');
       dispatch(getjobswithBoardId(board_id));
     }
-  }, [board_id]);
+  }, []);
 
   // Board Loading
   if (

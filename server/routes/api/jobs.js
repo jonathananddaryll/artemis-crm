@@ -224,13 +224,16 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   const client = new Client(config);
   client.connect();
 
-  const { selectedBoard_userId, selectedBoard_id } = req.body;
+  const { selectedBoard_userId, selectedBoard_id } = req.body.formData;
   const id = req.params.id;
+  console.log('req body data');
+  console.log(req.body.formData);
 
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
   console.log('user id is:' + userId);
   console.log('selectedBoard_userId: ' + selectedBoard_userId);
+  console.log('DELETE JOB triggered in the job API');
 
   // Checks if the loggedIn user owns the board
   if (userId === undefined || selectedBoard_userId !== userId) {
@@ -244,9 +247,6 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
       id,
       selectedBoard_id
     );
-
-    // delete this later
-    console.log(query);
 
     try {
       client.query(query, (err, response) => {

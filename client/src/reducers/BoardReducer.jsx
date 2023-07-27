@@ -2,6 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Create action
+
+////////////////////////////////// BOARDS ////////////////////////////
+
+// Get All Boards with userID
 export const getAllBoards = createAsyncThunk(
   'board/getBoardswithUserId',
   async (user_id, thunkAPI) => {
@@ -17,6 +21,7 @@ export const getAllBoards = createAsyncThunk(
   }
 );
 
+// Gets a board with boardId
 export const getBoard = createAsyncThunk(
   'board/getBoardwithBoardId',
   async (boardInfo, thunkAPI) => {
@@ -32,6 +37,7 @@ export const getBoard = createAsyncThunk(
   }
 );
 
+// Creates a new board
 export const createBoard = createAsyncThunk(
   'board/createBoard',
   async (formData, thunkAPI) => {
@@ -59,33 +65,7 @@ export const createBoard = createAsyncThunk(
   }
 );
 
-export const addJob = createAsyncThunk(
-  'job/addJob',
-  async (formData, thunkAPI) => {
-    // console.log('addJob triggered in redux reducer: ' + formData.token);
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${formData.token}`
-      }
-    };
-
-    // Makes the string an obj to send a json to the post route
-    // const formData = {
-    //   title: title
-    // };
-
-    try {
-      const res = await axios.post('/api/jobs', formData, config);
-      return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
-    }
-  }
-);
-
+// Adds a new column/status in the board
 export const addColumn = createAsyncThunk(
   'board/addColumn',
   async (formData, thunkAPI) => {
@@ -115,6 +95,49 @@ export const addColumn = createAsyncThunk(
   }
 );
 
+// @TODO:
+// 1. update board (name)
+// 2. delete board (make sure no jobs in it)
+//////////////////////////// JOBS //////////////////////////////////////////////
+
+// Gets all the job with boardId
+export const getjobswithBoardId = createAsyncThunk(
+  'board/getJobswithBoardId',
+  async (board_id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/jobs/board/${board_id}`);
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+// Adds a new job
+export const addJob = createAsyncThunk(
+  'job/addJob',
+  async (formData, thunkAPI) => {
+    // console.log('addJob triggered in redux reducer: ' + formData.token);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/jobs', formData, config);
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+// Updates a job status
 export const updateJobStatus = createAsyncThunk(
   'board/updateJobStatus',
   async (formData, thunkAPI) => {
@@ -143,18 +166,47 @@ export const updateJobStatus = createAsyncThunk(
   }
 );
 
-export const getjobswithBoardId = createAsyncThunk(
-  'board/getJobswithBoardId',
-  async (board_id, thunkAPI) => {
+// Deletes a job
+export const deleteJob = createAsyncThunk(
+  'job/deleteJob',
+  async (formData, thunkAPI) => {
+    console.log('Delete Job Trigger in redux reducer');
+
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${formData.token}`
+    //   }
+    // };
+
+    const headers = {
+      Authorization: `Bearer ${formData.token}`
+    };
+
+    // const data = {
+    //   formData
+    // };
+
+    console.log(formData);
+    console.log('it got to delete job extra reducer');
     try {
-      const res = await axios.get(`/api/jobs/board/${board_id}`);
+      const res = await axios.delete(`/api/jobs/${formData.jobId}`, {
+        data: { formData },
+        headers
+      });
+
       return res.data;
-    } catch (err) {
+    } catch (error) {
       // have a better error catch later
       console.log(err);
     }
   }
 );
+
+// @todo:
+// 1. Delete job
+// 2. update job (name and information)
+//
 
 // @TODO:
 // 1. create a getSelectedBoard with Id that calls the in api with the id. usually dont do this unless the page is refreshed
@@ -230,12 +282,14 @@ const boardSlice = createSlice({
   extraReducers: builder => {
     // call the action here and then action.payload is whatever the returned value from the action (res.data).
     // .fulfilled is if the action is successful, basically
+    /////////////// BOARDS EXTRA REDUCER //////////////////////////////////////
     builder.addCase(getAllBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
       state.boardsLoading = false;
       // delete this later. it's just to check if this triggers
       console.log('getAllBoards is triggered');
     });
+
     builder.addCase(getBoard.fulfilled, (state, action) => {
       console.log('here is the action payload for getboard: ' + action.payload);
       state.selectedBoard = action.payload;
@@ -243,34 +297,10 @@ const boardSlice = createSlice({
       // delete this later. it's just to check if this triggers
       console.log('getBoard with ID is triggered');
     });
+
     builder.addCase(createBoard.fulfilled, (state, action) => {
       state.boards = [...state.boards, action.payload];
       console.log('create board triggered');
-    });
-    builder.addCase(addJob.fulfilled, (state, action) => {
-      state.selectedBoardStatusCols[action.payload.status].push(action.payload);
-      // state.boards = [...state.boards, action.payload];
-    });
-    // JOBS EXTRA REDUCER
-    // call the action here and then action.payload is whatever the returned value from the action (res.data).
-    // .fulfilled is if the action is successful, basically
-    // builder.addCase(getjobswithBoardId.pending, (state, action) => {
-    //   state.jobs = action.payload;
-    //   state.jobsLoading = true;
-    //   console.log('getjobswithboardID PENDING is triggered');
-    // });
-    builder.addCase(getjobswithBoardId.fulfilled, (state, action) => {
-      // @@@@@@@@ I MIGHT NOT NEED TO KEEP TRACK OF JOBS STATES SINCE IT'S ALREADY IN THE STATUS COLUMN INSIDE BOARD
-      // state.jobs = action.payload;
-      state.jobsLoading = false;
-
-      const jobs = action.payload;
-      const cols = state.selectedBoardStatusCols;
-      jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
-      // const cols = state.selectedBoardStatusCols;
-      // jobs.forEach(job => cols[job.status].push(job));
-      // state.selectedBoardStatusCols = cols;
-      console.log('getjobswithboardID is triggered fsafaasffsafs');
     });
 
     // ADD COLUMN
@@ -285,11 +315,56 @@ const boardSlice = createSlice({
       state.selectedBoard[newCol] = action.payload;
     });
 
+    ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
+    // builder.addCase(getjobswithBoardId.pending, (state, action) => {
+    //   state.jobs = action.payload;
+    //   state.jobsLoading = true;
+    //   console.log('getjobswithboardID PENDING is triggered');
+    // });
+    builder.addCase(addJob.fulfilled, (state, action) => {
+      state.selectedBoardStatusCols[action.payload.status].push(action.payload);
+      // state.boards = [...state.boards, action.payload];
+    });
+
+    builder.addCase(getjobswithBoardId.fulfilled, (state, action) => {
+      // @@@@@@@@ I MIGHT NOT NEED TO KEEP TRACK OF JOBS STATES SINCE IT'S ALREADY IN THE STATUS COLUMN INSIDE BOARD
+      // state.jobs = action.payload;
+      state.jobsLoading = false;
+
+      const jobs = action.payload;
+      const cols = state.selectedBoardStatusCols;
+      jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
+      // const cols = state.selectedBoardStatusCols;
+      // jobs.forEach(job => cols[job.status].push(job));
+      // state.selectedBoardStatusCols = cols;
+      console.log('getjobswithboardID is triggered fsafaasffsafs');
+    });
+
     // UPDATE JOB STATUS
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
       // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
       // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
+      // job status is already updating in the reducer when user drop a job to a different status it
       console.log('successfully updated the job status');
+      console.log(action.payload);
+
+      const foundIndex = state.selectedBoardStatusCols[
+        action.payload.status
+      ].findIndex(job => job.id === action.payload.id);
+      state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
+        action.payload.status;
+    });
+
+    builder.addCase(deleteJob.fulfilled, (state, action) => {
+      console.log('successfully deleted job');
+      // filtered job without the deleted job
+      const jobsWithoutDeletedJob = state.selectedBoardStatusCols[
+        action.payload.status
+      ].filter(job => job.id !== action.payload.id);
+
+      state.selectedBoardStatusCols[action.payload.status] =
+        jobsWithoutDeletedJob;
+      console.log(action.payload);
     });
   }
 });

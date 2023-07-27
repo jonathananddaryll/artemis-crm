@@ -1,18 +1,44 @@
 import React, { useState } from 'react';
-import styles from './SelectedJobModal.module.css';
-
 import { useDispatch, useSelector } from 'react-redux';
+import { useSession } from '@clerk/clerk-react';
+import {
+  changeSelectedJob,
+  deleteJob,
+  handleToggleForm
+} from '../../../../reducers/BoardReducer';
 
-import { changeSelectedJob } from '../../../../reducers/BoardReducer';
+import styles from './SelectedJobModal.module.css';
 
 export default function SelectedJobModal() {
   const dispatch = useDispatch();
-  const { selectedJob } = useSelector(state => ({
+  const { selectedJob, selectedBoard } = useSelector(state => ({
     ...state.board
   }));
 
+  const { session } = useSession();
+
+  async function handleDeleteJob() {
+    const formData = {
+      jobId: selectedJob.id,
+      selectedBoard_id: selectedBoard.id,
+      selectedBoard_userId: selectedBoard.user_id,
+      token: await session.getToken()
+    };
+
+    dispatch(deleteJob(formData));
+
+    // change selectedJob to null and modal off
+    dispatch(changeSelectedJob([false, null]));
+  }
+
   return (
-    <div className={styles.wrapper}>
+    <>
+      <div
+        className={styles.wrapper}
+        onClick={() => dispatch(changeSelectedJob([false, null]))}
+      >
+        {' '}
+      </div>
       <div className={styles.modal}>
         {selectedJob !== null ? (
           <div>
@@ -23,10 +49,11 @@ export default function SelectedJobModal() {
           // might not even need this since the selected job is passed to the reducer onClick
           <p>Job is loading</p>
         )}
+        <button onClick={() => handleDeleteJob()}>Delete Job</button>
         <button onClick={() => dispatch(changeSelectedJob([false, null]))}>
           Cancel
         </button>
       </div>
-    </div>
+    </>
   );
 }
