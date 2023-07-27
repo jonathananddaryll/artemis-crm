@@ -28,7 +28,10 @@ router.get('/:user_id', async (req, res) => {
   // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
   // load the current logged in user id later on
   const userId = req.params.user_id;
-  const query = format('SELECT * FROM board WHERE user_id = %L', userId);
+  const query = format(
+    'SELECT * FROM board WHERE user_id = %L ORDER BY date_created ASC',
+    userId
+  );
   const client = new Client(config);
   client.connect();
 
@@ -200,79 +203,111 @@ router.patch(
   }
 );
 
-// @route     POST api/boards/:id/update
+// @route     POST api/boards/:id/update/column
 // @desc      update column
 // @access    Private
-router.patch('/:board_id/update', async (req, res) => {
-  // const errors = validationResult(req);
-  const client = new Client(config);
-  client.connect();
-  const { columnStatus, columnToUpdate } = req.body;
-  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
-  const boardId = req.params.board_id;
+router.patch(
+  '/:board_id/update/column',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const { columnStatus, columnToUpdate, userId } = req.body;
+    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+    const boardId = req.params.board_id;
 
-  const query = format(
-    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s RETURNING *`,
-    columnToUpdate,
-    columnStatus,
-    boardId,
-    111
-  );
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
 
-  try {
-    client.query(query, (err, response) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+    // if user do not own the board
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING *`,
+        columnToUpdate,
+        columnStatus,
+        boardId,
+        'user_2SWlvSMY0DKPuKthQBIRgFoDvdi'
+      );
+
+      console.log(query);
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the updated column
+          console.log(response.rows[0]);
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
       }
-
-      // return the new column status that is added
-      console.log(response);
-      res.status(200).json(response.rows[0]);
-      client.end();
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    }
   }
-});
+);
 
-// @route     POST api/boards/:id/updatename
+// @route     POST api/boards/:id/update/name
 // @desc      update board name
 // @access    Private
-router.patch('/:board_id/updatename', async (req, res) => {
-  // const errors = validationResult(req);
-  const client = new Client(config);
-  client.connect();
-  const { columnStatus, columnToUpdate } = req.body;
-  // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
-  const boardId = req.params.board_id;
+router.patch(
+  '/:board_id/update/name',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const { title, userId } = req.body;
+    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+    const boardId = req.params.board_id;
 
-  const query = format(
-    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s RETURNING *`,
-    columnToUpdate,
-    columnStatus,
-    boardId,
-    111
-  );
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
 
-  try {
-    client.query(query, (err, response) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+    // if user do not own the board
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE BOARD SET title = %L WHERE id = %s and user_id = %L RETURNING *`,
+        title,
+        boardId,
+        userId
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the updated board
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
       }
-
-      // return the new column status that is added
-      console.log(response);
-      res.status(200).json(response.rows[0]);
-      client.end();
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    }
   }
-});
+);
 
 // -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
 // @route     POST api/boards/:board_id/remove

@@ -95,9 +95,64 @@ export const addColumn = createAsyncThunk(
   }
 );
 
+// Update a column status
+export const updateBoardColumn = createAsyncThunk(
+  'board/updateColumnStatus',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/boards/${formData.id}/update/column`,
+        formData,
+        config
+      );
+
+      // return res.data;
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+// Update a column name
+export const updateColumnName = createAsyncThunk(
+  'board/updateColumnName',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/boards/${formData.id}/update/name`,
+        formData,
+        config
+      );
+
+      // return res.data;
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 // @TODO:
 // 1. update board (name)
-// 2. delete board (make sure no jobs in it)
+// 2. update board (column)
+// 3. delete board (make sure no jobs in it)
 //////////////////////////// JOBS //////////////////////////////////////////////
 
 // Gets all the job with boardId
@@ -224,6 +279,7 @@ const boardSlice = createSlice({
     toggleJobForm: false,
     selectedStatusToAdd: null,
     toggleSelectedJobModal: false,
+    toggleColumnUpdateForm: false,
     selectedJob: null
   },
   reducers: {
@@ -231,6 +287,9 @@ const boardSlice = createSlice({
     handleToggleForm: (state, action) => {
       state.toggleJobForm = action.payload[0];
       state.selectedStatusToAdd = action.payload[1];
+    },
+    handleColumnUpdateForm: (state, action) => {
+      state.toggleColumnUpdateForm = action.payload;
     },
     changeSelectedJob: (state, action) => {
       state.toggleSelectedJobModal = action.payload[0];
@@ -299,7 +358,7 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(createBoard.fulfilled, (state, action) => {
-      state.boards = [...state.boards, action.payload];
+      state.boards = [action.payload, ...state.boards];
       console.log('create board triggered');
     });
 
@@ -313,6 +372,20 @@ const boardSlice = createSlice({
       console.log('new column is: ' + newCol);
       state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
       state.selectedBoard[newCol] = action.payload;
+    });
+
+    builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
+      console.log('successfully updated column');
+      console.log(action.payload);
+    });
+
+    builder.addCase(updateColumnName.fulfilled, (state, action) => {
+      const foundIndex = state.boards.findIndex(
+        job => job.id === action.payload.id
+      );
+      state.boards[foundIndex].title = action.payload.title;
+
+      console.log('successfully updated column name');
     });
 
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
@@ -376,5 +449,6 @@ export const {
   removeFromStatus,
   addToStatus,
   changeSelectedJob,
-  handleToggleForm
+  handleToggleForm,
+  handleColumnUpdateForm
 } = boardSlice.actions;

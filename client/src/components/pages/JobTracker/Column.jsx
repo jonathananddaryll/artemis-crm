@@ -2,7 +2,10 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Job from './Job';
 import styled from 'styled-components';
-import { handleToggleForm } from '../../../reducers/BoardReducer';
+import {
+  handleToggleForm,
+  handleColumnUpdateForm
+} from '../../../reducers/BoardReducer';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Container = styled.div`

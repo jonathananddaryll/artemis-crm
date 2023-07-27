@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
+import UpdateForm from './UpdateForm';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const [formToggle, setFormToggle] = useState(false);
+  const [titleFormToggle, setTitleFormToggle] = useState({
+    ind: null,
+    state: false
+  });
 
   const { userId } = useAuth();
 
@@ -58,6 +63,23 @@ export default function BoardsPage() {
                   <p>{board.date_created}</p>
                 </div>
               </Link>{' '}
+              <button
+                className={styles.editButton}
+                onClick={e =>
+                  setTitleFormToggle({
+                    ind: idx,
+                    state: true
+                  })
+                }
+              >
+                edit
+              </button>
+              {titleFormToggle.state && titleFormToggle.ind === idx && (
+                <UpdateForm
+                  board={board}
+                  handleToggleUpdateForm={setTitleFormToggle}
+                />
+              )}
             </div>
           ))}
         </div>
