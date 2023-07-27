@@ -19,9 +19,12 @@ export const getAllBoards = createAsyncThunk(
 
 export const getBoard = createAsyncThunk(
   'board/getBoardwithBoardId',
-  async (user_id, board_id, thunkAPI) => {
+  async (boardInfo, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/boards/${user_id}/board/${board_id}`);
+      const res = await axios.get(
+        `/api/boards/${boardInfo.userId}/board/${boardInfo.boardId}`
+      );
+      return res.data;
     } catch (err) {
       // have a better error catch later
       console.log(err);
@@ -182,15 +185,17 @@ const boardSlice = createSlice({
       state.selectedJob = action.payload[1];
     },
     changeBoard: (state, action) => {
-      state.selectedBoardLoading = true;
-      state.selectedBoard = action.payload;
       const board = action.payload;
+      state.selectedBoardLoading = true;
+      state.selectedBoard = board;
       const newColObj = {};
       Object.keys(board)
         .filter(key => key.includes('column') && board[key] !== null)
         .forEach((keyName, i) => {
           newColObj[board[keyName]] = [];
         });
+
+      console.log('ayooo changeboard triggered');
 
       state.selectedBoardStatusCols = newColObj;
       state.selectedBoardLoading = false;
@@ -232,10 +237,11 @@ const boardSlice = createSlice({
       console.log('getAllBoards is triggered');
     });
     builder.addCase(getBoard.fulfilled, (state, action) => {
-      console.log(action.payload);
+      console.log('here is the action payload for getboard: ' + action.payload);
       state.selectedBoard = action.payload;
+      state.selectedBoardLoading = false;
       // delete this later. it's just to check if this triggers
-      console.log('getAllBoards is triggered');
+      console.log('getBoard with ID is triggered');
     });
     builder.addCase(createBoard.fulfilled, (state, action) => {
       state.boards = [...state.boards, action.payload];
@@ -261,6 +267,9 @@ const boardSlice = createSlice({
       const jobs = action.payload;
       const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
+      // const cols = state.selectedBoardStatusCols;
+      // jobs.forEach(job => cols[job.status].push(job));
+      // state.selectedBoardStatusCols = cols;
       console.log('getjobswithboardID is triggered fsafaasffsafs');
     });
 

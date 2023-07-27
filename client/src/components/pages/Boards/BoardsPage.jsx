@@ -5,11 +5,13 @@ import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
-import { useUser } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/clerk-react';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const [formToggle, setFormToggle] = useState(false);
+
+  const { userId } = useAuth();
 
   const toggleHandler = () => {
     setFormToggle(!formToggle);
@@ -19,10 +21,10 @@ export default function BoardsPage() {
   const dispatch = useDispatch();
 
   // // get all the jobs
-  // useEffect(() => {
-  //   // this will be loaded with the current loggedIn user's id or clerk_id
-  //   dispatch(getAllBoards());
-  // }, []);
+  useEffect(() => {
+    // this will be loaded with the current loggedIn user's id or clerk_id
+    dispatch(getAllBoards(userId));
+  }, []);
 
   const handleBoardClick = board => {
     console.log('yeeee handle boardclick');
@@ -45,10 +47,14 @@ export default function BoardsPage() {
             </div>
           </div>
           {boards.map((board, idx) => (
-            <div key={board.id} className={styles.flexBox}>
+            <div
+              key={board.id}
+              className={styles.flexBox}
+              onClick={() => handleBoardClick(board)}
+            >
               <Link to={`/boards/${board.id}/jobs`} key={idx}>
                 <div className={styles.boardBox}>
-                  <p onClick={() => handleBoardClick(board)}>{board.title}</p>
+                  <p key={board.id}>{board.title}</p>
                   <p>{board.date_created}</p>
                 </div>
               </Link>{' '}

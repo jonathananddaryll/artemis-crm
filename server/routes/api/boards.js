@@ -75,6 +75,8 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
         res.status(500).json({ msg: 'query error' });
       }
 
+      console.log(response.rows[0]);
+
       // Returns the board obj
       res.status(200).json(response.rows[0]);
       client.end();

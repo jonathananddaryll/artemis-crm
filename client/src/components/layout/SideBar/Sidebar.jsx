@@ -51,10 +51,11 @@ export default function SideBar() {
   // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
-  if (boardsLoading && userId !== null) {
-    // change the 111 to userId from clerk or sql user table later
-    dispatch(getAllBoards(userId));
-  }
+  // LOAD ALL THE BOARDS... MAYBE ADD THIS / UNCOMMENT THIS LATER
+  // if (boardsLoading && userId !== null) {
+  //   // change the 111 to userId from clerk or sql user table later
+  //   dispatch(getAllBoards(userId));
+  // }
 
   // get all the jobs
   // useEffect(() => {
