@@ -52,13 +52,12 @@ export default function BoardsPage() {
             </div>
           </div>
           {boards.map((board, idx) => (
-            <div
-              key={board.id}
-              className={styles.flexBox}
-              onClick={() => handleBoardClick(board)}
-            >
+            <div key={board.id} className={styles.flexBox}>
               <Link to={`/boards/${board.id}/jobs`} key={idx}>
-                <div className={styles.boardBox}>
+                <div
+                  className={styles.boardBox}
+                  onClick={() => handleBoardClick(board)}
+                >
                   <p key={board.id}>{board.title}</p>
                   <p>{board.date_created}</p>
                 </div>
