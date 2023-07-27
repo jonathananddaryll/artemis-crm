@@ -64,7 +64,7 @@ export default function SideBar() {
   // }, []);
 
   const handleLink = board => {
-    dispatch(changeBoard(board));
+    // dispatch(changeBoard(board));
     // dispatch(getjobswithBoardId(board.id));
   };
 
@@ -123,9 +123,7 @@ export default function SideBar() {
             documents
           </NavLink>
         </li> */}
-        <li className={styles.navItem}>
-          {/* will change this and combined boards with jobtracker */}
-
+        {/* <li className={styles.navItem}>
           <NavLink className={styles.navItemText} to='/boards'>
             Boards
           </NavLink>
@@ -143,7 +141,7 @@ export default function SideBar() {
               ))}
             </ul>
           )}
-        </li>
+        </li> */}
       </ul>
     </div>
   );
