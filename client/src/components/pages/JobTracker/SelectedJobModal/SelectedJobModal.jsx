@@ -15,6 +15,8 @@ export default function SelectedJobModal() {
     ...state.board
   }));
 
+  const [confirmationToggle, setConfirmationToggle] = useState(false);
+
   const { session } = useSession();
 
   async function handleDeleteJob() {
@@ -49,7 +51,17 @@ export default function SelectedJobModal() {
           // might not even need this since the selected job is passed to the reducer onClick
           <p>Job is loading</p>
         )}
-        <button onClick={() => handleDeleteJob()}>Delete Job</button>
+        {!confirmationToggle ? (
+          <button onClick={() => setConfirmationToggle(true)}>
+            Delete Job
+          </button>
+        ) : (
+          <div>
+            <p>Are you sure you want to delete this job?</p>
+            <button onClick={() => handleDeleteJob()}>Yes</button>
+            <button onClick={() => setConfirmationToggle(false)}>No</button>
+          </div>
+        )}
         <button onClick={() => dispatch(changeSelectedJob([false, null]))}>
           Cancel
         </button>
