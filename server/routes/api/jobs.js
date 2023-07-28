@@ -6,9 +6,9 @@ const { Client, config } = require('../../config/db');
 const {
   myRequestHeaders,
   validateRequest
-} = require('../../middleware/validators');
+} = require('../../middlewares/validators');
 
-const { decodeToken } = require('../../middleware/decodeToken');
+const { decodeToken } = require('../../middlewares/decodeToken');
 
 // // Going to change this to SELECT * FROM JOBS WHERE boardId is the current selectedBoard and userId is the current loggedIn user id
 // router.get('/', async (req, res) => {

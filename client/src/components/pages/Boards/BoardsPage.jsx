@@ -39,13 +39,18 @@ export default function BoardsPage() {
 
   return (
     <div className={styles.pageWrapper}>
-      <h3>My boards</h3>
+      <h3>My Personal Boards</h3>
       {!boardsLoading && (
         <div className={styles.boardsContainer}>
           <div className={styles.flexBox}>
             <div className={styles.newBoardBox}>
               {!formToggle ? (
-                <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
+                <button
+                  className={styles.newBoardButton}
+                  onClick={() => toggleHandler()}
+                >
+                  + NEW BOARD
+                </button>
               ) : (
                 <NewBoardForm toggleHandler={toggleHandler} />
               )}
@@ -53,13 +58,21 @@ export default function BoardsPage() {
           </div>
           {boards.map((board, idx) => (
             <div key={board.id} className={styles.flexBox}>
-              <Link to={`/boards/${board.id}/jobs`} key={idx}>
+              <Link
+                to={`/boards/${board.id}/jobs`}
+                key={idx}
+                style={{ textDecoration: 'none' }}
+              >
                 <div
                   className={styles.boardBox}
                   onClick={() => handleBoardClick(board)}
                 >
-                  <p key={board.id}>{board.title}</p>
-                  <p>{board.date_created}</p>
+                  <p key={board.id} className={styles.textBoardTitle}>
+                    {board.title}
+                  </p>
+                  <p className={styles.textBoardDateCreated}>
+                    {board.date_created}
+                  </p>
                 </div>
               </Link>{' '}
               <button
@@ -71,7 +84,7 @@ export default function BoardsPage() {
                   })
                 }
               >
-                edit
+                Edit
               </button>
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm
@@ -81,6 +94,37 @@ export default function BoardsPage() {
               )}
             </div>
           ))}
+          {/* if there's 4 gap */}
+          {(boards.length + 1) % 5 === 1 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 3 gaps */}
+          {(boards.length + 1) % 5 === 2 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 2 gaps */}
+          {(boards.length + 1) % 5 === 3 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 1 gaps */}
+          {(boards.length + 1) % 5 === 4 && (
+            <div className={styles.flexBoxEmpty}></div>
+          )}
         </div>
       )}
     </div>

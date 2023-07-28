@@ -7,9 +7,9 @@ const { Client, config } = require('../../config/db');
 const {
   myRequestHeaders,
   validateRequest
-} = require('../../middleware/validators');
+} = require('../../middlewares/validators');
 
-const { decodeToken } = require('../../middleware/decodeToken');
+const { decodeToken } = require('../../middlewares/decodeToken');
 // import 'dotenv/config';
 
 // @TODO:
