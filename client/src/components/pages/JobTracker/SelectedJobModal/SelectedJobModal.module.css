@@ -119,6 +119,8 @@
 }
 /* TIMELINE SECTION */
 .timelineContainer {
-  width: 300px;
+  width: 350px;
   background: #eeeef3;
+  padding: 0 20px 0 5px;
+  height: 100%;
 }

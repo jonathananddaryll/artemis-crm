@@ -19,6 +19,7 @@ import JobInfoTab from './JobInfoTab/JobInfoTab';
 import NotesTab from './NotesTab/NotesTab';
 import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from './DeletePopup/DeletePopup';
+import Timeline from './Timeline/Timeline';
 
 import styles from './SelectedJobModal.module.css';
 
@@ -117,11 +118,9 @@ export default function SelectedJobModal() {
           {activeItem === 4 && <TasksTab />}
           {activeItem === 5 && <CompanyTab />}
         </div>
-        <div className={styles.timelineContainer}></div>
-        {/* <div>
-          <p>{selectedJob.job_title}</p>
-          <p>{selectedJob.company}</p>
-        </div> */}
+        <div className={styles.timelineContainer}>
+          <Timeline timelines={timelines} timelinesLoading={timelinesLoading} />
+        </div>
 
         {confirmationToggle && (
           <DeletePopup
