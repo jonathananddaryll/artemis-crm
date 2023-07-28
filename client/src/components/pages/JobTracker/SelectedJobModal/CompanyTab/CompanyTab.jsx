@@ -3,7 +3,7 @@ import React from 'react';
 export default function CompanyTab() {
   return (
     <div>
-      <p>CompanyTab</p>
+      <p>This will be implemented soon.....</p>
     </div>
   );
 }
