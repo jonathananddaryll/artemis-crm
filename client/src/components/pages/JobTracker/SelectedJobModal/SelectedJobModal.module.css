@@ -98,6 +98,12 @@
   cursor: pointer;
 }
 
+/* ACTIVE TAB... MAKE THIS PRETTY LATER */
+.subNavigationItemActive {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .subNavigationItem p {
   text-transform: capitalize;
   margin: 0;

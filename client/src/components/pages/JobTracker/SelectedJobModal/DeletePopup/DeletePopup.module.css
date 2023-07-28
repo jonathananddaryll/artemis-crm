@@ -1,0 +1,35 @@
+.popupWrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #d4d7cc;
+}
+
+.popupOuter {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: d4d7cc;
+}
+
+.popupBox {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(128, 134, 128);
+  width: 500px;
+  height: 120px;
+}
+
+.popupButtons {
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.popupButtons button {
+  height: 35px;
+  margin-left: 10px;
+}

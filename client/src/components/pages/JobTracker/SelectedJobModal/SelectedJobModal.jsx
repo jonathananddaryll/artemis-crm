@@ -7,6 +7,14 @@ import {
   handleToggleForm
 } from '../../../../reducers/BoardReducer';
 
+import CompanyTab from './CompanyTab/CompanyTab';
+import ContactsTab from './ContactsTab/ContactsTab';
+import DocumentsTab from './DocumentsTab/DocumentsTab';
+import JobInfoTab from './JobInfoTab/JobInfoTab';
+import NotesTab from './NotesTab/NotesTab';
+import TasksTab from './TasksTab/TasksTab';
+import DeletePopup from './DeletePopup/DeletePopup';
+
 import styles from './SelectedJobModal.module.css';
 
 export default function SelectedJobModal() {
@@ -72,7 +80,11 @@ export default function SelectedJobModal() {
               {navItems.map((item, index) => (
                 <li
                   key={index}
-                  className={styles.subNavigationItem}
+                  className={
+                    styles.subNavigationItem +
+                    ' ' +
+                    (activeItem === index && styles.subNavigationItemActive)
+                  }
                   onClick={() => setActiveItem(index)}
                 >
                   <p>{item}</p>
@@ -80,36 +92,13 @@ export default function SelectedJobModal() {
               ))}
             </ul>
           </div>
-          {activeItem === 0 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - jobinfo</p>
-            </div>
-          )}
-          {activeItem === 1 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - notes</p>
-            </div>
-          )}
-          {activeItem === 2 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - contacts</p>
-            </div>
-          )}
-          {activeItem === 3 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - documents</p>
-            </div>
-          )}
-          {activeItem === 4 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - tasks</p>
-            </div>
-          )}
-          {activeItem === 5 && (
-            <div className={styles.contentBox}>
-              <p>contentbox - company</p>
-            </div>
-          )}
+          {/* MAIN CONTENT BOX */}
+          {activeItem === 0 && <JobInfoTab />}
+          {activeItem === 1 && <NotesTab />}
+          {activeItem === 2 && <ContactsTab />}
+          {activeItem === 3 && <DocumentsTab />}
+          {activeItem === 4 && <TasksTab />}
+          {activeItem === 5 && <CompanyTab />}
         </div>
         <div className={styles.timelineContainer}>TIMELINE</div>
         {/* <div>
@@ -117,20 +106,12 @@ export default function SelectedJobModal() {
           <p>{selectedJob.company}</p>
         </div> */}
 
-        {/*         
-        {!confirmationToggle ? (
-          <button onClick={() => setConfirmationToggle(true)}>
-            Delete Job
-          </button>
-        ) : (
-          <div>
-            <p>Are you sure you want to delete this job?</p>
-            <button onClick={() => handleDeleteJob()}>Yes</button>
-            <button onClick={() => setConfirmationToggle(false)}>No</button>
-          </div>
+        {confirmationToggle && (
+          <DeletePopup
+            handleDeleteJob={handleDeleteJob}
+            setConfirmationToggle={setConfirmationToggle}
+          />
         )}
-        
-        */}
       </div>
     </>
   );
