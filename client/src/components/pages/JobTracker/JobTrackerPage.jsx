@@ -10,10 +10,11 @@ import styles from './JobTrackerPage.module.css';
 
 import { useAuth } from '@clerk/clerk-react';
 
-import KanbanBoard from './KanbanBoard';
+import KanbanBoard from './KanbanBoard/KanbanBoard';
 import AddListForm from './AddListForm/AddListForm';
 import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
+import BoardHeader from './BoardHeader/BoardHeader';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
@@ -92,7 +93,13 @@ export default function JobTrackerPage() {
     <div className={styles.container}>
       {selectedBoardStatusCols !== null ? (
         <>
-          <KanbanBoard setAddListToggle={setAddListToggle} />
+          <BoardHeader title={selectedBoard.title} />
+
+          <KanbanBoard
+            setAddListToggle={setAddListToggle}
+            selectedBoard={selectedBoard}
+            selectedBoardStatusCols={selectedBoardStatusCols}
+          />
           {addListToggle && (
             <AddListForm
               setAddListToggle={setAddListToggle}

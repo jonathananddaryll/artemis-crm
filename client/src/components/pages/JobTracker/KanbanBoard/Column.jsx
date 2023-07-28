@@ -5,16 +5,19 @@ import styled from 'styled-components';
 import {
   handleToggleForm,
   handleColumnUpdateForm
-} from '../../../reducers/BoardReducer';
-import { useSelector, useDispatch } from 'react-redux';
+} from '../../../../reducers/BoardReducer';
+import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
+  position: relative;
   background-color: #e6eefb;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: hidden;
   margin-right: 5px;
+  padding-bottom: 50px;
   width: 300px;
-  min-height: 92vh;
+  height: 88vh;
   float: left;
 `;
 
@@ -29,7 +32,7 @@ const Title = styled.h3`
   margin: 0px;
   text-align: center;
   text-transform: capitalize;
-  font-size: 22px;
+  font-size: 20px;
 `;
 
 const TotalJobs = styled.p`
@@ -42,23 +45,37 @@ const TotalJobs = styled.p`
 
 const JobList = styled.div`
   padding: 3px;
-  min-height: 100px;
+  height: 94%;
+  overflow-y: auto;
 `;
 
 const AddButton = styled.button`
-  background-color: #a3bfeb;
-  color: #125acf;
-  padding: 3px;
-  font-size: 20px;
+  font-size: 15px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: left;
+
+  & span {
+    font-size: 25px;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-right: 5px;
+  }
+
+  &:hover {
+    background-color: #d6e2f7;
+  }
+`;
+
+const EditButton = styled.button`
   position: absolute;
   right: 15px;
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-
-  border: 0;
-  padding: 0;
-  cursor: pointer;
 `;
 
 export default function ({ title, jobs, id }) {
@@ -69,9 +86,7 @@ export default function ({ title, jobs, id }) {
       <Status>
         <Title>{title}</Title>
         <TotalJobs> {jobs.length} </TotalJobs>
-        <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
-          +
-        </AddButton>
+        <EditButton>...</EditButton>
       </Status>
 
       <Droppable droppableId={id}>
@@ -89,6 +104,9 @@ export default function ({ title, jobs, id }) {
           </JobList>
         )}
       </Droppable>
+      <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
+        <span> + </span> Add new job
+      </AddButton>
     </Container>
   );
 }
