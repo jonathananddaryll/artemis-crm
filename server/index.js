@@ -12,6 +12,7 @@ app.use('/api/jobs', require('./routes/api/jobs'));
 app.use('/api/contacts', require('./routes/api/contacts'));
 app.use('/api/boards', require('./routes/api/boards'));
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/timelines', require('./routes/api/timelines'));
 
 const PORT = process.env.PORT || 5000;
 

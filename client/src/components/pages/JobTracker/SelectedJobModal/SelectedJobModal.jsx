@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import {
@@ -6,6 +6,11 @@ import {
   deleteJob,
   handleToggleForm
 } from '../../../../reducers/BoardReducer';
+
+import {
+  getAllTimelines,
+  resetTimelines
+} from '../../../../reducers/TimelineReducer';
 
 import CompanyTab from './CompanyTab/CompanyTab';
 import ContactsTab from './ContactsTab/ContactsTab';
@@ -19,8 +24,17 @@ import styles from './SelectedJobModal.module.css';
 
 export default function SelectedJobModal() {
   const dispatch = useDispatch();
+
   const { selectedJob, selectedBoard } = useSelector(state => ({
     ...state.board
+  }));
+
+  useEffect(() => {
+    dispatch(getAllTimelines(selectedJob.id));
+  }, [selectedJob.id]);
+
+  const { timelines, timelinesLoading } = useSelector(state => ({
+    ...state.timeline
   }));
 
   const [confirmationToggle, setConfirmationToggle] = useState(false);
@@ -51,19 +65,22 @@ export default function SelectedJobModal() {
     dispatch(changeSelectedJob([false, null]));
   }
 
+  const handleClosingModal = () => {
+    dispatch(resetTimelines());
+    dispatch(changeSelectedJob([false, null]));
+  };
+
   return (
-    <>
+    <div className={styles.wrapper}>
       <div
-        className={styles.wrapper}
-        onClick={() => dispatch(changeSelectedJob([false, null]))}
+        className={styles.modalOuter}
+        onClick={() => handleClosingModal()}
       ></div>
       <div className={styles.modalContainer}>
         <div className={styles.mainContainer}>
           <div className={styles.actionButtonsContainer}>
             <button onClick={() => setConfirmationToggle(true)}>Delete</button>
-            <button onClick={() => dispatch(changeSelectedJob([false, null]))}>
-              Close
-            </button>
+            <button onClick={() => handleClosingModal()}>Close</button>
           </div>
           <div className={styles.header}>
             <div className={styles.headerLogo}></div>
@@ -100,7 +117,7 @@ export default function SelectedJobModal() {
           {activeItem === 4 && <TasksTab />}
           {activeItem === 5 && <CompanyTab />}
         </div>
-        <div className={styles.timelineContainer}>TIMELINE</div>
+        <div className={styles.timelineContainer}></div>
         {/* <div>
           <p>{selectedJob.job_title}</p>
           <p>{selectedJob.company}</p>
@@ -113,6 +130,6 @@ export default function SelectedJobModal() {
           />
         )}
       </div>
-    </>
+    </div>
   );
 }

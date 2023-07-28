@@ -34,11 +34,22 @@ export default function KanbanBoard({
     if (source.droppableId == destination.droppableId) return;
 
     const formData = {
+      oldStatus: source.droppableId,
       newStatus: destination.droppableId,
       boardId: board_id,
       job_id: draggableId,
       selectedBoard_userId: selectedBoard.user_id,
-      token: await session.getToken()
+      token: await session.getToken(),
+      update_type: `Moved to ${
+        destination.droppableId.charAt(0).toUpperCase() +
+        destination.droppableId.slice(1)
+      }`,
+      description: `You moved this job from ${
+        source.droppableId.charAt(0).toUpperCase() + source.droppableId.slice(1)
+      } to ${
+        destination.droppableId.charAt(0).toUpperCase() +
+        destination.droppableId.slice(1)
+      }`
     };
 
     dispatch(
