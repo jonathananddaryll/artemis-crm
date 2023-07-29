@@ -3,17 +3,24 @@ const router = express.Router();
 const { Client, config } = require('../../config/db');
 const format = require('pg-format');
 
-// Testing new git token
+// TODO:
+// 1) Integrate backend auth (grab user_id from clerk frontend token)
+// 2) Input validation and sql injection check
+// 3) Error handling and response object formatting
 
 // @ROUTE  GET api/contacts/:user_id
 // @DESC   READ api for individual users contacts
 // @ACCESS Private
 router.get('/', async (req, res) => {
     try{
-        // This query is a straightforward match, which means if searching for 'joh', 'john' will not be 
-        // in the results, and neither will jo.
-        // Will later add LIKE, as in, first_name LIKE '<first_name>%', or LIKE '%<first_name>' for 
-        // misspellings or similar names, etc
+
+        // Uses first OR last name to search contacts. Receives a request body with 'first', 'last', 
+        // and 'user_id' fields. User_id is required, and must provide at least one of the two other
+        // values, or you will get an error with the message 'not found'.
+
+        // TODO:
+        // 1) add LIKE into postgresql query to add more flexible search
+        // 
         const { first, last, user_id } = req.body
         // Query string will always begin with:
         let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
@@ -69,10 +76,13 @@ router.get('/', async (req, res) => {
 // @ACCESS Private
 router.post('/', async (req, res) => {
     try{
-        // Should have client side input checks, and server side input validation. Does not verify minimum requirements
-        // to create a new contact, will only return error.
-        // an array of the identifiers
-        // needs secure parameterization for when adding the user_id to the query
+
+        // Receives an array of column 'names', and an array of column 'values'
+        // to fill the row with. Will return an error if insufficient data to create a new
+        // row in the table.
+
+        // TODO: 
+        // 1) Check that request has sufficient data for creation of a new row
         const { names, values } = req.body;
         const query = format(`INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${req.body.user_id}, %L);`, 'contact', values)
         const client = new Client(config)
@@ -96,11 +106,16 @@ router.post('/', async (req, res) => {
 // @ACCESS Private
 router.patch('/', async (req, res) => {
     try{
-        // request sends JSON.stringified arrays as parts of the body
+
+        // A request sends JSON.stringified arrays as parts of the body along with the user_id --
+        // an array of column names 'updateWhat,' and an array of values 'updateTo,' to set
+        // as the new values for the contact.
+
         const { updateWhat, updateTo, user_id, id } = req.body
-        // merge two arrays strings, together throwing in the formatting for SQL updates for updating a type STRING
-        // => <row_name> = '<new_row_value>'
+        // merge two arrays strings, together throwing in the formatting for SQL updates for updating 
+        // a type STRING column to a new value.
         const setUpdate = updateWhat.map((element, index, array) => {
+        // EXAMPLE:  <row_name> = '<new_row_value>' 
             return `${element} = '${updateTo[index]}'`
         })
         const query = `UPDATE contact SET ${setUpdate.join(", ")} WHERE user_id = ${user_id} AND id = ${id};`;
@@ -125,7 +140,14 @@ router.patch('/', async (req, res) => {
 // @ACCESS Private
 router.delete('/', async (req, res) => {
     try{
-        // Are DELETE requests authenticated and protected from injection?
+        
+        // Receives the typical user_id, the id of the contact. Verifies ownership, 
+        // validates inputs for injections, and then deletes the contact.
+
+        // TODO:
+
+        // 1) Verify that the user_id is deleting a contact that it owns before deleting it.
+
         const { user_id, id } = req.body;
         const query = `DELETE FROM contact WHERE user_id = ${user_id} AND id = ${id};`;
         const client = new Client(config)
