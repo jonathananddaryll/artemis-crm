@@ -52,6 +52,35 @@ export const getAllNotes = createAsyncThunk(
   }
 );
 
+// Deletes a note
+export const deleteNote = createAsyncThunk(
+  'job/deleteNote',
+  async (formData, thunkAPI) => {
+    console.log('Delete Note Trigger in redux reducer');
+
+    const headers = {
+      Authorization: `Bearer ${formData.token}`
+    };
+
+    // const data = {
+    //   formData
+    // };
+
+    console.log(formData);
+    try {
+      const res = await axios.delete(`/api/notes/${formData.noteId}`, {
+        data: { formData },
+        headers
+      });
+
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
@@ -93,6 +122,15 @@ const selectedJobSlice = createSlice({
       // FIGURE THIS OUT LATER
       // state.notes = [action.payload[0].rows[0], ...state.notes];
       // state.timeline = [action.payload[1].rows[0], ...state.timelines];
+    });
+
+    builder.addCase(deleteNote.fulfilled, (state, action) => {
+      console.log('successfully deleted note');
+      // filtered notes without the deleted note
+      state.notes = state.notes.filter(
+        note => note.id !== action.payload[0].rows[0].id
+      );
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
     });
   }
 });

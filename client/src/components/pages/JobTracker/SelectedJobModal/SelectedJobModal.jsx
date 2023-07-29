@@ -11,7 +11,8 @@ import {
   getAllTimelines,
   resetSelectedJobItems,
   createNote,
-  getAllNotes
+  getAllNotes,
+  deleteNote
 } from '../../../../reducers/SelectedJobReducer';
 
 import CompanyTab from './CompanyTab/CompanyTab';
@@ -129,6 +130,7 @@ export default function SelectedJobModal() {
               jobId={selectedJob.id}
               notes={notes}
               notesLoading={notesLoading}
+              deleteNote={deleteNote}
             />
           )}
           {activeItem === 2 && <ContactsTab />}

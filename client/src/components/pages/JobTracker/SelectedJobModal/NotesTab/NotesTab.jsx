@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './NotesTab.module.css';
+import { deleteNote } from '../../../../../reducers/SelectedJobReducer';
 
 export default function NotesTab({
   createNote,
   selectedBoard_userId,
   jobId,
   notes,
-  notesLoading
+  notesLoading,
+  deleteJob
 }) {
   const [newNoteFormToggle, setNewNoteFormToggle] = useState(false);
   const [newNoteText, setNewNoteText] = useState('');
@@ -34,7 +36,23 @@ export default function NotesTab({
     dispatch(createNote(formData));
 
     // hide the form after creating a note
-    // newNoteFormToggle(false);
+    setNewNoteFormToggle(false);
+  }
+
+  // Delete Note
+  async function handleDeleteJob(noteId) {
+    const formData = {
+      jobId: jobId,
+      selectedboard_user_id: selectedBoard_userId,
+      noteId: noteId,
+      token: await session.getToken()
+    };
+
+    dispatch(deleteNote(formData));
+
+    // APPLY THIS LATER
+    // change selectedJob to null and modal off
+    // dispatch(changeSelectedJob([false, null]));
   }
 
   return (
@@ -84,7 +102,9 @@ export default function NotesTab({
                 </div>
                 <div className={styles.notesActionsItems}>
                   <button>Edit</button>
-                  <button>Delete</button>
+                  <button onClick={() => handleDeleteJob(note.id)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
