@@ -1,5 +1,17 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
 #root {
   /* max-width: 1280px; */
   margin: 0 auto;
   text-align: center;
+  max-height: 100vh;
+}
+
+.flex {
+  display: flex;
+  height: 100vh;
 }

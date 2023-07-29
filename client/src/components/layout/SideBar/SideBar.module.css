@@ -1,8 +1,207 @@
-.container {
-  width: 300px;
-  background-color: yellow;
+.navContainer {
+  width: 250px;
+  background-color: rgb(20, 19, 19);
   height: 100vh;
+  position: relative;
+  /* position: absolute;
+  top: 0; */
+
+  /* delete this later */
+  color: white;
+
+  transition: 0.4s;
+}
+
+/* Not expanded */
+.navContainerNX {
+  width: 80px;
+}
+
+.navUpper,
+.navHeading,
+.navMenu,
+.menuItem {
+  display: grid;
+}
+
+.navHeading {
+  grid-template-columns: 2fr, 1fr;
+  grid-template-rows: 1fr;
+  height: 75px;
+  padding-top: 10px;
+}
+
+.navBrand {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.logoText {
+  font-size: 23px;
+  letter-spacing: 2px;
+}
+
+.logoImage {
+  width: 35px;
+  height: 35px;
+  padding: 0 10px;
+}
+
+.hamburger {
   position: absolute;
-  left: 0;
-  top: 0;
+  right: 0;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  margin: auto -33px;
+  background-color: rgb(110, 70, 219);
+  border: 2px solid white;
+  padding: 17px;
+  border-radius: 90px;
+  height: 64px;
+  width: 66px;
+}
+
+.hamburger span {
+  display: block;
+  margin: 4px 0;
+  background-color: white;
+  border-radius: 4px;
+  width: 27px;
+  height: 4px;
+
+  transition: 0.4s;
+}
+
+.hamburger:hover span {
+  margin: auto;
+}
+
+.hamburgerIn:hover span:nth-child(1) {
+  width: 24px;
+  transform: translate(-3px, 8px) rotate(30deg);
+}
+
+.hamburgerIn:hover span:nth-child(2) {
+  display: none;
+}
+
+.hamburgerIn:hover span:nth-child(3) {
+  width: 24px;
+  transform: translate(-3px, -8px) rotate(-30deg);
+}
+
+.hamburgerOut:hover span:nth-child(1) {
+  width: 24px;
+  transform: translate(0px, 8px) rotate(-30deg);
+}
+
+.hamburgerOut:hover span:nth-child(2) {
+  display: none;
+}
+
+.hamburgerOut:hover span:nth-child(3) {
+  width: 24px;
+  transform: translate(0px, -8px) rotate(30deg);
+}
+
+.navMenu {
+  grid-template-rows: (repeat(7, 1fr));
+  margin-top: 50px;
+}
+
+/* NavLink to remove underline on visited links */
+.navMenuLink {
+  text-decoration: none;
+}
+
+.menuItem {
+  height: 48px;
+  /* width: 16em; */
+  display: flex;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin: auto 20px;
+  border-radius: 10px;
+  position: relative;
+  align-items: center;
+}
+
+.menuItemNX {
+  margin: auto;
+  width: 4em;
+}
+
+.menuItem:hover {
+  background-color: rgb(110, 70, 219);
+}
+
+.menuItem img {
+  width: 20px;
+  height: 20px;
+  padding: 0 20px;
+}
+
+.menuItem p {
+  /* margin: 0; */
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.menuItem:hover > .tooltip {
+  display: block;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  left: 90%;
+  bottom: 80%;
+
+  width: auto;
+  padding: 4px 8px;
+
+  border-radius: 15px 15px 15px 0;
+  white-space: nowrap;
+  border: 2px solid white;
+  background-color: rgb(20, 19, 19);
+  color: whitesmoke;
+}
+
+/* DELETE THIS LATER */
+.navItems {
+  list-style-type: none;
+}
+
+.navItem {
+  color: rgb(236, 226, 226);
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.navItemIcon {
+  font-size: 15px;
+}
+
+.navItemText {
+  font-size: 18px;
+  text-transform: capitalize;
+  margin-left: 10px;
+  text-decoration: none;
+  color: rgb(236, 226, 226);
+}
+
+.navItemTextSub {
+  text-decoration: none;
+  color: rgb(236, 226, 226);
+  line-height: 1.3;
+}
+
+/* Current active/selected item in the navbar */
+.active {
+  background-color: rgb(110, 70, 219);
 }

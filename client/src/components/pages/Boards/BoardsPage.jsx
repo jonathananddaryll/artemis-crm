@@ -5,10 +5,18 @@ import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
+import { useAuth } from '@clerk/clerk-react';
+import UpdateForm from './UpdateForm';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
   const [formToggle, setFormToggle] = useState(false);
+  const [titleFormToggle, setTitleFormToggle] = useState({
+    ind: null,
+    state: false
+  });
+
+  const { userId } = useAuth();
 
   const toggleHandler = () => {
     setFormToggle(!formToggle);
@@ -18,10 +26,10 @@ export default function BoardsPage() {
   const dispatch = useDispatch();
 
   // // get all the jobs
-  // useEffect(() => {
-  //   // this will be loaded with the current loggedIn user's id or clerk_id
-  //   dispatch(getAllBoards());
-  // }, []);
+  useEffect(() => {
+    // this will be loaded with the current loggedIn user's id or clerk_id
+    dispatch(getAllBoards(userId));
+  }, []);
 
   const handleBoardClick = board => {
     console.log('yeeee handle boardclick');
@@ -30,26 +38,95 @@ export default function BoardsPage() {
   };
 
   return (
-    <div className={styles.page_wrapper}>
-      <h3>My boards</h3>
+    <div className={styles.pageWrapper}>
+      <h3>My Personal Boards</h3>
       {!boardsLoading && (
-        <div className={styles.boards_container}>
-          {boards.map(board => (
-            <Link to={`/boards/${board.id}/jobs`}>
-              <div key={board.id} className={styles.board_box}>
-                <p onClick={() => handleBoardClick(board)}>{board.title}</p>
-              </div>
-            </Link>
+        <div className={styles.boardsContainer}>
+          <div className={styles.flexBox}>
+            <div className={styles.newBoardBox}>
+              {!formToggle ? (
+                <button
+                  className={styles.newBoardButton}
+                  onClick={() => toggleHandler()}
+                >
+                  + NEW BOARD
+                </button>
+              ) : (
+                <NewBoardForm toggleHandler={toggleHandler} />
+              )}
+            </div>
+          </div>
+          {boards.map((board, idx) => (
+            <div key={board.id} className={styles.flexBox}>
+              <Link
+                to={`/boards/${board.id}/jobs`}
+                key={idx}
+                style={{ textDecoration: 'none' }}
+              >
+                <div
+                  className={styles.boardBox}
+                  onClick={() => handleBoardClick(board)}
+                >
+                  <p key={board.id} className={styles.textBoardTitle}>
+                    {board.title}
+                  </p>
+                  <p className={styles.textBoardDateCreated}>
+                    {board.date_created}
+                  </p>
+                </div>
+              </Link>{' '}
+              <button
+                className={styles.editButton}
+                onClick={e =>
+                  setTitleFormToggle({
+                    ind: idx,
+                    state: true
+                  })
+                }
+              >
+                Edit
+              </button>
+              {titleFormToggle.state && titleFormToggle.ind === idx && (
+                <UpdateForm
+                  board={board}
+                  handleToggleUpdateForm={setTitleFormToggle}
+                />
+              )}
+            </div>
           ))}
+          {/* if there's 4 gap */}
+          {(boards.length + 1) % 5 === 1 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 3 gaps */}
+          {(boards.length + 1) % 5 === 2 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 2 gaps */}
+          {(boards.length + 1) % 5 === 3 && (
+            <>
+              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexBoxEmpty}></div>
+            </>
+          )}
+
+          {/* if there's 1 gaps */}
+          {(boards.length + 1) % 5 === 4 && (
+            <div className={styles.flexBoxEmpty}></div>
+          )}
         </div>
       )}
-      <div className={styles.newboard_box}>
-        {!formToggle ? (
-          <button onClick={() => toggleHandler()}>+ NEW BOARD</button>
-        ) : (
-          <NewBoardForm toggleHandler={toggleHandler} />
-        )}
-      </div>
     </div>
   );
 }

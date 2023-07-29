@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createBoard } from '../../../reducers/BoardReducer';
+import { useSession } from '@clerk/clerk-react';
 
 export default function NewBoardForm({ toggleHandler }) {
   const [title, setTitle] = useState('');
   const dispatch = useDispatch();
 
-  const onSubmitHandler = e => {
+  const { session } = useSession();
+
+  async function onSubmitHandler(e) {
     e.preventDefault();
 
-    dispatch(createBoard(title));
+    const formData = {
+      title: title,
+      token: await session.getToken()
+    };
+
+    dispatch(createBoard(formData));
+
+    // console.log(formData);
 
     // Clears the form then close it
     setTitle('');
     toggleHandler();
-  };
+  }
 
   return (
     <div>
