@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {
   handleToggleForm,
   changeSelectedJob
-} from '../../../reducers/BoardReducer';
+} from '../../../../reducers/BoardReducer';
 import { useDispatch } from 'react-redux';
 
 const Container = styled.div`

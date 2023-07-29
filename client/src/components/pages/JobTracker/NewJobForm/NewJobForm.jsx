@@ -94,6 +94,10 @@ export default function NewJobForm() {
   const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
+      <div
+        className={styles.outerModal}
+        onClick={() => dispatch(handleToggleForm([false, null]))}
+      ></div>
       <div className={styles.modal}>
         <form onSubmit={e => onSubmitHandler(e)}>
           <div className={styles.formGroup}>

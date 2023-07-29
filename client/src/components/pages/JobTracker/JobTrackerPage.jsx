@@ -10,10 +10,11 @@ import styles from './JobTrackerPage.module.css';
 
 import { useAuth } from '@clerk/clerk-react';
 
-import KanbanBoard from './KanbanBoard';
+import KanbanBoard from './KanbanBoard/KanbanBoard';
 import AddListForm from './AddListForm/AddListForm';
 import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
+import BoardHeader from './BoardHeader/BoardHeader';
 
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
@@ -46,11 +47,11 @@ export default function JobTrackerPage() {
   // DONT NEED THIS SINCE ALL THE LOADING IS DONE BY THE 3 CONDITIONAL STATEMENT BELOW
   useEffect(() => {
     //
-    if (selectedBoardStatusCols !== null && loadStart1) {
+    if (selectedBoardStatusCols !== null && selectedBoard !== null) {
       console.log('yoooooo this triggered just now');
       dispatch(getjobswithBoardId(board_id));
     }
-  }, [board_id]);
+  }, []);
 
   // Board Loading
   if (
@@ -69,7 +70,13 @@ export default function JobTrackerPage() {
   }
 
   // jobs loading
-  if (jobsLoading && board_id !== null && loadStart1) {
+  if (
+    jobsLoading &&
+    board_id !== null &&
+    loadStart1 &&
+    selectedBoardStatusCols === null &&
+    selectedBoard !== null
+  ) {
     dispatch(getjobswithBoardId(board_id));
     console.log('ayoooooooooooooooo this ssssss hits');
     setLoadStart1(false);
@@ -86,7 +93,13 @@ export default function JobTrackerPage() {
     <div className={styles.container}>
       {selectedBoardStatusCols !== null ? (
         <>
-          <KanbanBoard setAddListToggle={setAddListToggle} />
+          <BoardHeader title={selectedBoard.title} />
+
+          <KanbanBoard
+            setAddListToggle={setAddListToggle}
+            selectedBoard={selectedBoard}
+            selectedBoardStatusCols={selectedBoardStatusCols}
+          />
           {addListToggle && (
             <AddListForm
               setAddListToggle={setAddListToggle}

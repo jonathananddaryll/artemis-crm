@@ -6,9 +6,9 @@ const { Client, config } = require('../../config/db');
 const {
   myRequestHeaders,
   validateRequest
-} = require('../../middleware/validators');
+} = require('../../middlewares/validators');
 
-const { decodeToken } = require('../../middleware/decodeToken');
+const { decodeToken } = require('../../middlewares/decodeToken');
 
 // // Going to change this to SELECT * FROM JOBS WHERE boardId is the current selectedBoard and userId is the current loggedIn user id
 // router.get('/', async (req, res) => {
@@ -175,7 +175,13 @@ router.patch(
     const client = new Client(config);
     client.connect();
 
-    const { newStatus, boardId, selectedBoard_userId } = req.body;
+    const {
+      newStatus,
+      boardId,
+      selectedBoard_userId,
+      update_type,
+      description
+    } = req.body;
     const jobId = req.params.job_id;
 
     const decodedToken = decodeToken(req.headers.authorization);
@@ -188,11 +194,21 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board' });
     } else {
       // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
+      // const query = format(
+      //   `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *`,
+      //   newStatus,
+      //   jobId,
+      //   boardId
+      // );
+
       const query = format(
-        `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *`,
+        `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)`,
         newStatus,
         jobId,
-        boardId
+        boardId,
+        jobId,
+        update_type,
+        description
       );
 
       console.log(query);
@@ -205,8 +221,9 @@ router.patch(
           }
 
           // return the updated job
-          console.log(response.rows[0]);
-          res.status(200).json(response.rows[0]);
+          // console.log(response.rows[0]);
+          console.log(response[0].rows[0]);
+          res.status(200).json(response[0].rows[0]);
           client.end();
         });
       } catch (err) {

@@ -10,8 +10,6 @@ export const getAllBoards = createAsyncThunk(
   'board/getBoardswithUserId',
   async (user_id, thunkAPI) => {
     try {
-      // const res = await axios.get(`/api/boards/${user_id}`);
-      // chill change this later tro dynamic user_id
       const res = await axios.get(`/api/boards/${user_id}`);
       return res.data;
     } catch (err) {

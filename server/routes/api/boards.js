@@ -7,9 +7,9 @@ const { Client, config } = require('../../config/db');
 const {
   myRequestHeaders,
   validateRequest
-} = require('../../middleware/validators');
+} = require('../../middlewares/validators');
 
-const { decodeToken } = require('../../middleware/decodeToken');
+const { decodeToken } = require('../../middlewares/decodeToken');
 // import 'dotenv/config';
 
 // @TODO:
@@ -20,7 +20,7 @@ const { decodeToken } = require('../../middleware/decodeToken');
 // 5. deleting column name --> make sure the column is empty first before letting user delete it
 
 // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
-// @desc      get all boards for the user_id
+// @desc      get all boards for the user with user_id
 // @access    public ----> will probably make this private later with userid
 router.get('/:user_id', async (req, res) => {
   console.log('boards api getall hits');

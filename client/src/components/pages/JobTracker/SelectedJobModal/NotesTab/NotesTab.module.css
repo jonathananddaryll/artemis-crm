@@ -1,0 +1,54 @@
+.notesTabContainer {
+  padding: 20px;
+  position: relative;
+}
+
+.header {
+  height: 50px;
+  text-align: right;
+}
+.newNoteButton {
+  /* float: right; */
+  height: 40px;
+  padding: 0 20px;
+}
+
+.formGroup {
+  width: 100%;
+  /* background-color: red; */
+  border: 1px solid grey;
+  border-radius: 7px;
+}
+
+.textarea {
+  width: 99%;
+  height: 100px;
+}
+
+.submitButton {
+  display: block;
+}
+
+/* NOTES BOX */
+.notesBox {
+  /* width: 100%; */
+  padding: 15px;
+  background-color: rgb(238, 238, 210);
+  max-height: 230px;
+  /* min-height: 100px; */
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.notesFooter {
+  border-top: 1px solid rgb(134, 126, 126);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 35px;
+  padding-top: 5px;
+}
+
+.notesFooter p {
+  margin: 0;
+}

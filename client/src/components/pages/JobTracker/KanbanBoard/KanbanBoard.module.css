@@ -1,0 +1,21 @@
+.kanbanContainer {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* flex-direction: row; */
+
+  overflow: hidden;
+
+  /* display: inline-block; */
+  width: max-content;
+}
+
+.addlistContainer {
+  background-color: #f2f3f5;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 5px;
+  width: 300px;
+  min-height: 92vh;
+  float: left;
+}

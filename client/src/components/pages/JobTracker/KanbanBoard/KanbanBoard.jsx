@@ -3,55 +3,53 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  getBoard,
   removeFromStatus,
   addToStatus,
   updateJobStatus
-} from '../../../reducers/BoardReducer';
+} from '../../../../reducers/BoardReducer';
 
 import { useSession } from '@clerk/clerk-react';
 
 import Column from './Column';
-import styles from './JobTrackerPage.module.css';
+import styles from './KanbanBoard.module.css';
 
-export default function KanbanBoard({ setAddListToggle }) {
-  const { selectedBoard, selectedBoardStatusCols } = useSelector(state => ({
-    ...state.board
-  }));
+export default function KanbanBoard({
+  setAddListToggle,
+  selectedBoard,
+  selectedBoardStatusCols
+}) {
+  // PASSED selectedBoard and selectedBoardStatusCols as a props instead of using useSelector hook. delete this later once everything is finalized and working as planned
+  // const { selectedBoard, selectedBoardStatusCols } = useSelector(state => ({
+  //   ...state.board
+  // }));
 
   const dispatch = useDispatch();
-
   const { board_id } = useParams();
-
   const { session } = useSession();
 
-  // const { selectedBoard } = useSelector(state => ({ ...state.board }));
-
-  // const [selectedBoard, setSelectedBoard] = useState(boards[0]);
-
-  // HAVE A FUNCTION THAT LOADS THIS AND SET ALL THE STATS WHEN JOB IS DONE LOADING. OR MAYBE DONT DO USESTATE. MAKE IT A JOB BOARD STATE IN REDUX
-  // const { board_id } = useParams();
-
-  // if (selectedBoard === null) {
-  //   console.log(board_id);
-  //   dispatch(getBoard(board_id));
-  // }
-
-  // const populateBoard = jobs => {
-  //   selectedBoardStatusCols.map();
-  // };
-
-  async function handleDragEnd(result, selectedBoardStatusCols) {
+  // Handles the dropping of the job
+  async function handleDragEnd(result) {
     const { destination, source, draggableId } = result;
     console.log(result);
     if (source.droppableId == destination.droppableId) return;
 
     const formData = {
+      oldStatus: source.droppableId,
       newStatus: destination.droppableId,
       boardId: board_id,
       job_id: draggableId,
       selectedBoard_userId: selectedBoard.user_id,
-      token: await session.getToken()
+      token: await session.getToken(),
+      update_type: `Moved to ${
+        destination.droppableId.charAt(0).toUpperCase() +
+        destination.droppableId.slice(1)
+      }`,
+      description: `You moved this job from ${
+        source.droppableId.charAt(0).toUpperCase() + source.droppableId.slice(1)
+      } to ${
+        destination.droppableId.charAt(0).toUpperCase() +
+        destination.droppableId.slice(1)
+      }`
     };
 
     dispatch(
@@ -82,7 +80,7 @@ export default function KanbanBoard({ setAddListToggle }) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2>
+      {/* <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2> */}
 
       {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
       <div className={styles.kanbanContainer}>
