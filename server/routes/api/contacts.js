@@ -8,7 +8,7 @@ const format = require('pg-format');
 
 // Testing new git token
 
-// @ROUTE  GET api/contacts/
+// @ROUTE  GET api/contacts/:user_id
 // @DESC   READ api for individual users contacts
 // @ACCESS Private
 router.get('/', async (req, res) => {
