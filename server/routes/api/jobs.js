@@ -67,12 +67,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .status(405)
       .json({ msg: 'Error: The user does not own the board' });
   } else {
-    // const query1 = format(
-    //   'INSERT INTO board (title, user_id) VALUES(%L, %L) RETURNING *',
-    //   title,
-    //   userId
-    // );
-
     const query = format(
       'INSERT INTO job (job_title, company, location, status, board_id) VALUES(%L, %L, %L, %L, %L) RETURNING *',
       job_title,

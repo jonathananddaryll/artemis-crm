@@ -45,7 +45,7 @@ const CompanyText = styled.p`
   margin: 2px 0;
 `;
 
-const LocationText = styled.p`
+const CreatedText = styled.p`
   margin: 2px 0;
 `;
 
@@ -65,7 +65,7 @@ export default function Job({ job, index }) {
           <TextContent>
             <TitleText>{job.job_title}</TitleText>
             <CompanyText>{job.company}</CompanyText>
-            <LocationText>{job.location}</LocationText>
+            <CreatedText>{job.date_created}</CreatedText>
           </TextContent>
           {provided.placeholder}
         </Container>

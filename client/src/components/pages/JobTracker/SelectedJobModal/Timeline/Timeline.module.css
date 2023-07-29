@@ -1,23 +1,29 @@
-.content {
+/* .content {
   display: flex;
   height: 100%;
   overflow: auto;
-}
+} */
 
 .verticalLine {
   flex: 0 0 15%;
-  background-color: red;
-  width: 100%;
-  height: 100%;
+  /* background-color: red; */
+  /* height: 50px; */
 }
 
 .cardsContainer {
+  display: flex;
+  width: 100%;
+}
+
+.box {
   flex: 0 0 85%;
+  padding: 6px 0;
 }
 
 .timelineCard {
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   /* width: 100%; */
+
   background: #d1d1da;
   border-radius: 5px;
   padding: 10px;
@@ -40,4 +46,38 @@
 .textDateCreated {
   margin: 0;
   font-size: 11px;
+}
+
+/* TIMELINE left line to show timeline */
+.topLine {
+  width: 2px;
+  height: 37%;
+  margin: auto;
+  border: 2px solid rgb(224, 224, 152);
+  background-color: rgb(224, 224, 152);
+}
+
+.middleDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 33%;
+  background-color: green;
+  display: inline-block;
+}
+
+.bottomLine {
+  width: 2px;
+  height: 33%;
+  margin: auto;
+  background-color: rgb(224, 224, 152);
+  border: 2px solid rgb(224, 224, 152);
+}
+
+.timelineScroll {
+  overflow: auto;
+  height: 100%;
+}
+
+.timelineContainer {
+  height: 100%;
 }

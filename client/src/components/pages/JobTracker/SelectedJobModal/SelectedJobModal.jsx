@@ -119,7 +119,11 @@ export default function SelectedJobModal() {
           {activeItem === 5 && <CompanyTab />}
         </div>
         <div className={styles.timelineContainer}>
-          <Timeline timelines={timelines} timelinesLoading={timelinesLoading} />
+          <Timeline
+            timelines={timelines}
+            timelinesLoading={timelinesLoading}
+            dateCreated={selectedJob.date_created}
+          />
         </div>
 
         {confirmationToggle && (
