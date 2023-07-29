@@ -11,11 +11,11 @@ import {
   UserButton
 } from '@clerk/clerk-react';
 
-import SideBar from './components/layout/SideBar/SideBar';
+import SideBar from './components/layout/SideBar/Sidebar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
-import Contacts from './components/pages/Contacts/ContactsPage';
+import ContactsPage from './components/pages/Contacts/ContactsPage';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 //   throw new Error('Missing Publishable Key');
@@ -73,16 +73,19 @@ function App() {
                 </>
               }
             ></Route>
-            <Route path='/contacts' element={<Contacts />}>
-              <>
-              <SignedIn>
-                < ContactsPage />
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn></RedirectToSignIn>
-              </SignedOut>
-              </>
-            </Route>
+            <Route 
+              path='/contacts/' 
+              element={
+                <>
+                  <SignedIn>
+                    < ContactsPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn></RedirectToSignIn>
+                  </SignedOut>
+                </>
+              }
+              ></Route>
           </Routes>
         </>
       </ClerkProvider>
