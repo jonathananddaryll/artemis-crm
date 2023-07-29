@@ -4,7 +4,7 @@ import styles from './Timeline.module.css';
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (
     <div className={styles.timelineContainer}>
-      <p>Timeline</p>
+      <p className={styles.textHeader}>Timeline</p>
       {timelinesLoading ? (
         <p>TIMELINE IS LOADING</p>
       ) : (

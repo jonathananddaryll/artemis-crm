@@ -4,8 +4,14 @@
   overflow: auto;
 } */
 
+.textHeader {
+  font-size: 20px;
+  text-align: left;
+}
+
 .verticalLine {
-  flex: 0 0 15%;
+  flex: 0 0 7%;
+  /* padding-right: 10px; */
   /* background-color: red; */
   /* height: 50px; */
 }
@@ -13,10 +19,11 @@
 .cardsContainer {
   display: flex;
   width: 100%;
+  justify-content: space-between;
 }
 
 .box {
-  flex: 0 0 85%;
+  flex: 0 0 90%;
   padding: 6px 0;
 }
 
