@@ -16,7 +16,7 @@ router.get('/job/:job_id', async (req, res) => {
   console.log('get all timeline with jobId');
   const jobId = req.params.job_id;
   const query = format(
-    'SELECT * FROM timeline WHERE job_id = %s ORDER BY date_created ASC',
+    'SELECT * FROM timeline WHERE job_id = %s ORDER BY date_created DESC',
     jobId
   );
   console.log(query);

@@ -9,8 +9,10 @@ import {
 
 import {
   getAllTimelines,
-  resetTimelines
-} from '../../../../reducers/TimelineReducer';
+  resetSelectedJobItems,
+  createNote,
+  getAllNotes
+} from '../../../../reducers/SelectedJobReducer';
 
 import CompanyTab from './CompanyTab/CompanyTab';
 import ContactsTab from './ContactsTab/ContactsTab';
@@ -31,12 +33,20 @@ export default function SelectedJobModal() {
   }));
 
   useEffect(() => {
-    dispatch(getAllTimelines(selectedJob.id));
+    // dispatch(getAllTimelines(selectedJob.id));
+    handleEveryGetAll();
   }, [selectedJob.id]);
 
-  const { timelines, timelinesLoading } = useSelector(state => ({
-    ...state.timeline
-  }));
+  const handleEveryGetAll = () => {
+    dispatch(getAllTimelines(selectedJob.id));
+    dispatch(getAllNotes(selectedJob.id));
+  };
+
+  const { timelines, timelinesLoading, notes, notesLoading } = useSelector(
+    state => ({
+      ...state.selectedJob
+    })
+  );
 
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
@@ -67,7 +77,7 @@ export default function SelectedJobModal() {
   }
 
   const handleClosingModal = () => {
-    dispatch(resetTimelines());
+    dispatch(resetSelectedJobItems());
     dispatch(changeSelectedJob([false, null]));
   };
 
@@ -112,7 +122,15 @@ export default function SelectedJobModal() {
           </div>
           {/* MAIN CONTENT BOX */}
           {activeItem === 0 && <JobInfoTab />}
-          {activeItem === 1 && <NotesTab />}
+          {activeItem === 1 && (
+            <NotesTab
+              createNote={createNote}
+              selectedBoard_userId={selectedBoard.user_id}
+              jobId={selectedJob.id}
+              notes={notes}
+              notesLoading={notesLoading}
+            />
+          )}
           {activeItem === 2 && <ContactsTab />}
           {activeItem === 3 && <DocumentsTab />}
           {activeItem === 4 && <TasksTab />}

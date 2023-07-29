@@ -90,7 +90,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
           res.status(500).json({ msg: 'query error' });
         }
 
-        // return the new column status that is added
         // console.log(response.rows[0]);
         res.status(200).json(response.rows[0]);
 

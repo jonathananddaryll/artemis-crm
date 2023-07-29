@@ -167,7 +167,7 @@ export const getjobswithBoardId = createAsyncThunk(
   }
 );
 
-// Adds a new job
+// Creates a new job
 export const addJob = createAsyncThunk(
   'job/addJob',
   async (formData, thunkAPI) => {
