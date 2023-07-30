@@ -64,8 +64,10 @@ const fakeContacts = [
     },
 ]
 
+// CONTACTS Reducers : first and last name search only at this point
+
 // READ all contacts for a user
-export const getContactsWithUserId = createAsyncThunk(
+export const getAllContacts = createAsyncThunk(
   'contacts/getAllContacts',
   async ( user_id, first, last, thunkAPI ) => {
     try {
@@ -75,10 +77,14 @@ export const getContactsWithUserId = createAsyncThunk(
           method: 'GET',
           url: '/api/contacts/',
           withCredentials: false,
-          params: {
-            user_id,
-            first,
-            last
+          body: {
+            user_id: user_id,
+            first: first,
+            last: last
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            
           }
         });
         return res.data;
@@ -89,22 +95,25 @@ export const getContactsWithUserId = createAsyncThunk(
 );
 
 // DELETE a users contact
-export const deleteContactWithUserId = createAsyncThunk(
+export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async( user_id, id ) => {
     try {
-      console.log(user_id, id)
-      // const res = await axios.delete('api/contacts/');
+      // send the user_id along with the contact id to delete.
       const res = await axios.delete({
         method: 'DELETE',
         url: '/api/contacts/',
         withCredentials: false,
-        params: {
-          user_id,
-          id
+        body: {
+          user_id: user_id,
+          id: id
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          
         }
       });
-      // return res.data;
+      return res.data;
     } catch(err){
       console.log(err);
     }
@@ -112,12 +121,12 @@ export const deleteContactWithUserId = createAsyncThunk(
 )
 
 // UPDATE a users contact
-export const updateContactWithUserId = createAsyncThunk(
+export const updateContact = createAsyncThunk(
   'contacts/updateContact',
-  async( user_id, updateRows, updateValues ) => {
+  async( user_id, updateWhat, updateTo ) => {
     try{
-      console.log(user_id, updateRows, updateValues)
-      // const res = await axios.patch('api/contacts/');
+      // with user_id, send two stringified arrays, one of the column names (str) and one
+      // of the column value to set it to (also str)
       const res = await axios.patch({
         method: 'UPDATE',
         url: '/api/contacts/',
@@ -126,13 +135,13 @@ export const updateContactWithUserId = createAsyncThunk(
           'Content-Type': 'application/json',
           
         },
-        params: {
-          user_id,
-          updateRows,
-          updateValues
+        body: {
+          user_id: user_id,
+          updateWhat: updateWhat,
+          updateTo: updateTo,
         }
       });
-      // return res.data;
+      return res.data;
     }catch(err){
       console.log(err);
     }
@@ -140,13 +149,10 @@ export const updateContactWithUserId = createAsyncThunk(
 )
 
 // CREATE a contact for a user
-export const createNewContactWithUserId = createAsyncThunk(
+export const createContact = createAsyncThunk(
   'contacts/createContact',
   async( user_id, contactRows, contactValues) => {
     try{
-      console.log(user_id, contactRows, contactValues)
-      // const res = await axios.post('api/contacts/');
-      // return res.data;
       const res = await axios.create({
         method: 'CREATE',
         url: '/api/contacts/',
@@ -155,12 +161,13 @@ export const createNewContactWithUserId = createAsyncThunk(
           'Content-Type': 'application/json',
           
         },
-        params: {
+        body: {
           user_id,
           contactRows,
           contactValues
         }
       });
+      return res.data;
     }catch(err){
       console.log(err);
     }
@@ -172,11 +179,50 @@ const initialState = {
     selectedContact: null,
     loading: false
 }
-
+// const timelineSlice = createSlice({
+//   name: 'board',
+//   initialState: {
+//     timelinesLoading: true,
+//     timelines: []
+//   },
+//   reducers: {
+//     resetTimelines: (state, action) => {
+//       state.timelinesLoading = true;
+//       state.timelines = [];
+//     }
+//   },
+//   extraReducers: builder => {
+//     builder.addCase(getAllTimelines.fulfilled, (state, action) => {
+//       state.timelines = action.payload;
+//       state.timelinesLoading = false;
+//       // delete this later. it's just to check if this triggers
+//       console.log('getAllTimelines is triggered');
+//     });
+//   }
+// });
 const contactSlice = createSlice({
   name: 'contact',
-  initialState,
+  initialState: {
+    contactResults: {},
+    newContactStaging: {},
+    contactInFocus: {},
+    contactLoading: true,
 
+  },
+  reducers: {
+    updateContactInFocus: (state, action) => {
+      if(action.payload.empty){
+        state.contactInFocus = {};
+        state.contactLoading = true;
+      }else{
+        state.contactInFocus = action.payload;
+        state.contactLoading = false;
+      }
+    },
+    setNewContactStaging: (state, action) => {
+      newContactStaging = action.payload;
+    }
+  },
   extraReducers: builder => {
     // call the action here and then action.payload is whatever the returned value from the action (res.data).
     // .fulfilled is if the action is successful, basically
