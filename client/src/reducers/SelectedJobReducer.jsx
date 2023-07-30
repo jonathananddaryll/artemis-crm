@@ -19,7 +19,6 @@ export const getAllTimelines = createAsyncThunk(
 export const createNote = createAsyncThunk(
   'note/createNote',
   async (formData, thunkAPI) => {
-    console.log('this is in createNote redux slice');
     console.log(formData);
     const config = {
       headers: {
@@ -33,6 +32,30 @@ export const createNote = createAsyncThunk(
       return res.data;
     } catch (error) {
       // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+export const updateNote = createAsyncThunk(
+  'note/updateNote',
+  async (formData, thunkAPI) => {
+    console.log('this is in updateNote redux slice');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/notes/${formData.noteId}`,
+        formData,
+        config
+      );
+      return res.data;
+    } catch (error) {
       console.log(err);
     }
   }
@@ -105,15 +128,11 @@ const selectedJobSlice = createSlice({
     builder.addCase(getAllTimelines.fulfilled, (state, action) => {
       state.timelines = action.payload;
       state.timelinesLoading = false;
-      // delete this later. it's just to check if this triggers
-      console.log('getAllTimelines is triggered');
     });
 
     builder.addCase(getAllNotes.fulfilled, (state, action) => {
       state.notes = action.payload;
       state.notesLoading = false;
-      // delete this later. it's just to check if this triggers
-      console.log('getAllNotes is triggered');
     });
 
     builder.addCase(createNote.fulfilled, (state, action) => {
@@ -124,9 +143,16 @@ const selectedJobSlice = createSlice({
       // state.timeline = [action.payload[1].rows[0], ...state.timelines];
     });
 
+    builder.addCase(updateNote.fulfilled, (state, action) => {
+      // Find the index of the updated note then change it to the updated note
+      const index = state.notes.findIndex(
+        note => note.id === action.payload.id
+      );
+      state.notes[index] = action.payload;
+    });
+
     builder.addCase(deleteNote.fulfilled, (state, action) => {
-      console.log('successfully deleted note');
-      // filtered notes without the deleted note
+      // Filter notes without the deleted note
       state.notes = state.notes.filter(
         note => note.id !== action.payload[0].rows[0].id
       );

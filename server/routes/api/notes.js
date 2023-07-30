@@ -98,6 +98,53 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   }
 });
 
+// @route     PATCH api/notes/:id
+// @desc      updates a note
+// @access    Private
+router.patch('/:id', myRequestHeaders, validateRequest, async (req, res) => {
+  // const errors = validationResult(req);
+  const client = new Client(config);
+  client.connect();
+  const { text, jobId, selectedboard_user_id } = req.body;
+  const noteId = req.params.id;
+
+  console.log('update note api triggered!');
+
+  // Decode the token
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
+
+  // if the user doesnt own the board throw error
+  if (selectedboard_user_id !== userId) {
+    return res
+      .status(405)
+      .json({ msg: 'Error: The user does not own the board/job' });
+  } else {
+    const query = format(
+      `UPDATE note SET text = %L WHERE id = %s and job_id = %s RETURNING *`,
+      text,
+      noteId,
+      jobId
+    );
+
+    try {
+      client.query(query, (err, response) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ msg: 'query error' });
+        }
+
+        console.log(response.rows[0]);
+        res.status(200).json(response.rows[0]);
+        client.end();
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+});
+
 // @route     DELETE /api/notes/:id
 // @desc      delete a note
 // @access    Private

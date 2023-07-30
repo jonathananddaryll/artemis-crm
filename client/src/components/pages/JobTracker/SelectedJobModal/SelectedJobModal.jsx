@@ -12,7 +12,8 @@ import {
   resetSelectedJobItems,
   createNote,
   getAllNotes,
-  deleteNote
+  deleteNote,
+  updateNote
 } from '../../../../reducers/SelectedJobReducer';
 
 import CompanyTab from './CompanyTab/CompanyTab';
@@ -131,6 +132,7 @@ export default function SelectedJobModal() {
               notes={notes}
               notesLoading={notesLoading}
               deleteNote={deleteNote}
+              updateNote={updateNote}
             />
           )}
           {activeItem === 2 && <ContactsTab />}

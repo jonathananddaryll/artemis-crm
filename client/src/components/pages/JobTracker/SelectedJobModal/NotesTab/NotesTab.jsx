@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './NotesTab.module.css';
-import { deleteNote } from '../../../../../reducers/SelectedJobReducer';
 
 export default function NotesTab({
   createNote,
@@ -11,10 +10,12 @@ export default function NotesTab({
   jobId,
   notes,
   notesLoading,
-  deleteJob
+  deleteNote,
+  updateNote
 }) {
-  const [newNoteFormToggle, setNewNoteFormToggle] = useState(false);
-  const [newNoteText, setNewNoteText] = useState('');
+  const [noteFormToggle, setNoteFormToggle] = useState(false);
+  const [noteText, setNoteText] = useState('');
+  const [noteId, setNoteId] = useState(0);
 
   const dispatch = useDispatch();
   const { session } = useSession();
@@ -24,23 +25,54 @@ export default function NotesTab({
     e.preventDefault();
 
     const formData = {
-      text: newNoteText,
+      text: noteText,
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
       token: await session.getToken()
     };
 
-    // Clears the newNoteText then close it
-    setNewNoteText('');
+    if (!isUpdate) {
+      dispatch(createNote(formData));
+    } else {
+      console.log('ayoooo this is an update');
+      formData.noteId = noteId;
 
-    dispatch(createNote(formData));
+      console.log(formData);
+      dispatch(updateNote(formData));
 
+      // set noteId back to 0
+      setNoteId(0);
+    }
+
+    // Clears the noteText then close it
+    setNoteText('');
     // hide the form after creating a note
-    setNewNoteFormToggle(false);
+    setNoteFormToggle(false);
   }
 
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  // const onUpdateSubmitHandler = () => {
+  //   console.log('thissss is notes update onsubmit');
+  // };
+
+  // Fill the textarea with the text from note that's being updated
+  const onEditHandler = note => {
+    setNoteText(note.text);
+    setNoteId(note.id);
+    setIsUpdate(true);
+    setNoteFormToggle(true);
+  };
+
+  // Canceling the edit/create form
+  const onCancelFormHandler = note => {
+    setNoteText('');
+    setIsUpdate(false);
+    setNoteFormToggle(false);
+  };
+
   // Delete Note
-  async function handleDeleteJob(noteId) {
+  async function handleDeleteNote(noteId) {
     const formData = {
       jobId: jobId,
       selectedboard_user_id: selectedBoard_userId,
@@ -57,31 +89,35 @@ export default function NotesTab({
 
   return (
     <div className={styles.notesTabContainer}>
-      {!newNoteFormToggle && (
+      {!noteFormToggle && (
         <div className={styles.header}>
           <button
             className={styles.newNoteButton}
-            onClick={() => setNewNoteFormToggle(true)}
+            onClick={() => setNoteFormToggle(true)}
           >
             Create New Note
           </button>
         </div>
       )}
-      {newNoteFormToggle && (
+      {noteFormToggle && (
         <div className={styles.newNoteContainer}>
           <p>Add note</p>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
               <textarea
                 className={styles.textarea}
-                name='newNoteText'
-                value={newNoteText}
-                onChange={e => setNewNoteText(e.target.value)}
+                name='noteText'
+                value={noteText}
+                onChange={e => setNoteText(e.target.value)}
+                placeholder="Add your notes about the company's history, culture, and any relevant information here..."
               ></textarea>
-              <button onClick={() => setNewNoteFormToggle(false)}>
-                Cancel
-              </button>
-              <input type='submit' value='Save Note' />
+              <button onClick={() => onCancelFormHandler()}>Cancel</button>
+
+              {!isUpdate ? (
+                <input type='submit' value='Save Note' />
+              ) : (
+                <input type='submit' value='Update Note' />
+              )}
             </div>
           </form>
         </div>
@@ -101,8 +137,8 @@ export default function NotesTab({
                   <p>{note.date_created}</p>
                 </div>
                 <div className={styles.notesActionsItems}>
-                  <button>Edit</button>
-                  <button onClick={() => handleDeleteJob(note.id)}>
+                  <button onClick={() => onEditHandler(note)}>Edit</button>
+                  <button onClick={() => handleDeleteNote(note.id)}>
                     Delete
                   </button>
                 </div>
