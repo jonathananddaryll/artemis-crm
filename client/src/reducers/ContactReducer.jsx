@@ -177,7 +177,8 @@ export const createContact = createAsyncThunk(
 const initialState = {
     contacts: [],
     selectedContact: null,
-    loading: false
+    loading: false,
+    searchQuery: "",
 }
 // const timelineSlice = createSlice({
 //   name: 'board',
