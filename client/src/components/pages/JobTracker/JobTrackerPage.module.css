@@ -2,10 +2,22 @@
   background-color: #f8fbfe;
   /* width: 100%-250px;
   margin-left: 250px; */
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
-  overflow-x: auto;
-  padding: 0 30px;
+  /* padding: 0 30px; */
+  overflow-x: hidden;
+
+  /* padding: 20px 0 20px 10px; */
+}
+
+.kanbanBoardContainer {
+  background-color: #f8fbfe;
+  /* width: 100%-250px;
+  margin-left: 250px; */
+  /* height: 100%; */
+  width: 100%;
+  padding: 0 30px 15px 30px;
+  overflow-x: scroll;
   /* padding: 20px 0 20px 10px; */
 }
 

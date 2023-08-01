@@ -12,8 +12,8 @@ const Container = styled.div`
   position: relative;
   background-color: #e6eefb;
   border-radius: 10px;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
   margin-right: 5px;
   padding-bottom: 50px;
   width: 300px;

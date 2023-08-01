@@ -87,20 +87,21 @@ export default function JobTrackerPage() {
       {selectedBoardStatusCols !== null ? (
         <>
           <BoardHeader title={selectedBoard.title} />
-
-          <KanbanBoard
-            setAddListToggle={setAddListToggle}
-            selectedBoard={selectedBoard}
-            selectedBoardStatusCols={selectedBoardStatusCols}
-          />
-          {addListToggle && (
-            <AddListForm
+          <div className={styles.kanbanBoardContainer}>
+            <KanbanBoard
               setAddListToggle={setAddListToggle}
               selectedBoard={selectedBoard}
+              selectedBoardStatusCols={selectedBoardStatusCols}
             />
-          )}
-          {toggleJobForm && <NewJobForm />}
-          {toggleSelectedJobModal && <SelectedJobModal />}
+            {addListToggle && (
+              <AddListForm
+                setAddListToggle={setAddListToggle}
+                selectedBoard={selectedBoard}
+              />
+            )}
+            {toggleJobForm && <NewJobForm />}
+            {toggleSelectedJobModal && <SelectedJobModal />}
+          </div>
         </>
       ) : (
         <div className={styles.loaderContainer}>

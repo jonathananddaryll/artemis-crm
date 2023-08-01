@@ -79,14 +79,7 @@ export default function KanbanBoard({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      {/* <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2> */}
-
-      {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
       <div className={styles.kanbanContainer}>
-        {/* CHANGE THIS TO SELECTED BOARD LATER */}
-        {/* {selectedBoardStatusCols.map((col, idx) => (
-            <Column title={col} jobs={applied} id={idx} />
-          ))} */}
         {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
           <Column
             title={keyName}
@@ -102,7 +95,6 @@ export default function KanbanBoard({
           </div>
         )}
       </div>
-      {/* )} */}
     </DragDropContext>
   );
 }
