@@ -15,13 +15,11 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @desc      get all notes for the job with job_id
 // @access    public ----> GOTTA MAKE THIS PRIVATE LATER
 router.get('/job/:job_id', async (req, res) => {
-  console.log('get all notes with jobId');
   const jobId = req.params.job_id;
   const query = format(
     `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM note WHERE job_id = %s ORDER BY date_created DESC`,
     jobId
   );
-  console.log(query);
   const client = new Client(config);
   client.connect();
 
@@ -60,7 +58,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .status(405)
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
-    console.log('it got all the way here befire the query');
     const query = format(
       `INSERT INTO note (text, job_id) VALUES(%L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
       text,
@@ -79,12 +76,8 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
 
         // For Note
         // response[0].rows[0];
-
         // For Timeline
         // response[1].rows[0];
-
-        console.log(response);
-
         // return both response for note and timeline
         res.status(200).json(response);
         client.end();
@@ -105,8 +98,6 @@ router.patch('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   client.connect();
   const { text, jobId, selectedboard_user_id } = req.body;
   const noteId = req.params.id;
-
-  console.log('update note api triggered!');
 
   // Decode the token
   const decodedToken = decodeToken(req.headers.authorization);
@@ -183,10 +174,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
         // response.rows[0];
         // Timeline
         // response.rows[1];
-
-        console.log(response);
         res.status(200).json(response);
-
         client.end();
       });
     } catch (err) {

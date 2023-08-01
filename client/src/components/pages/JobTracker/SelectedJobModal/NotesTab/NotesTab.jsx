@@ -131,7 +131,7 @@ export default function NotesTab({
           {notes.length > 0 ? (
             <>
               {notes.map(note => (
-                <div className={styles.notesBox}>
+                <div key={note.id} className={styles.notesBox}>
                   <div className={styles.notesText}>
                     <p>{note.text}</p>
                   </div>

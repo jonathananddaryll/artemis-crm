@@ -30,7 +30,6 @@ export default function KanbanBoard({
   // Handles the dropping of the job
   async function handleDragEnd(result) {
     const { destination, source, draggableId } = result;
-    console.log(result);
     if (source.droppableId == destination.droppableId) return;
 
     const formData = {

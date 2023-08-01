@@ -15,14 +15,11 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @desc      get all tasks for the job with job_id
 // @access    public ----> GOTTA MAKE THIS PRIVATE LATER
 router.get('/job/:job_id', async (req, res) => {
-  console.log('get all tasks with jobId');
   const jobId = req.params.job_id;
   const query = format(
     `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM task WHERE job_id = %s ORDER BY date_created DESC`,
     jobId
   );
-  console.log('ITTTTTTTTTTTTT GOTTTTTTTTT HERE AT GET ROUTE FOR TASKS');
-  console.log(query);
   const client = new Client(config);
   client.connect();
 
@@ -34,7 +31,6 @@ router.get('/job/:job_id', async (req, res) => {
       }
 
       res.status(200).json(response.rows);
-      console.log(response);
       client.end();
     });
   } catch (err) {
@@ -51,7 +47,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   const client = new Client(config);
   client.connect();
   const { name, jobId, selectedboard_user_id } = req.body;
-  console.log(req.body);
 
   // Decode the token
   const decodedToken = decodeToken(req.headers.authorization);
@@ -81,12 +76,8 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
 
         // For Note
         // response[0].rows[0];
-
         // For Timeline
         // response[1].rows[0];
-
-        console.log(response);
-
         // return both response for note and timeline
         res.status(200).json(response);
         client.end();
@@ -129,9 +120,6 @@ router.patch(
         jobId
       );
 
-      console.log('it got all the way here in the tasks api route');
-      console.log(query);
-
       try {
         client.query(query, (err, response) => {
           if (err) {
@@ -139,7 +127,6 @@ router.patch(
             res.status(500).json({ msg: 'query error' });
           }
 
-          console.log(response.rows[0]);
           res.status(200).json(response.rows[0]);
           client.end();
         });

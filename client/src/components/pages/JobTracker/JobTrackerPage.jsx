@@ -45,7 +45,6 @@ export default function JobTrackerPage() {
   // get all the jobs
   useEffect(() => {
     if (selectedBoardStatusCols !== null && selectedBoard !== null) {
-      console.log('yoooooo this triggered just now');
       dispatch(getjobswithBoardId(board_id));
     }
   }, []);

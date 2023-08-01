@@ -15,8 +15,6 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @desc      get all boards for the user with user_id
 // @access    public ----> will probably make this private later with userid
 router.get('/:user_id', async (req, res) => {
-  console.log('boards api getall hits -- delete later');
-
   const userId = req.params.user_id;
   const query = format(
     'SELECT * FROM board WHERE user_id = %L ORDER BY date_created ASC',
@@ -152,9 +150,6 @@ router.patch(
         decodedUserId
       );
 
-      // remove this later
-      console.log(query);
-
       if (totalCols === 10) {
         return res
           .status(405)
@@ -169,7 +164,6 @@ router.patch(
           }
 
           // return the new column status that is added
-          console.log(response);
           res.status(200).json(response.rows[0]);
           client.end();
         });
@@ -214,8 +208,6 @@ router.patch(
         'user_2SWlvSMY0DKPuKthQBIRgFoDvdi'
       );
 
-      console.log(query);
-
       try {
         client.query(query, (err, response) => {
           if (err) {
@@ -224,7 +216,6 @@ router.patch(
           }
 
           // return the updated column
-          console.log(response.rows[0]);
           res.status(200).json(response.rows[0]);
           client.end();
         });
@@ -357,8 +348,6 @@ router.delete(
         `DELETE FROM board WHERE id = %s and NOT EXISTS (SELECT * FROM job WHERE board.id = job.board_id) RETURNING *`,
         id
       );
-
-      console.log(query);
 
       try {
         client.query(query, (err, response) => {

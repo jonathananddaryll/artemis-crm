@@ -13,15 +13,14 @@ const {
 // @desc      get all timelines for the job with job_id
 // @access    public ----> GOTTA MAKE THIS PRIVATE LATER
 router.get('/job/:job_id', async (req, res) => {
-  console.log('get all timeline with jobId');
   const jobId = req.params.job_id;
+  const client = new Client(config);
+  client.connect();
+
   const query = format(
     'SELECT * FROM timeline WHERE job_id = %s ORDER BY date_created DESC',
     jobId
   );
-  console.log(query);
-  const client = new Client(config);
-  client.connect();
 
   try {
     client.query(query, (err, response) => {

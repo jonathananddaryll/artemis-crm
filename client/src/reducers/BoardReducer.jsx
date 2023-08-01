@@ -39,8 +39,6 @@ export const getBoard = createAsyncThunk(
 export const createBoard = createAsyncThunk(
   'board/createBoard',
   async (formData, thunkAPI) => {
-    console.log('create board triggered in createBoard redux reducer');
-
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -73,9 +71,6 @@ export const addColumn = createAsyncThunk(
         Authorization: `Bearer ${formData.token}`
       }
     };
-
-    console.log('token sent from addColumn: ' + formData.token);
-    // console.log(token);
 
     try {
       const res = await axios.patch(
@@ -201,9 +196,6 @@ export const updateJobStatus = createAsyncThunk(
       }
     };
 
-    console.log(formData);
-    console.log(formData.token);
-
     try {
       const res = await axios.patch(
         `/api/jobs/${formData.job_id}/status`,
@@ -223,25 +215,10 @@ export const updateJobStatus = createAsyncThunk(
 export const deleteJob = createAsyncThunk(
   'job/deleteJob',
   async (formData, thunkAPI) => {
-    console.log('Delete Job Trigger in redux reducer');
-
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${formData.token}`
-    //   }
-    // };
-
     const headers = {
       Authorization: `Bearer ${formData.token}`
     };
 
-    // const data = {
-    //   formData
-    // };
-
-    console.log(formData);
-    console.log('it got to delete job extra reducer');
     try {
       const res = await axios.delete(`/api/jobs/${formData.jobId}`, {
         data: { formData },
@@ -255,11 +232,6 @@ export const deleteJob = createAsyncThunk(
     }
   }
 );
-
-// @todo:
-// 1. Delete job
-// 2. update job (name and information)
-//
 
 // @TODO:
 // 1. create a getSelectedBoard with Id that calls the in api with the id. usually dont do this unless the page is refreshed
@@ -386,8 +358,6 @@ const boardSlice = createSlice({
       // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
       // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
       // job status is already updating in the reducer when user drop a job to a different status it
-      console.log('successfully updated the job status');
-
       const foundIndex = state.selectedBoardStatusCols[
         action.payload.status
       ].findIndex(job => job.id === action.payload.id);
@@ -396,7 +366,6 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
-      console.log('successfully deleted job');
       // filters jobs without the deleted job
       const jobsWithoutDeletedJob = state.selectedBoardStatusCols[
         action.payload.status
@@ -404,7 +373,6 @@ const boardSlice = createSlice({
 
       state.selectedBoardStatusCols[action.payload.status] =
         jobsWithoutDeletedJob;
-      console.log(action.payload);
     });
   }
 });

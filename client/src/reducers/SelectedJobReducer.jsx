@@ -41,7 +41,6 @@ export const createNote = createAsyncThunk(
 export const updateNote = createAsyncThunk(
   'note/updateNote',
   async (formData, thunkAPI) => {
-    console.log('this is in updateNote redux slice');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -80,8 +79,6 @@ export const getAllNotes = createAsyncThunk(
 export const deleteNote = createAsyncThunk(
   'job/deleteNote',
   async (formData, thunkAPI) => {
-    console.log('Delete Note Trigger in redux reducer');
-
     const headers = {
       Authorization: `Bearer ${formData.token}`
     };
@@ -235,7 +232,6 @@ const selectedJobSlice = createSlice({
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
       // Find the index of the updated note then change it to the updated note
-
       var updatedTask = action.payload;
 
       if (action.payload.is_done === true) {

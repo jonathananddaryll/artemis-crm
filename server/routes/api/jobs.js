@@ -62,9 +62,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
           res.status(500).json({ msg: 'query error' });
         }
 
-        // console.log(response.rows[0]);
         res.status(200).json(response.rows[0]);
-
         client.end();
       });
     } catch (err) {
@@ -148,8 +146,6 @@ router.patch(
         description
       );
 
-      console.log(query);
-
       try {
         client.query(query, (err, response) => {
           if (err) {
@@ -158,8 +154,6 @@ router.patch(
           }
 
           // return the updated job
-          // console.log(response.rows[0]);
-          console.log(response[0].rows[0]);
           res.status(200).json(response[0].rows[0]);
           client.end();
         });
