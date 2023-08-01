@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
+import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
@@ -29,7 +29,7 @@ export default function BoardsPage() {
   // // get all the jobs
   useEffect(() => {
     // this will be loaded with the current loggedIn user's id or clerk_id
-    dispatch(getAllBoards(userId));
+    dispatch(getBoards(userId));
   }, []);
 
   const handleBoardClick = board => {

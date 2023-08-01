@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateColumnName } from '../../../reducers/BoardReducer';
+import { updateBoardName } from '../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './UpdateForm.module.css';
@@ -28,7 +28,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
     // Clears the form then close it
     // setNewTitle('');
     // toggleHandler();
-    dispatch(updateColumnName(formData));
+    dispatch(updateBoardName(formData));
     handleToggleUpdateForm({ ind: null, state: false });
     console.log(formData);
   }

@@ -11,7 +11,7 @@ import {
 
 import { NavLink } from 'react-router-dom';
 import {
-  getAllBoards,
+  getBoards,
   changeBoard,
   getjobswithBoardId
 } from '../../../reducers/BoardReducer';
@@ -51,13 +51,13 @@ export default function SideBar() {
 
   if (boardsLoading && userId !== null) {
     // change the 111 to userId from clerk or sql user table later
-    dispatch(getAllBoards(111));
+    dispatch(getBoards(111));
   }
 
   // get all the jobs
   // useEffect(() => {
   //   // this will be loaded with the current loggedIn user's id or clerk_id
-  //   dispatch(getAllBoards());
+  //   dispatch(getBoards());
   // }, []);
 
   const handleLink = board => {

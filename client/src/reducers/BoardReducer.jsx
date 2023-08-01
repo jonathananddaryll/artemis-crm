@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Create action
 
 ////////////////////////////////// BOARDS ////////////////////////////
 
 // Get All Boards with userID
-export const getAllBoards = createAsyncThunk(
+export const getBoards = createAsyncThunk(
   'board/getBoardswithUserId',
   async (user_id, thunkAPI) => {
     try {
@@ -116,8 +117,8 @@ export const updateBoardColumn = createAsyncThunk(
 );
 
 // Update a column name
-export const updateColumnName = createAsyncThunk(
-  'board/updateColumnName',
+export const updateBoardName = createAsyncThunk(
+  'board/updateBoardName',
   async (formData, thunkAPI) => {
     const config = {
       headers: {
@@ -303,7 +304,7 @@ const boardSlice = createSlice({
     // call the action here and then action.payload is whatever the returned value from the action (res.data).
     // .fulfilled is if the action is successful, basically
     /////////////// BOARDS EXTRA REDUCER //////////////////////////////////////
-    builder.addCase(getAllBoards.fulfilled, (state, action) => {
+    builder.addCase(getBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
       state.boardsLoading = false;
     });
@@ -315,6 +316,7 @@ const boardSlice = createSlice({
 
     builder.addCase(createBoard.fulfilled, (state, action) => {
       state.boards = [action.payload, ...state.boards];
+      toast.success('Successfully Created a New Board');
     });
 
     builder.addCase(addColumn.fulfilled, (state, action) => {
@@ -325,23 +327,28 @@ const boardSlice = createSlice({
       const newCol = 'column' + (state.selectedBoard.total_cols + 1);
       state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
       state.selectedBoard[newCol] = action.payload;
+      toast.success(
+        `Successfully Added a Column in ${state.selectedBoard.title}`
+      );
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
       console.log(action.payload);
     });
 
-    builder.addCase(updateColumnName.fulfilled, (state, action) => {
+    builder.addCase(updateBoardName.fulfilled, (state, action) => {
       const foundIndex = state.boards.findIndex(
         job => job.id === action.payload.id
       );
       state.boards[foundIndex].title = action.payload.title;
+      toast.success('Successfully Renamed a Board');
     });
 
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
     builder.addCase(addJob.fulfilled, (state, action) => {
       state.selectedBoardStatusCols[action.payload.status].push(action.payload);
       // state.boards = [...state.boards, action.payload];
+      toast.success('Successfully Added a New Job');
     });
 
     builder.addCase(getjobswithBoardId.fulfilled, (state, action) => {
@@ -354,6 +361,10 @@ const boardSlice = createSlice({
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
     });
 
+    // builder.addCase(updateJobStatus.pending, (state, action) => {
+    //   toast.info('Updating Job Status', { autoClose: 500 });
+    // });
+
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
       // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
       // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
@@ -363,6 +374,7 @@ const boardSlice = createSlice({
       ].findIndex(job => job.id === action.payload.id);
       state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
         action.payload.status;
+      toast.success('Successfully Updated Job Status');
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {

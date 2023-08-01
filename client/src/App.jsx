@@ -11,6 +11,9 @@ import {
   UserButton
 } from '@clerk/clerk-react';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
@@ -31,51 +34,69 @@ function App() {
   // const navigate1 = useNavigate();
 
   return (
-    <BrowserRouter>
-      <ClerkProvider publishableKey={clerkPubKey} navigate={to => navigate(to)}>
-        <div className='flex'>
-          <SideBar />
-          <Routes>
-            <Route
-              path='/sign-in/*'
-              element={<SignIn routing='path' path='/sign-in' />}
-            />
-            <Route
-              path='/sign-up/*'
-              element={<SignUp routing='path' path='/sign-up' />}
-            />
-            <Route path='/' element={<HomePage />}></Route>
-            <Route
-              path='/boards'
-              element={
-                <>
-                  <SignedIn>
-                    <BoardsPage />
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn></RedirectToSignIn>
-                  </SignedOut>
-                </>
-              }
-            ></Route>
+    <>
+      <BrowserRouter>
+        <ClerkProvider
+          publishableKey={clerkPubKey}
+          navigate={to => navigate(to)}
+        >
+          <div className='flex'>
+            <SideBar />
+            <Routes>
+              <Route
+                path='/sign-in/*'
+                element={<SignIn routing='path' path='/sign-in' />}
+              />
+              <Route
+                path='/sign-up/*'
+                element={<SignUp routing='path' path='/sign-up' />}
+              />
+              <Route path='/' element={<HomePage />}></Route>
+              <Route
+                path='/boards'
+                element={
+                  <>
+                    <SignedIn>
+                      <BoardsPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              ></Route>
 
-            <Route
-              path='/boards/:board_id/jobs'
-              element={
-                <>
-                  <SignedIn>
-                    <JobTrackerPage />
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn></RedirectToSignIn>
-                  </SignedOut>
-                </>
-              }
-            ></Route>
-          </Routes>
-        </div>
-      </ClerkProvider>
-    </BrowserRouter>
+              <Route
+                path='/boards/:board_id/jobs'
+                element={
+                  <>
+                    <SignedIn>
+                      <JobTrackerPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              ></Route>
+            </Routes>
+          </div>
+        </ClerkProvider>
+      </BrowserRouter>
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+        // limit={1}
+      />
+    </>
   );
 }
 
