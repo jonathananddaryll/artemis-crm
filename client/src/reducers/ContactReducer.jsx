@@ -1,12 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// State structure of a contact organizer:
+// State for contact organizer:
 
-// 1) Current contact in focus(either displayed front and center, or in an overlay/modal)
-// 2) All contacts belonging to user
-// 3) Search filters/tags? for queries
+// add a new contact:
+    // - input form data ( searchQuery )
+    // - new contact created ( true/false )
+    // - 
 
+// delete a contact:
+    // - deleting / awaiting results
+    // - 
+
+// update a contact:
+
+// search for contacts:
+
+
+
+// fake data for testing
 const fakeContacts = [
     {
       id: 1,
@@ -64,27 +76,29 @@ const fakeContacts = [
     },
 ]
 
-// CONTACTS Reducers : first and last name search only at this point
+// ASYNC thunks
 
 // READ all contacts for a user
-export const getAllContacts = createAsyncThunk(
-  'contacts/getAllContacts',
-  async ( user_id, first, last, thunkAPI ) => {
+export const getContacts = createAsyncThunk(
+  'contacts/getContacts',
+  async ( user_id, searchQuery, thunkAPI ) => {
     try {
         // Send user_id from clerk, along with first, last in req.body
-        // Call to cross origin backend
+        const { first, last, type, strValue, token } = searchQuery;
         const res = await axios.get({
           method: 'GET',
           url: '/api/contacts/',
           withCredentials: false,
           body: {
-            user_id: user_id,
-            first: first,
-            last: last
+            user_id,
+            first,
+            last,
+            type,
+            strValue,
           },
           headers: {
             'Content-Type': 'application/json',
-            
+            Authorization: `Bearer ${token}`
           }
         });
         return res.data;
@@ -97,7 +111,7 @@ export const getAllContacts = createAsyncThunk(
 // DELETE a users contact
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async( user_id, id ) => {
+  async( user_id, id, token ) => {
     try {
       // send the user_id along with the contact id to delete.
       const res = await axios.delete({
@@ -110,7 +124,7 @@ export const deleteContact = createAsyncThunk(
         },
         headers: {
           'Content-Type': 'application/json',
-          
+          Authorization: `Bearer ${token}`
         }
       });
       return res.data;
@@ -123,7 +137,7 @@ export const deleteContact = createAsyncThunk(
 // UPDATE a users contact
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
-  async( user_id, updateWhat, updateTo ) => {
+  async( user_id, updateWhat, updateTo, token ) => {
     try{
       // with user_id, send two stringified arrays, one of the column names (str) and one
       // of the column value to set it to (also str)
@@ -133,7 +147,7 @@ export const updateContact = createAsyncThunk(
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json',
-          
+          Authorization: `Bearer ${token}`
         },
         body: {
           user_id: user_id,
@@ -151,7 +165,7 @@ export const updateContact = createAsyncThunk(
 // CREATE a contact for a user
 export const createContact = createAsyncThunk(
   'contacts/createContact',
-  async( user_id, contactRows, contactValues) => {
+  async( user_id, contactRows, contactValues, token) => {
     try{
       const res = await axios.create({
         method: 'CREATE',
@@ -159,7 +173,7 @@ export const createContact = createAsyncThunk(
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json',
-          
+          Authorization: `Bearer ${token}`
         },
         body: {
           user_id,
@@ -178,29 +192,14 @@ const initialState = {
     contacts: [],
     selectedContact: null,
     loading: false,
-    searchQuery: "",
+    searchQuery: {
+      first: "",
+      last: "",
+      type: "empty",
+      strValue: "",
+    },
 }
-// const timelineSlice = createSlice({
-//   name: 'board',
-//   initialState: {
-//     timelinesLoading: true,
-//     timelines: []
-//   },
-//   reducers: {
-//     resetTimelines: (state, action) => {
-//       state.timelinesLoading = true;
-//       state.timelines = [];
-//     }
-//   },
-//   extraReducers: builder => {
-//     builder.addCase(getAllTimelines.fulfilled, (state, action) => {
-//       state.timelines = action.payload;
-//       state.timelinesLoading = false;
-//       // delete this later. it's just to check if this triggers
-//       console.log('getAllTimelines is triggered');
-//     });
-//   }
-// });
+
 const contactSlice = createSlice({
   name: 'contact',
   initialState: {
@@ -208,7 +207,11 @@ const contactSlice = createSlice({
     newContactStaging: {},
     contactInFocus: {},
     contactLoading: true,
-
+    searchQuery: {
+      type: "",
+      strValue: "",
+      filters: {},
+    },
   },
   reducers: {
     updateContactInFocus: (state, action) => {
@@ -222,20 +225,43 @@ const contactSlice = createSlice({
     },
     setNewContactStaging: (state, action) => {
       newContactStaging = action.payload;
+    },
+    updateSearchQuery: (state, action) => {
+      searchQuery = action.payload;
     }
   },
   extraReducers: builder => {
-    // call the action here and then action.payload is whatever the returned value from the action (res.data).
-    // .fulfilled is if the action is successful, basically
-    builder.addCase(getContactsWithUserId.fulfilled, (state, action) => {
-      state.contacts = action.payload;
-      state.loading = false;
-      // delete this later. it's just to check if this triggers
-      console.log('getContactsWithUserId is triggered');
-    }); 
+    builder.addCase(getContacts.fulfilled, (state, action) => {
+      state.contactResults = action.payload;
+      state.contactLoading = false;
+      // sort results, highlights, anything
+    });
+    builder.addCase(getContacts.pending, (state, action) => {
+      // loading or searching animation
+      state.contactLoading = true;
+    });
+    builder.addCase(deleteContact.fulfilled, (state, action) => {
+      // Once it's confirmed deleted, be sure the contact doesn't exist in the
+      // state, and that the UI element is gone.
+    });
+    builder.addCase(deleteContact.pending, (state, action) => {
+      // While it's pending deleted, remove the UI element and entry from local state.
+      // If delete fails, call getContacts and refresh the state with a clean start.
+      // Alert user of a problem (provide error)
+    });
+    builder.addCase(updateContact.fulfilled, (state, action) => {
+      // Once confirmed updated, set state entry to updated entry.
+      // If update fails, call getContacts and refresh the state with a clean start.
+    });
+    builder.addCase(updateContact.pending, (state, action) => {
+      // While updating, make sure components render with updated info.
+    });
   }
 });
 
-// export const {} = contactSlice.actions; for non async/db related reducers 
-// i.e. reducers: { <reducerName>: (store, {payload}) => {} };
 export default contactSlice.reducer;
+export const {
+  updateContactInFocus,
+  setNewContactStaging,
+  updateSearchQuery,
+} = contactSlice.actions;
