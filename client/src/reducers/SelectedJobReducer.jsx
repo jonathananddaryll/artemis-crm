@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Get All Timeline with jobId
 export const getAllTimelines = createAsyncThunk(
@@ -200,6 +201,7 @@ const selectedJobSlice = createSlice({
       // FIGURE THIS OUT LATER
       // state.notes = [action.payload[0].rows[0], ...state.notes];
       // state.timeline = [action.payload[1].rows[0], ...state.timelines];
+      toast.success('Successfully Created a New Note');
     });
 
     builder.addCase(updateNote.fulfilled, (state, action) => {
@@ -208,6 +210,7 @@ const selectedJobSlice = createSlice({
         note => note.id === action.payload.id
       );
       state.notes[index] = action.payload;
+      toast.success('Successfully Updated a Note');
     });
 
     builder.addCase(deleteNote.fulfilled, (state, action) => {
@@ -216,6 +219,7 @@ const selectedJobSlice = createSlice({
         note => note.id !== action.payload[0].rows[0].id
       );
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
+      toast.success('Successfully Deleted a Note');
     });
 
     builder.addCase(getAllTasks.fulfilled, (state, action) => {
@@ -228,6 +232,7 @@ const selectedJobSlice = createSlice({
     builder.addCase(createTask.fulfilled, (state, action) => {
       state.tasks = [action.payload[0].rows[0], ...state.tasks];
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
+      toast.success('Successfully Created a New Task');
     });
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
@@ -240,12 +245,14 @@ const selectedJobSlice = createSlice({
         );
         state.tasks = filteredTasks;
         state.completedTasks = [...state.completedTasks, updatedTask];
+        toast.success('Good Job Completing a Task');
       } else {
         const filteredTasks = state.completedTasks.filter(
           task => task.id !== action.payload.id
         );
         state.completedTasks = filteredTasks;
         state.tasks = [...state.tasks, updatedTask];
+        toast.success('Dont Forget to Finish That Task');
       }
     });
   }
