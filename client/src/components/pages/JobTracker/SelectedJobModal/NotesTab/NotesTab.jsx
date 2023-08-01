@@ -128,24 +128,32 @@ export default function NotesTab({
         <p>notes loading</p>
       ) : (
         <div className={styles.notesContentContainer}>
-          {notes.map(note => (
-            <div className={styles.notesBox}>
-              <div className={styles.notesText}>
-                <p>{note.text}</p>
-              </div>
-              <div className={styles.notesFooter}>
-                <div className={styles.notesInfo}>
-                  <p>{note.date_created}</p>
+          {notes.length > 0 ? (
+            <>
+              {notes.map(note => (
+                <div className={styles.notesBox}>
+                  <div className={styles.notesText}>
+                    <p>{note.text}</p>
+                  </div>
+                  <div className={styles.notesFooter}>
+                    <div className={styles.notesInfo}>
+                      <p>{note.date_created}</p>
+                    </div>
+                    <div className={styles.notesActionsItems}>
+                      <button onClick={() => onEditHandler(note)}>Edit</button>
+                      <button onClick={() => handleDeleteNote(note.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className={styles.notesActionsItems}>
-                  <button onClick={() => onEditHandler(note)}>Edit</button>
-                  <button onClick={() => handleDeleteNote(note.id)}>
-                    Delete
-                  </button>
-                </div>
-              </div>
+              ))}{' '}
+            </>
+          ) : (
+            <div className={styles.noNotes}>
+              <p>NO NOTES.... MAKE THIS PRETTY LATER</p>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>

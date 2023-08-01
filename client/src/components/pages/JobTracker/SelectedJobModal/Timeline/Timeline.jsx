@@ -20,7 +20,7 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
           {timelines.length > 0 && (
             <>
               {timelines.map(timeline => (
-                <div className={styles.cardsContainer}>
+                <div key={timeline.id} className={styles.cardsContainer}>
                   <div className={styles.verticalLine}>
                     <div className={styles.topLine}></div>
                     <div className={styles.middleDot}></div>

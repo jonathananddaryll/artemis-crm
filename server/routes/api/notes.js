@@ -50,8 +50,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   client.connect();
   const { text, jobId, selectedboard_user_id } = req.body;
 
-  console.log('create new note api triggered!');
-
   // Decode the token
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;

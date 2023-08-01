@@ -68,12 +68,12 @@ export default function SelectedJobModal() {
   const { session } = useSession();
 
   const navItems = [
-    'job info',
-    'notes',
-    'contacts',
-    'documents',
-    'tasks',
-    'company'
+    { name: 'job info', icon: 'bi bi-info-circle' },
+    { name: 'notes', icon: 'bi bi-journal' },
+    { name: 'contacts', icon: 'bi bi-people' },
+    { name: 'documents', icon: 'bi bi-file-earmark-text' },
+    { name: 'tasks', icon: 'bi bi-list-task' },
+    { name: 'interview', icon: 'bi bi-calendar-check' }
   ];
 
   async function handleDeleteJob() {
@@ -112,8 +112,15 @@ export default function SelectedJobModal() {
             <div className={styles.headerInfo}>
               <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
               <div className={styles.headerSub}>
-                <p className={styles.textSub}>{selectedJob.company}</p>
-                <p className={styles.textSub}>{selectedJob.location}</p>
+                <p className={styles.textSub}>
+                  <i className='bi bi-building' />
+                  {selectedJob.company}
+                </p>
+
+                <p className={styles.textSub}>
+                  <i className='bi bi-geo-alt' />
+                  {selectedJob.location}
+                </p>
               </div>
             </div>
           </div>
@@ -129,7 +136,10 @@ export default function SelectedJobModal() {
                   }
                   onClick={() => setActiveItem(index)}
                 >
-                  <p>{item}</p>
+                  <p className={styles.subNavigationText}>
+                    <i className={item.icon}></i>
+                    {item.name}
+                  </p>
                 </div>
               ))}
             </div>

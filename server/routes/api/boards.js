@@ -10,23 +10,13 @@ const {
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
-// import 'dotenv/config';
-
-// @TODO:
-// 1. Create Board route
-// 2. Update Board route
-// 3. Add column to the board route
-// 4. renaming column name
-// 5. deleting column name --> make sure the column is empty first before letting user delete it
 
 // @route     GET api/boards/:user_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
 // @desc      get all boards for the user with user_id
 // @access    public ----> will probably make this private later with userid
 router.get('/:user_id', async (req, res) => {
-  console.log('boards api getall hits');
+  console.log('boards api getall hits -- delete later');
 
-  // RESEARCH IF WE NEED TO CLOSE THE CLIENT IF THERES AN ERROR
-  // load the current logged in user id later on
   const userId = req.params.user_id;
   const query = format(
     'SELECT * FROM board WHERE user_id = %L ORDER BY date_created ASC',
@@ -51,13 +41,10 @@ router.get('/:user_id', async (req, res) => {
   }
 });
 
-// @route     GET api/boards/:user_id/board/:board_id ---> change it to /:user_id later --> maybe change this to clerk_id and then look for user_id with that clerk_id and then query the board
+// @route     GET api/boards/:user_id/board/:board_id
 // @desc      get boards for the user_id with board_id
 // @access    public ----> will probably make this private later with userid
 router.get('/:user_id/board/:board_id', async (req, res) => {
-  console.log('get board with boardId hits');
-
-  // load the current logged in user id later on
   const userId = req.params.user_id;
   const boardId = req.params.board_id;
   const query = format(
@@ -65,8 +52,6 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
     userId,
     boardId
   );
-
-  // console.log('userId: ' + userId + ' and boardId: ' + boardId);
 
   const client = new Client(config);
   client.connect();
@@ -77,8 +62,6 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'query error' });
       }
-
-      // console.log(response.rows[0]);
 
       // Returns the board obj
       res.status(200).json(response.rows[0]);
@@ -99,8 +82,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   const client = new Client(config);
   client.connect();
   const { title } = req.body;
-
-  console.log('create board api triggered!');
 
   // Decode the token
   const decodedToken = decodeToken(req.headers.authorization);
@@ -124,10 +105,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
         res.status(500).json({ msg: 'query error' });
       }
 
-      // return the new column status that is added
-      // console.log(response.rows[0]);
       res.status(200).json(response.rows[0]);
-
       client.end();
     });
   } catch (err) {
@@ -365,11 +343,8 @@ router.delete(
 
     const { selectedBoard_userId } = req.body;
     const id = req.params.board_id;
-
     const decodedToken = decodeToken(req.headers.authorization);
     const userId = decodedToken.userId;
-    console.log('user id is:' + userId);
-    console.log('selectedBoard_userId: ' + selectedBoard_userId);
 
     // Checks if the loggedIn user owns the board
     if (userId === undefined || selectedBoard_userId !== userId) {
@@ -392,11 +367,7 @@ router.delete(
             res.status(500).json({ msg: 'query error' });
           }
 
-          // console.log(response.rows[0]);
-          // res.status(200).json(response.rows[0]);
-
           // ------------------------------- ADD A RETURN IF THE QUERY DOESNT RETURN ANYTHIHNG
-          console.log(response);
           res.status(200).json(response);
           client.end();
         });

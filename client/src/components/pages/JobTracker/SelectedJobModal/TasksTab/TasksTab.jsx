@@ -87,19 +87,29 @@ export default function TasksTab({
         <div className={styles.tasksBox}>
           <p>Tasks List</p>
           {tasks.map(task => (
-            <p key={task.id} onClick={() => onUpdateStatusHandler(task)}>
-              {task.task_name}
-            </p>
+            <div
+              key={task.id}
+              className={styles.taskCard}
+              onClick={() => onUpdateStatusHandler(task)}
+            >
+              <p className={styles.taskText}>{task.task_name}</p>
+            </div>
           ))}
         </div>
-        <div className={styles.completedTasksBox}>
-          <p>Completed Tasks</p>
-          {completedTasks.map(task => (
-            <p key={task.id} onClick={() => onUpdateStatusHandler(task)}>
-              {task.task_name}
-            </p>
-          ))}
-        </div>
+        {completedTasks.length > 0 && (
+          <div className={styles.completedTasksBox}>
+            <p>Completed Tasks</p>
+            {completedTasks.map(task => (
+              <div
+                key={task.id}
+                className={styles.taskCard}
+                onClick={() => onUpdateStatusHandler(task)}
+              >
+                <p className={styles.completedTaskText}>{task.task_name}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

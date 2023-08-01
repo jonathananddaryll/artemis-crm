@@ -22,14 +22,38 @@
 
 .tasksContentContainer {
   display: flex;
+  justify-content: space-between;
 }
 
 .tasksBox {
-  flex: 0 0 50%;
+  flex: 0 0 45%;
   text-align: left;
 }
 
 .completedTasksBox {
-  flex: 0 0 50%;
+  flex: 0 0 45%;
   text-align: left;
+}
+
+.taskCard {
+  /* background: red; */
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 2px solid rgba(213, 238, 250, 0.692);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.taskText {
+  margin: 0;
+}
+
+.completedTaskText {
+  margin: 0;
+  text-decoration-line: line-through;
+}
+
+/* upper case first letter of the text */
+.taskText:first-letter {
+  text-transform: uppercase;
 }

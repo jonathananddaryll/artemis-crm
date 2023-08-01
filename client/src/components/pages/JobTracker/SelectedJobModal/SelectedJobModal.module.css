@@ -87,6 +87,11 @@
   margin: 0 20px 0 0;
 }
 
+.textSub i {
+  font-size: 17px;
+  margin-right: 2px;
+}
+
 /* SUB NAVIGATION SECTION */
 .subNavigation {
   /* padding: 0 35px; */
@@ -116,15 +121,22 @@
 /* ACTIVE TAB... MAKE THIS PRETTY LATER */
 .subNavigationItemActive {
   /* font-size: 20px; */
-  /* font-weight: bold; */
+  font-weight: 600;
   border-top: 2px solid red;
   background-color: #fdfdff;
 }
 
-.subNavigationItem p {
+.subNavigationText {
   text-transform: capitalize;
   margin: 0;
+  font-size: 17px;
 }
+
+.subNavigationText i {
+  font-size: 15px;
+  margin-right: 5px;
+}
+
 /* TIMELINE SECTION */
 .timelineContainer {
   width: 350px;

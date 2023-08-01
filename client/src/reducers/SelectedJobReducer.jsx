@@ -152,8 +152,6 @@ export const updateTaskStatus = createAsyncThunk(
       }
     };
 
-    console.log('ittttt gotttt here');
-
     try {
       const res = await axios.patch(
         `/api/tasks/${formData.taskId}/status`,
