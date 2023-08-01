@@ -15,7 +15,7 @@ export const getAllTimelines = createAsyncThunk(
   }
 );
 
-// Create a new Note
+// Creates a new Note
 export const createNote = createAsyncThunk(
   'note/createNote',
   async (formData, thunkAPI) => {
@@ -37,6 +37,7 @@ export const createNote = createAsyncThunk(
   }
 );
 
+// Updates a note
 export const updateNote = createAsyncThunk(
   'note/updateNote',
   async (formData, thunkAPI) => {
@@ -104,6 +105,68 @@ export const deleteNote = createAsyncThunk(
   }
 );
 
+// Get All Tasks with jobId
+export const getAllTasks = createAsyncThunk(
+  'task/getAllTasksWithJobId',
+  async (job_id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/tasks/job/${job_id}`);
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+// Creates a new Task
+export const createTask = createAsyncThunk(
+  'task/createTask',
+  async (formData, thunkAPI) => {
+    console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/tasks', formData, config);
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+// Updates a task status
+export const updateTaskStatus = createAsyncThunk(
+  'note/updateTaskStatus',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    console.log('ittttt gotttt here');
+
+    try {
+      const res = await axios.patch(
+        `/api/tasks/${formData.taskId}/status`,
+        formData,
+        config
+      );
+      return res.data;
+    } catch (error) {
+      console.log(err);
+    }
+  }
+);
+
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
@@ -112,7 +175,8 @@ const selectedJobSlice = createSlice({
     tasksLoading: true,
     timelines: [],
     notes: [],
-    tasks: []
+    tasks: [],
+    completedTasks: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
@@ -157,6 +221,38 @@ const selectedJobSlice = createSlice({
         note => note.id !== action.payload[0].rows[0].id
       );
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
+    });
+
+    builder.addCase(getAllTasks.fulfilled, (state, action) => {
+      const tasks = action.payload;
+      state.tasks = tasks.filter(task => task.is_done === false);
+      state.completedTasks = tasks.filter(task => task.is_done === true);
+      state.tasksLoading = false;
+    });
+
+    builder.addCase(createTask.fulfilled, (state, action) => {
+      state.tasks = [action.payload[0].rows[0], ...state.tasks];
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+    });
+
+    builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
+      // Find the index of the updated note then change it to the updated note
+
+      var updatedTask = action.payload;
+
+      if (action.payload.is_done === true) {
+        const filteredTasks = state.tasks.filter(
+          task => task.id !== action.payload.id
+        );
+        state.tasks = filteredTasks;
+        state.completedTasks = [...state.completedTasks, updatedTask];
+      } else {
+        const filteredTasks = state.completedTasks.filter(
+          task => task.id !== action.payload.id
+        );
+        state.completedTasks = filteredTasks;
+        state.tasks = [...state.tasks, updatedTask];
+      }
     });
   }
 });

@@ -16,6 +16,8 @@ import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 import BoardHeader from './BoardHeader/BoardHeader';
 
+import loadingInfinity from '../../../assets/loadingInfinity.gif';
+
 export default function JobTrackerPage() {
   // this is basically the state in the reducer
   const {
@@ -110,7 +112,14 @@ export default function JobTrackerPage() {
           {toggleSelectedJobModal && <SelectedJobModal />}
         </>
       ) : (
-        <p>BOARD LOADING</p>
+        <div className={styles.loaderContainer}>
+          <img
+            className={styles.loaderImg}
+            src={loadingInfinity}
+            alt='loading_boards'
+          />
+          <p className={styles.loaderText}>Your board is loading</p>
+        </div>
       )}
     </div>
   );

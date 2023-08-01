@@ -1,0 +1,35 @@
+.tasksTabContainer {
+  padding: 20px;
+  position: relative;
+}
+
+.buttonsContainer {
+  height: 50px;
+  text-align: right;
+  /* background-color: red; */
+}
+
+.newTaskForm {
+  height: 50px;
+}
+
+.createTaskButton {
+  /* float: right; */
+  height: 40px;
+  padding: 0 20px;
+  margin-left: 10px;
+}
+
+.tasksContentContainer {
+  display: flex;
+}
+
+.tasksBox {
+  flex: 0 0 50%;
+  text-align: left;
+}
+
+.completedTasksBox {
+  flex: 0 0 50%;
+  text-align: left;
+}

@@ -14,6 +14,7 @@ app.use('/api/boards', require('./routes/api/boards'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/timelines', require('./routes/api/timelines'));
 app.use('/api/notes', require('./routes/api/notes'));
+app.use('/api/tasks', require('./routes/api/tasks'));
 
 const PORT = process.env.PORT || 5000;
 

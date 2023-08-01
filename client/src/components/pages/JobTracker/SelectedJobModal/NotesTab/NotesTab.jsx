@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './NotesTab.module.css';
+import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
 
 export default function NotesTab({
   createNote,
@@ -14,8 +15,14 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
+  const [confirmationToggle, setConfirmationToggle] = useState(false);
+
   const [noteText, setNoteText] = useState('');
+  // This is just to keeptrack of the selected noteId for Updating purposes
   const [noteId, setNoteId] = useState(0);
+
+  // Just a toggler between update or create functionality for the Note Form
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const dispatch = useDispatch();
   const { session } = useSession();
@@ -31,32 +38,27 @@ export default function NotesTab({
       token: await session.getToken()
     };
 
+    // Dispatches create or update depends on the isUpdate toggler
     if (!isUpdate) {
       dispatch(createNote(formData));
     } else {
-      console.log('ayoooo this is an update');
+      // Adds noteId to the formData for updateNote
       formData.noteId = noteId;
 
-      console.log(formData);
       dispatch(updateNote(formData));
 
-      // set noteId back to 0
+      // Sets noteId back to 0
       setNoteId(0);
     }
 
     // Clears the noteText then close it
     setNoteText('');
+
     // hide the form after creating a note
     setNoteFormToggle(false);
   }
 
-  const [isUpdate, setIsUpdate] = useState(false);
-
-  // const onUpdateSubmitHandler = () => {
-  //   console.log('thissss is notes update onsubmit');
-  // };
-
-  // Fill the textarea with the text from note that's being updated
+  // Fills the textarea with the text from note that's being updated
   const onEditHandler = note => {
     setNoteText(note.text);
     setNoteId(note.id);
@@ -64,14 +66,14 @@ export default function NotesTab({
     setNoteFormToggle(true);
   };
 
-  // Canceling the edit/create form
-  const onCancelFormHandler = note => {
+  // Cancels the edit/create form
+  const onCancelFormHandler = () => {
     setNoteText('');
     setIsUpdate(false);
     setNoteFormToggle(false);
   };
 
-  // Delete Note
+  // Deletes Note
   async function handleDeleteNote(noteId) {
     const formData = {
       jobId: jobId,
@@ -82,15 +84,15 @@ export default function NotesTab({
 
     dispatch(deleteNote(formData));
 
-    // APPLY THIS LATER
+    // APPLY THIS LATER FOR CONFIRMATION DELETE MODAL POPUP
     // change selectedJob to null and modal off
     // dispatch(changeSelectedJob([false, null]));
   }
 
   return (
     <div className={styles.notesTabContainer}>
-      {!noteFormToggle && (
-        <div className={styles.header}>
+      {!noteFormToggle ? (
+        <div className={styles.buttonsContainer}>
           <button
             className={styles.newNoteButton}
             onClick={() => setNoteFormToggle(true)}
@@ -98,8 +100,7 @@ export default function NotesTab({
             Create New Note
           </button>
         </div>
-      )}
-      {noteFormToggle && (
+      ) : (
         <div className={styles.newNoteContainer}>
           <p>Add note</p>
           <form onSubmit={e => onSubmitHandler(e)}>
@@ -126,7 +127,7 @@ export default function NotesTab({
       {notesLoading ? (
         <p>notes loading</p>
       ) : (
-        <>
+        <div className={styles.notesContentContainer}>
           {notes.map(note => (
             <div className={styles.notesBox}>
               <div className={styles.notesText}>
@@ -145,46 +146,8 @@ export default function NotesTab({
               </div>
             </div>
           ))}
-        </>
+        </div>
       )}
-
-      {/* <div className={styles.notesBox}>
-        <div className={styles.notesText}>
-          <p>note box this will be dynamic later</p>
-        </div>
-        <div className={styles.notesFooter}>
-          <div className={styles.notesInfo}>
-            <p>9 hours ago</p>
-          </div>
-          <div className={styles.notesActionsItems}>
-            <button>Edit</button>
-            <button>Delete</button>
-          </div>
-        </div>
-      </div>
-      <div className={styles.notesBox}>
-        <div className={styles.notesText}>
-          <p>
-            Vestibulum mattis ullamcorper velit sed ullamcorper morbi. A diam
-            sollicitudin tempor id eu nisl nunc mi. Purus faucibus ornare
-            suspendisse sed nisi lacus sed viverra tellus. Blandit libero
-            volutpat sed cras. Scelerisque fermentum dui faucibus in. Vestibulum
-            sed arcu non odio euismod. Sem integer vitae justo eget magna.
-            Feugiat nisl pretium fusce id. Lobortis mattis aliquam faucibus
-            purus. Felis imperdiet proin fermentum leo vel orci. Mi eget mauris
-            pharetra et ultrices neque ornare aenean. Imperdiet proin fermentum
-            leo vel orci. Risus nullam eget felis eget nunc. Leo integer
-            malesuada nunc vel.
-          </p>
-        </div>
-        <div className={styles.notesFooter}>
-          <p>9 hours ago</p>
-          <div className={styles.notesActionsItems}>
-            <button>Edit</button>
-            <button>Delete</button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

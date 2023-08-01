@@ -18,7 +18,7 @@ router.get('/job/:job_id', async (req, res) => {
   console.log('get all notes with jobId');
   const jobId = req.params.job_id;
   const query = format(
-    'SELECT * FROM note WHERE job_id = %s ORDER BY date_created DESC',
+    `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM note WHERE job_id = %s ORDER BY date_created DESC`,
     jobId
   );
   console.log(query);

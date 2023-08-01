@@ -1,0 +1,18 @@
+.contactsTabContainer {
+  padding: 20px;
+  position: relative;
+}
+
+.buttonsContainer {
+  height: 50px;
+  text-align: right;
+  /* background-color: red; */
+}
+
+.createContactButton,
+.linkContactButton {
+  /* float: right; */
+  height: 40px;
+  padding: 0 20px;
+  margin-left: 10px;
+}

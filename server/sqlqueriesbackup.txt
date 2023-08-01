@@ -3,7 +3,7 @@ CREATE TABLE timeline(
   id SERIAL PRIMARY KEY,
   update_type varchar(50),
   description varchar(150),
-  date_created time DEFAULT CURRENT_TIMESTAMP,
+  date_created TIMESTAMP DEFAULT NOW(),,
   job_id INT,
   FOREIGN KEY(job_id) REFERENCES job(id)
   ON DELETE CASCADE
@@ -22,7 +22,7 @@ WHERE id = 6 AND NOT EXISTS
 CREATE TABLE user(
   id SERIAL PRIMARY KEY,
   user_id varchar(255) NOT NULL,
-  date_created time DEFAULT CURRENT_TIMESTAMP
+  date_created TIMESTAMP DEFAULT NOW(),
 );
 
 // Create BOARD
@@ -41,7 +41,7 @@ CREATE TABLE board(
   column9 varchar(255),
   column10 varchar(255),
   total_cols int DEFAULT 6,
-  date_created time DEFAULT CURRENT_TIMESTAMP
+  date_created TIMESTAMP DEFAULT NOW(),
 );
 
 // Create JOB
@@ -56,5 +56,25 @@ CREATE TABLE job(
   main_contact int DEFAULT NULL,
   rate_of_pay int DEFAULT NULL,
   description text DEFAULT NULL,
-  date_created time DEFAULT CURRENT_TIMESTAMP
+  date_created TIMESTAMP DEFAULT NOW(),
+);
+
+CREATE TABLE note(
+  id SERIAL PRIMARY KEY,
+  text TEXT,
+  date_created TIMESTAMP DEFAULT NOW(),
+  job_id INT,
+  FOREIGN KEY(job_id) REFERENCES job(id)
+  ON DELETE CASCADE
+);
+
+// Create TASK
+CREATE TABLE task(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  is_done BOOLEAN DEFAULT false,
+  date_created TIMESTAMP DEFAULT NOW(),
+  job_id INT,
+  FOREIGN KEY(job_id) REFERENCES job(id)
+  ON DELETE CASCADE
 );

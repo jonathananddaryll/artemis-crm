@@ -1,12 +1,20 @@
 import React from 'react';
 import styles from './Timeline.module.css';
+import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (
     <div className={styles.timelineContainer}>
       <p className={styles.textHeader}>Timeline</p>
       {timelinesLoading ? (
-        <p>TIMELINE IS LOADING</p>
+        <div className={styles.loaderContainer}>
+          <img
+            className={styles.loaderImg}
+            src={loadingSpinner}
+            alt='loading_timelines'
+          />
+          <p className={styles.loaderText}>Loading</p>
+        </div>
       ) : (
         <div className={styles.timelineScroll}>
           {timelines.length > 0 && (

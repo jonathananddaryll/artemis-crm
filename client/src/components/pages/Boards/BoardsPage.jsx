@@ -7,6 +7,7 @@ import styles from './Boards.module.css';
 import NewBoardForm from './NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
 import UpdateForm from './UpdateForm';
+import loadingInfinity from '../../../assets/loadingInfinity.gif';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
@@ -40,7 +41,16 @@ export default function BoardsPage() {
   return (
     <div className={styles.pageWrapper}>
       <h3>My Personal Boards</h3>
-      {!boardsLoading && (
+      {boardsLoading ? (
+        <div className={styles.loaderContainer}>
+          <img
+            className={styles.loaderImg}
+            src={loadingInfinity}
+            alt='loading_boards'
+          />
+          <p className={styles.loaderText}>Your boards are loading</p>
+        </div>
+      ) : (
         <div className={styles.boardsContainer}>
           <div className={styles.flexBox}>
             <div className={styles.newBoardBox}>
@@ -97,33 +107,33 @@ export default function BoardsPage() {
           {/* if there's 4 gap */}
           {(boards.length + 1) % 5 === 1 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 3 gaps */}
           {(boards.length + 1) % 5 === 2 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 2 gaps */}
           {(boards.length + 1) % 5 === 3 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 1 gaps */}
           {(boards.length + 1) % 5 === 4 && (
-            <div className={styles.flexBoxEmpty}></div>
+            <div className={styles.flexboxSpacer}></div>
           )}
         </div>
       )}
