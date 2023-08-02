@@ -36,10 +36,40 @@ export default function ContactsPage() {
     useEffect(() => {
         dispatch(getContacts(userId, searchQuery));
     }, [dispatch]);
-
     return (
-        <div className={styles.page_wrapper}>
-            
+        <div className={styles.pageWrapper}>
+            <nav className={styles.menuContainer}>
+                <ul className={styles.menu}>
+                <Link
+                    to={`/contacts`}
+                    key={0}
+                    className={styles.menuLinks}
+                    >
+                        search
+                </Link>
+                <Link
+                    to={`/contacts/recent`}
+                    key={1}
+                    className={styles.menuLinks}
+                    >
+                        recent
+                </Link>
+                <Link
+                    to={`/contacts/favorites`}
+                    key={2}
+                    className={styles.menuLinks}
+                    >
+                        favorites
+                </Link>
+                <Link
+                    to={`/contacts/create`}
+                    key={3}
+                    className={styles.menuLinks}
+                    >
+                        create
+                </Link>
+                </ul>
+            </nav>
         </div>
     );
 }
