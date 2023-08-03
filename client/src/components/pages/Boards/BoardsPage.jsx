@@ -33,8 +33,6 @@ export default function BoardsPage() {
   }, []);
 
   const handleBoardClick = board => {
-    console.log('yeeee handle boardclick');
-    console.log(board);
     dispatch(changeBoard(board));
   };
 

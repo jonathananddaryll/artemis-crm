@@ -19,3 +19,7 @@
   min-height: 92vh;
   float: left;
 }
+
+.important {
+  background: yellow;
+}

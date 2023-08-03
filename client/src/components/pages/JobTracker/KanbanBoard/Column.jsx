@@ -17,7 +17,7 @@ const Container = styled.div`
   margin-right: 5px;
   padding-bottom: 50px;
   width: 300px;
-  height: 88vh;
+  height: 95vh;
   float: left;
 `;
 

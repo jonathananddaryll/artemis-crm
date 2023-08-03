@@ -64,23 +64,35 @@ export default function JobTrackerPage() {
     setLoadStart(false);
   }
 
-  // jobs loading
+  // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
   if (
-    jobsLoading &&
-    board_id !== null &&
     loadStart1 &&
-    selectedBoardStatusCols === null &&
-    selectedBoard !== null
+    selectedBoard !== null &&
+    selectedBoardStatusCols === null
   ) {
-    // Gets all the job with the selectedBoard Id
+    dispatch(changeBoard(selectedBoard));
     dispatch(getjobswithBoardId(board_id));
     setLoadStart1(false);
   }
 
-  // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
-  if (selectedBoard !== null && selectedBoardStatusCols === null) {
-    dispatch(changeBoard(selectedBoard));
-  }
+  // IF THE LOADING STOP WORKING, REVERT TO THIS
+  // jobs loading
+  // if (
+  //   jobsLoading &&
+  //   board_id !== null &&
+  //   loadStart1 &&
+  //   selectedBoardStatusCols === null &&
+  //   selectedBoard !== null
+  // ) {
+  //   // Gets all the job with the selectedBoard Id
+  //   dispatch(getjobswithBoardId(board_id));
+  //   setLoadStart1(false);
+  // }
+
+  // // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
+  // if (selectedBoard !== null && selectedBoardStatusCols === null) {
+  //   dispatch(changeBoard(selectedBoard));
+  // }
 
   return (
     <div className={styles.container}>

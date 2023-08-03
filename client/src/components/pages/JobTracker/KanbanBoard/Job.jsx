@@ -1,6 +1,7 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import styles from './KanbanBoard.module.css';
 
 import {
   handleToggleForm,
@@ -13,7 +14,7 @@ const Container = styled.div`
   padding: 8px;
   color: #000;
   margin-bottom: 8px;
-  min-height: 90px;
+  height: 80px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: white;
@@ -21,11 +22,17 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  ${({ active }) =>
+    active &&
+    `
+    background-color: rgb(191, 167, 236);;
+  `}
 `;
 
 const CompanyLogo = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background-color: rgb(145, 145, 180);
 `;
@@ -34,20 +41,16 @@ const TextContent = styled.div`
   text-align: left;
   margin-left: 15px;
   text-transform: capitalize;
+  font-size: 14px;
 `;
 
 const TitleText = styled.p`
-  margin: 2px 0;
   font-weight: bold;
 `;
 
-const CompanyText = styled.p`
-  margin: 2px 0;
-`;
+const CompanyText = styled.p``;
 
-const CreatedText = styled.p`
-  margin: 2px 0;
-`;
+const CreatedText = styled.p``;
 
 export default function Job({ job, index }) {
   const dispatch = useDispatch();
@@ -55,6 +58,7 @@ export default function Job({ job, index }) {
     <Draggable draggableId={`${job.id}`} key={job.id} index={index}>
       {(provided, snapshot) => (
         <Container
+          active={job.got_tasks === true}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}

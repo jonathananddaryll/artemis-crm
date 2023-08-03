@@ -78,3 +78,9 @@ CREATE TABLE task(
   FOREIGN KEY(job_id) REFERENCES job(id)
   ON DELETE CASCADE
 );
+
+
+// Join Table get every job that has a task to do
+SELECT * FROM job JOIN task ON job.id = task.job_id WHERE board_id = 1 AND task.is_done = false
+
+@todo for 
