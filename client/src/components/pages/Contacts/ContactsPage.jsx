@@ -21,6 +21,7 @@ export default function ContactsPage() {
         token: {}
     })
 
+
     async function onSubmitHandler(e) {
         e.preventDefault();
         const searchQuerySubmit = {
@@ -33,6 +34,10 @@ export default function ContactsPage() {
         dispatch(getContacts(user_id, searchQuerySubmit));
       }
 
+    const addContact = () => {
+        
+    }
+
     useEffect(() => {
         dispatch(getContacts(userId, searchQuery));
     }, [dispatch]);
@@ -40,36 +45,40 @@ export default function ContactsPage() {
         <div className={styles.pageWrapper}>
             <nav className={styles.menuContainer}>
                 <ul className={styles.menu}>
-                <Link
-                    to={`/contacts`}
-                    key={0}
-                    className={styles.menuLinks}
-                    >
-                        search
-                </Link>
-                <Link
-                    to={`/contacts/recent`}
-                    key={1}
-                    className={styles.menuLinks}
-                    >
-                        recent
-                </Link>
-                <Link
-                    to={`/contacts/favorites`}
-                    key={2}
-                    className={styles.menuLinks}
-                    >
-                        favorites
-                </Link>
-                <Link
-                    to={`/contacts/create`}
-                    key={3}
-                    className={styles.menuLinks}
-                    >
-                        create
-                </Link>
+                    <li className={styles.menuLinks}><a onclick="addContact()"><i class="fa-solid fa-person-circle-plus"></i></a></li>
+                    <li className={styles.menuLinks}><a onclick="priorityContacts()"><i class="fa-regular fa-star"></i></a></li>
+                    <li className={styles.menuLinks}><a onclick="contactHistory()"><i class="fa-solid fa-comments"></i></a></li>
                 </ul>
             </nav>
+            <section className={styles.searchBar}>
+                <input type="text" inputMode="search" name="searchBar" className={styles.contactSearchInput} placeholder="search"/>
+                <div className={styles.dropdownOptions}>
+                    <a href=""><i></i></a>
+                    <section>
+                        <ul>
+                            <li>
+
+                            </li>
+                            <li>
+
+                            </li>
+                            <li>
+                                
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </section>
+            <section className={styles.searchResultsContainer}>
+                {/* {contactResults.notEmpty? contactResults.forEach(element => {
+                    <section className={styles.contactCard}>
+                        <title className={styles.contactFirstName}></title>
+                        <span></span>
+                    </section>
+                }):''}; */}
+
+            </section>
+            
         </div>
     );
 }
