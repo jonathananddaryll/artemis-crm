@@ -28,11 +28,12 @@ const Status = styled.div`
   position: relative;
 `;
 
-const Title = styled.h3`
+const Title = styled.p`
   margin: 0px;
   text-align: center;
   text-transform: capitalize;
   font-size: 20px;
+  font-weight: 500;
 `;
 
 const TotalJobs = styled.p`

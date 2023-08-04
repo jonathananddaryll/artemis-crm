@@ -46,13 +46,16 @@ const CompanyLogo = styled.div`
 const TextContent = styled.div`
   text-align: left;
   margin-left: 10px;
-  font-size: 14px;
   flex: 1;
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  // background: red;
+  padding: 0 5px 0 20px;
+  height: 20px;
 `;
 
 const Reminders = styled.div`
@@ -60,21 +63,23 @@ const Reminders = styled.div`
 `;
 
 const TitleText = styled.p`
-  font-weight: bold;
   text-transform: capitalize;
+  font-size: 17px;
+  font-weight: 500;
 `;
 
 const CompanyText = styled.p`
   text-transform: capitalize;
+  font-size: 15px;
 
   i {
-    font-size: 12px;
+    font-size: 13px;
     margin-right: 4px;
   }
 `;
 
 const CreatedText = styled.p`
-  font-size: 13px;
+  font-size: 12px;
 `;
 
 export default function Job({ job, index }) {

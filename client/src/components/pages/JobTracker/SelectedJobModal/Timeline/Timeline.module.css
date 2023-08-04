@@ -4,9 +4,15 @@
   overflow: auto;
 } */
 
+.timelineContainer {
+  height: 100%;
+  padding-top: 15px;
+}
+
 .textHeader {
-  font-size: 20px;
+  font-size: 16px;
   text-align: left;
+  margin-bottom: 5px;
 }
 
 .verticalLine {
@@ -29,6 +35,7 @@
 
 .loaderImg {
   width: 50%;
+  margin: 0 auto;
 }
 
 .loaderText {
@@ -51,20 +58,20 @@
 }
 
 .textUpdateType {
-  margin: 0 0 5px 0;
+  /* margin: 0 0 5px 0; */
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .textDescription {
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   margin: 0 0 5px 0;
 }
 
 .textDateCreated {
   margin: 0;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 /* TIMELINE left line to show timeline */
@@ -95,8 +102,4 @@
 .timelineScroll {
   overflow: auto;
   height: 93%;
-}
-
-.timelineContainer {
-  height: 100%;
 }

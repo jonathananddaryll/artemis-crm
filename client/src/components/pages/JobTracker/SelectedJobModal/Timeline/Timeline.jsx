@@ -6,7 +6,7 @@ import timeSince from '../../../../../helpers/convertDate';
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (
     <div className={styles.timelineContainer}>
-      <p className={styles.textHeader}>Timeline</p>
+      <h4 className={styles.textHeader}>Timeline</h4>
       {timelinesLoading ? (
         <div className={styles.loaderContainer}>
           <img

@@ -94,7 +94,7 @@ export default function NewJobForm() {
         <div className={styles.formHeader}>
           <p>Add Job</p>
           <button onClick={() => dispatch(handleToggleForm([false, null]))}>
-            X
+            <i class='bi bi-x-lg'></i>
           </button>
         </div>
         <div className={styles.formContainer}>
