@@ -25,8 +25,6 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
     job_url,
     board_id,
     location,
-    rate_of_pay,
-    main_contact,
     selectedboard_user_id
   } = req.body;
 
@@ -41,11 +39,12 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board' });
   } else {
     const query = format(
-      'INSERT INTO job (job_title, company, location, status, board_id) VALUES(%L, %L, %L, %L, %L) RETURNING *',
+      'INSERT INTO job (job_title, company, location, status, job_url, board_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *',
       job_title,
       company,
       location,
       status,
+      job_url,
       board_id
     );
 
@@ -72,6 +71,9 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   }
 });
 
+// @route     GET api/jobs/board/:board_id
+// @desc      Gets all the job with board_id
+// @access    Public -- make it private later
 router.get('/board/:board_id', async (req, res) => {
   //check the board_id and check if it belongs to the current loggedin user and then if it does, go fetch it
 
@@ -84,8 +86,9 @@ router.get('/board/:board_id', async (req, res) => {
   //   boardId
   // );
 
+  // CHECK IF I NEED THE SELECT is_done there.. is is_done good? it's working even without anything there. should i take it out?
   const query = format(
-    'SELECT j.*, CASE WHEN EXISTS (SELECT * FROM task WHERE task.job_id = j.id AND task.is_done = FALSE) THEN true ELSE false END AS got_tasks FROM job j left JOIN (SELECT DISTINCT job_id from task) t ON j.id = t.job_id WHERE board_id = %s',
+    `SELECT j.*, CASE WHEN EXISTS (SELECT * FROM task WHERE task.job_id = j.id AND task.is_done = FALSE) THEN true ELSE false END AS got_tasks FROM job j left JOIN (SELECT DISTINCT job_id from task) t ON j.id = t.job_id WHERE board_id = %s ORDER BY date_created DESC`,
     boardId
   );
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Timeline.module.css';
 import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
+import timeSince from '../../../../../helpers/convertDate';
 
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (
@@ -35,7 +36,7 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
                         {timeline.description.substring(0, 35)}
                       </p>
                       <p className={styles.textDateCreated}>
-                        {timeline.date_created}
+                        {timeSince(timeline.date_created)}
                       </p>
                     </div>
                   </div>
@@ -53,7 +54,9 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
               <div className={styles.timelineCard}>
                 <p className={styles.textUpdateType}>New Job Created</p>
                 <p className={styles.textDescription}>You added a new job</p>
-                <p className={styles.textDateCreated}>{dateCreated}</p>
+                <p className={styles.textDateCreated}>
+                  {timeSince(dateCreated)}
+                </p>
               </div>
             </div>
           </div>

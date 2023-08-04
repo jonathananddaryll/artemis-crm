@@ -245,6 +245,7 @@ const selectedJobSlice = createSlice({
         );
         state.tasks = filteredTasks;
         state.completedTasks = [...state.completedTasks, updatedTask];
+
         toast.success('Good Job Completing a Task');
       } else {
         const filteredTasks = state.completedTasks.filter(

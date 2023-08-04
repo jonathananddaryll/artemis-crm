@@ -8,6 +8,7 @@ import NewBoardForm from './NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
 import UpdateForm from './UpdateForm';
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
+import timeSince from '../../../helpers/convertDate';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
@@ -79,7 +80,7 @@ export default function BoardsPage() {
                     {board.title}
                   </p>
                   <p className={styles.textBoardDateCreated}>
-                    {board.date_created}
+                    created {timeSince(board.date_created)}
                   </p>
                 </div>
               </Link>{' '}

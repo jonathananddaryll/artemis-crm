@@ -13,7 +13,7 @@ const Container = styled.div`
   background-color: #e6eefb;
   border-radius: 10px;
   // overflow-y: hidden;
-  // overflow-x: hidden;
+  overflow: hidden;
   margin-right: 5px;
   padding-bottom: 50px;
   width: 300px;
@@ -55,10 +55,9 @@ const AddButton = styled.button`
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: transparent;
+  background-color: #e6eefb;
   border: none;
   padding: 10px 20px;
-  cursor: pointer;
   text-align: left;
 
   & span {
@@ -76,6 +75,10 @@ const AddButton = styled.button`
 const EditButton = styled.button`
   position: absolute;
   right: 15px;
+  border: none;
+  // background-color: red;
+  font-size: 20px;
+  color: black;
 `;
 
 export default function ({ title, jobs, id }) {
@@ -86,7 +89,9 @@ export default function ({ title, jobs, id }) {
       <Status>
         <Title>{title}</Title>
         <TotalJobs> {jobs.length} </TotalJobs>
-        <EditButton>...</EditButton>
+        <EditButton>
+          <i class='bi bi-three-dots'></i>
+        </EditButton>
       </Status>
 
       <Droppable droppableId={id}>
@@ -105,7 +110,7 @@ export default function ({ title, jobs, id }) {
         )}
       </Droppable>
       <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
-        <span> + </span> Add new job
+        <i class='bi bi-plus-lg'></i> Add new job
       </AddButton>
     </Container>
   );

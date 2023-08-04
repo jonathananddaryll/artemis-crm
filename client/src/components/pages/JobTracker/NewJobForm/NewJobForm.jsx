@@ -19,20 +19,16 @@ export default function NewJobForm() {
   //   job_url: '',
   //   board_id: selectedBoard.id,
   //   location: '',
-  //   rate_of_pay: '',
-  //   main_contact: '',
   //   selectedboard_user_id: selectedBoard.user_id
   // });
 
   const [formData, setFormData] = useState({
-    company: 'google',
-    job_title: 'software engineer',
+    company: '',
+    job_title: '',
     status: selectedStatusToAdd,
     job_url: '',
     board_id: selectedBoard.id,
-    location: 'remote',
-    rate_of_pay: '',
-    main_contact: '',
+    location: '',
     selectedboard_user_id: selectedBoard.user_id
   });
 
@@ -43,8 +39,6 @@ export default function NewJobForm() {
     job_url,
     board_id,
     location,
-    rate_of_pay,
-    main_contact,
     selectedboard_user_id
   } = formData;
 
@@ -78,9 +72,7 @@ export default function NewJobForm() {
       status: selectedStatusToAdd,
       job_url: '',
       board_id: selectedBoard.id,
-      location: '',
-      rate_of_pay: '',
-      main_contact: ''
+      location: ''
     };
 
     dispatch(addJob(formD));
@@ -99,66 +91,79 @@ export default function NewJobForm() {
         onClick={() => dispatch(handleToggleForm([false, null]))}
       ></div>
       <div className={styles.modal}>
-        <form onSubmit={e => onSubmitHandler(e)}>
-          <div className={styles.formGroup}>
-            <label>Company</label>
-            <input
-              type='text'
-              name='company'
-              value={company}
-              onChange={e => onChangeHandler(e)}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Job Title</label>
-            <input
-              type='text'
-              name='job_title'
-              value={job_title}
-              onChange={e => onChangeHandler(e)}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Location</label>
-            <input
-              type='text'
-              name='location'
-              value={location}
-              onChange={e => onChangeHandler(e)}
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Job URL</label>
-            <input
-              type='text'
-              name='job_url'
-              value={job_url}
-              onChange={e => onChangeHandler(e)}
-            />
-          </div>
-          {/* ADD a dropdown for main contact later  */}
-          <div className={styles.formFlex}>
+        <div className={styles.formHeader}>
+          <p>Add Job</p>
+          <button onClick={() => dispatch(handleToggleForm([false, null]))}>
+            X
+          </button>
+        </div>
+        <div className={styles.formContainer}>
+          <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
-              {/* HAVE THE BOARD NAME AS THE LABEL BUT VALUE WILL BE BOARD_ID*/}
-              <label>Board</label>
-              <input type='text' name='board_id' value={board_id} readonly />
-            </div>
-            <div className={styles.formGroup}>
-              <label>Status</label>
+              <label>Company</label>
               <input
                 type='text'
-                name='status'
-                value={status}
+                name='company'
+                value={company}
+                placeholder='Add company name'
                 onChange={e => onChangeHandler(e)}
               />
             </div>
-            <input type='submit' value='Save Job' />
-          </div>
-        </form>
+            <div className={styles.formGroup}>
+              <label>Job Title</label>
+              <input
+                type='text'
+                name='job_title'
+                value={job_title}
+                placeholder='Add a new job name'
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Location</label>
+              <input
+                type='text'
+                name='location'
+                value={location}
+                placeholder='Add Location'
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Job URL</label>
+              <input
+                type='text'
+                name='job_url'
+                value={job_url}
+                placeholder='Add job url'
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
 
-        <button onClick={() => dispatch(handleToggleForm([false, null]))}>
-          CANCEL NEW JOB FORM
-        </button>
+            <div className={styles.formFlex}>
+              <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
+                <label>Status</label>
+                <input type='text' name='status' value={status} readonly />
+              </div>
+              <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
+                <label>Link Contact</label>
+                <input type='text' name='contact' readonly />
+              </div>
+            </div>
+            <div className={styles.buttonsContainer}>
+              <input className={styles.button} type='submit' value='Save Job' />
+              <input
+                className={styles.button}
+                type='button'
+                value='Cancel'
+                onClick={() => dispatch(handleToggleForm([false, null]))}
+              />
+            </div>
+            {/* <button onClick={() => dispatch(handleToggleForm([false, null]))}>
+                CANCEL NEW JOB FORM
+              </button> */}
+          </form>
+        </div>
       </div>
     </div>
   );
