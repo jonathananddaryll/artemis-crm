@@ -92,4 +92,14 @@
   position: absolute;
   right: 15px;
   top: 15px;
+
+  /* padding: 5px 10px; */
+  background-color: transparent;
+  border: 0;
+  font-size: 20px;
+
+  &:hover {
+    font-size: 22px;
+    transition: all 0.2s ease;
+  }
 }

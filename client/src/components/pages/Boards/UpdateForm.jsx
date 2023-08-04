@@ -34,22 +34,33 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
   }
 
   return (
-    <div className={styles.updateForm}>
-      <form onSubmit={e => onSubmitHandler(e)}>
-        <input
-          type='text'
-          value={newTitle}
-          name='newTitle'
-          placeholder='New Board Name'
-          onChange={e => setNewTitle(e.target.value)}
-        />
-        <input type='submit' value='Update' />
-      </form>
-      <button
-        onClick={() => handleToggleUpdateForm({ ind: null, state: false })}
-      >
-        Cancel{' '}
-      </button>
+    <div className={styles.updateFormContainer}>
+      <div className={styles.updateForm}>
+        <form onSubmit={e => onSubmitHandler(e)}>
+          <input
+            type='text'
+            value={newTitle}
+            name='newTitle'
+            placeholder='New Board Name'
+            onChange={e => setNewTitle(e.target.value)}
+          />
+          <div className={styles.formButtons}>
+            <input
+              type='submit'
+              value='Update'
+              className={styles.updateBoardButton}
+            />
+            <input
+              type='button'
+              value='Cancel'
+              className={styles.updateBoardButton}
+              onClick={() =>
+                handleToggleUpdateForm({ ind: null, state: false })
+              }
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

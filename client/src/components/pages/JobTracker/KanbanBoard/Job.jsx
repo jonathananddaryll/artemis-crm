@@ -97,7 +97,7 @@ export default function Job({ job, index }) {
         >
           <CompanyLogo />
           <TextContent>
-            <TitleText>{job.job_title}</TitleText>
+            <TitleText>{job.job_title.substring(0, 28)}</TitleText>
             <CompanyText>
               <i class='bi bi-building-fill'></i>
               {job.company}

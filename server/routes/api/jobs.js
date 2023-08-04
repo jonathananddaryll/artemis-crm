@@ -88,7 +88,7 @@ router.get('/board/:board_id', async (req, res) => {
 
   // CHECK IF I NEED THE SELECT is_done there.. is is_done good? it's working even without anything there. should i take it out?
   const query = format(
-    `SELECT j.*, CASE WHEN EXISTS (SELECT * FROM task WHERE task.job_id = j.id AND task.is_done = FALSE) THEN true ELSE false END AS got_tasks FROM job j left JOIN (SELECT DISTINCT job_id from task) t ON j.id = t.job_id WHERE board_id = %s ORDER BY date_created DESC`,
+    `SELECT j.*, CASE WHEN EXISTS (SELECT * FROM task WHERE task.job_id = j.id AND task.is_done = FALSE) THEN true ELSE false END AS got_tasks FROM job j LEFT JOIN (SELECT DISTINCT job_id from task) t ON j.id = t.job_id WHERE board_id = %s ORDER BY date_created DESC`,
     boardId
   );
 
