@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
         // TODO:
         // 1) add LIKE into postgresql query to add more flexible search
         // 
-        const { first, last, user_id } = req.body
+        const { first, last, user_id, type } = req.body
         // Query string will always begin with:
         let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
         // But if both first name and last name were added to the search,
