@@ -97,9 +97,4 @@
   background-color: transparent;
   border: 0;
   font-size: 20px;
-
-  &:hover {
-    font-size: 22px;
-    transition: all 0.2s ease;
-  }
 }

@@ -1,6 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+
+import { updateTaskStatus, createTask } from './SelectedJobReducer';
 
 // Create action
 
@@ -297,6 +299,26 @@ const boardSlice = createSlice({
 
       // Add the job that was removed from previous status to the new status
       state.selectedBoardStatusCols[action.payload[0]].push(job);
+    },
+
+    filterJob: (state, action) => {
+      console.log('ayooo filterjob triggered');
+      const searchFilter = action.payload.searchFilter;
+      const filteredjobs = state.jobs.filter(job =>
+        job.company.includes(searchFilter)
+      );
+
+      console.log(searchFilter);
+
+      if (searchFilter.length > 0) {
+        filteredjobs.forEach(job =>
+          state.selectedBoardStatusCols[job.status].push(job)
+        );
+      } else {
+        state.jobs.forEach(job =>
+          state.selectedBoardStatusCols[job.status].push(job)
+        );
+      }
     }
   },
 
@@ -359,6 +381,7 @@ const boardSlice = createSlice({
       const jobs = action.payload;
       const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
+      state.jobs = jobs;
     });
 
     // builder.addCase(updateJobStatus.pending, (state, action) => {
@@ -386,6 +409,39 @@ const boardSlice = createSlice({
       state.selectedBoardStatusCols[action.payload.status] =
         jobsWithoutDeletedJob;
     });
+
+    ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////
+    // Updates the incomplete_task_count both in selectedJob and selectedBoardStatusCols
+    builder.addMatcher(isAnyOf(updateTaskStatus.fulfilled), (state, action) => {
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === action.payload.job_id);
+
+      action.payload.is_done === false
+        ? state.selectedJob['incomplete_task_count']++ &&
+          state.selectedBoardStatusCols[state.selectedJob.status][
+            selectedJobIndex
+          ].incomplete_task_count++
+        : state.selectedJob['incomplete_task_count']-- &&
+          state.selectedBoardStatusCols[state.selectedJob.status][
+            selectedJobIndex
+          ].incomplete_task_count--;
+    });
+
+    // Updates the selectedJob and
+    builder.addMatcher(isAnyOf(createTask.fulfilled), (state, action) => {
+      console.log('create task fulfilled hit in boardreducer');
+      // Finds the index
+      console.log(action.payload[0].rows[0]);
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === action.payload[0].rows[0].job_id);
+
+      state.selectedJob['incomplete_task_count']++;
+      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
+        .incomplete_task_count++;
+    });
   }
 });
 
@@ -397,5 +453,6 @@ export const {
   addToStatus,
   changeSelectedJob,
   handleToggleForm,
-  handleColumnUpdateForm
+  handleColumnUpdateForm,
+  filterJob
 } = boardSlice.actions;

@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import {
   getjobswithBoardId,
   getBoard,
-  changeBoard
+  changeBoard,
+  filterJob
 } from '../../../reducers/BoardReducer';
 import styles from './JobTrackerPage.module.css';
 
@@ -15,6 +16,8 @@ import AddListForm from './AddListForm/AddListForm';
 import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 import BoardHeader from './BoardHeader/BoardHeader';
+
+import SearchBar from './SearchBar/SearchBar';
 
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
 
@@ -100,6 +103,7 @@ export default function JobTrackerPage() {
         <>
           <BoardHeader title={selectedBoard.title} />
           <div className={styles.kanbanBoardContainer}>
+            <SearchBar filterJob={filterJob} />
             <KanbanBoard
               setAddListToggle={setAddListToggle}
               selectedBoard={selectedBoard}

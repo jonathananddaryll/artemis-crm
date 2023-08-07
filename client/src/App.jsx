@@ -31,8 +31,6 @@ function App() {
 
   const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-  // const navigate1 = useNavigate();
-
   return (
     <>
       <BrowserRouter>
@@ -90,11 +88,8 @@ function App() {
         newestOnTop={false}
         closeOnClick
         rtl={false}
-        pauseOnFocusLoss
         draggable
-        pauseOnHover
         theme='light'
-        // limit={1}
       />
     </>
   );

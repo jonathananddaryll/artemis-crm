@@ -1,10 +1,8 @@
 export default function timeSince(date) {
   var newDate = new Date(date);
-  console.log(date);
-  console.log(newDate);
-  console.log(new Date());
+
   var seconds = Math.floor((new Date() - newDate) / 1000);
-  console.log('seconds: ' + seconds);
+  // console.log('seconds: ' + seconds);
 
   var interval = seconds / 31536000;
 

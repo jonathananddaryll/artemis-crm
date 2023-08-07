@@ -108,7 +108,10 @@ export default function Job({ job, index }) {
             </CompanyText>
             <Footer>
               <Reminders>
-                {job.got_tasks && <i class='bi bi-check2-square'></i>}
+                {job.incomplete_task_count > 0 && (
+                  <i class='bi bi-check2-square'></i>
+                )}
+                {}
               </Reminders>
               <CreatedText>{timeSince(job.date_created)}</CreatedText>
             </Footer>

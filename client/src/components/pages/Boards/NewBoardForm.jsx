@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createBoard } from '../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
+import styles from './UpdateForm.module.css';
+
 export default function NewBoardForm({ toggleHandler }) {
   const [title, setTitle] = useState('');
   const dispatch = useDispatch();
@@ -27,18 +29,31 @@ export default function NewBoardForm({ toggleHandler }) {
   }
 
   return (
-    <div>
-      <form onSubmit={e => onSubmitHandler(e)}>
-        <input
-          type='text'
-          value={title}
-          name='title'
-          placeholder='New Board Name'
-          onChange={e => setTitle(e.target.value)}
-        />
-        <input type='submit' value='Create' />
-      </form>
-      <button onClick={() => toggleHandler()}>Cancel </button>
+    <div className={styles.updateFormContainer}>
+      <div className={styles.updateForm}>
+        <form onSubmit={e => onSubmitHandler(e)}>
+          <input
+            type='text'
+            value={title}
+            name='title'
+            placeholder='New Board Name'
+            onChange={e => setTitle(e.target.value)}
+          />
+          <div className={styles.formButtons}>
+            <input
+              type='submit'
+              value='Create'
+              className={styles.updateBoardButton}
+            />
+            <input
+              type='button'
+              value='Cancel'
+              onClick={() => toggleHandler()}
+              className={styles.updateBoardButton}
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

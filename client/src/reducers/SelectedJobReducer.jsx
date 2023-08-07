@@ -239,6 +239,7 @@ const selectedJobSlice = createSlice({
       // Find the index of the updated note then change it to the updated note
       var updatedTask = action.payload;
 
+      ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_tASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
       if (action.payload.is_done === true) {
         const filteredTasks = state.tasks.filter(
           task => task.id !== action.payload.id
