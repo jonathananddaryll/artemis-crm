@@ -81,26 +81,27 @@ const fakeContacts = [
 // READ all contacts for a user
 export const getContacts = createAsyncThunk(
   'contacts/getContacts',
-  async ( user_id, searchQuery, thunkAPI ) => {
+  async ( searchQuery, thunkAPI ) => {
     try {
         // Send user_id from clerk, along with first, last in req.body
-        const { first, last, type, strValue, token } = searchQuery;
-        const res = await axios.get({
+        console.log(searchQuery)
+        const config = {
           method: 'GET',
-          url: '/api/contacts/',
+          url: '/api/contacts',
           withCredentials: false,
-          body: {
-            user_id,
-            first,
-            last,
-            type,
-            strValue,
+          params: {
+            user_id: searchQuery.user_id,
+            first: searchQuery.first,
+            last: searchQuery.last,
+            type: searchQuery.type,
+            strValue: searchQuery.strValue,
           },
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${searchQuery.token}`
           }
-        });
+        }
+        const res = await axios.get(`/api/contacts/`, config)
         return res.data;
     } catch (err) {
       console.log(err);
@@ -188,18 +189,6 @@ export const createContact = createAsyncThunk(
   }
 )
 
-const initialState = {
-    contacts: [],
-    selectedContact: null,
-    loading: false,
-    searchQuery: {
-      first: "",
-      last: "",
-      type: "empty",
-      strValue: "",
-    },
-}
-
 const contactSlice = createSlice({
   name: 'contact',
   initialState: {
@@ -208,9 +197,11 @@ const contactSlice = createSlice({
     contactInFocus: {},
     contactLoading: true,
     searchQuery: {
-      type: "",
+      user_id: "",
+      first: "",
+      last: "",
+      type: "name",
       strValue: "",
-      filters: {},
     },
   },
   reducers: {

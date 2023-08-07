@@ -3,19 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getContacts } from '../../../reducers/ContactReducer';
-import { useAuth, useSession } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
 import styles from './ContactsPage.module.css';
 
 export default function ContactsPage() {
 
-    const { userId } = useAuth();
-    const { session } = useSession();
+    const { userId, getToken } = useAuth();
+
     const dispatch = useDispatch();
     const contactResults = useSelector((state) => state.contactResults);
+
     const [ searchType, setSearchType ] = useState("name");
     const [ searchQuery, setSearchQuery ] = useState({
+        user_id: userId,
         first: "jon",
         last: "",
         type: searchType,
@@ -25,24 +27,27 @@ export default function ContactsPage() {
 
     async function onSubmitHandler(e) {
         e.preventDefault();
-        const searchQuerySubmit = {
-          first: searchQuery.first,
-          last: searchQuery.last,
-          type: searchQuery.type,
-          strValue: searchQuery.strValue,
-          token: await session.getToken()
-        };
-        dispatch(getContacts(user_id, searchQuerySubmit));
+        const token = await getToken()
+        dispatch(getContacts({
+            "first": searchQuery.first,
+            "last": searchQuery.last,
+            "type": searchQuery.type,
+            "strValue": searchQuery.strValue,
+            "token": token
+          }));
       }
 
     const addContact = () => {
         
     }
 
+    const priorityContacts = () => {
+        
+    }
 
-    // <i class="fa-solid fa-person-circle-plus"></i>
-    // <i class="fa-regular fa-star"></i>
-    // <i class="fa-solid fa-comments"></i>
+    const contactHistory = () => {
+        
+    }
 
     useEffect(() => {
         dispatch(getContacts(userId, searchQuery));
@@ -51,9 +56,9 @@ export default function ContactsPage() {
         <div className={styles.pageWrapper}>
             <nav className={styles.menuContainer}>
                 <ul className={styles.menu}>
-                    <li className={styles.menuLinks}><a onclick="addContact()">add+</a></li>
-                    <li className={styles.menuLinks}><a onclick="priorityContacts()">priority</a></li>
-                    <li className={styles.menuLinks}><a onclick="contactHistory()">history</a></li>
+                    <li className={styles.menuLinks}><a onClick={() => {addContact()}}>add+</a></li>
+                    <li className={styles.menuLinks}><a onClick={() => {priorityContacts()}}>priority</a></li>
+                    <li className={styles.menuLinks}><a onClick={() => {contactHistory()}}>history</a></li>
                 </ul>
             </nav>
             <section className={styles.searchBar}>
@@ -78,5 +83,3 @@ export default function ContactsPage() {
         </div>
     );
 }
-// onMouseEnter={() => setVisible()}
-// onMouseLeave={() => setHidden()}>
