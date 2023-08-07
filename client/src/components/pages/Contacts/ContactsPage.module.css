@@ -29,7 +29,8 @@
   list-style-type: none;
   background-color: white;
   color: rgb(20, 19, 19);
-  border-bottom: solid 2px transparent
+  border-bottom: solid 2px transparent;
+  cursor: pointer;
 }
 .menuLinks:hover{
   border-bottom: solid 2px black;
@@ -52,6 +53,7 @@
   border: transparent;
   border-radius: 5px 5px 0 0;
   border-bottom: 2px solid black;
+  cursor: pointer;
 }
 .contactSearchInput:hover{
   background-color: rgb(236, 236, 236);
@@ -64,6 +66,7 @@
   font-size: 1.2em;
   height: 1em;
   padding: 0.2em;
+  cursor: pointer;
 }
 .searchResultsContainer{
   margin-top: 1em;
@@ -76,26 +79,4 @@
 }
 .searchResultsContainer:hover{
   border: solid 2px black;
-}
-.searchSlider{
- font-size: 1.3em;
- margin: 0.2em 1em;
- color: black;
-}
-.dropdownContainer{
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.dropdown{
-  display: flex;
-  border: solid red 1px;
-  position: absolute;
-  width: 10em;
-}
-.hiddenDropdown{
-  display: none;
-}
-.dropdownItem{
-  list-style-type: none;
 }

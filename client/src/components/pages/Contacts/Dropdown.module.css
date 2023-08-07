@@ -10,6 +10,7 @@
 }
 .menuHiddenHeader{
     padding-left: 2em;
+    cursor: pointer;
 }
 .menuShownHeader{
     display: none;
@@ -24,6 +25,7 @@
     padding-left: 2em;
     border: solid transparent 2px;
     border-radius: 5px;
+    cursor: pointer;
 }
 .menuShownItem:hover{
     background-color:rgb(236, 236, 236);
