@@ -13,30 +13,29 @@ export default function ContactsPage() {
     const { userId, getToken } = useAuth();
 
     const dispatch = useDispatch();
-    const contactResults = useSelector((state) => state.contactResults);
+    const searchResults = useSelector((state) => state.contact.contactResults);
 
     const [ searchType, setSearchType ] = useState("name");
-    const [ searchQuery, setSearchQuery ] = useState({
+    const [ searchParams, setSearchParams ] = useState({
         user_id: userId,
-        first: "jon",
+        first: "",
         last: "",
-        type: searchType,
+        type: "init",
         strValue: "",
         token: {}
-    })
+    });
 
-    async function onSubmitHandler(e) {
-        e.preventDefault();
-        const token = await getToken()
-        dispatch(getContacts({
-            "first": searchQuery.first,
-            "last": searchQuery.last,
-            "type": searchQuery.type,
-            "strValue": searchQuery.strValue,
-            "token": token
-          }));
+    async function searchSubmit(e) {
+        const validated = validateSearchParams(searchParams);
+        if(!validated){
+            console.log('please enter text to search with')
+        }else{
+            const token = await getToken()
+            validated.token = token;
+            dispatch(updateSearchQuery(validated))
+            dispatch(getContacts(validated));
+        }
       }
-
     const addContact = () => {
         
     }
@@ -48,9 +47,55 @@ export default function ContactsPage() {
     const contactHistory = () => {
         
     }
+    const validateSearchParams = (searchObj) => {
+        let validated = {
+            "first": "",
+            "last": "",
+            "type": "",
+            "strValue": "",
+            "token": {}
+        }
+        if(searchObj.strValue === ""){
+            return false
+        }
+        if(searchObj.type !== "name"){
+            return searchObj
+        }else{
+            let stringTrimmed = searchObj.strValue.trim();
+            if(stringTrimmed.split("").includes(" ")){
+                if(stringTrimmed.split("").length > 2){
+                    validated.first = stringTrimmed.split(" ")[0];
+                    validated.last = stringTrimmed.split(validated.first)[1];
+                    return validated
+                }else{
+                    validated.first = stringTrimmed.split(" ")[0];
+                    validated.last = stringTrimmed.split(" ")[1];
+                    return validated
+                }
+            }else{
+                validated.strValue = stringTrimmed;
+                return validated
+            }
+        }
+    }
+
+    function updateSearchString(e) {
+        setSearchParams(oldParams => {
+            return {
+                ...oldParams,
+                strValue: e.target.value
+            }
+        });
+    }
 
     useEffect(() => {
-        dispatch(getContacts(userId, searchQuery));
+        const grabSessionToken = async () => {
+            const token = await getToken()
+            searchParams.token = token
+            dispatch(getContacts(searchParams))
+        }
+        grabSessionToken()
+        .catch(console.error)
     }, [dispatch]);
     return (
         <div className={styles.pageWrapper}>
@@ -62,8 +107,8 @@ export default function ContactsPage() {
                 </ul>
             </nav>
             <section className={styles.searchBar}>
-                <input type="text" inputMode="search" name="searchBar" className={styles.contactSearchInput} placeholder={searchType}/>
-                <a><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></a>
+                <input onChange={ (e) => updateSearchString(e) } type="text" inputMode="search" name="searchBar"  className={styles.contactSearchInput} value={searchParams.strValue} placeholder={searchType}/>
+                <a onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></a>
                 <Dropdown 
                     items={["name", "company", "location"]}
                     header={"options"}
@@ -71,13 +116,11 @@ export default function ContactsPage() {
                 />
             </section>
             <section className={styles.searchResultsContainer}>
-                {/* {contactResults.notEmpty? contactResults.forEach(element => {
-                    <section className={styles.contactCard}>
-                        <title className={styles.contactFirstName}></title>
-                        <span></span>
-                    </section>
-                }):''}; */}
-
+                {searchResults !== undefined? searchResults.forEach((element) => {
+                    return (
+                        <div>{element.first_name}</div>
+                    )
+                }) : "" }
             </section>
             
         </div>
