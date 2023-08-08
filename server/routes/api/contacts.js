@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
         // TODO:
         // 1) add LIKE into postgresql query to add more flexible search
         // 
-        const { first, last, user_id, type, strValue } = req.params
+        const { first, last, user_id, type, strValue } = req.query
         console.log(req)
         // Query string will always begin with:
         let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
@@ -65,7 +65,22 @@ router.get('/', async (req, res) => {
                 client.end()
             })
         }else{
-            return res.status(400).json({msg: 'not found'})
+            if(type === "init"){
+                const query = format(queryStarter, 'contact', user_id)
+                const client = new Client(config)
+                client.connect();
+                console.log(query)
+                client.query(query, (err, response) => {
+                    if(err){
+                        console.error(err)
+                        res.status(500).json({msg: 'user has no contacts, or db error'})
+                    }
+                    res.status(200).json(response.rows)
+                    client.end()
+                })
+            }else{
+                return res.status(400).json({msg: 'not found'})
+            }
         }
     }catch (err) {
         res.status(500).json({msg: 'server error'})

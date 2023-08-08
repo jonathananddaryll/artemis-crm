@@ -84,17 +84,24 @@ export const getContacts = createAsyncThunk(
   async ( searchQuery, thunkAPI ) => {
     try {
         // Send user_id from clerk, along with first, last in req.body
-        console.log(searchQuery)
+        const params = {
+          user_id: searchQuery.user_id,
+          type: searchQuery.type
+        }
+        if(params.type === 'name'){
+          params.first = searchQuery.first;
+          params.last = searchQuery.last;
+        }else if(params.type === 'init'){
+          
+        }else{
+          params.strValue = searchQuery.strValue;
+        }
         const config = {
           method: 'GET',
           url: '/api/contacts',
           withCredentials: false,
           params: {
-            user_id: searchQuery.user_id,
-            first: searchQuery.first,
-            last: searchQuery.last,
-            type: searchQuery.type,
-            strValue: searchQuery.strValue,
+            ...params
           },
           headers: {
             'Content-Type': 'application/json',
@@ -102,6 +109,7 @@ export const getContacts = createAsyncThunk(
           }
         }
         const res = await axios.get(`/api/contacts/`, config)
+        console.log(res)
         return res.data;
     } catch (err) {
       console.log(err);
@@ -223,8 +231,8 @@ const contactSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(getContacts.fulfilled, (state, action) => {
-      state.contactResults = action.payload;
-      state.contactLoading = false;
+      state.contacts.contactResults = action.payload;
+      state.contacts.contactLoading = false;
       // sort results, highlights, anything
     });
     builder.addCase(getContacts.pending, (state, action) => {

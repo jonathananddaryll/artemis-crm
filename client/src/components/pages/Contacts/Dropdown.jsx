@@ -23,7 +23,6 @@ export default function Dropdown (props) {
 
     function updateSearchType(type){
         setSearchType(type);
-        console.log(type)
     }
 
 return (
