@@ -95,11 +95,14 @@ router.get('/board/:board_id', async (req, res) => {
   const query = format(
     `  select j.*,
     (select count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count,
-    (select count(*)::int from note n WHERE n.job_id = j.id) total_note_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
+    (select count(*)::int from note n WHERE n.job_id = j.id) total_note_count,
+    (select count(*)::int from task t WHERE t.job_id = j.id AND ((t.category like %L) OR (t.category like %L)) AND t.start_date > NOW() AND t.is_done = false) pending_interview_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
+    '%e Interview%',
+    '%Screen%',
     boardId
   );
 
-  // console.log(query);
+  console.log(query);
   const client = new Client(config);
   client.connect();
 

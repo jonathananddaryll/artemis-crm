@@ -74,7 +74,7 @@ export default function TasksTab({
       title: '',
       category: '',
       note: '',
-      start_date: new Date().toLocaleString(),
+      start_date: new Date(),
       is_done: false
     };
 
@@ -156,7 +156,7 @@ export default function TasksTab({
             </div>
             <div className={styles.formGroup}>
               <label>
-                {category.includes('Interview') || category.includes('Screen')
+                {category.includes('e Interview') || category.includes('Screen')
                   ? 'Interview Date'
                   : 'Finish Task By'}
               </label>

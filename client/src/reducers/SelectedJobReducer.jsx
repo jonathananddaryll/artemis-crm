@@ -182,6 +182,7 @@ const selectedJobSlice = createSlice({
       state.timelines = [];
       state.notes = [];
       state.tasks = [];
+      state.interviews = [];
     }
   },
   extraReducers: builder => {
@@ -227,6 +228,11 @@ const selectedJobSlice = createSlice({
       state.tasks = tasks.filter(task => task.is_done === false);
       state.completedTasks = tasks.filter(task => task.is_done === true);
       state.tasksLoading = false;
+      state.interviews = tasks.filter(
+        task =>
+          task.category.includes('e Interview') ||
+          task.category.includes('Screen')
+      );
     });
 
     builder.addCase(createTask.fulfilled, (state, action) => {

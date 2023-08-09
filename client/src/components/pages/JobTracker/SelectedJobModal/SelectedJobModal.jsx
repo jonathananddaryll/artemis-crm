@@ -46,7 +46,8 @@ export default function SelectedJobModal() {
     notesLoading,
     tasks,
     completedTasks,
-    tasksLoading
+    tasksLoading,
+    interviews
   } = useSelector(state => ({
     ...state.selectedJob
   }));
@@ -170,7 +171,7 @@ export default function SelectedJobModal() {
               updateTaskStatus={updateTaskStatus}
             />
           )}
-          {activeItem === 5 && <InterviewTab />}
+          {activeItem === 5 && <InterviewTab interviews={interviews} />}
         </div>
         <div className={styles.timelineContainer}>
           <Timeline

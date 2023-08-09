@@ -118,6 +118,10 @@ export default function Job({ job, index }) {
                 {job.total_note_count > 0 && (
                   <i className='bi bi-journal-text'></i>
                 )}
+                {/* for total pending interview count */}
+                {job.pending_interview_count > 0 && (
+                  <i className='bi bi-telephone'></i>
+                )}
               </Reminders>
               <CreatedText>{timeSince(job.date_created)}</CreatedText>
             </Footer>
