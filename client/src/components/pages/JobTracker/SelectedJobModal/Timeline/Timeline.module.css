@@ -28,20 +28,6 @@
   justify-content: space-between;
 }
 
-/* LOADING ANIMATION FOR TIMELINE LOADER */
-.loaderContainer {
-  width: 100%;
-}
-
-.loaderImg {
-  width: 50%;
-  margin: 0 auto;
-}
-
-.loaderText {
-  margin-top: -20px;
-}
-
 .box {
   flex: 0 0 90%;
   padding: 6px 0;

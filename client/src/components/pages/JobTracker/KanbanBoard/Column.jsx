@@ -77,7 +77,7 @@ const EditButton = styled.button`
   position: absolute;
   right: 15px;
   border: none;
-  // background-color: red;
+  background-color: transparent;
   font-size: 20px;
   color: black;
 `;

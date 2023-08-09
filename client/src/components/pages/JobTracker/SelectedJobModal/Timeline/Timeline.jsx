@@ -3,19 +3,20 @@ import styles from './Timeline.module.css';
 import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 import timeSince from '../../../../../helpers/convertDate';
 
+import Loader from '../../../../layout/Loader/Loader';
+
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (
     <div className={styles.timelineContainer}>
       <h4 className={styles.textHeader}>Timeline</h4>
       {timelinesLoading ? (
-        <div className={styles.loaderContainer}>
-          <img
-            className={styles.loaderImg}
-            src={loadingSpinner}
-            alt='loading_timelines'
-          />
-          <p className={styles.loaderText}>Loading</p>
-        </div>
+        <Loader
+          text={'Loading'}
+          img={loadingSpinner}
+          altText={'loading_timelines'}
+          imageStyle={2}
+          textStyle={2}
+        />
       ) : (
         <div className={styles.timelineScroll}>
           {timelines.length > 0 && (

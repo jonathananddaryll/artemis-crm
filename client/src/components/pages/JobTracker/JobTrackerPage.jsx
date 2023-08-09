@@ -17,6 +17,8 @@ import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 import BoardHeader from './BoardHeader/BoardHeader';
 
+import Loader from '../../layout/Loader/Loader';
+
 import SearchBar from './SearchBar/SearchBar';
 
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
@@ -120,14 +122,13 @@ export default function JobTrackerPage() {
           </div>
         </>
       ) : (
-        <div className={styles.loaderContainer}>
-          <img
-            className={styles.loaderImg}
-            src={loadingInfinity}
-            alt='loading_boards'
-          />
-          <p className={styles.loaderText}>Your board is loading</p>
-        </div>
+        <Loader
+          text={'Your board is loading'}
+          img={loadingInfinity}
+          altText={'loading_boards'}
+          imageStyle={3}
+          textStyle={3}
+        />
       )}
     </div>
   );

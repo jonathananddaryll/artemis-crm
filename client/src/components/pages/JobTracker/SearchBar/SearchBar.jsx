@@ -8,22 +8,16 @@ export default function SearchBar({ filterJob }) {
   const firstUpdate = useRef(true);
 
   useEffect(() => {
+    // Dont trigger on the first load of the page
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
     }
+
     if (!firstUpdate.current) {
       dispatch(filterJob(searchFilter));
     }
-    // dispatch(filterJob(searchFilter));
   }, [searchFilter]);
-
-  // const onChangeHandler = e => {
-  //   e.preventDefault();
-  //   setSearchFilter(e.target.value);
-  //   console.log(searchFilter);
-  //   dispatch(filterJob(searchFilter));
-  // };
 
   return (
     <div>
@@ -34,7 +28,6 @@ export default function SearchBar({ filterJob }) {
         value={searchFilter}
         onChange={e => setSearchFilter(e.target.value)}
       />
-      <p>{searchFilter}</p>
     </div>
   );
 }

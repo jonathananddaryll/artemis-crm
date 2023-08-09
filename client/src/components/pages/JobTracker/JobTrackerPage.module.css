@@ -20,17 +20,3 @@
   overflow-x: scroll;
   /* padding: 20px 0 20px 10px; */
 }
-
-/* LOADING ANIMATION FOR BOARDS LOADER AND MAKE SURE TO MAKE THIS PRETTY LATER*/
-.loaderContainer {
-  margin-top: 200px;
-}
-
-.loaderImg {
-  margin: 0 auto;
-}
-
-.loaderText {
-  font-size: 20px;
-  margin-top: -30px;
-}

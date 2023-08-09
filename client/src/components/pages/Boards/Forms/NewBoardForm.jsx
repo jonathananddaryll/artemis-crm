@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateBoardName } from '../../../reducers/BoardReducer';
+import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './UpdateForm.module.css';
 
-export default function UpdateForm({ board, handleToggleUpdateForm }) {
-  const [newTitle, setNewTitle] = useState(board.title);
+export default function NewBoardForm({ toggleHandler }) {
+  const [title, setTitle] = useState('');
   const dispatch = useDispatch();
 
   const { session } = useSession();
@@ -15,22 +15,17 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
     e.preventDefault();
 
     const formData = {
-      id: board.id,
-      title: newTitle,
-      userId: board.user_id,
+      title: title,
       token: await session.getToken()
     };
 
-    // dispatch(createBoard(formData));
+    dispatch(createBoard(formData));
 
     // console.log(formData);
 
     // Clears the form then close it
-    // setNewTitle('');
-    // toggleHandler();
-    dispatch(updateBoardName(formData));
-    handleToggleUpdateForm({ ind: null, state: false });
-    console.log(formData);
+    setTitle('');
+    toggleHandler();
   }
 
   return (
@@ -39,24 +34,22 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
         <form onSubmit={e => onSubmitHandler(e)}>
           <input
             type='text'
-            value={newTitle}
-            name='newTitle'
+            value={title}
+            name='title'
             placeholder='New Board Name'
-            onChange={e => setNewTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
           />
           <div className={styles.formButtons}>
             <input
               type='submit'
-              value='Update'
+              value='Create'
               className={styles.updateBoardButton}
             />
             <input
               type='button'
               value='Cancel'
+              onClick={() => toggleHandler()}
               className={styles.updateBoardButton}
-              onClick={() =>
-                handleToggleUpdateForm({ ind: null, state: false })
-              }
             />
           </div>
         </form>

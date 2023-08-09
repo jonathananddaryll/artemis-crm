@@ -1,0 +1,32 @@
+/* For Boards Loader */
+.textStyle_1 {
+  font-size: 20px;
+  margin-top: -30px;
+}
+
+.imageStyle_1 {
+  width: 23%;
+  margin: 0 auto;
+}
+
+/* For Timelines Loader */
+.imageStyle_2 {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.textStyle_2 {
+  font-size: 16x;
+  margin-top: -20px;
+}
+
+/* For Job Loader */
+.imageStyle_3 {
+  width: 20%;
+  margin: 150px auto 0 auto;
+}
+
+.textStyle_3 {
+  font-size: 20x;
+  margin-top: -30px;
+}

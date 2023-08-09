@@ -5,19 +5,6 @@
   width: 100%;
 }
 
-/* LOADING ANIMATION FOR BOARDS LOADER */
-.loaderContainer {
-}
-
-.loaderImg {
-  margin: 0 auto;
-}
-
-.loaderText {
-  font-size: 20px;
-  margin-top: -30px;
-}
-
 .boardsContainer {
   display: flex;
   flex-wrap: wrap;

@@ -4,11 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
-import NewBoardForm from './NewBoardForm';
+import NewBoardForm from './Forms/NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
-import UpdateForm from './UpdateForm';
+import UpdateForm from './Forms/UpdateForm';
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
 import timeSince from '../../../helpers/convertDate';
+
+import Loader from '../../layout/Loader/Loader';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
@@ -41,14 +43,13 @@ export default function BoardsPage() {
     <div className={styles.pageWrapper}>
       <h3>My Personal Boards</h3>
       {boardsLoading ? (
-        <div className={styles.loaderContainer}>
-          <img
-            className={styles.loaderImg}
-            src={loadingInfinity}
-            alt='loading_boards'
-          />
-          <p className={styles.loaderText}>Your boards are loading</p>
-        </div>
+        <Loader
+          text={'Your boards are loading'}
+          img={loadingInfinity}
+          altText={'loading_boards'}
+          imageStyle={1}
+          textStyle={1}
+        />
       ) : (
         <div className={styles.boardsContainer}>
           <div className={styles.flexBox}>
