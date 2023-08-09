@@ -10,7 +10,48 @@
 }
 
 .newTaskForm {
-  height: 50px;
+  width: 100%;
+}
+
+.formGroup {
+  width: 80%;
+  margin: 0 auto 15px auto;
+
+  > label {
+    display: block;
+    text-align: left;
+  }
+
+  > input[type='text'] {
+    width: 100%;
+    padding: 2px 5px;
+  }
+
+  > textarea {
+    width: 100%;
+    padding: 2px 5px;
+  }
+
+  text-align: left;
+}
+
+.categoriesInput {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  > p {
+    /* background-color: yellow; */
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 3px 10px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+
+.selectedCategory {
+  background-color: green;
 }
 
 .createTaskButton {
@@ -20,18 +61,18 @@
   margin-left: 10px;
 }
 
-.tasksContentContainer {
+/* .tasksContentContainer {
   display: flex;
   justify-content: space-between;
-}
+} */
 
 .tasksBox {
-  flex: 0 0 45%;
+  /* flex: 0 0 45%; */
   text-align: left;
 }
 
 .completedTasksBox {
-  flex: 0 0 45%;
+  /* flex: 0 0 45%; */
   text-align: left;
 }
 
@@ -42,6 +83,19 @@
   border: 2px solid rgba(213, 238, 250, 0.692);
   border-radius: 5px;
   cursor: pointer;
+  display: flex;
+
+  gap: 40px;
+
+  > .taskBoxCategory {
+    background: rgb(70, 141, 70);
+    border: 0;
+    border-radius: 5px;
+    padding: 3px 10px;
+    line-height: 1;
+    cursor: pointer;
+    color: white;
+  }
 }
 
 .taskText {

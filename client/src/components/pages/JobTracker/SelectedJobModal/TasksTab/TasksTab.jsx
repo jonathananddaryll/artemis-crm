@@ -3,6 +3,13 @@ import styles from './TasksTab.module.css';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
+import timeSince from '../../../../../helpers/convertDate';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import { taskCategories } from '../../../../../data/taskCategories';
+
 export default function TasksTab({
   tasksLoading,
   tasks,
@@ -15,32 +22,68 @@ export default function TasksTab({
   const [toggleForm, setToggleForm] = useState(false);
   const [nameText, setNameText] = useState('');
 
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    note: '',
+    start_date: new Date(),
+    is_done: false
+  });
+
+  const timestamp = { seconds: 1627282008, nanoseconds: 285000000 };
+
+  // Deconstruct formData
+  const { title, category, note, start_date, is_done } = formData;
+
   const dispatch = useDispatch();
   const { session } = useSession();
+
+  // onChange Hander
+  const onChangeHandler = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  // const handleDateChange = d => {
+  //   setFormData({ ...formData, start_date: d });
+  //   console.log(d);
+  // };
 
   // Submit handler
   async function onSubmitHandler(e) {
     e.preventDefault();
 
-    const formData = {
-      name: nameText,
+    const formD = {
+      title: title,
+      category: category,
+      note: note,
+      start_date: start_date.toLocaleString(),
+      is_done: is_done,
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
       token: await session.getToken()
     };
 
-    dispatch(createTask(formData));
+    dispatch(createTask(formD));
 
     // Clears the noteText then close it
     setNameText('');
 
     // hide the form after creating a note
     setToggleForm(false);
+
+    const resetFormData = {
+      title: '',
+      category: '',
+      note: '',
+      start_date: new Date(),
+      is_done: false
+    };
+
+    setFormData(resetFormData);
   }
 
-  // Submit handler
+  // Submit handler for updating status of the task
   async function onUpdateStatusHandler(task) {
-    const formData = {
+    const formD = {
       status: !task.is_done,
       taskId: task.id,
       selectedboard_user_id: selectedBoard_userId,
@@ -48,7 +91,7 @@ export default function TasksTab({
       token: await session.getToken()
     };
 
-    dispatch(updateTaskStatus(formData));
+    dispatch(updateTaskStatus(formD));
   }
 
   // Cancels the edit/create form
@@ -65,19 +108,76 @@ export default function TasksTab({
             className={styles.createTaskButton}
             onClick={() => setToggleForm(true)}
           >
-            Add Task
+            Create Task
           </button>
         </div>
       ) : (
         <div className={styles.newTaskForm}>
+          <div className={styles.formHeader}>
+            <p>Create New Task</p>
+          </div>
           <form onSubmit={e => onSubmitHandler(e)}>
-            <input
-              type='text'
-              name='nameText'
-              placeholder='Enter a new task'
-              value={nameText}
-              onChange={e => setNameText(e.target.value)}
-            />
+            <div className={styles.formGroup}>
+              <label>Title</label>
+              <input
+                type='text'
+                name='title'
+                placeholder={category !== '' ? category : 'Enter Title'}
+                value={title}
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Category</label>
+              {/* <input
+                type='text'
+                name='category'
+                placeholder='Enter Category'
+                value={category}
+                onChange={e => onChangeHandler(e)}
+              /> */}
+              <div className={styles.categoriesInput}>
+                {taskCategories.map((task, idx) => (
+                  <p
+                    key={idx}
+                    className={category === task && styles.selectedCategory}
+                    onClick={() => setFormData({ ...formData, category: task })}
+                  >
+                    {task}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className={styles.formGroup}>
+              <label>
+                {category.includes('Interview') || category.includes('Screen')
+                  ? 'Interview Date'
+                  : 'Finish Task By'}
+              </label>
+              <DatePicker
+                selected={start_date}
+                onChange={
+                  date => setFormData({ ...formData, start_date: date })
+                  // handleDateChange(date)
+                }
+                showTimeSelect
+                timestamp
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Note</label>
+
+              <textarea
+                name='note'
+                placeholder='Enter Note'
+                value={note}
+                onChange={e => onChangeHandler(e)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Mark as completed</label>
+            </div>
+
             <input type='submit' value='save' />
             <button onClick={() => setToggleForm(false)}>Cancel</button>
           </form>
@@ -92,7 +192,9 @@ export default function TasksTab({
               className={styles.taskCard}
               onClick={() => onUpdateStatusHandler(task)}
             >
-              <p className={styles.taskText}>{task.task_name}</p>
+              <p className={styles.taskText}>{task.title}</p>
+              <p className={styles.taskBoxCategory}>{task.category}</p>
+              <p>{timeSince(task.start_date)}</p>
             </div>
           ))}
         </div>
@@ -105,7 +207,7 @@ export default function TasksTab({
                 className={styles.taskCard}
                 onClick={() => onUpdateStatusHandler(task)}
               >
-                <p className={styles.completedTaskText}>{task.task_name}</p>
+                <p className={styles.completedTaskText}>{task.title}</p>
               </div>
             ))}
           </div>

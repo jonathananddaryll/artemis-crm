@@ -60,6 +60,8 @@ const Footer = styled.div`
 
 const Reminders = styled.div`
   flex: 1;
+  display: flex;
+  gap: 10px;
 `;
 
 const TitleText = styled.p`
@@ -99,19 +101,23 @@ export default function Job({ job, index }) {
           <TextContent>
             <TitleText>{job.job_title.substring(0, 28)}</TitleText>
             <CompanyText>
-              <i class='bi bi-building-fill'></i>
+              <i className='bi bi-building-fill'></i>
               {job.company}
             </CompanyText>
             <CompanyText>
-              <i class='bi bi-geo-alt-fill'></i>
+              <i className='bi bi-geo-alt-fill'></i>
               {job.location}
             </CompanyText>
             <Footer>
               <Reminders>
+                {/* for incomplete task count */}
                 {job.incomplete_task_count > 0 && (
-                  <i class='bi bi-check2-square'></i>
+                  <i className='bi bi-check2-square'></i>
                 )}
-                {}
+                {/* for note count */}
+                {job.total_note_count > 0 && (
+                  <i className='bi bi-journal-text'></i>
+                )}
               </Reminders>
               <CreatedText>{timeSince(job.date_created)}</CreatedText>
             </Footer>

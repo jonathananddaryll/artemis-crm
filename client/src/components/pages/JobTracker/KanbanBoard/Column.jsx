@@ -91,7 +91,7 @@ export default function ({ title, jobs, id }) {
         <Title>{title}</Title>
         <TotalJobs> {jobs.length} </TotalJobs>
         <EditButton>
-          <i class='bi bi-three-dots'></i>
+          <i className='bi bi-three-dots'></i>
         </EditButton>
       </Status>
 
@@ -111,7 +111,7 @@ export default function ({ title, jobs, id }) {
         )}
       </Droppable>
       <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
-        <i class='bi bi-plus-lg'></i> Add new job
+        <i className='bi bi-plus-lg'></i> Add new job
       </AddButton>
     </Container>
   );

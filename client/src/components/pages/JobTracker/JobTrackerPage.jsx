@@ -103,7 +103,7 @@ export default function JobTrackerPage() {
         <>
           <BoardHeader title={selectedBoard.title} />
           <div className={styles.kanbanBoardContainer}>
-            <SearchBar filterJob={filterJob} />
+            {/* <SearchBar filterJob={filterJob} /> */}
             <KanbanBoard
               setAddListToggle={setAddListToggle}
               selectedBoard={selectedBoard}

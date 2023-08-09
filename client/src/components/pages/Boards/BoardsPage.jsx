@@ -93,7 +93,7 @@ export default function BoardsPage() {
                   })
                 }
               >
-                <i class='bi bi-pencil'></i>
+                <i className='bi bi-pencil'></i>
               </button>
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm

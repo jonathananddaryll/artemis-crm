@@ -91,13 +91,15 @@ router.get('/board/:board_id', async (req, res) => {
   // );
 
   // CHECK IF I NEED THE SELECT is_done there.. is is_done good? it's working even without anything there. should i take it out?
+  // GOING TO HAVE TO CHANGE THIS QUERY AND ADD IF DATE IS LATER THAN THE CURRENT DATE SHOW IT.
   const query = format(
     `  select j.*,
-    (select count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count FROM job j WHERE board_id = %s ORDER BY date_created DESC`,
+    (select count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count,
+    (select count(*)::int from note n WHERE n.job_id = j.id) total_note_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
     boardId
   );
 
-  console.log(query);
+  // console.log(query);
   const client = new Client(config);
   client.connect();
 

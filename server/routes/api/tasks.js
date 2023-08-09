@@ -46,7 +46,15 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
-  const { name, jobId, selectedboard_user_id } = req.body;
+  const {
+    title,
+    category,
+    start_date,
+    note,
+    is_done,
+    jobId,
+    selectedboard_user_id
+  } = req.body;
 
   // Decode the token
   const decodedToken = decodeToken(req.headers.authorization);
@@ -59,13 +67,19 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `INSERT INTO task (task_name, job_id) VALUES(%L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
-      name,
+      `INSERT INTO task (title, category, note, is_done, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+      title,
+      category,
+      note,
+      is_done,
+      start_date,
       jobId,
       jobId,
       'New task created',
-      name
+      category
     );
+
+    console.log(query);
 
     try {
       client.query(query, (err, response) => {
