@@ -189,34 +189,46 @@ export default function TasksTab({
         </div>
       )}
       <div className={styles.tasksContentContainer}>
-        <div className={styles.tasksBox}>
-          <p>Tasks List</p>
-          {tasks.map(task => (
-            <div
-              key={task.id}
-              className={styles.taskCard}
-              onClick={() => onUpdateStatusHandler(task)}
-            >
-              <p className={styles.taskText}>{task.title}</p>
-              <p className={styles.taskBoxCategory}>{task.category}</p>
-              <p>Due {timeSince(task.start_date)}</p>
-            </div>
-          ))}
-        </div>
-        {completedTasks.length > 0 && (
-          <div className={styles.completedTasksBox}>
-            <p>Completed Tasks</p>
-            {completedTasks.map(task => (
-              <div
-                key={task.id}
-                className={styles.taskCard}
-                onClick={() => onUpdateStatusHandler(task)}
-              >
-                <p className={styles.completedTaskText}>{task.title}</p>
-                <p>Completed {timeSince(task.date_completed)}</p>
+        {tasks.length === 0 && completedTasks.length === 0 ? (
+          <p>NO TASKS MAKE THIS PRETTIER LATER</p>
+        ) : (
+          <>
+            {tasks.length > 0 && (
+              <div className={styles.tasksBox}>
+                <p>Tasks List</p>
+                {tasks.map(task => (
+                  <div key={task.id} className={styles.taskCard}>
+                    <p className={styles.taskText}>
+                      <i
+                        onClick={() => onUpdateStatusHandler(task)}
+                        className='bi bi-square'
+                      ></i>
+                      {task.title}
+                    </p>
+                    <p className={styles.categoryText}>{task.category}</p>
+                    <p>Due {timeSince(task.start_date)}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+            {completedTasks.length > 0 && (
+              <div className={styles.completedTasksBox}>
+                <p>Completed Tasks</p>
+                {completedTasks.map(task => (
+                  <div key={task.id} className={styles.taskCard}>
+                    <p className={styles.completedTaskText}>
+                      <i
+                        className='bi bi-check2-square'
+                        onClick={() => onUpdateStatusHandler(task)}
+                      ></i>
+                      {task.title}
+                    </p>
+                    <p>Completed {timeSince(task.date_completed)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

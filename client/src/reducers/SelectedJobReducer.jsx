@@ -231,13 +231,23 @@ const selectedJobSlice = createSlice({
       state.interviews = tasks.filter(
         task =>
           task.category.includes('e Interview') ||
-          task.category.includes('Screen')
+          (task.category.includes('Screen') && task.start_date > new Date())
       );
     });
 
     builder.addCase(createTask.fulfilled, (state, action) => {
-      state.tasks = [action.payload[0].rows[0], ...state.tasks];
+      const newAddedTask = action.payload[0].rows[0];
+      state.tasks = [newAddedTask, ...state.tasks];
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
+
+      // Check if the new added task is interview or screen type
+      if (
+        newAddedTask.category.includes('e Interview') ||
+        newAddedTask.category.includes('Screen')
+      ) {
+        state.interviews = [newAddedTask, ...state.interviews];
+      }
+
       toast.success('Successfully Created a New Task');
     });
 

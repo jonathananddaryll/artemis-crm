@@ -82,29 +82,41 @@
   margin-bottom: 15px;
   border: 2px solid rgba(213, 238, 250, 0.692);
   border-radius: 5px;
-  cursor: pointer;
   display: flex;
 
   gap: 40px;
-
-  > .taskBoxCategory {
-    background: rgb(70, 141, 70);
-    border: 0;
-    border-radius: 5px;
-    padding: 3px 10px;
-    line-height: 1;
-    cursor: pointer;
-    color: white;
-  }
 }
 
 .taskText {
   margin: 0;
+  font-size: 16px;
+
+  > i {
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+  }
+}
+
+.categoryText {
+  background: rgb(70, 141, 70);
+  border: 0;
+  border-radius: 5px;
+  padding: 3px 10px;
+  line-height: 1;
+  color: white;
+  font-size: 14px;
 }
 
 .completedTaskText {
   margin: 0;
   text-decoration-line: line-through;
+
+  > i {
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+  }
 }
 
 /* upper case first letter of the text */

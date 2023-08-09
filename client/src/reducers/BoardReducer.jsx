@@ -436,15 +436,25 @@ const boardSlice = createSlice({
     // Updates the selectedJob and
     builder.addMatcher(isAnyOf(createTask.fulfilled), (state, action) => {
       console.log('create task fulfilled hit in boardreducer');
+      const newAddedTask = action.payload[0].rows[0];
       // Finds the index
-      console.log(action.payload[0].rows[0]);
+      console.log(newAddedTask);
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
-      ].findIndex(job => job.id === action.payload[0].rows[0].job_id);
+      ].findIndex(job => job.id === newAddedTask.job_id);
 
       state.selectedJob['incomplete_task_count']++;
       state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
         .incomplete_task_count++;
+
+      if (
+        newAddedTask.category.includes('e Interview') ||
+        newAddedTask.category.includes('Screen')
+      ) {
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].pending_interview_count++;
+      }
     });
   }
 });
