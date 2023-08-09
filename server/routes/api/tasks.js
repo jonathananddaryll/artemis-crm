@@ -114,7 +114,7 @@ router.patch(
     // const errors = validationResult(req);
     const client = new Client(config);
     client.connect();
-    const { status, jobId, selectedboard_user_id } = req.body;
+    const { status, jobId, selectedboard_user_id, date_completed } = req.body;
     const taskId = req.params.id;
 
     // Decode the token
@@ -128,11 +128,14 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board/job' });
     } else {
       const query = format(
-        `UPDATE task SET is_done = %L WHERE id = %s and job_id = %s RETURNING *`,
+        `UPDATE task SET is_done = %L, date_completed = %L WHERE id = %s and job_id = %s RETURNING *`,
         status,
+        date_completed,
         taskId,
         jobId
       );
+
+      console.log(query);
 
       try {
         client.query(query, (err, response) => {

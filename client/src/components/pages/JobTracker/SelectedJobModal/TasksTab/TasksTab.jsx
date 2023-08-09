@@ -74,7 +74,7 @@ export default function TasksTab({
       title: '',
       category: '',
       note: '',
-      start_date: new Date(),
+      start_date: new Date().toLocaleString(),
       is_done: false
     };
 
@@ -88,6 +88,12 @@ export default function TasksTab({
       taskId: task.id,
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
+      date_completed:
+        task.is_done === false
+          ? new Date().toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles'
+            })
+          : null,
       token: await session.getToken()
     };
 
@@ -156,12 +162,11 @@ export default function TasksTab({
               </label>
               <DatePicker
                 selected={start_date}
-                onChange={
-                  date => setFormData({ ...formData, start_date: date })
-                  // handleDateChange(date)
+                onChange={date =>
+                  setFormData({ ...formData, start_date: date })
                 }
                 showTimeSelect
-                timestamp
+                dateFormat='MMMM d, yyyy h:mm aa'
               />
             </div>
             <div className={styles.formGroup}>
@@ -194,7 +199,7 @@ export default function TasksTab({
             >
               <p className={styles.taskText}>{task.title}</p>
               <p className={styles.taskBoxCategory}>{task.category}</p>
-              <p>{timeSince(task.start_date)}</p>
+              <p>Due {timeSince(task.start_date)}</p>
             </div>
           ))}
         </div>
@@ -208,6 +213,7 @@ export default function TasksTab({
                 onClick={() => onUpdateStatusHandler(task)}
               >
                 <p className={styles.completedTaskText}>{task.title}</p>
+                <p>Completed {timeSince(task.date_completed)}</p>
               </div>
             ))}
           </div>
