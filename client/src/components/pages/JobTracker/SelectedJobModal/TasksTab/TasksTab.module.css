@@ -111,6 +111,7 @@
 .completedTaskText {
   margin: 0;
   text-decoration-line: line-through;
+  font-size: 16px;
 
   > i {
     cursor: pointer;

@@ -195,7 +195,7 @@ export default function TasksTab({
           <>
             {tasks.length > 0 && (
               <div className={styles.tasksBox}>
-                <p>Tasks List</p>
+                <p>Tasks Todo</p>
                 {tasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
                     <p className={styles.taskText}>
@@ -218,7 +218,7 @@ export default function TasksTab({
                   <div key={task.id} className={styles.taskCard}>
                     <p className={styles.completedTaskText}>
                       <i
-                        className='bi bi-check2-square'
+                        className='bi bi-check-square'
                         onClick={() => onUpdateStatusHandler(task)}
                       ></i>
                       {task.title}
