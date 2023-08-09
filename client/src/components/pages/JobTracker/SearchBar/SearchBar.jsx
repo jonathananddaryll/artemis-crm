@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 export default function SearchBar({ filterJob }) {
   const [searchFilter, setSearchFilter] = useState('');
   const dispatch = useDispatch();
 
-  const onChangeHandler = e => {
-    console.log('ayoooooooooooooooooooooo');
-    e.preventDefault();
+  const firstUpdate = useRef(true);
 
-    setSearchFilter(e.target.value);
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    if (!firstUpdate.current) {
+      dispatch(filterJob(searchFilter));
+    }
+    // dispatch(filterJob(searchFilter));
+  }, [searchFilter]);
 
-    console.log(searchFilter);
-    dispatch(filterJob(searchFilter));
-  };
+  // const onChangeHandler = e => {
+  //   e.preventDefault();
+  //   setSearchFilter(e.target.value);
+  //   console.log(searchFilter);
+  //   dispatch(filterJob(searchFilter));
+  // };
 
   return (
     <div>
@@ -22,7 +32,7 @@ export default function SearchBar({ filterJob }) {
         type='text'
         name='searchFilter'
         value={searchFilter}
-        onChange={e => onChangeHandler(e)}
+        onChange={e => setSearchFilter(e.target.value)}
       />
       <p>{searchFilter}</p>
     </div>

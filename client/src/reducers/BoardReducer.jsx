@@ -302,14 +302,19 @@ const boardSlice = createSlice({
     },
 
     filterJob: (state, action) => {
-      console.log('ayooo filterjob triggered');
-      const searchFilter = action.payload.searchFilter;
-      const filteredjobs = state.jobs.filter(job =>
-        job.company.includes(searchFilter)
+      const searchFilter = action.payload;
+      const filteredjobs = state.jobs.filter(
+        job =>
+          job.company.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          job.job_title.toLowerCase().includes(searchFilter.toLowerCase())
       );
 
-      console.log(searchFilter);
+      // Clear all the columns
+      for (let col in state.selectedBoardStatusCols) {
+        state.selectedBoardStatusCols[col] = [];
+      }
 
+      // Revert back to unfiltered jobs whenever the search bar is empty
       if (searchFilter.length > 0) {
         filteredjobs.forEach(job =>
           state.selectedBoardStatusCols[job.status].push(job)

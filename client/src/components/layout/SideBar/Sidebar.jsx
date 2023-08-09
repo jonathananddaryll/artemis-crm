@@ -112,37 +112,7 @@ export default function SideBar() {
         </div>
       </div>
       <SignOutButton />
-      <ul className={styles.navItems}>
-        {/* <li className={styles.navItem}>
-          <NavLink className={styles.navItemText} to='/contacts'>
-            contacts
-          </NavLink>
-        </li>
-        <li className={styles.navItem}>
-          <NavLink className={styles.navItemText} to='/jobtracker'>
-            documents
-          </NavLink>
-        </li> */}
-        {/* <li className={styles.navItem}>
-          <NavLink className={styles.navItemText} to='/boards'>
-            Boards
-          </NavLink>
-          {!boardsLoading && boards.length > 0 && (
-            <ul className={styles.navItems}>
-              {boards.map(board => (
-                <li key={board.id} onClick={() => handleLink(board)}>
-                  <NavLink
-                    className={styles.navItemTextSub}
-                    to={`/boards/${board.id}/jobs`}
-                  >
-                    {board.title}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li> */}
-      </ul>
+      <UserButton />
     </div>
   );
 }
