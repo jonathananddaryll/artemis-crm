@@ -10,7 +10,9 @@ import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
   position: relative;
-  background-color: #e6eefb;
+  // background-color: #e6eefb;
+  // #E3E8EF
+  background-color: #f1f3f7;
   border-radius: 10px;
   // overflow-y: hidden;
   overflow: hidden;
@@ -23,7 +25,7 @@ const Container = styled.div`
 
 const Status = styled.div`
   display: flex;
-  padding: 18px 15px;
+  padding: 15px;
   align-items: center;
   position: relative;
 `;
@@ -34,20 +36,24 @@ const Title = styled.p`
   text-transform: capitalize;
   font-size: 20px;
   font-weight: 500;
+  color: #6c788d;
 `;
 
 const TotalJobs = styled.p`
-  font-size: 15px;
+  font-size: 13px;
   margin: 0px 0px 0px 10px;
-  padding: 3px 7px;
-  background-color: #a3bfeb;
+  padding: 4px 8px;
+  background-color: #97a2b6;
   border-radius: 5px;
+  line-height: 1;
+  color: #fff;
 `;
 
 const JobList = styled.div`
   padding: 3px;
   height: 94%;
   overflow-y: auto;
+  background-color: ${props => (props.isDraggingOver ? '#E3E8EF' : 'f1f3f7')};
 `;
 
 const AddButton = styled.button`
@@ -56,7 +62,8 @@ const AddButton = styled.button`
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #e6eefb;
+  background-color: #f1f3f7;
+  color: #6c788d;
   border: none;
   padding: 10px 20px;
   text-align: left;
@@ -69,7 +76,7 @@ const AddButton = styled.button`
   }
 
   &:hover {
-    background-color: #d6e2f7;
+    background-color: #e3e5ea;
   }
 `;
 
@@ -79,7 +86,7 @@ const EditButton = styled.button`
   border: none;
   background-color: transparent;
   font-size: 20px;
-  color: black;
+  color: #97a2b6;
 `;
 
 export default function ({ title, jobs, id }) {

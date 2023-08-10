@@ -21,7 +21,6 @@ export default function SearchBar({ filterJob }) {
 
   return (
     <div>
-      <p>searchbar</p>
       <input
         type='text'
         name='searchFilter'
