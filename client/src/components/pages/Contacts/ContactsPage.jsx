@@ -6,6 +6,7 @@ import { getContacts } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
+import ContactCard from './ContactCard';
 import styles from './ContactsPage.module.css';
 
 export default function ContactsPage() {
@@ -116,11 +117,25 @@ export default function ContactsPage() {
                 />
             </section>
             <section className={styles.searchResultsContainer}>
-                {searchResults !== undefined? searchResults.forEach((element) => {
+                {searchResults && searchResults.map(element => {
                     return (
-                        <div>{element.first_name}</div>
-                    )
-                }) : "" }
+                        // a business card.
+                        < ContactCard 
+                            image={""}
+                            name={"Jonny Mnemonic"}
+                            contactInfo={
+                                {
+                                    phone: "888-708-7077",
+                                    email: "joncodes@gmail.com",
+                                    location: "Mallorca, Spain",
+                                    title: "Software Engineer",
+                                    linkedin: "https://linkedin.com/in/jonnymnemonic",
+                                    otherSocial: "https://github.com/jonnymnemonic"
+                                }
+                            }
+                            key={element.email}
+                        />                  )
+                })}
             </section>
             
         </div>

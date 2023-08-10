@@ -3,79 +3,6 @@ import axios from 'axios';
 
 // State for contact organizer:
 
-// add a new contact:
-    // - input form data ( searchQuery )
-    // - new contact created ( true/false )
-    // - 
-
-// delete a contact:
-    // - deleting / awaiting results
-    // - 
-
-// update a contact:
-
-// search for contacts:
-
-
-
-// fake data for testing
-const fakeContacts = [
-    {
-      id: 1,
-      user_id: 1,
-      first_name: 'Apollo',
-      last_name: 'Delos',
-      company: 'Olympus Studioss',
-      location: 'Mount Olympus',
-      current_job_title: 'Project Manager',
-      phone: '(302)302-3022',
-      email: 'apollo@twelveolympians.pantheon',
-      linkedin: 'https://www.linkedin.com/in/apollotheoracle',
-      twitter: 'https://twitter.com/apollotheoracle',
-      instagram: 'https://instagram.com/apollotheoracle',
-      other_social: 'https://olympus.social/gods/apollo',
-      personal_site: 'https://www.averterofevil.org',
-      fk_linked_job: 1,
-      timestamp: '2023-05-30 00:00:01',
-    },
-    {
-      id: 2,
-      user_id: 2,
-      first_name: 'Python',
-      last_name: 'Parnassus',
-      company: 'Hera Be Dragonz',
-      location: 'Mount Parnassus',
-      current_job_title: 'Security Manager',
-      phone: '(808)880-0808',
-      email: 'python@hera.hr.com',
-      linkedin: 'https://www.linkedin.com/in/cthonic',
-      twitter: 'https://twitter.com/cthonic',
-      instagram: 'https://instagram.com/cthonic',
-      other_social: 'https://hades.social/goddess/hera/minions/python',
-      personal_site: 'https://www.learntocode.org',
-      fk_linked_job: 1,
-      timestamp: '2023-03-21 10:50:05',
-    },
-    {
-      id: 3,
-      user_id: 1,
-      first_name: 'Hecate',
-      last_name: 'Trivia',
-      company: 'Mother of Angels, LLC',
-      location: 'Sicily',
-      current_job_title: 'Shadow Warrior',
-      phone: '(012)345-6789',
-      email: 'hecate@darkside.moon',
-      linkedin: 'https://www.linkedin.com/in/heqet',
-      twitter: 'https://twitter.com/heqet',
-      instagram: 'https://instagram.com/heqet',
-      other_social: 'https://olympus.social/gods/heqet',
-      personal_site: '',
-      fk_linked_job: 1,
-      timestamp: '2023-01-09 16:30:49',
-    },
-]
-
 // ASYNC thunks
 
 // READ all contacts for a user
@@ -200,7 +127,7 @@ export const createContact = createAsyncThunk(
 const contactSlice = createSlice({
   name: 'contact',
   initialState: {
-    contactResults: {},
+    contactResults: [],
     newContactStaging: {},
     contactInFocus: {},
     contactLoading: true,
@@ -223,16 +150,16 @@ const contactSlice = createSlice({
       }
     },
     setNewContactStaging: (state, action) => {
-      newContactStaging = action.payload;
+      state.newContactStaging = action.payload;
     },
     updateSearchQuery: (state, action) => {
-      searchQuery = action.payload;
+      state.searchQuery = action.payload;
     }
   },
   extraReducers: builder => {
     builder.addCase(getContacts.fulfilled, (state, action) => {
-      state.contacts.contactResults = action.payload;
-      state.contacts.contactLoading = false;
+      state.contactResults = action.payload;
+      state.contactLoading = false;
       // sort results, highlights, anything
     });
     builder.addCase(getContacts.pending, (state, action) => {
