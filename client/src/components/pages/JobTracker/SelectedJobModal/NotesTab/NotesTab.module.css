@@ -3,10 +3,12 @@
   position: relative;
 }
 
-.header {
+.buttonsContainer {
   height: 50px;
   text-align: right;
+  /* background-color: red; */
 }
+
 .newNoteButton {
   /* float: right; */
   height: 40px;

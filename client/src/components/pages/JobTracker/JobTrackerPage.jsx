@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 import {
   getjobswithBoardId,
   getBoard,
-  changeBoard
+  changeBoard,
+  filterJob
 } from '../../../reducers/BoardReducer';
+import { useNavigate } from 'react-router-dom';
 import styles from './JobTrackerPage.module.css';
 
 import { useAuth } from '@clerk/clerk-react';
@@ -16,11 +18,15 @@ import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 import BoardHeader from './BoardHeader/BoardHeader';
 
+import Loader from '../../layout/Loader/Loader';
+
+import SearchBar from './SearchBar/SearchBar';
+
+import loadingInfinity from '../../../assets/loadingInfinity.gif';
+
 export default function JobTrackerPage() {
-  // this is basically the state in the reducer
   const {
     selectedBoard,
-    jobs,
     jobsLoading,
     toggleJobForm,
     selectedBoardStatusCols,
@@ -40,15 +46,11 @@ export default function JobTrackerPage() {
   const [loadStart1, setLoadStart1] = useState(true); // for jobs
 
   const { board_id } = useParams();
-  // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
   // get all the jobs
-  // DONT NEED THIS SINCE ALL THE LOADING IS DONE BY THE 3 CONDITIONAL STATEMENT BELOW
   useEffect(() => {
-    //
     if (selectedBoardStatusCols !== null && selectedBoard !== null) {
-      console.log('yoooooo this triggered just now');
       dispatch(getjobswithBoardId(board_id));
     }
   }, []);
@@ -65,52 +67,75 @@ export default function JobTrackerPage() {
       boardId: board_id
     };
     dispatch(getBoard(boardInfo));
-    console.log('ayoooooo this hit');
     setLoadStart(false);
   }
 
-  // jobs loading
+  // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
   if (
-    jobsLoading &&
-    board_id !== null &&
     loadStart1 &&
-    selectedBoardStatusCols === null &&
-    selectedBoard !== null
+    selectedBoard !== null &&
+    selectedBoardStatusCols === null
   ) {
+    dispatch(changeBoard(selectedBoard));
     dispatch(getjobswithBoardId(board_id));
-    console.log('ayoooooooooooooooo this ssssss hits');
     setLoadStart1(false);
   }
 
-  if (selectedBoard !== null && selectedBoardStatusCols === null) {
-    console.log('changeboard load in jobtrackerpage triggered');
-    dispatch(changeBoard(selectedBoard));
+  // Redirects the user when they try to go to board page that they do not own
+  const navigate = useNavigate();
+  if (selectedBoard !== null && selectedBoard.user_id !== userId) {
+    // console.log('redirecting since you do not own the board');
+    navigate('/boards');
   }
 
-  // check the params in the query in the browser. then compare it if it's not the same as the selectedBoard, call the getjobswithboardid.. or just call it everytime on the page load.
+  // IF THE LOADING STOP WORKING, REVERT TO THIS
+  // jobs loading
+  // if (
+  //   jobsLoading &&
+  //   board_id !== null &&
+  //   loadStart1 &&
+  //   selectedBoardStatusCols === null &&
+  //   selectedBoard !== null
+  // ) {
+  //   // Gets all the job with the selectedBoard Id
+  //   dispatch(getjobswithBoardId(board_id));
+  //   setLoadStart1(false);
+  // }
+
+  // // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
+  // if (selectedBoard !== null && selectedBoardStatusCols === null) {
+  //   dispatch(changeBoard(selectedBoard));
+  // }
 
   return (
     <div className={styles.container}>
       {selectedBoardStatusCols !== null ? (
         <>
-          <BoardHeader title={selectedBoard.title} />
-
-          <KanbanBoard
-            setAddListToggle={setAddListToggle}
-            selectedBoard={selectedBoard}
-            selectedBoardStatusCols={selectedBoardStatusCols}
-          />
-          {addListToggle && (
-            <AddListForm
+          <BoardHeader title={selectedBoard.title} filterJob={filterJob} />
+          <div className={styles.kanbanBoardContainer}>
+            <KanbanBoard
               setAddListToggle={setAddListToggle}
               selectedBoard={selectedBoard}
+              selectedBoardStatusCols={selectedBoardStatusCols}
             />
-          )}
-          {toggleJobForm && <NewJobForm />}
-          {toggleSelectedJobModal && <SelectedJobModal />}
+            {addListToggle && (
+              <AddListForm
+                setAddListToggle={setAddListToggle}
+                selectedBoard={selectedBoard}
+              />
+            )}
+            {toggleJobForm && <NewJobForm />}
+            {toggleSelectedJobModal && <SelectedJobModal />}
+          </div>
         </>
       ) : (
-        <p>BOARD LOADING</p>
+        <Loader
+          text={'Loading Board'}
+          img={loadingInfinity}
+          altText={'loading_boards'}
+          imageStyle={3}
+          textStyle={3}
+        />
       )}
     </div>
   );

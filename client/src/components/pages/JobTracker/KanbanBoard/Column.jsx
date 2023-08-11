@@ -10,43 +10,68 @@ import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
   position: relative;
-  background-color: #e6eefb;
+  background-color: #f1f3f7;
   border-radius: 10px;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   margin-right: 5px;
-  padding-bottom: 50px;
   width: 300px;
-  height: 88vh;
-  float: left;
+  padding: 0px 5px 40px 5px;
 `;
 
 const Status = styled.div`
   display: flex;
-  padding: 18px 15px;
+  padding: 15px;
   align-items: center;
   position: relative;
 `;
 
-const Title = styled.h3`
+const Title = styled.p`
   margin: 0px;
   text-align: center;
   text-transform: capitalize;
   font-size: 20px;
+  font-weight: 500;
+  color: #6c788d;
 `;
 
 const TotalJobs = styled.p`
-  font-size: 15px;
+  font-size: 12px;
   margin: 0px 0px 0px 10px;
-  padding: 3px 7px;
-  background-color: #a3bfeb;
+  padding: 4px 8px;
+  background-color: #97a2b6;
   border-radius: 5px;
+  line-height: 1;
+  font-weight: 600;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
 `;
 
 const JobList = styled.div`
   padding: 3px;
-  height: 94%;
   overflow-y: auto;
+  background-color: ${props => (props.isDraggingOver ? '#E3E8EF' : 'f1f3f7')};
+
+  overflow: auto;
+  height: 95%;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #e7dddd;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #747171;
+  }
 `;
 
 const AddButton = styled.button`
@@ -55,10 +80,10 @@ const AddButton = styled.button`
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: transparent;
+  background-color: #f1f3f7;
+  color: #6c788d;
   border: none;
   padding: 10px 20px;
-  cursor: pointer;
   text-align: left;
 
   & span {
@@ -69,13 +94,17 @@ const AddButton = styled.button`
   }
 
   &:hover {
-    background-color: #d6e2f7;
+    background-color: #e3e5ea;
   }
 `;
 
 const EditButton = styled.button`
   position: absolute;
   right: 15px;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  color: #97a2b6;
 `;
 
 export default function ({ title, jobs, id }) {
@@ -86,7 +115,9 @@ export default function ({ title, jobs, id }) {
       <Status>
         <Title>{title}</Title>
         <TotalJobs> {jobs.length} </TotalJobs>
-        <EditButton>...</EditButton>
+        <EditButton>
+          <i className='bi bi-three-dots'></i>
+        </EditButton>
       </Status>
 
       <Droppable droppableId={id}>
@@ -105,7 +136,7 @@ export default function ({ title, jobs, id }) {
         )}
       </Droppable>
       <AddButton onClick={() => dispatch(handleToggleForm([true, title]))}>
-        <span> + </span> Add new job
+        <i className='bi bi-plus-lg'></i> Add new job
       </AddButton>
     </Container>
   );

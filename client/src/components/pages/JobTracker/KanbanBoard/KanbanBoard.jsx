@@ -30,7 +30,6 @@ export default function KanbanBoard({
   // Handles the dropping of the job
   async function handleDragEnd(result) {
     const { destination, source, draggableId } = result;
-    console.log(result);
     if (source.droppableId == destination.droppableId) return;
 
     const formData = {
@@ -79,15 +78,8 @@ export default function KanbanBoard({
   }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      {/* <h2 style={{ textAlign: 'center' }}>{selectedBoard.title}</h2> */}
-
-      {/* {selectedBoard !== null && selectedBoardStatusCols !== null && ( */}
-      <div className={styles.kanbanContainer}>
-        {/* CHANGE THIS TO SELECTED BOARD LATER */}
-        {/* {selectedBoardStatusCols.map((col, idx) => (
-            <Column title={col} jobs={applied} id={idx} />
-          ))} */}
+    <div className={styles.kanbanContainer}>
+      <DragDropContext onDragEnd={handleDragEnd}>
         {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
           <Column
             title={keyName}
@@ -102,8 +94,7 @@ export default function KanbanBoard({
             <button onClick={() => setAddListToggle(true)}>Add list</button>
           </div>
         )}
-      </div>
-      {/* )} */}
-    </DragDropContext>
+      </DragDropContext>
+    </div>
   );
 }

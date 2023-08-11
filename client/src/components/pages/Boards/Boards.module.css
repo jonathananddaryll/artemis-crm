@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.header {
+  padding: 10px 0;
+}
+
 .boardsContainer {
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +27,7 @@
   position: relative;
 }
 
-.flexBoxEmpty {
+.flexboxSpacer {
   flex: 0 0 19%;
   height: 200px;
   margin-bottom: 20px;
@@ -31,12 +35,11 @@
 }
 
 .boardBox {
-  background: rgb(218, 218, 245);
+  background-color: #f1f3f7;
   border-radius: 10px;
   width: 100%;
   height: 100%;
   text-align: left;
-  box-sizing: border-box;
   padding: 15px;
   position: relative;
   transition: all 0.2s ease;
@@ -59,14 +62,14 @@
 .newBoardBox {
   width: 100%;
   height: 100%;
-  background: rgb(233, 233, 238);
+  background-color: #f1f3f7;
   border-radius: 10px;
   transition: all 0.2s ease;
 }
 
 .newBoardBox:hover,
 .boardBox:hover {
-  background: rgb(152, 152, 199);
+  background-color: #e3e8ef;
 }
 
 .newBoardButton {
@@ -74,12 +77,21 @@
   height: 100%;
   background-color: transparent;
   border: none;
-  cursor: pointer;
 }
 
 .editButton {
   position: absolute;
   right: 15px;
   top: 15px;
-  cursor: pointer;
+
+  /* padding: 5px 10px; */
+  background-color: transparent;
+  color: #97a2b6;
+  border: 0;
+  font-size: 20px;
+  transition: all 0.1s;
+
+  &:hover {
+    color: black;
+  }
 }

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllBoards, changeBoard } from '../../../reducers/BoardReducer';
+import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
 import styles from './Boards.module.css';
-import NewBoardForm from './NewBoardForm';
+import NewBoardForm from './Forms/NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
-import UpdateForm from './UpdateForm';
+import UpdateForm from './Forms/UpdateForm';
+import loadingInfinity from '../../../assets/loadingInfinity.gif';
+import timeSince from '../../../helpers/convertDate';
+
+import Loader from '../../layout/Loader/Loader';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
@@ -28,19 +32,28 @@ export default function BoardsPage() {
   // // get all the jobs
   useEffect(() => {
     // this will be loaded with the current loggedIn user's id or clerk_id
-    dispatch(getAllBoards(userId));
+    dispatch(getBoards(userId));
   }, []);
 
   const handleBoardClick = board => {
-    console.log('yeeee handle boardclick');
-    console.log(board);
     dispatch(changeBoard(board));
   };
 
   return (
     <div className={styles.pageWrapper}>
-      <h3>My Personal Boards</h3>
-      {!boardsLoading && (
+      <div className={styles.header}>
+        <h3>My Personal Boards</h3>
+      </div>
+
+      {boardsLoading ? (
+        <Loader
+          text={'Loading Boards'}
+          img={loadingInfinity}
+          altText={'loading_boards'}
+          imageStyle={1}
+          textStyle={1}
+        />
+      ) : (
         <div className={styles.boardsContainer}>
           <div className={styles.flexBox}>
             <div className={styles.newBoardBox}>
@@ -49,7 +62,7 @@ export default function BoardsPage() {
                   className={styles.newBoardButton}
                   onClick={() => toggleHandler()}
                 >
-                  + NEW BOARD
+                  + New Board
                 </button>
               ) : (
                 <NewBoardForm toggleHandler={toggleHandler} />
@@ -71,7 +84,7 @@ export default function BoardsPage() {
                     {board.title}
                   </p>
                   <p className={styles.textBoardDateCreated}>
-                    {board.date_created}
+                    Created {timeSince(board.date_created)}
                   </p>
                 </div>
               </Link>{' '}
@@ -84,7 +97,7 @@ export default function BoardsPage() {
                   })
                 }
               >
-                Edit
+                <i className='bi bi-pencil'></i>
               </button>
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm
@@ -97,33 +110,33 @@ export default function BoardsPage() {
           {/* if there's 4 gap */}
           {(boards.length + 1) % 5 === 1 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 3 gaps */}
           {(boards.length + 1) % 5 === 2 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 2 gaps */}
           {(boards.length + 1) % 5 === 3 && (
             <>
-              <div className={styles.flexBoxEmpty}></div>
-              <div className={styles.flexBoxEmpty}></div>
+              <div className={styles.flexboxSpacer}></div>
+              <div className={styles.flexboxSpacer}></div>
             </>
           )}
 
           {/* if there's 1 gaps */}
           {(boards.length + 1) % 5 === 4 && (
-            <div className={styles.flexBoxEmpty}></div>
+            <div className={styles.flexboxSpacer}></div>
           )}
         </div>
       )}

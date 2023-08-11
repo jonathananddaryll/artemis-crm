@@ -9,10 +9,17 @@ import {
 
 import {
   getAllTimelines,
-  resetTimelines
-} from '../../../../reducers/TimelineReducer';
+  resetSelectedJobItems,
+  createNote,
+  getAllNotes,
+  deleteNote,
+  updateNote,
+  getAllTasks,
+  createTask,
+  updateTaskStatus
+} from '../../../../reducers/SelectedJobReducer';
 
-import CompanyTab from './CompanyTab/CompanyTab';
+import InterviewTab from './InterviewTab/InterviewTab';
 import ContactsTab from './ContactsTab/ContactsTab';
 import DocumentsTab from './DocumentsTab/DocumentsTab';
 import JobInfoTab from './JobInfoTab/JobInfoTab';
@@ -20,6 +27,8 @@ import NotesTab from './NotesTab/NotesTab';
 import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from './DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
+
+import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
 import styles from './SelectedJobModal.module.css';
 
@@ -30,13 +39,29 @@ export default function SelectedJobModal() {
     ...state.board
   }));
 
+  const {
+    timelines,
+    timelinesLoading,
+    notes,
+    notesLoading,
+    tasks,
+    completedTasks,
+    tasksLoading,
+    interviews
+  } = useSelector(state => ({
+    ...state.selectedJob
+  }));
+
   useEffect(() => {
-    dispatch(getAllTimelines(selectedJob.id));
+    // dispatch(getAllTimelines(selectedJob.id));
+    handleEveryGetAll();
   }, [selectedJob.id]);
 
-  const { timelines, timelinesLoading } = useSelector(state => ({
-    ...state.timeline
-  }));
+  const handleEveryGetAll = () => {
+    dispatch(getAllTimelines(selectedJob.id));
+    dispatch(getAllNotes(selectedJob.id));
+    dispatch(getAllTasks(selectedJob.id));
+  };
 
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
@@ -44,12 +69,12 @@ export default function SelectedJobModal() {
   const { session } = useSession();
 
   const navItems = [
-    'job info',
-    'notes',
-    'contacts',
-    'documents',
-    'tasks',
-    'company'
+    { name: 'job info', icon: 'bi bi-info-circle' },
+    { name: 'notes', icon: 'bi bi-journal' },
+    { name: 'contacts', icon: 'bi bi-people' },
+    { name: 'documents', icon: 'bi bi-file-earmark-text' },
+    { name: 'tasks', icon: 'bi bi-list-task' },
+    { name: 'interview', icon: 'bi bi-calendar-check' }
   ];
 
   async function handleDeleteJob() {
@@ -67,7 +92,7 @@ export default function SelectedJobModal() {
   }
 
   const handleClosingModal = () => {
-    dispatch(resetTimelines());
+    dispatch(resetSelectedJobItems());
     dispatch(changeSelectedJob([false, null]));
   };
 
@@ -88,15 +113,22 @@ export default function SelectedJobModal() {
             <div className={styles.headerInfo}>
               <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
               <div className={styles.headerSub}>
-                <p className={styles.textSub}>{selectedJob.company}</p>
-                <p className={styles.textSub}>{selectedJob.location}</p>
+                <p className={styles.textSub}>
+                  <i className='bi bi-building' />
+                  {selectedJob.company}
+                </p>
+
+                <p className={styles.textSub}>
+                  <i className='bi bi-geo-alt' />
+                  {selectedJob.location}
+                </p>
               </div>
             </div>
           </div>
           <div className={styles.subNavigation}>
-            <ul className={styles.subNavigationItems}>
+            <div className={styles.subNavigationItems}>
               {navItems.map((item, index) => (
-                <li
+                <div
                   key={index}
                   className={
                     styles.subNavigationItem +
@@ -105,28 +137,64 @@ export default function SelectedJobModal() {
                   }
                   onClick={() => setActiveItem(index)}
                 >
-                  <p>{item}</p>
-                </li>
+                  <p className={styles.subNavigationText}>
+                    <i className={item.icon}></i>
+                    {item.name}
+                  </p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
           {/* MAIN CONTENT BOX */}
-          {activeItem === 0 && <JobInfoTab />}
-          {activeItem === 1 && <NotesTab />}
+          {activeItem === 0 && (
+            <JobInfoTab
+              selectedJob={selectedJob}
+              selectedBoard_userId={selectedBoard.user_id}
+            />
+          )}
+          {activeItem === 1 && (
+            <NotesTab
+              createNote={createNote}
+              selectedBoard_userId={selectedBoard.user_id}
+              jobId={selectedJob.id}
+              notes={notes}
+              notesLoading={notesLoading}
+              deleteNote={deleteNote}
+              updateNote={updateNote}
+            />
+          )}
           {activeItem === 2 && <ContactsTab />}
           {activeItem === 3 && <DocumentsTab />}
-          {activeItem === 4 && <TasksTab />}
-          {activeItem === 5 && <CompanyTab />}
+          {activeItem === 4 && (
+            <TasksTab
+              tasks={tasks}
+              completedTasks={completedTasks}
+              tasksLoading={tasksLoading}
+              createTask={createTask}
+              selectedBoard_userId={selectedBoard.user_id}
+              jobId={selectedJob.id}
+              updateTaskStatus={updateTaskStatus}
+            />
+          )}
+          {activeItem === 5 && <InterviewTab interviews={interviews} />}
         </div>
         <div className={styles.timelineContainer}>
-          <Timeline timelines={timelines} timelinesLoading={timelinesLoading} />
+          <Timeline
+            timelines={timelines}
+            timelinesLoading={timelinesLoading}
+            dateCreated={selectedJob.date_created}
+          />
         </div>
-
         {confirmationToggle && (
           <DeletePopup
             handleDeleteJob={handleDeleteJob}
             setConfirmationToggle={setConfirmationToggle}
           />
+          // <ConfirmationPopUp
+          //   popUpText={'Are you sure you want to delete this job?'}
+          //   handleDelete={handleDeleteJob}
+          //   cancelDelete={setConfirmationToggle}
+          // />
         )}
       </div>
     </div>
