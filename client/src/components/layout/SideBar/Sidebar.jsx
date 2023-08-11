@@ -1,41 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import styles from './SideBar.module.css';
 import {
   useClerk,
   UserButton,
   useAuth,
+  useUser,
   SignOutButton
 } from '@clerk/clerk-react';
 
 import { NavLink } from 'react-router-dom';
-import {
-  getBoards,
-  changeBoard,
-  getjobswithBoardId
-} from '../../../reducers/BoardReducer';
-
-// import { getjobswithBoardId } from '../../../reducers/JobReducer';
-
-// function SignInButton() {
-//   const clerk = useClerk();
-
-//   return (
-//     <Button
-//       onClick={() => clerk.openSignIn({})}
-//       bg={'blue.400'}
-//       color={'white'}
-//       _hover={{ bg: 'blue.500' }}
-//     >
-//       SignIn
-//     </Button>
-//   );
-// }
 
 export default function SideBar() {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
-  const { isLoaded, userId, firstName } = useAuth();
+  const { isLoaded } = useAuth();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   const menuItems = [
     { index: 1, text: 'Contacts', icon: '/icons/phone.svg', link: '/contacts' },
@@ -48,71 +26,43 @@ export default function SideBar() {
     { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
   ];
 
-  // this is how to use the action in the extrareducer.
-  const dispatch = useDispatch();
-
-  // LOAD ALL THE BOARDS... MAYBE ADD THIS / UNCOMMENT THIS LATER
-  // if (boardsLoading && userId !== null) {
-  //   // change the 111 to userId from clerk or sql user table later
-  //   dispatch(getBoards(userId));
-  // }
-
-  // get all the jobs
-  // useEffect(() => {
-  //   // this will be loaded with the current loggedIn user's id or clerk_id
-  //   dispatch(getBoards());
-  // }, []);
-
-  const handleLink = board => {
-    // dispatch(changeBoard(board));
-    // dispatch(getjobswithBoardId(board.id));
-  };
-
   return (
-    <div
-      className={
-        styles.navContainer + ' ' + (!isExpanded && styles.navContainerNX)
-      }
-    >
+    <div className={styles.navContainer}>
       <div className={styles.navUpper}>
         <div className={styles.navHeading}>
-          {isExpanded && (
-            <div className={styles.navBrand}>
-              <img src='/icons/deer.png' className={styles.logoImage} />
-              <h2 className={styles.logoText}>Artemis</h2>
-            </div>
-          )}
-          {/* <button
-            className={
-              styles.hamburger +
-              ' ' +
-              (isExpanded ? styles.hamburgerIn : styles.hamburgerOut)
-            }
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button> */}
+          <div className={styles.navBrand}>
+            <img src='/icons/deer.png' className={styles.logoImage} />
+            <h2 className={styles.logoText}>Artemis</h2>
+          </div>
         </div>
         <div className={styles.navMenu}>
           {menuItems.map(({ index, text, icon, link }) => (
             <NavLink key={index} to={link} className={styles.navMenuLink}>
-              <div
-                className={
-                  styles.menuItem + ' ' + (!isExpanded && styles.menuItemNX)
-                }
-              >
+              <div className={styles.menuItem}>
                 <img src={icon} alt='' srcSet='' />
-                {isExpanded && <p>{text}</p>}
-                {!isExpanded && <div className={styles.tooltip}>{text}</div>}
+                <p>{text}</p>
               </div>
             </NavLink>
           ))}
         </div>
       </div>
-      <SignOutButton />
-      <UserButton />
+      {isLoaded && user !== null && (
+        <div className={styles.footer}>
+          <UserButton />
+          <div className={styles.footerUserInfo}>
+            <p className={styles.fullNameText}>{user.fullName}</p>
+            <p className={styles.emailText}>
+              {user.emailAddresses[0].emailAddress}
+            </p>
+          </div>
+          {/* <SignOutButton /> */}
+          <div className={styles.footerButton}>
+            <button className={styles.signoutButton} onClick={() => signOut()}>
+              <i className='bi bi-box-arrow-right'></i>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

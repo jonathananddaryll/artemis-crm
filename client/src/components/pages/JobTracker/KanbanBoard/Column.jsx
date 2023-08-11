@@ -14,7 +14,7 @@ const Container = styled.div`
   border-radius: 10px;
   overflow: hidden;
   margin-right: 5px;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
   width: 300px;
 `;
 

@@ -7,6 +7,7 @@ import {
   changeBoard,
   filterJob
 } from '../../../reducers/BoardReducer';
+import { useNavigate } from 'react-router-dom';
 import styles from './JobTrackerPage.module.css';
 
 import { useAuth } from '@clerk/clerk-react';
@@ -78,6 +79,13 @@ export default function JobTrackerPage() {
     dispatch(changeBoard(selectedBoard));
     dispatch(getjobswithBoardId(board_id));
     setLoadStart1(false);
+  }
+
+  // Redirects the user when they try to go to board page that they do not own
+  const navigate = useNavigate();
+  if (selectedBoard !== null && selectedBoard.user_id !== userId) {
+    // console.log('redirecting since you do not own the board');
+    navigate('/boards');
   }
 
   // IF THE LOADING STOP WORKING, REVERT TO THIS

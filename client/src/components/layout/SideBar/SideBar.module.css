@@ -1,34 +1,15 @@
 .navContainer {
-  width: 250px;
-  background-color: rgb(20, 19, 19);
+  flex: 0 0 230px;
+  background-color: #20293a;
   height: 100vh;
+
+  color: #ffff;
   position: relative;
-  /* position: absolute;
-  top: 0; */
-
-  /* delete this later */
-  color: white;
-
-  transition: 0.4s;
-}
-
-/* Not expanded */
-.navContainerNX {
-  width: 80px;
-}
-
-.navUpper,
-.navHeading,
-.navMenu,
-.menuItem {
-  display: grid;
 }
 
 .navHeading {
-  grid-template-columns: 2fr, 1fr;
-  grid-template-rows: 1fr;
   height: 75px;
-  padding-top: 10px;
+  padding: 20px 5px;
 }
 
 .navBrand {
@@ -45,71 +26,11 @@
 .logoImage {
   width: 35px;
   height: 35px;
-  padding: 0 10px;
-}
-
-.hamburger {
-  position: absolute;
-  right: 0;
-
-  background: none;
-  border: none;
-
-  margin: auto -33px;
-  background-color: rgb(110, 70, 219);
-  border: 2px solid white;
-  padding: 17px;
-  border-radius: 90px;
-  height: 64px;
-  width: 66px;
-}
-
-.hamburger span {
-  display: block;
-  margin: 4px 0;
-  background-color: white;
-  border-radius: 4px;
-  width: 27px;
-  height: 4px;
-
-  transition: 0.4s;
-}
-
-.hamburger:hover span {
-  margin: auto;
-}
-
-.hamburgerIn:hover span:nth-child(1) {
-  width: 24px;
-  transform: translate(-3px, 8px) rotate(30deg);
-}
-
-.hamburgerIn:hover span:nth-child(2) {
-  display: none;
-}
-
-.hamburgerIn:hover span:nth-child(3) {
-  width: 24px;
-  transform: translate(-3px, -8px) rotate(-30deg);
-}
-
-.hamburgerOut:hover span:nth-child(1) {
-  width: 24px;
-  transform: translate(0px, 8px) rotate(-30deg);
-}
-
-.hamburgerOut:hover span:nth-child(2) {
-  display: none;
-}
-
-.hamburgerOut:hover span:nth-child(3) {
-  width: 24px;
-  transform: translate(0px, -8px) rotate(30deg);
+  margin-right: 10px;
 }
 
 .navMenu {
-  grid-template-rows: (repeat(7, 1fr));
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 /* NavLink to remove underline on visited links */
@@ -118,21 +39,16 @@
 }
 
 .menuItem {
-  height: 48px;
-  /* width: 16em; */
+  height: 50px;
   display: flex;
   color: white;
   text-decoration: none;
   text-transform: uppercase;
-  margin: auto 20px;
+  margin: auto 7px;
+  padding: 0 20px;
   border-radius: 10px;
   position: relative;
   align-items: center;
-}
-
-.menuItemNX {
-  margin: auto;
-  width: 4em;
 }
 
 .menuItem:hover {
@@ -140,67 +56,61 @@
 }
 
 .menuItem img {
-  width: 20px;
-  height: 20px;
-  padding: 0 20px;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  /* padding: 0 20px; */
 }
 
 .menuItem p {
   /* margin: 0; */
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 1px;
 }
 
-.menuItem:hover > .tooltip {
-  display: block;
-}
-
-.tooltip {
-  display: none;
+/************** FOOTER ****************/
+.footer {
   position: absolute;
-  left: 90%;
-  bottom: 80%;
-
-  width: auto;
-  padding: 4px 8px;
-
-  border-radius: 15px 15px 15px 0;
-  white-space: nowrap;
-  border: 2px solid white;
-  background-color: rgb(20, 19, 19);
-  color: whitesmoke;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  border-top: 1px solid #40495a;
+  padding: 20px 10px;
+  align-items: center;
 }
 
-/* DELETE THIS LATER */
-.navItems {
-  list-style-type: none;
-}
-
-.navItem {
-  color: rgb(236, 226, 226);
+.footerUserInfo {
+  /* flex: 0 0 40%; */
+  width: 65%;
   text-align: left;
-  margin-bottom: 20px;
+  padding: 0 5px 0 10px;
+
+  > p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
-.navItemIcon {
+.footerButton {
+  text-align: right;
+  flex: 1;
+
+  > button {
+    font-size: 20px;
+    background-color: transparent;
+    color: #8f99ac;
+    border: none;
+  }
+}
+
+.fullNameText {
+  font-family: 'Montserrat', sans-serif;
   font-size: 15px;
+  font-weight: 500;
 }
 
-.navItemText {
-  font-size: 18px;
-  text-transform: capitalize;
-  margin-left: 10px;
-  text-decoration: none;
-  color: rgb(236, 226, 226);
-}
-
-.navItemTextSub {
-  text-decoration: none;
-  color: rgb(236, 226, 226);
-  line-height: 1.3;
-}
-
-/* Current active/selected item in the navbar */
-.active {
-  background-color: rgb(110, 70, 219);
+.emailText {
+  font-size: 15px;
+  color: #8f99ac;
 }

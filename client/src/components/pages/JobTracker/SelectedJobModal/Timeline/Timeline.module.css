@@ -20,6 +20,7 @@
   /* padding-right: 10px; */
   /* background-color: red; */
   /* height: 50px; */
+  overflow: hidden;
 }
 
 .cardsContainer {
@@ -63,26 +64,27 @@
 /* TIMELINE left line to show timeline */
 .topLine {
   width: 2px;
-  height: 37%;
-  margin: auto;
-  border: 2px solid rgb(224, 224, 152);
-  background-color: rgb(224, 224, 152);
+  height: 40%;
+  margin: 0 auto;
+  border: 2px solid rgb(201, 209, 243);
+  background-color: rgb(201, 209, 243);
 }
 
 .middleDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 33%;
-  background-color: green;
-  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+  background-color: rgb(100, 100, 223);
+  border: 3px solid rgb(255, 255, 255);
+  margin: 0 auto;
 }
 
 .bottomLine {
   width: 2px;
-  height: 33%;
-  margin: auto;
-  background-color: rgb(224, 224, 152);
-  border: 2px solid rgb(224, 224, 152);
+  height: 50%;
+  margin: 0 auto;
+  background-color: rgb(155, 173, 253);
+  border: 2px solid rgb(201, 209, 243);
 }
 
 .timelineScroll {

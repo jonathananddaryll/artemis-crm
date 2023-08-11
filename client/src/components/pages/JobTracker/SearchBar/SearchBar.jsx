@@ -29,7 +29,7 @@ export default function SearchBar({ filterJob }) {
           type='text'
           name='searchFilter'
           value={searchFilter}
-          placeholder='Search for role or location'
+          placeholder='Search for company, role, or location'
           onChange={e => setSearchFilter(e.target.value)}
         />
       </div>

@@ -306,7 +306,8 @@ const boardSlice = createSlice({
       const filteredjobs = state.jobs.filter(
         job =>
           job.company.toLowerCase().includes(searchFilter.toLowerCase()) ||
-          job.job_title.toLowerCase().includes(searchFilter.toLowerCase())
+          job.job_title.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          job.location.toLowerCase().includes(searchFilter.toLowerCase())
       );
 
       // Clear all the columns
