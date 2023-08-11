@@ -64,8 +64,9 @@
 
 .menuItem p {
   /* margin: 0; */
-  font-size: 15px;
-  letter-spacing: 1px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /************** FOOTER ****************/
@@ -106,7 +107,7 @@
 
 .fullNameText {
   font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 

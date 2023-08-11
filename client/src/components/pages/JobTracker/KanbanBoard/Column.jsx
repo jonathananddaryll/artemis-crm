@@ -49,6 +49,28 @@ const JobList = styled.div`
   height: 94%;
   overflow-y: auto;
   background-color: ${props => (props.isDraggingOver ? '#E3E8EF' : 'f1f3f7')};
+
+  overflow: auto;
+  height: 95%;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #e7dddd;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #747171;
+  }
 `;
 
 const AddButton = styled.button`

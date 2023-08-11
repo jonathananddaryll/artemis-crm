@@ -27,6 +27,7 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+  padding-right: 10px;
 }
 
 .box {
@@ -89,5 +90,24 @@
 
 .timelineScroll {
   overflow: auto;
-  height: 93%;
+  height: 95%;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #e7dddd;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #aaa3a3;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #747171;
+  }
 }
