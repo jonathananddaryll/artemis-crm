@@ -15,11 +15,10 @@ import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
   border-radius: 10px;
-  padding: 12px;
+  padding: 7px 10px;
   color: #000;
-  margin-bottom: 8px;
-  margin-left: 10px;
-  margin-right: 10px;
+  // margin-bottom: 8px;
+  margin: 0 5px 8px 5px;
   background-color: #fff;
   cursor: pointer;
   align-items: top;
@@ -29,22 +28,20 @@ const Container = styled.div`
 const TextContent = styled.div`
   text-align: left;
   // margin-left: 10px;
-  flex: 1;
   color: #343949;
 `;
 
 const Flex = styled.div`
   display: flex;
   gap: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
+  line-height: 1.2;
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  // background: red;
-  padding: 0 5px 0 5pxpx;
+  align-items: end;
   height: 20px;
 `;
 
@@ -54,11 +51,12 @@ const Reminders = styled.div`
   gap: 10px;
   font-size: 14px;
   color: #97a2b6;
+  line-height: 1;
 `;
 
 const TitleText = styled.p`
   text-transform: capitalize;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
 `;
 

@@ -14,8 +14,8 @@ const Container = styled.div`
   border-radius: 10px;
   overflow: hidden;
   margin-right: 5px;
-  padding-bottom: 30px;
   width: 300px;
+  padding: 0px 5px 40px 5px;
 `;
 
 const Status = styled.div`
@@ -35,18 +35,19 @@ const Title = styled.p`
 `;
 
 const TotalJobs = styled.p`
-  font-size: 13px;
+  font-size: 12px;
   margin: 0px 0px 0px 10px;
   padding: 4px 8px;
   background-color: #97a2b6;
   border-radius: 5px;
   line-height: 1;
+  font-weight: 600;
   color: #fff;
+  font-family: 'Montserrat', sans-serif;
 `;
 
 const JobList = styled.div`
   padding: 3px;
-  height: 94%;
   overflow-y: auto;
   background-color: ${props => (props.isDraggingOver ? '#E3E8EF' : 'f1f3f7')};
 
@@ -54,7 +55,7 @@ const JobList = styled.div`
   height: 95%;
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
   }
 
   /* Track */

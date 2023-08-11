@@ -58,7 +58,7 @@
 
 .headerLogo {
   width: 80px;
-  background: blue;
+  background: rgb(230, 230, 236);
   height: 80px;
   border-radius: 10px;
 }
@@ -139,6 +139,6 @@
 .timelineContainer {
   width: 350px;
   background: #eeeef3;
-  padding: 0 18px;
+  padding: 0 10px 0 18px;
   height: 100%;
 }

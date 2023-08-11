@@ -41,10 +41,13 @@ export default function BoardsPage() {
 
   return (
     <div className={styles.pageWrapper}>
-      <h3>My Personal Boards</h3>
+      <div className={styles.header}>
+        <h3>My Personal Boards</h3>
+      </div>
+
       {boardsLoading ? (
         <Loader
-          text={'Your boards are loading'}
+          text={'Loading Boards'}
           img={loadingInfinity}
           altText={'loading_boards'}
           imageStyle={1}
@@ -59,7 +62,7 @@ export default function BoardsPage() {
                   className={styles.newBoardButton}
                   onClick={() => toggleHandler()}
                 >
-                  + NEW BOARD
+                  + New Board
                 </button>
               ) : (
                 <NewBoardForm toggleHandler={toggleHandler} />
@@ -81,7 +84,7 @@ export default function BoardsPage() {
                     {board.title}
                   </p>
                   <p className={styles.textBoardDateCreated}>
-                    created {timeSince(board.date_created)}
+                    Created {timeSince(board.date_created)}
                   </p>
                 </div>
               </Link>{' '}

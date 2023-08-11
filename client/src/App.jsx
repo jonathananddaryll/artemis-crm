@@ -88,8 +88,9 @@ function App() {
         newestOnTop={false}
         closeOnClick
         rtl={false}
-        draggable
         theme='light'
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
       />
     </>
   );

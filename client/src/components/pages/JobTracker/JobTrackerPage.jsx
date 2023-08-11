@@ -130,7 +130,7 @@ export default function JobTrackerPage() {
         </>
       ) : (
         <Loader
-          text={'Your board is loading'}
+          text={'Loading Board'}
           img={loadingInfinity}
           altText={'loading_boards'}
           imageStyle={3}

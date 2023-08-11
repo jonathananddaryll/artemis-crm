@@ -11,7 +11,7 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
       <h4 className={styles.textHeader}>Timeline</h4>
       {timelinesLoading ? (
         <Loader
-          text={'Loading'}
+          text={'Loading Timelines'}
           img={loadingSpinner}
           altText={'loading_timelines'}
           imageStyle={2}

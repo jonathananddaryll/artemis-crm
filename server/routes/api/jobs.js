@@ -102,7 +102,7 @@ router.get('/board/:board_id', async (req, res) => {
     boardId
   );
 
-  console.log(query);
+  // console.log(query);
   const client = new Client(config);
   client.connect();
 

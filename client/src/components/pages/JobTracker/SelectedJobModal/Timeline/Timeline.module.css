@@ -93,7 +93,7 @@
   height: 95%;
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
   }
 
   /* Track */
@@ -103,7 +103,7 @@
 
   /* Handle */
   &::-webkit-scrollbar-thumb {
-    background: #aaa3a3;
+    background: #c1c1c1;
   }
 
   /* Handle on hover */
