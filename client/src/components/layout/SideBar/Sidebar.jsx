@@ -82,7 +82,7 @@ export default function SideBar() {
               <h2 className={styles.logoText}>Artemis</h2>
             </div>
           )}
-          <button
+          {/* <button
             className={
               styles.hamburger +
               ' ' +
@@ -93,7 +93,7 @@ export default function SideBar() {
             <span></span>
             <span></span>
             <span></span>
-          </button>
+          </button> */}
         </div>
         <div className={styles.navMenu}>
           {menuItems.map(({ index, text, icon, link }) => (

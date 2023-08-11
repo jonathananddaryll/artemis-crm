@@ -32,6 +32,7 @@ const TextContent = styled.div`
   flex: 1;
   color: #343949;
 `;
+
 const Flex = styled.div`
   display: flex;
   gap: 10px;

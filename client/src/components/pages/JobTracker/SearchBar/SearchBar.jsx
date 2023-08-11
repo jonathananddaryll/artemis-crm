@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
+import styles from './SearchBar.module.css';
+
 export default function SearchBar({ filterJob }) {
   const [searchFilter, setSearchFilter] = useState('');
   const dispatch = useDispatch();
@@ -20,13 +22,17 @@ export default function SearchBar({ filterJob }) {
   }, [searchFilter]);
 
   return (
-    <div>
-      <input
-        type='text'
-        name='searchFilter'
-        value={searchFilter}
-        onChange={e => setSearchFilter(e.target.value)}
-      />
+    <div className={styles.container}>
+      <div className={styles.formGroup}>
+        <i className='bi bi-search'></i>
+        <input
+          type='text'
+          name='searchFilter'
+          value={searchFilter}
+          placeholder='Search for role or location'
+          onChange={e => setSearchFilter(e.target.value)}
+        />
+      </div>
     </div>
   );
 }

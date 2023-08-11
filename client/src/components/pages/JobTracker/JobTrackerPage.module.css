@@ -1,23 +1,26 @@
 .container {
-  /* background-color: #caf0f8; */
-  /* background-color: #f8fbfe; */
+  background-color: #ffff;
   /* width: 100%-250px;
   margin-left: 250px; */
   /* height: 100%; */
   width: 100%;
+  height: 100vh;
   /* padding: 0 30px; */
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
 
   /* padding: 20px 0 20px 10px; */
 }
 
 .kanbanBoardContainer {
-  background-color: #f8fbfe;
+  background-color: #ffff;
   /* width: 100%-250px;
   margin-left: 250px; */
-  /* height: 100%; */
   width: 100%;
-  padding: 0 30px 15px 30px;
+  height: 100%;
+  padding: 0 15px 15px 15px;
   overflow-x: scroll;
+  overflow-y: hidden;
   /* padding: 20px 0 20px 10px; */
 }

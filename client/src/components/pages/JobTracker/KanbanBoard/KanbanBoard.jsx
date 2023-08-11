@@ -78,8 +78,8 @@ export default function KanbanBoard({
   }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <div className={styles.kanbanContainer}>
+    <div className={styles.kanbanContainer}>
+      <DragDropContext onDragEnd={handleDragEnd}>
         {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
           <Column
             title={keyName}
@@ -94,7 +94,7 @@ export default function KanbanBoard({
             <button onClick={() => setAddListToggle(true)}>Add list</button>
           </div>
         )}
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+    </div>
   );
 }

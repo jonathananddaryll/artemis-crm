@@ -104,7 +104,6 @@ export default function JobTrackerPage() {
       {selectedBoardStatusCols !== null ? (
         <>
           <BoardHeader title={selectedBoard.title} filterJob={filterJob} />
-
           <div className={styles.kanbanBoardContainer}>
             <KanbanBoard
               setAddListToggle={setAddListToggle}

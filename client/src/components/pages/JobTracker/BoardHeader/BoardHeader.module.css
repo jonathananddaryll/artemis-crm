@@ -1,9 +1,26 @@
 .boardContainer {
   display: flex;
-  padding: 20px 50px;
+  width: 100%;
+  /* padding: 30px 35px 20px 35px; */
+  padding: 40px 15px 30px 15px;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
 }
 
-.boardTitle {
-  font-size: 23px;
+.titleContainer {
+  width: 40%;
+  text-align: center;
+}
+
+.filterContainer {
+  width: 30%;
+  /* background-color: red; */
+  text-align: right;
+}
+
+.titleText {
+  font-size: 22px;
   text-transform: capitalize;
+  color: #343949;
 }

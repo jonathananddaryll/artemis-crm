@@ -10,17 +10,12 @@ import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
   position: relative;
-  // background-color: #e6eefb;
-  // #E3E8EF
   background-color: #f1f3f7;
   border-radius: 10px;
-  // overflow-y: hidden;
   overflow: hidden;
   margin-right: 5px;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
   width: 300px;
-  height: 95vh;
-  float: left;
 `;
 
 const Status = styled.div`
