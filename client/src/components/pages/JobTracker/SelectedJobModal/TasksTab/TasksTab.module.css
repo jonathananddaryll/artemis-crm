@@ -10,12 +10,13 @@
 }
 
 .newTaskForm {
-  width: 100%;
+  width: 80%;
+  margin: 0 auto 15px auto;
 }
 
 .formGroup {
-  width: 80%;
-  margin: 0 auto 15px auto;
+  width: 100%;
+  margin-bottom: 15px;
 
   > label {
     display: block;
@@ -30,6 +31,8 @@
   > textarea {
     width: 100%;
     padding: 2px 5px;
+    resize: none;
+    height: 120px;
   }
 
   text-align: left;

@@ -38,6 +38,7 @@ export default function NewBoardForm({ toggleHandler }) {
             name='title'
             placeholder='New Board Name'
             onChange={e => setTitle(e.target.value)}
+            required
           />
           <div className={styles.formButtons}>
             <input

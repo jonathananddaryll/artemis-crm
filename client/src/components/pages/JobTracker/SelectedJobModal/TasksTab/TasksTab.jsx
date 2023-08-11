@@ -11,7 +11,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { taskCategories } from '../../../../../data/taskCategories';
 
 export default function TasksTab({
-  tasksLoading,
   tasks,
   completedTasks,
   createTask,
@@ -135,13 +134,6 @@ export default function TasksTab({
             </div>
             <div className={styles.formGroup}>
               <label>Category</label>
-              {/* <input
-                type='text'
-                name='category'
-                placeholder='Enter Category'
-                value={category}
-                onChange={e => onChangeHandler(e)}
-              /> */}
               <div className={styles.categoriesInput}>
                 {taskCategories.map((task, idx) => (
                   <p

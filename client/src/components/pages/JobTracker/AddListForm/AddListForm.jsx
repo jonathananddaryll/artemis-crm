@@ -48,6 +48,7 @@ export default function AddListForm({
           name='columnStatus'
           value={columnStatus}
           onChange={e => onChangeHandler(e)}
+          required
         />
         <input type='submit' value='Add List' />
       </form>

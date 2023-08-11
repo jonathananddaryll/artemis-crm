@@ -107,6 +107,7 @@ export default function NewJobForm() {
                 value={company}
                 placeholder='Add company name'
                 onChange={e => onChangeHandler(e)}
+                required
               />
             </div>
             <div className={styles.formGroup}>
@@ -117,6 +118,7 @@ export default function NewJobForm() {
                 value={job_title}
                 placeholder='Add a new job name'
                 onChange={e => onChangeHandler(e)}
+                required
               />
             </div>
             <div className={styles.formGroup}>
@@ -127,6 +129,7 @@ export default function NewJobForm() {
                 value={location}
                 placeholder='Add Location'
                 onChange={e => onChangeHandler(e)}
+                required
               />
             </div>
             <div className={styles.formGroup}>
@@ -143,7 +146,13 @@ export default function NewJobForm() {
             <div className={styles.formFlex}>
               <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
                 <label>Status</label>
-                <input type='text' name='status' value={status} readonly />
+                <input
+                  type='text'
+                  name='status'
+                  value={status}
+                  readonly
+                  required
+                />
               </div>
               <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
                 <label>Link Contact</label>

@@ -146,7 +146,12 @@ export default function SelectedJobModal() {
             </div>
           </div>
           {/* MAIN CONTENT BOX */}
-          {activeItem === 0 && <JobInfoTab selectedJob={selectedJob} />}
+          {activeItem === 0 && (
+            <JobInfoTab
+              selectedJob={selectedJob}
+              selectedBoard_userId={selectedBoard.user_id}
+            />
+          )}
           {activeItem === 1 && (
             <NotesTab
               createNote={createNote}

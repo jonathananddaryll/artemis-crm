@@ -43,6 +43,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
             name='newTitle'
             placeholder='New Board Name'
             onChange={e => setNewTitle(e.target.value)}
+            required
           />
           <div className={styles.formButtons}>
             <input
