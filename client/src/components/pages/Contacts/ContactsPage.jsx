@@ -117,12 +117,12 @@ export default function ContactsPage() {
                 />
             </section>
             <section className={styles.searchResultsContainer}>
-                {searchResults && searchResults.map(element => {
+                {searchResults && searchResults.map((element, idx) => {
                     return (
                         // a business card.
                         < ContactCard 
                             image={""}
-                            name={"Jonny Mnemonic"}
+                            name={element.first_name + " " + element.last_name}
                             contactInfo={
                                 {
                                     phone: "888-708-7077",
@@ -133,7 +133,7 @@ export default function ContactsPage() {
                                     otherSocial: "https://github.com/jonnymnemonic"
                                 }
                             }
-                            key={element.email}
+                            key={element.id}
                         />                  )
                 })}
             </section>

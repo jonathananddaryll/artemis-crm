@@ -1,14 +1,77 @@
 .ContactCard{
+    height: 10rem;
+    width: 20rem;
+    font-family: 'Cormorant';
+    position: relative;
+    background-color: white;
+    border-bottom: solid transparent 1px;
+    border-top: solid transparent 1px;
+}
+.ContactCard:hover{
+    border-bottom: solid rgba(0, 0, 0, 1) 1px;
+    border-top: solid rgba(0, 0, 0, 1) 1px;
+}
+.ContactCard:active{
 
 }
-.contactImage{
-
+.contactFrame{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
-contactName{
-
+.cardHero{
+    width: 85%;
+    margin-left: 15%;
 }
-contactInfo{
-
+.cardDetails{
+    width: 85%;
+    margin-left: 15%;
+    min-height: 30%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-family: 'Cabin';
+    font-weight: 300;
+}
+.cardOpen{
+    margin-top: 0;
+}
+.contactInit{
+    margin: 2rem 1rem 2.5rem 1rem;
+    font-size: 2.4rem;
+    background-color: rgba(192, 192, 192, 0.356);
+    border-radius: 50%;
+    height: 5rem;
+    width: 25%;
+    line-height: 5rem;
+    position: absolute;
+}
+.contactName{
+    font-size: 1.6em;
+    margin: 0.5em 0 0 0;
+}
+.contactTitle{
+    margin: 0 auto;
+    font-family: 'Cormorant';
+    font-weight: 300;
+}
+.contactInfo{
+    height: 5rem;
+    display: flex-column;
+    align-content:center;
+}
+.contactInfo > *{
+    margin: 0 auto;
+    font-size: 0.8em;
+    background-color: inherit;
+}
+.contactInfo > button {
+    border: none;
+    border-bottom: transparent solid 1px;
+}
+.contactInfo > button:hover{
+    border-bottom: black solid 1px;
 }
 .contactPhone{
 
@@ -19,12 +82,18 @@ contactInfo{
 .contactLocation{
 
 }
-.contactTitle{
-
-}
 .contactLinkedin{
 
 }
 .contactSocial{
     
+}
+.cardOpen > button{
+    font-family: 'Cormorant';
+    border: none;
+    border-bottom: transparent solid 1px;
+    background-color: inherit;
+}
+.cardOpen > button:hover{
+    border-bottom: black solid 1px;
 }

@@ -16,20 +16,34 @@ export default function ContactCard(props) {
     // redux can pass the contact id to the form
     return(
         <section className={styles.ContactCard}>
-            <img src="" alt={image} className={styles.contactImage}/>
-            <title className={styles.contactName}>{name}</title>
-            <div className={styles.contactInfo}>
-                <span className={styles.contactPhone}>{contactInfo.phone}</span> 
-                <span className={styles.contactEmail}>{contactInfo.email}</span>
-                <span className={styles.contactLocation}>{contactInfo.location}</span>
-                <span className={styles.contactTitle}>{contactInfo.title}</span>
-                <span className={styles.contactLinkedin}>{contactInfo.linkedin}</span>
-                <span className={styles.contactSocial}>{contactInfo.otherSocial}</span>
-                <div className={styles.contactOpen}>
-                    <button>
-                        
-                    </button>
+            <div className={styles.contactFrame}>
+            <h2 className={styles.contactInit}>{name[0].toUpperCase() + name.split(" ")[1][0].toUpperCase()}</h2>
+                <section className={styles.cardHero}>
+                    <p className={styles.contactName}>{name}</p>
+                    {contactInfo.title !== ""? <p className={styles.contactTitle}>{contactInfo.title}</p>: ""}
+                    {contactInfo.location !== ""? <p className={styles.contactLocation}>{contactInfo.Location}</p>: ""}
+                </section>
+                <div className={styles.cardDetails}>
+                    <div className={styles.contactInfo}>
+                        {contactInfo.phone !== ""? <p className={styles.contactPhone}>{contactInfo.phone}</p>: ""}
+                        {contactInfo.email !== ""? <p className={styles.contactEmail}>{contactInfo.email}</p>: ""}
+                        {contactInfo.linkedin !== ""? 
+                            <button type="button" onClick={window.open(contactInfo.linkedin)} className={styles.contactLinkedin}>
+                            <i className="fa-brands fa-linkedin"></i>
+                            </button>
+                            : ""} 
+                        {contactInfo.otherSocial !== ""? 
+                            <button type="button" onClick={window.open(contactInfo.otherSocial)} className={styles.contactSocial}>
+                            <i className="fa-solid fa-link"></i>
+                            </button>
+                            : ""}
+                    </div>
                 </div>
+                <div className={styles.cardOpen}>
+                        <button>
+                            see more
+                        </button>
+                    </div>
             </div>
         </section>
     )
