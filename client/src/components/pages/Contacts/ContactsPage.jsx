@@ -7,6 +7,7 @@ import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';
+import ContactForm from './ContactForm';
 import styles from './ContactsPage.module.css';
 
 export default function ContactsPage() {
@@ -42,11 +43,13 @@ export default function ContactsPage() {
     }
 
     const priorityContacts = () => {
-        
+        // place in search results only the contacts with priority === true
     }
 
     const contactHistory = () => {
-        
+        // place in search results only the contacts with recent communications
+        // this could be from events table where sort top 10 recent events with
+        // an event type of '{tbd}', pull the contact for that linked job on the event
     }
     const validateSearchParams = (searchObj) => {
         let validated = {
