@@ -19,6 +19,7 @@
   height: 4;
   padding-left: 0;
   margin-top: 0;
+  position: relative;
 }
 .menuLinks{
   height: 2em;
@@ -41,6 +42,8 @@
   padding: 0em 0.5em 0 1em;
   height: 2em;
   display: flex;
+  position: relative;
+  z-index: 1;
 }
 .contactSearchInput{
   display: block;
@@ -69,14 +72,14 @@
   cursor: pointer;
 }
 .searchResultsContainer{
+  position: relative;
+  z-index: 0;
   margin-top: 1em;
   height: 78vh;
   border: solid 2px transparent;
   transition: border 0.3s ease-in-out;
-}
-.searchResultsContainer:focus{
-  border: solid 2px black;
-}
-.searchResultsContainer:hover{
-  border: solid 2px black;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content:space-evenly;
+
 }
