@@ -46,7 +46,6 @@ select {
 */
 p {
   overflow-wrap: break-word;
-  font-family: 'Barlow Condensed', sans-serif;
 }
 
 h1,
@@ -56,7 +55,6 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
-  font-family: 'Montserrat', sans-serif;
 }
 /*
   8. Create a root stacking context
@@ -69,6 +67,13 @@ h6 {
   max-height: 100vh;
 }
 
+/* MERGE THIS WITH THE RESET ON TOP  */
+#__next {
+  margin: 0 auto;
+  text-align: center;
+  max-height: 100vh;
+}
+
 .flex {
   display: flex;
   height: 100vh;
@@ -76,6 +81,19 @@ h6 {
 
 button {
   cursor: pointer;
+}
+
+p {
+  font-family: 'Barlow Condensed', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* body,

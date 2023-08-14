@@ -1,0 +1,141 @@
+@use './mixins.scss' as mixin;
+
+// Imported Fonts and Icons
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  5. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  6. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+  7. Avoid text overflows
+*/
+p {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+  8. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+  margin: 0 auto;
+  text-align: center;
+  max-height: 100vh;
+}
+
+/* MERGE THIS WITH THE RESET ON TOP  */
+#__next {
+  margin: 0 auto;
+  text-align: center;
+  max-height: 100vh;
+}
+
+.flex {
+  display: flex;
+  height: 100vh;
+}
+
+button {
+  cursor: pointer;
+}
+
+p {
+  font-family: 'Barlow Condensed', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* font-family: 'Barlow Condensed', sans-serif; */
+/* font-family: 'Montserrat', sans-serif; */
+
+// SEE IF THIS IS GONNA WORK
+html {
+  // Default is 16px, so 62.5% of that is 10px
+  // This defines what 1rem is
+  font-size: 62.5%;
+
+  @include mixin.tabLandscape {
+    // width < 1200
+    font-size: 56.25%; // 1 rem = 9px   9/16 = 50%
+  }
+
+  @include mixin.tabPortrait {
+    // width < 900
+    font-size: 50%; // 1 rem = 8px    8/16 = 50%;
+  }
+
+  @include mixin.phone {
+    // width < 600
+    font-size: 43.75%; // 1 rem = 8px    7/16 = 43.75%;
+  }
+
+  @include mixin.smallPhone {
+    // width < 600
+    font-size: 43.75%; // 1 rem = 8px    8/16 = 43.75%;
+  }
+
+  // Probably wont use this but just in case
+  @include mixin.bigDesktop {
+    font-size: 68.75%; // 1rem = 12px     12/16 = 75%
+  }
+}
