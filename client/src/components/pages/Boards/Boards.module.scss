@@ -1,12 +1,12 @@
 /* make this global later on since we are gonna reuse this a lot */
 .pageWrapper {
   /* margin-left: 305px; */
-  padding: 5px 30px;
+  padding: 0.5rem 3rem;
   width: 100%;
 }
 
 .header {
-  padding: 10px 0;
+  padding: 1rem 0;
 }
 
 .boardsContainer {
@@ -20,17 +20,17 @@
   /* width: 350px; */
   flex: 0 0 19%;
 
-  height: 200px;
+  height: 20rem;
   /* background-color: red; */
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
   cursor: pointer;
   position: relative;
 }
 
 .flexboxSpacer {
   flex: 0 0 19%;
-  height: 200px;
-  margin-bottom: 20px;
+  height: 20rem;
+  margin-bottom: 2rem;
   position: relative;
 }
 
@@ -40,13 +40,13 @@
   width: 100%;
   height: 100%;
   text-align: left;
-  padding: 15px;
+  padding: 1.5rem;
   position: relative;
   transition: all 0.2s ease;
 }
 
 .textBoardTitle {
-  font-size: 18px;
+  font-size: 1.7rem;
   margin: 0;
   text-transform: capitalize;
   color: black;
@@ -55,8 +55,8 @@
 .textBoardDateCreated {
   margin: 0;
   position: absolute;
-  bottom: 15px;
-  right: 15px;
+  bottom: 1.5rem;
+  right: 1.5rem;
 }
 
 .newBoardBox {
@@ -77,18 +77,19 @@
   height: 100%;
   background-color: transparent;
   border: none;
+  font-size: 1.6rem;
 }
 
 .editButton {
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 1.5rem;
+  top: 1.5rem;
 
   /* padding: 5px 10px; */
   background-color: transparent;
   color: #97a2b6;
   border: 0;
-  font-size: 20px;
+  font-size: 2rem;
   transition: all 0.1s;
 
   &:hover {

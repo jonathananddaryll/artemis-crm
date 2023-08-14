@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Timeline.module.css';
+import styles from './Timeline.module.scss';
 import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 import timeSince from '../../../../../helpers/convertDate';
 

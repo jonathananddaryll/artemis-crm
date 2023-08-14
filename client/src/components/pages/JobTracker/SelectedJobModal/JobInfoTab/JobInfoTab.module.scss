@@ -1,5 +1,5 @@
 .container {
-  padding: 20px;
+  padding: 2rem;
   position: relative;
 }
 
@@ -10,7 +10,7 @@
 
 .formGroup {
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
 
   > label {
     display: block;
@@ -19,14 +19,14 @@
 
   > input[type='text'] {
     width: 100%;
-    padding: 2px 5px;
+    padding: 0.2rem 0.5rem;
   }
 
   > textarea {
     width: 100%;
-    padding: 2px 5px;
+    padding: 0.2rem 0.5rem;
     resize: none;
-    height: 200px;
+    height: 20rem;
   }
 
   text-align: left;
@@ -34,5 +34,5 @@
 
 .formFlex {
   display: flex;
-  gap: 20px;
+  gap: 2rem;
 }

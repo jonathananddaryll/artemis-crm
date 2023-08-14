@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './SideBar.module.css';
+import styles from './SideBar.module.scss';
 import {
   useClerk,
   UserButton,

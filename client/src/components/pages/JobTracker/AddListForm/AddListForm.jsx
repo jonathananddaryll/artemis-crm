@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './AddListForm.module.css';
+import styles from './AddListForm.module.scss';
 import { useDispatch } from 'react-redux';
 import { addColumn } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';

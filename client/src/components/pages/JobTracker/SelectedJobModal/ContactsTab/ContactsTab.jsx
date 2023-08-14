@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './ContactsTab.module.css';
+import styles from './ContactsTab.module.scss';
 
 export default function ContactsTab() {
   return (

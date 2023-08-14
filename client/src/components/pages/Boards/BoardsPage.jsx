@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
-import styles from './Boards.module.css';
+import styles from './Boards.module.scss';
 import NewBoardForm from './Forms/NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
 import UpdateForm from './Forms/UpdateForm';

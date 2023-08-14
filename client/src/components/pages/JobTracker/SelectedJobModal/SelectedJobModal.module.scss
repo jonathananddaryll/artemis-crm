@@ -37,14 +37,14 @@
   /* background: green; */
   display: flex;
   justify-content: end;
-  padding: 0 15px;
+  padding: 0 1.5rem;
   align-items: center;
 }
 
 .actionButtonsContainer button {
-  height: 30px;
-  margin-left: 10px;
-  width: 70px;
+  height: 3rem;
+  margin-left: 1rem;
+  width: 7rem;
   border-radius: 5px;
   border: none;
   background-color: rgb(157, 157, 240);
@@ -53,18 +53,18 @@
 /* HEADER SECTION */
 .header {
   display: flex;
-  padding: 0 35px 50px 35px;
+  padding: 0 3.5rem 5rem 3.5rem;
 }
 
 .headerLogo {
-  width: 80px;
+  width: 8rem;
   background: rgb(230, 230, 236);
-  height: 80px;
-  border-radius: 10px;
+  height: 8rem;
+  border-radius: 1rem;
 }
 
 .headerInfo {
-  margin-left: 20px;
+  margin-left: 2rem;
   text-align: left;
 }
 
@@ -74,21 +74,21 @@
 
 .textJobTitle {
   text-transform: capitalize;
-  font-size: 35px;
-  margin: 0 0 5px;
+  font-size: 3.5rem;
+  margin: 0 0 0.5rem;
 }
 
 .textSub {
   text-transform: capitalize;
-  font-size: 20px;
+  font-size: 2rem;
 
   /* change margin to 0 later and have an icon on the left of the text */
-  margin: 0 20px 0 0;
+  margin: 0 2rem 0 0;
 }
 
 .textSub i {
-  font-size: 17px;
-  margin-right: 2px;
+  font-size: 1.7rem;
+  margin-right: 0.2rem;
 }
 
 /* SUB NAVIGATION SECTION */
@@ -103,7 +103,7 @@
   justify-content: space-between;
   margin: 0;
   padding: 0;
-  height: 50px;
+  height: 5rem;
   align-items: center;
 }
 
@@ -111,7 +111,7 @@
   cursor: pointer;
   height: 100%;
   width: 100%;
-  line-height: 50px;
+  line-height: 5rem;
   border-top: 2px solid #bdbdcc;
   transition: all 0.3s ease;
 }
@@ -127,18 +127,18 @@
 .subNavigationText {
   text-transform: capitalize;
   margin: 0;
-  font-size: 17px;
+  font-size: 1.7rem;
 }
 
 .subNavigationText i {
-  font-size: 15px;
-  margin-right: 5px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 /* TIMELINE SECTION */
 .timelineContainer {
-  width: 350px;
+  width: 35rem;
   background: #eeeef3;
-  padding: 0 10px 0 18px;
+  padding: 0 1rem 0 1.8rem;
   height: 100%;
 }

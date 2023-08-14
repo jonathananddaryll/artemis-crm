@@ -11,7 +11,7 @@ import {
 import { useSession } from '@clerk/clerk-react';
 
 import Column from './Column';
-import styles from './KanbanBoard.module.scss';
+import styles from './KanbanBoard.module.css';
 
 export default function KanbanBoard({
   setAddListToggle,

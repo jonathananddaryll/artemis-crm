@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './InterviewTab.module.css';
+import styles from './InterviewTab.module.scss';
 
 export default function InteviewTab({ interviews }) {
   return (

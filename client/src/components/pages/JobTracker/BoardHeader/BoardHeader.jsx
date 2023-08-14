@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './BoardHeader.module.css';
+import styles from './BoardHeader.module.scss';
 import SearchBar from '../SearchBar/SearchBar';
 
 export default function BoardHeader({ title, filterJob }) {

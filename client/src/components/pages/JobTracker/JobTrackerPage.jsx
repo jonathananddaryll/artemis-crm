@@ -8,7 +8,7 @@ import {
   filterJob
 } from '../../../reducers/BoardReducer';
 import { useNavigate } from 'react-router-dom';
-import styles from './JobTrackerPage.module.css';
+import styles from './JobTrackerPage.module.scss';
 
 import { useAuth } from '@clerk/clerk-react';
 

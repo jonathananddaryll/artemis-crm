@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './TasksTab.module.css';
+import styles from './TasksTab.module.scss';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 

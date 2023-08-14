@@ -6,13 +6,13 @@
 
 .timelineContainer {
   height: 100%;
-  padding-top: 15px;
+  padding-top: 1.5rem;
 }
 
 .textHeader {
-  font-size: 16px;
+  font-size: 1.6rem;
   text-align: left;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
 }
 
 .verticalLine {
@@ -27,12 +27,12 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding-right: 10px;
+  padding-right: 1rem;
 }
 
 .box {
   flex: 0 0 90%;
-  padding: 6px 0;
+  padding: 0.6rem 0;
 }
 
 .timelineCard {
@@ -41,30 +41,30 @@
 
   background: #d1d1da;
   border-radius: 5px;
-  padding: 10px;
+  padding: 1rem;
   text-align: left;
 }
 
 .textUpdateType {
   /* margin: 0 0 5px 0; */
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 500;
 }
 
 .textDescription {
   margin: 0;
-  font-size: 14px;
-  margin: 0 0 5px 0;
+  font-size: 1.4rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .textDateCreated {
   margin: 0;
-  font-size: 13px;
+  font-size: 1.3rem;
 }
 
 /* TIMELINE left line to show timeline */
 .topLine {
-  width: 2px;
+  width: 0.2rem;
   height: 40%;
   margin: 0 auto;
   border: 2px solid rgb(201, 209, 243);
@@ -72,8 +72,8 @@
 }
 
 .middleDot {
-  width: 14px;
-  height: 14px;
+  width: 1.4rem;
+  height: 1.4rem;
   border-radius: 100%;
   background-color: rgb(100, 100, 223);
   border: 3px solid rgb(255, 255, 255);
@@ -81,7 +81,7 @@
 }
 
 .bottomLine {
-  width: 2px;
+  width: 0.2rem;
   height: 50%;
   margin: 0 auto;
   background-color: rgb(155, 173, 253);
@@ -93,7 +93,7 @@
   height: 95%;
 
   &::-webkit-scrollbar {
-    width: 7px;
+    width: 0.7rem;
   }
 
   /* Track */

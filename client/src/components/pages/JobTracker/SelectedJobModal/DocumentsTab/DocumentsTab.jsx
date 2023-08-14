@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './DocumentsTab.module.css';
+import styles from './DocumentsTab.module.scss';
 
 export default function DocumentsTab() {
   return (

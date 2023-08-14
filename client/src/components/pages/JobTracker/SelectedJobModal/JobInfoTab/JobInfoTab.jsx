@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './JobInfoTab.module.css';
+import styles from './JobInfoTab.module.scss';
 
 export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const [formData, setFormData] = useState({

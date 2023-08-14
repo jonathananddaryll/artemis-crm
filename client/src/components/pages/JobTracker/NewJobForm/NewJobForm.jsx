@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './NewJobForm.module.css';
+import styles from './NewJobForm.module.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';

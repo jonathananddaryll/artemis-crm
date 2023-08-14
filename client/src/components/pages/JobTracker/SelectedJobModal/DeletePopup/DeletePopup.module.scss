@@ -18,18 +18,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgb(228, 233, 228);
-  width: 500px;
-  height: 120px;
+  width: 50rem;
+  height: 12rem;
 }
 
 .popupButtons {
-  padding: 10px;
+  padding: 1rem;
   position: absolute;
   right: 0;
   bottom: 0;
 }
 
 .popupButtons button {
-  height: 35px;
-  margin-left: 10px;
+  height: 3.5rem;
+  margin-left: 1rem;
+}
+
+.textPopup {
+  font-size: 1.6rem;
 }

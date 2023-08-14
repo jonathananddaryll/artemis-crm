@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
-import styles from './UpdateForm.module.css';
+import styles from './UpdateForm.module.scss';
 
 export default function NewBoardForm({ toggleHandler }) {
   const [title, setTitle] = useState('');

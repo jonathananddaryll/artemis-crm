@@ -30,7 +30,7 @@ import Timeline from './Timeline/Timeline';
 
 import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
-import styles from './SelectedJobModal.module.css';
+import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {
   const dispatch = useDispatch();
