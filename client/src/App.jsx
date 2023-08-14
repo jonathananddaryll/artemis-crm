@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import './App.css';
+import React from 'react';
+import './styles/globals.scss';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import {
   ClerkProvider,
