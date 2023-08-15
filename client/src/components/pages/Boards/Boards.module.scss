@@ -1,3 +1,5 @@
+@use '../../../styles//mixins.scss' as mixin;
+
 /* make this global later on since we are gonna reuse this a lot */
 .pageWrapper {
   /* margin-left: 305px; */
@@ -6,7 +8,8 @@
 }
 
 .header {
-  padding: 1rem 0;
+  padding: 2rem 0;
+  // margin-bottom: 2rem;
 }
 
 .boardsContainer {
@@ -14,6 +17,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .flexBox {
@@ -25,6 +30,19 @@
   margin-bottom: 2rem;
   cursor: pointer;
   position: relative;
+
+  @include mixin.tabLandscape {
+    flex: 0 0 23.8%;
+  }
+
+  @include mixin.tabPortrait {
+    flex: 0 0 32%;
+  }
+
+  @include mixin.phone {
+    flex: 0 0 48%;
+    height: 15rem;
+  }
 }
 
 .flexboxSpacer {
@@ -45,6 +63,14 @@
   transition: all 0.2s ease;
 }
 
+.boardBoxHeader {
+  padding-right: 2.6rem;
+}
+
+.textHeader {
+  font-size: 1.8rem;
+}
+
 .textBoardTitle {
   font-size: 1.7rem;
   margin: 0;
@@ -57,6 +83,7 @@
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .newBoardBox {
@@ -91,6 +118,7 @@
   border: 0;
   font-size: 2rem;
   transition: all 0.1s;
+  padding: 0 0 0 1rem;
 
   &:hover {
     color: black;

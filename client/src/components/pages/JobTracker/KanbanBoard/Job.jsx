@@ -16,7 +16,7 @@ const Container = styled.div`
   // margin-bottom: 8px;
   margin: 0 5px 8px 5px;
   background-color: #fff;
-  cursor: pointer;
+  cursor: pointer !important;
   align-items: top;
   background-color: ${props => (props.isDragging ? '#b8d5fc' : 'white')};
 `;

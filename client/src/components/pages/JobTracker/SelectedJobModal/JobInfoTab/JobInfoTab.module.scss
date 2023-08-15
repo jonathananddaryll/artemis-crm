@@ -1,3 +1,5 @@
+@use '../../../../../styles/mixins.scss' as mixin;
+
 .container {
   padding: 2rem;
   position: relative;
@@ -6,6 +8,10 @@
 .jobInfoForm {
   width: 80%;
   margin: 0 auto;
+
+  @include mixin.phone {
+    width: 100%;
+  }
 }
 
 .formGroup {
@@ -15,11 +21,13 @@
   > label {
     display: block;
     text-align: left;
+    font-size: 1.6rem;
   }
 
   > input[type='text'] {
     width: 100%;
     padding: 0.2rem 0.5rem;
+    font-size: 1.6rem;
   }
 
   > textarea {
@@ -27,6 +35,7 @@
     padding: 0.2rem 0.5rem;
     resize: none;
     height: 20rem;
+    font-size: 1.6rem;
   }
 
   text-align: left;

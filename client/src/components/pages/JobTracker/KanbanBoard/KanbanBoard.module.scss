@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .kanbanContainer {
   display: flex;
   /* justify-content: space-between; */
@@ -15,7 +17,11 @@
 .addlistContainer {
   background-color: #f2f3f5;
   border-radius: 10px;
-  width: 300px;
+  width: 27rem;
+
+  @include mixin.phone {
+    width: 25rem;
+  }
 }
 
 /*************** Column Component **************/
@@ -25,8 +31,13 @@
   border-radius: 1rem;
   overflow: hidden;
   margin-right: 0.5rem;
-  width: 30rem;
+  width: 27rem;
   padding: 0 0.5rem 4rem 0.5rem;
+
+  @include mixin.phone {
+    width: 22rem;
+    padding: 0 0.5rem 6rem 0.5rem;
+  }
 }
 
 .header {

@@ -1,7 +1,7 @@
 .boardContainer {
   display: flex;
   width: 100%;
-  padding: 20px 15px 10px 15px;
+  padding: 2rem 1.5rem 1rem 1.5rem;
   justify-content: space-between;
   /* height: 50px; */
   align-items: center;
@@ -19,7 +19,7 @@
 }
 
 .titleText {
-  font-size: 22px;
+  font-size: 1.8rem;
   text-transform: capitalize;
   color: #343949;
 }

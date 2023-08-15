@@ -1,12 +1,23 @@
-/* For Boards Loader */
-.textStyle_1 {
-  font-size: 2rem;
-  margin-top: -3rem;
-}
+@use '../../../styles//mixins.scss' as mixin;
 
+/* For Boards Loader */
 .imageStyle_1 {
   width: 15%;
   margin: 0 auto;
+
+  @include mixin.phone {
+    width: 35%;
+  }
+}
+
+.textStyle_1 {
+  font-size: 2rem;
+  margin-top: -3rem;
+
+  @include mixin.phone {
+    font-size: 2.2rem;
+    margin-top: -2rem;
+  }
 }
 
 /* For Timelines Loader */
@@ -24,9 +35,19 @@
 .imageStyle_3 {
   width: 15%;
   margin: 1.5rem auto 0 auto;
+
+  @include mixin.phone {
+    width: 35%;
+    margin: 5rem auto 0 auto;
+  }
 }
 
 .textStyle_3 {
   font-size: 2rem;
   margin-top: -3rem;
+
+  @include mixin.phone {
+    font-size: 2.2rem;
+    margin-top: -2rem;
+  }
 }

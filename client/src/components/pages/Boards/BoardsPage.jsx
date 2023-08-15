@@ -42,7 +42,7 @@ export default function BoardsPage() {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.header}>
-        <h3>My Personal Boards</h3>
+        <h3 className={styles.textHeader}>My Personal Boards</h3>
       </div>
 
       {boardsLoading ? (
@@ -80,25 +80,29 @@ export default function BoardsPage() {
                   className={styles.boardBox}
                   onClick={() => handleBoardClick(board)}
                 >
-                  <p key={board.id} className={styles.textBoardTitle}>
-                    {board.title}
-                  </p>
+                  <div className={styles.boardBoxHeader}>
+                    <p key={board.id} className={styles.textBoardTitle}>
+                      {board.title}
+                    </p>
+                    <button
+                      className={styles.editButton}
+                      onClick={e =>
+                        setTitleFormToggle({
+                          ind: idx,
+                          state: true
+                        })
+                      }
+                    >
+                      <i className='bi bi-pencil'></i>
+                    </button>
+                  </div>
+
                   <p className={styles.textBoardDateCreated}>
                     Created {timeSince(board.date_created)}
                   </p>
                 </div>
-              </Link>{' '}
-              <button
-                className={styles.editButton}
-                onClick={e =>
-                  setTitleFormToggle({
-                    ind: idx,
-                    state: true
-                  })
-                }
-              >
-                <i className='bi bi-pencil'></i>
-              </button>
+              </Link>
+
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm
                   board={board}
