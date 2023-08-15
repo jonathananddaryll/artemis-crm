@@ -1,8 +1,15 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .container {
   flex: 0 0 30%;
   /* background-color: red; */
   text-align: left;
-  font-size: 1.5rem;
+
+  @include mixin.phone {
+    flex: 0 0 100%;
+    order: 2;
+    font-size: 1.7rem;
+  }
 }
 
 .formGroup {
@@ -10,9 +17,14 @@
 
   > input {
     width: 300px;
-    padding: 7px 5px 7px 35px;
+    padding: 0.7rem 0.5rem 0.7rem 3.5rem;
     border: 1px solid rgb(231, 213, 213);
     border-radius: 5px;
+    font-size: 1.6rem;
+
+    @include mixin.phone {
+      width: 100%;
+    }
 
     &::placeholder {
       color: rgb(160, 143, 143);

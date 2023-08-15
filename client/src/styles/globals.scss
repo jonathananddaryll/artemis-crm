@@ -150,3 +150,12 @@ html {
 .Toastify__toast-container {
   font-size: 1.4rem;
 }
+
+// For input text so it doesnt do zoom in since phone needs atleast 16px font-size
+// maybe change this to a better solution so we can use smaller font-size and it doesn't zoom in.
+input[type='text'],
+textarea {
+  @include mixin.phone {
+    font-size: 2rem !important;
+  }
+}

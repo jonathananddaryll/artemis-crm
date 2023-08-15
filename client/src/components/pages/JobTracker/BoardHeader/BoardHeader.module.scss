@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .boardContainer {
   display: flex;
   width: 100%;
@@ -5,21 +7,44 @@
   justify-content: space-between;
   /* height: 50px; */
   align-items: center;
+
+  @include mixin.phone {
+    flex-wrap: wrap;
+  }
 }
 
 .titleContainer {
   flex: 0 0 40%;
   text-align: center;
+
+  @include mixin.phone {
+    flex: 0 0 100%;
+    order: 1;
+  }
 }
 
 .filterContainer {
   flex: 0 0 30%;
   /* background-color: red; */
   text-align: right;
+
+  @include mixin.phone {
+    flex: 0 0 100%;
+    order: 3;
+    text-align: center;
+
+    // CHANGE THIS LATER ON WHEN FILTER IS READY AND DONE
+    display: none;
+  }
 }
 
 .titleText {
   font-size: 1.8rem;
   text-transform: capitalize;
   color: #343949;
+
+  @include mixin.phone {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
 }

@@ -74,6 +74,11 @@
   background-color: transparent;
   color: #97a2b6;
   font-size: 2rem;
+
+  @include mixin.phone {
+    // right: 0;
+    padding: 0 0 0 1rem;
+  }
 }
 
 .buttonAddJob {

@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .wrapper {
   background-color: #483375ea;
   position: absolute;
@@ -25,6 +27,11 @@
   transform: translate(-50%, -50%);
 
   border-radius: 10px;
+
+  @include mixin.phone {
+    width: 100%;
+    top: 45%;
+  }
 }
 
 .formHeader {
@@ -33,17 +40,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.8rem;
+
+  // MAYBE CHANGE THIS LATER AND MAKE IT BETTER WITH BETTER FONT
+  @include mixin.phone {
+    font-size: 2rem;
+  }
 
   > button {
     border: none;
     background-color: transparent;
-    /* font-size: 13px; */
+    font-size: 1.5rem;
     /* height: 50px; */
   }
 }
 
 .formContainer {
-  padding: 10px 50px 20px 50px;
+  padding: 1rem 5rem 2rem 5rem;
+
+  @include mixin.phone {
+    padding: 2rem;
+  }
 }
 
 .formGroup {
