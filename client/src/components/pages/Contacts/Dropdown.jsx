@@ -21,9 +21,9 @@ export default function Dropdown (props) {
         }
     }
 
-    function updateSearchType(type){
-        setSearchType(type);
-    }
+    // function updateSearchType(type){
+    //     setSearchType(type);
+    // }
 
 return (
     <section 
@@ -41,7 +41,7 @@ return (
                 return (
                     <a 
                         className={menuHiding? styles.menuHiddenItem: styles.menuShownItem} 
-                        onClick={() => {updateSearchType(element)}}
+                        onClick={() => {setSearchType(element)}}
                         key={element}
                     >
                         {element}

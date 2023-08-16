@@ -80,10 +80,11 @@
 
 }
 .contactLocation{
-
+    margin: 0 auto;
+    font-size: 0.8rem;
 }
 .contactLinkedin{
-
+    display: inline-block;
 }
 .contactSocial{
     
