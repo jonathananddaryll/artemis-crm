@@ -84,17 +84,6 @@ export default function BoardsPage() {
                     <p key={board.id} className={styles.textBoardTitle}>
                       {board.title}
                     </p>
-                    <button
-                      className={styles.editButton}
-                      onClick={e =>
-                        setTitleFormToggle({
-                          ind: idx,
-                          state: true
-                        })
-                      }
-                    >
-                      <i className='bi bi-pencil'></i>
-                    </button>
                   </div>
 
                   <p className={styles.textBoardDateCreated}>
@@ -102,6 +91,17 @@ export default function BoardsPage() {
                   </p>
                 </div>
               </Link>
+              <button
+                className={styles.editButton}
+                onClick={e =>
+                  setTitleFormToggle({
+                    ind: idx,
+                    state: true
+                  })
+                }
+              >
+                <i className='bi bi-pencil'></i>
+              </button>
 
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm

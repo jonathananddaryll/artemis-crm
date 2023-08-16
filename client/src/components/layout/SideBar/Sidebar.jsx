@@ -8,6 +8,8 @@ import {
   SignOutButton
 } from '@clerk/clerk-react';
 
+import SignIn from './SignIn';
+
 import { NavLink } from 'react-router-dom';
 
 export default function SideBar() {
@@ -45,6 +47,11 @@ export default function SideBar() {
             </NavLink>
           ))}
         </div>
+        {user === null && (
+          <div>
+            <SignIn />
+          </div>
+        )}
       </div>
       {isLoaded && user !== null && (
         <div className={styles.footer}>

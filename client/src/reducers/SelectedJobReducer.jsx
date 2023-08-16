@@ -252,7 +252,7 @@ const selectedJobSlice = createSlice({
     });
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
-      // Find the index of the updated note then change it to the updated note
+      // Find the index of the updated task then change it to the updated task
       var updatedTask = action.payload;
 
       ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_tASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
