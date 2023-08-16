@@ -21,19 +21,19 @@ export default function ContactCard(props) {
                 <section className={styles.cardHero}>
                     <p className={styles.contactName}>{name}</p>
                     {contactInfo.title !== ""? <p className={styles.contactTitle}>{contactInfo.title}</p>: ""}
-                    {contactInfo.location !== ""? <p className={styles.contactLocation}>{contactInfo.Location}</p>: ""}
+                    {contactInfo.location !== ""? <p className={styles.contactLocation}>{contactInfo.location}</p>: ""}
                 </section>
                 <div className={styles.cardDetails}>
                     <div className={styles.contactInfo}>
                         {contactInfo.phone !== ""? <p className={styles.contactPhone}>{contactInfo.phone}</p>: ""}
                         {contactInfo.email !== ""? <p className={styles.contactEmail}>{contactInfo.email}</p>: ""}
                         {contactInfo.linkedin !== ""? 
-                            <button type="button" onClick={window.open(contactInfo.linkedin)} className={styles.contactLinkedin}>
+                            <button type="button" onClick={() => window.open(contactInfo.linkedin)} className={styles.contactLinkedin}>
                             <i className="fa-brands fa-linkedin"></i>
                             </button>
                             : ""} 
                         {contactInfo.otherSocial !== ""? 
-                            <button type="button" onClick={window.open(contactInfo.otherSocial)} className={styles.contactSocial}>
+                            <button type="button" onClick={() => window.open(contactInfo.otherSocial)} className={styles.contactSocial}>
                             <i className="fa-solid fa-link"></i>
                             </button>
                             : ""}
