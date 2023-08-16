@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
-<<<<<<< HEAD
-=======
-const Client = require('../../config/db');
+const { Client, config } = require('../../config/db');
 const format = require('pg-format');
->>>>>>> 05be52a (added more client query structure)
 
 // TODO:
 // 1) Integrate backend auth (grab user_id from clerk frontend token)

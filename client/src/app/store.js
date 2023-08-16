@@ -9,6 +9,7 @@ export const store = configureStore({
     board: BoardReducer,
     selectedJob: SelectedJobReducer
     timeline: TimelineReducer,
+    contact: ContactReducer,,
     contact: ContactReducer,
   }
 });

@@ -107,20 +107,6 @@ function App() {
                 </>
               }
             ></Route>
-            <Route 
-              path='/contacts/' 
-              element={
-                <>
-                  <SignedIn>
-                    < ContactsPage />
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn></RedirectToSignIn>
-                  </SignedOut>
-                </>
-              }
-              ></Route>
->>>>>>> d1fcd08 (fixes for some import errors in contactspage)
           </Routes>
           </div>
         </ClerkProvider>
