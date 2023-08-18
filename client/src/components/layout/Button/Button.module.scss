@@ -64,6 +64,11 @@
   &:hover {
     background-color: #2967da;
   }
+
+  &:disabled {
+    background-color: #ccdbf8;
+    cursor: auto;
+  }
 }
 
 // red

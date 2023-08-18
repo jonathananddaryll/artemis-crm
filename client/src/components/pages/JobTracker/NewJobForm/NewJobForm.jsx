@@ -102,7 +102,9 @@ export default function NewJobForm() {
         <div className={styles.formContainer}>
           <form>
             <div className={styles.formGroup}>
-              <label>Company</label>
+              <label>
+                Company<span> *</span>
+              </label>
               <input
                 type='text'
                 name='company'
@@ -113,7 +115,9 @@ export default function NewJobForm() {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Job Title</label>
+              <label>
+                Job Title<span> *</span>
+              </label>
               <input
                 type='text'
                 name='job_title'
@@ -124,7 +128,9 @@ export default function NewJobForm() {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Location</label>
+              <label>
+                Location<span> *</span>
+              </label>
               <input
                 type='text'
                 name='location'
@@ -152,13 +158,13 @@ export default function NewJobForm() {
                   type='text'
                   name='status'
                   value={status}
-                  readonly
+                  readOnly
                   required
                 />
               </div>
               <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
                 <label>Link Contact</label>
-                <input type='text' name='contact' readonly />
+                <input type='text' name='contact' readOnly />
               </div>
             </div>
             <div className={styles.buttonsContainer}>
@@ -181,6 +187,7 @@ export default function NewJobForm() {
                 color={'blue'}
                 // size={'small'}
                 onClick={e => onSubmitHandler(e)}
+                disabled={company === '' || job_title === '' || location === ''}
               />
             </div>
             {/* <button onClick={() => dispatch(handleToggleForm([false, null]))}>

@@ -181,9 +181,16 @@ export const addJob = createAsyncThunk(
     try {
       const res = await axios.post('/api/jobs', formData, config);
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
+
+      const errors = err.response.data.errors;
+      console.log(errors);
+
+      if (errors) {
+        errors.forEach(error => toast.error(error, { autoClose: 4000 }));
+      }
     }
   }
 );
