@@ -22,11 +22,6 @@
 .formButtons {
   margin-top: 10px;
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   justify-content: center;
-
-  .updateBoardButton {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-  }
 }

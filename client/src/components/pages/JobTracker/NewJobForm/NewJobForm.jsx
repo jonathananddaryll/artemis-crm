@@ -6,6 +6,8 @@ import { useSession } from '@clerk/clerk-react';
 
 import { handleToggleForm, addJob } from '../../../../reducers/BoardReducer';
 
+import Button from '../../../layout/Button/Button';
+
 export default function NewJobForm() {
   const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =
     useSelector(state => ({
@@ -98,7 +100,7 @@ export default function NewJobForm() {
           </button>
         </div>
         <div className={styles.formContainer}>
-          <form onSubmit={e => onSubmitHandler(e)}>
+          <form>
             <div className={styles.formGroup}>
               <label>Company</label>
               <input
@@ -160,12 +162,25 @@ export default function NewJobForm() {
               </div>
             </div>
             <div className={styles.buttonsContainer}>
-              <input className={styles.button} type='submit' value='Save Job' />
-              <input
+              {/* <input
                 className={styles.button}
                 type='button'
                 value='Cancel'
                 onClick={() => dispatch(handleToggleForm([false, null]))}
+              /> */}
+              {/* <input className={styles.button} type='submit' value='Save Job' /> */}
+
+              <Button
+                value={'Cancel'}
+                color={'white'}
+                size={'small'}
+                onClick={() => dispatch(handleToggleForm([false, null]))}
+              />
+              <Button
+                value={'Save Job'}
+                color={'blue'}
+                // size={'small'}
+                onClick={e => onSubmitHandler(e)}
               />
             </div>
             {/* <button onClick={() => dispatch(handleToggleForm([false, null]))}>

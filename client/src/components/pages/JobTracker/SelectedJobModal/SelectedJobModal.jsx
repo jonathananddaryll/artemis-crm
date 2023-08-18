@@ -105,8 +105,14 @@ export default function SelectedJobModal() {
       <div className={styles.modalContainer}>
         <div className={styles.mainContainer}>
           <div className={styles.actionButtonsContainer}>
-            <button onClick={() => setConfirmationToggle(true)}>Delete</button>
-            <button onClick={() => handleClosingModal()}>Close</button>
+            {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
+            {/* <button onClick={() => handleClosingModal()}>Close</button> */}
+            <button onClick={() => setConfirmationToggle(true)}>
+              <i className='bi bi-trash-fill'></i>
+            </button>
+            <button onClick={() => handleClosingModal()}>
+              <i className='bi bi-x-square-fill'></i>
+            </button>
           </div>
           <div className={styles.header}>
             <div className={styles.headerLogo}></div>

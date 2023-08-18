@@ -65,3 +65,18 @@
     background-color: #2967da;
   }
 }
+
+// light
+.white {
+  background-color: white;
+  color: black;
+  border: 1px solid #f8f8f8;
+  &:hover {
+    background-color: rgb(250, 247, 247);
+  }
+}
+
+.small {
+  font-size: 1.2rem;
+  padding: 0.7rem 1.2rem;
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
+import Button from '../../../layout/Button/Button';
 
 import styles from './UpdateForm.module.scss';
 
@@ -31,7 +32,7 @@ export default function NewBoardForm({ toggleHandler }) {
   return (
     <div className={styles.updateFormContainer}>
       <div className={styles.updateForm}>
-        <form onSubmit={e => onSubmitHandler(e)}>
+        <form>
           <input
             type='text'
             value={title}
@@ -41,7 +42,7 @@ export default function NewBoardForm({ toggleHandler }) {
             required
           />
           <div className={styles.formButtons}>
-            <input
+            {/* <input
               type='submit'
               value='Create'
               className={styles.updateBoardButton}
@@ -51,6 +52,19 @@ export default function NewBoardForm({ toggleHandler }) {
               value='Cancel'
               onClick={() => toggleHandler()}
               className={styles.updateBoardButton}
+            /> */}
+
+            <Button
+              value={'Cancel'}
+              color={'white'}
+              size={'small'}
+              onClick={() => toggleHandler()}
+            />
+            <Button
+              value={'Create'}
+              color={'blue'}
+              size={'small'}
+              onClick={e => onSubmitHandler(e)}
             />
           </div>
         </form>

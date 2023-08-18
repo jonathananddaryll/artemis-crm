@@ -4,6 +4,7 @@ import { updateBoardName } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './UpdateForm.module.scss';
+import Button from '../../../layout/Button/Button';
 
 export default function UpdateForm({ board, handleToggleUpdateForm }) {
   const [newTitle, setNewTitle] = useState(board.title);
@@ -36,7 +37,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
   return (
     <div className={styles.updateFormContainer}>
       <div className={styles.updateForm}>
-        <form onSubmit={e => onSubmitHandler(e)}>
+        <form>
           <input
             type='text'
             value={newTitle}
@@ -46,18 +47,19 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
             required
           />
           <div className={styles.formButtons}>
-            <input
-              type='submit'
-              value='Update'
-              className={styles.updateBoardButton}
-            />
-            <input
-              type='button'
-              value='Cancel'
-              className={styles.updateBoardButton}
+            <Button
+              value={'Cancel'}
+              color={'white'}
+              size={'small'}
               onClick={() =>
                 handleToggleUpdateForm({ ind: null, state: false })
               }
+            />
+            <Button
+              value={'Update'}
+              color={'blue'}
+              size={'small'}
+              onClick={e => onSubmitHandler(e)}
             />
           </div>
         </form>
