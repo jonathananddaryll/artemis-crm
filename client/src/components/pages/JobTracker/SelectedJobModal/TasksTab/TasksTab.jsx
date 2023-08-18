@@ -115,6 +115,7 @@ export default function TasksTab({
             value={'Create Task'}
             color={'blue'}
             onClick={() => setToggleForm(true)}
+            size={'small'}
           />
         </div>
       ) : (

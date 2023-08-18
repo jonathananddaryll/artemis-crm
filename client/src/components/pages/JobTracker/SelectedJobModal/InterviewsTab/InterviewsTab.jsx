@@ -6,7 +6,7 @@ export default function InteviewTab({ interviews }) {
   return (
     <div className={styles.interviewsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <Button value={'Add Interview'} color={'blue'} />
+        <Button value={'Add Interview'} color={'blue'} size={'small'} />
       </div>
       {interviews.length > 0 ? (
         <div>

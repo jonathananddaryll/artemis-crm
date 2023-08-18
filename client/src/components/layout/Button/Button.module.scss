@@ -66,11 +66,19 @@
   }
 }
 
+// red
+.red {
+  background-color: rgb(231, 82, 82);
+  &:hover {
+    background-color: rgb(219, 42, 42);
+  }
+}
+
 // light
 .white {
   background-color: white;
   color: black;
-  border: 1px solid #f8f8f8;
+  border: 1px solid #e2dede;
   &:hover {
     background-color: rgb(250, 247, 247);
   }

@@ -19,6 +19,8 @@ const Container = styled.div`
   cursor: pointer !important;
   align-items: top;
   background-color: ${props => (props.isDragging ? '#b8d5fc' : 'white')};
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 export default function Job({ job, index }) {

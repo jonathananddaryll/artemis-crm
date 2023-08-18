@@ -7,6 +7,8 @@ import {
   handleToggleForm
 } from '../../../../reducers/BoardReducer';
 
+import Button from '../../../layout/Button/Button';
+
 import {
   getAllTimelines,
   resetSelectedJobItems,
@@ -107,12 +109,18 @@ export default function SelectedJobModal() {
           <div className={styles.actionButtonsContainer}>
             {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
             {/* <button onClick={() => handleClosingModal()}>Close</button> */}
-            <button onClick={() => setConfirmationToggle(true)}>
-              <i className='bi bi-trash-fill'></i>
-            </button>
-            <button onClick={() => handleClosingModal()}>
-              <i className='bi bi-x-square-fill'></i>
-            </button>
+            <Button
+              value={'Delete'}
+              color={'red'}
+              size={'small'}
+              onClick={() => setConfirmationToggle(true)}
+            />
+            <Button
+              value={'Close'}
+              color={'white'}
+              size={'small'}
+              onClick={() => handleClosingModal()}
+            />
           </div>
           <div className={styles.header}>
             <div className={styles.headerLogo}></div>

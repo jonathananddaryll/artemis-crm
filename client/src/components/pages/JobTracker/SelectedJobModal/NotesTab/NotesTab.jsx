@@ -97,6 +97,7 @@ export default function NotesTab({
           <Button
             value={'Create New Note'}
             color={'blue'}
+            size={'small'}
             onClick={() => setNoteFormToggle(true)}
           />
         </div>

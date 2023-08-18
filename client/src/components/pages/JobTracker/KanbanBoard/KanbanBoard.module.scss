@@ -33,6 +33,7 @@
   margin-right: 0.5rem;
   width: 27rem;
   padding: 0 0.5rem 4rem 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 
   @include mixin.phone {
     width: 22rem;

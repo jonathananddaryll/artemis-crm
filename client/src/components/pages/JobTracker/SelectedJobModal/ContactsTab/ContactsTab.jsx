@@ -6,8 +6,8 @@ export default function ContactsTab() {
   return (
     <div className={styles.contactsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <Button value={'Create Contact'} color={'blue'} />
-        <Button value={'Link Contact'} color={'blue'} />
+        <Button value={'Create Contact'} color={'blue'} size={'small'} />
+        <Button value={'Link Contact'} color={'blue'} size={'small'} />
       </div>
       <div className={styles.contactsContentContainer}>
         <p>no linked contacts.. make this pretty later</p>
