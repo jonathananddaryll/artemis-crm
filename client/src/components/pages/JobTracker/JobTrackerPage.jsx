@@ -49,11 +49,11 @@ export default function JobTrackerPage() {
   const dispatch = useDispatch();
 
   // get all the jobs
-  useEffect(() => {
-    if (selectedBoardStatusCols !== null && selectedBoard !== null) {
-      dispatch(getjobswithBoardId(board_id));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (selectedBoardStatusCols !== null && selectedBoard !== null) {
+  //     dispatch(getjobswithBoardId(board_id));
+  //   }
+  // }, []);
 
   // Board Loading
   if (
@@ -75,6 +75,17 @@ export default function JobTrackerPage() {
     loadStart1 &&
     selectedBoard !== null &&
     selectedBoardStatusCols === null
+  ) {
+    dispatch(changeBoard(selectedBoard));
+    dispatch(getjobswithBoardId(board_id));
+    setLoadStart1(false);
+  }
+
+  // This will trigger if a user click a board from board page
+  if (
+    loadStart1 &&
+    selectedBoard !== null &&
+    selectedBoardStatusCols !== null
   ) {
     dispatch(changeBoard(selectedBoard));
     dispatch(getjobswithBoardId(board_id));

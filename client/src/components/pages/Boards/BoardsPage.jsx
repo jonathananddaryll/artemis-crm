@@ -31,8 +31,10 @@ export default function BoardsPage() {
 
   // // get all the jobs
   useEffect(() => {
-    // this will be loaded with the current loggedIn user's id or clerk_id
-    dispatch(getBoards(userId));
+    // this will be loaded with the current loggedIn user's user_id
+    if (boardsLoading) {
+      dispatch(getBoards(userId));
+    }
   }, []);
 
   const handleBoardClick = board => {

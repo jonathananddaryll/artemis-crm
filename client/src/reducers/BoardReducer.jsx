@@ -387,9 +387,8 @@ const boardSlice = createSlice({
       // @@@@@@@@ I MIGHT NOT NEED TO KEEP TRACK OF JOBS STATES SINCE IT'S ALREADY IN THE STATUS COLUMN INSIDE BOARD
       // state.jobs = action.payload;
       state.jobsLoading = false;
-
       const jobs = action.payload;
-      const cols = state.selectedBoardStatusCols;
+      // const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
       state.jobs = jobs;
     });
@@ -418,6 +417,7 @@ const boardSlice = createSlice({
 
       state.selectedBoardStatusCols[action.payload.status] =
         jobsWithoutDeletedJob;
+      toast.success('Successfully Deleted a Job');
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////

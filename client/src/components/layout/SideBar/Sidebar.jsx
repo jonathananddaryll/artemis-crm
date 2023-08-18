@@ -8,7 +8,7 @@ import {
   SignOutButton
 } from '@clerk/clerk-react';
 
-import SignIn from './SignIn';
+import DemoSignIn from './DemoSignIn';
 
 import { NavLink } from 'react-router-dom';
 
@@ -47,11 +47,8 @@ export default function SideBar() {
             </NavLink>
           ))}
         </div>
-        {user === null && (
-          <div>
-            <SignIn />
-          </div>
-        )}
+        {/* // Demo Sign in Button put this in landing page later */}
+        {user === null && <DemoSignIn />}
       </div>
       {isLoaded && user !== null && (
         <div className={styles.footer}>
