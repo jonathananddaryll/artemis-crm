@@ -1,10 +1,13 @@
 import React from 'react';
-import styles from './InterviewTab.module.scss';
+import styles from './InterviewsTab.module.scss';
+import Button from '../../../../layout/Button/Button';
 
 export default function InteviewTab({ interviews }) {
   return (
-    <div>
-      <button>ADD INTERVIEW</button>
+    <div className={styles.interviewsTabContainer}>
+      <div className={styles.buttonsContainer}>
+        <Button value={'Add Interview'} color={'blue'} />
+      </div>
       {interviews.length > 0 ? (
         <div>
           {interviews.map(interview => (

@@ -1,0 +1,67 @@
+/* CSS */
+.button {
+  appearance: none;
+  backface-visibility: hidden;
+  // background-color: #27ae60;
+  // background-color: #4c85f0;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(39, 174, 96, 0.15) 0 4px 9px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter, -apple-system, system-ui, 'Segoe UI', Helvetica, Arial,
+    sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 1rem 2rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button:hover {
+  // background-color: #1e8449;
+  // background-color: #2967da;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: 0.35s;
+}
+
+.button:active {
+  transform: translateY(2px);
+  transition-duration: 0.35s;
+}
+
+.button:hover {
+  box-shadow: rgba(39, 174, 96, 0.2) 0 6px 12px;
+}
+
+// Green
+.green {
+  background-color: #27ae60;
+
+  &:hover {
+    background-color: #27ae60;
+  }
+}
+
+// blue
+.blue {
+  background-color: #4c85f0;
+  &:hover {
+    background-color: #2967da;
+  }
+}

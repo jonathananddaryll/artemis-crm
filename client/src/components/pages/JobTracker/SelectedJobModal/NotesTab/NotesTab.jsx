@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import Button from '../../../../layout/Button/Button';
 
 import styles from './NotesTab.module.scss';
 import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
@@ -93,12 +94,11 @@ export default function NotesTab({
     <div className={styles.notesTabContainer}>
       {!noteFormToggle ? (
         <div className={styles.buttonsContainer}>
-          <button
-            className={styles.newNoteButton}
+          <Button
+            value={'Create New Note'}
+            color={'blue'}
             onClick={() => setNoteFormToggle(true)}
-          >
-            Create New Note
-          </button>
+          />
         </div>
       ) : (
         <div className={styles.newNoteContainer}>

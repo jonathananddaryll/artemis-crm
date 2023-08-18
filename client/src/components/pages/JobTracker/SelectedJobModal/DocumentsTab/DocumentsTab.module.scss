@@ -1,18 +1,13 @@
 .documentsTabContainer {
-  padding: 2rem;
+  padding: 1.2rem 2rem;
   position: relative;
 }
 
 .buttonsContainer {
-  height: 5rem;
+  // height: 5rem;
   text-align: right;
-  /* background-color: red; */
-}
 
-.createDocumentButton,
-.linkDocumentButton {
-  /* float: right; */
-  height: 4rem;
-  padding: 0 2rem;
-  margin-left: 1rem;
+  button {
+    margin-left: 1rem;
+  }
 }

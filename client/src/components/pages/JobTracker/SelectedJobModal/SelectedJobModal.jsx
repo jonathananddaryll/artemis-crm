@@ -19,7 +19,7 @@ import {
   updateTaskStatus
 } from '../../../../reducers/SelectedJobReducer';
 
-import InterviewTab from './InterviewTab/InterviewTab';
+import InterviewsTab from './InterviewsTab/InterviewsTab';
 import ContactsTab from './ContactsTab/ContactsTab';
 import DocumentsTab from './DocumentsTab/DocumentsTab';
 import JobInfoTab from './JobInfoTab/JobInfoTab';
@@ -176,7 +176,7 @@ export default function SelectedJobModal() {
               updateTaskStatus={updateTaskStatus}
             />
           )}
-          {activeItem === 5 && <InterviewTab interviews={interviews} />}
+          {activeItem === 5 && <InterviewsTab interviews={interviews} />}
         </div>
         <div className={styles.timelineContainer}>
           <Timeline

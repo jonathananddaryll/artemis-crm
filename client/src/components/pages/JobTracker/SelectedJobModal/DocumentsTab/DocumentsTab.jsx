@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './DocumentsTab.module.scss';
+import Button from '../../../../layout/Button/Button';
 
 export default function DocumentsTab() {
   return (
     <div className={styles.documentsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <button className={styles.createDocumentButton}>Add Document</button>
-        <button className={styles.linkDocumentButton}>Link Document</button>
+        <Button value={'Add Document'} color={'blue'} />
+        <Button value={'Link Document'} color={'blue'} />
       </div>
       <div className={styles.documentsContentContainer}>
         <p>no linked documents.. make this pretty later</p>

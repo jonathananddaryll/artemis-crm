@@ -5,6 +5,8 @@ import { useSession } from '@clerk/clerk-react';
 
 import timeSince from '../../../../../helpers/convertDate';
 
+import Button from '../../../../layout/Button/Button';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -109,12 +111,11 @@ export default function TasksTab({
     <div className={styles.tasksTabContainer}>
       {!toggleForm ? (
         <div className={styles.buttonsContainer}>
-          <button
-            className={styles.createTaskButton}
+          <Button
+            value={'Create Task'}
+            color={'blue'}
             onClick={() => setToggleForm(true)}
-          >
-            Create Task
-          </button>
+          />
         </div>
       ) : (
         <div className={styles.newTaskForm}>
