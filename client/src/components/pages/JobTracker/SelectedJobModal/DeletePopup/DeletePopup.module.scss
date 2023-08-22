@@ -17,22 +17,24 @@
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgb(228, 233, 228);
+  background: #fff;
   width: 50rem;
-  height: 12rem;
+  padding: 1rem;
+  border-radius: 10px;
+  padding-top: 1.8rem;
 }
 
 .popupButtons {
-  padding: 1rem;
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  text-align: right;
+  margin-top: 2rem;
 
-  button {
+  input {
     margin-left: 1rem;
   }
 }
 
 .textPopup {
   font-size: 1.6rem;
+  // Change this font-family later
+  font-family: 'Montserrat', sans-serif;
 }

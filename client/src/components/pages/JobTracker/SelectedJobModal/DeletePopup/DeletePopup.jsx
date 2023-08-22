@@ -20,11 +20,13 @@ export default function DeletePopup({
         <div className={styles.popupButtons}>
           {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
           <Button
+            type={'button'}
             value={'Cancel'}
             color={'white'}
             onClick={() => setConfirmationToggle(false)}
           />
           <Button
+            type={'button'}
             value={'OK'}
             color={'blue'}
             onClick={() => handleDeleteJob()}

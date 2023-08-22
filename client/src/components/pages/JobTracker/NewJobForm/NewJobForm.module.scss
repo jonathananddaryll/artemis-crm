@@ -18,7 +18,7 @@
 
 .modal {
   width: 500px;
-  background-color: white;
+  background-color: #fff;
 
   /* center */
   position: absolute;
@@ -36,7 +36,7 @@
 
 .formHeader {
   padding: 12px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(216, 210, 210);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,6 +53,12 @@
     font-size: 1.5rem;
     /* height: 50px; */
   }
+}
+
+.headerText {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: rgb(49, 39, 39);
 }
 
 .formContainer {

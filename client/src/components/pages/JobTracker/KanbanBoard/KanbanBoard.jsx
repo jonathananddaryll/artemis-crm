@@ -91,7 +91,12 @@ export default function KanbanBoard({
         {/* Add list column only shows when there's less than 10 total status columns */}
         {selectedBoard.total_cols < 10 && (
           <div className={styles.addlistContainer}>
-            <button onClick={() => setAddListToggle(true)}>Add list</button>
+            <button
+              className={styles.newListButton}
+              onClick={() => setAddListToggle(true)}
+            >
+              Add list +
+            </button>
           </div>
         )}
       </DragDropContext>

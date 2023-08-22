@@ -15,12 +15,34 @@
 }
 
 .addlistContainer {
-  background-color: #f2f3f5;
+  background-color: rgb(234, 236, 240);
   border-radius: 10px;
   width: 27rem;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  overflow: hidden;
 
   @include mixin.phone {
     width: 25rem;
+  }
+}
+
+.newListButton {
+  // height: 2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  padding: 1.5rem 0;
+
+  // margin: 0;
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 2rem;
+  color: #6c788d;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #d5d9e2;
   }
 }
 
@@ -93,6 +115,7 @@
   border: none;
   padding: 1rem 2rem;
   text-align: left;
+  transition: all 0.3s;
 
   & span {
     font-size: 2.5rem;

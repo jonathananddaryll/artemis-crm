@@ -94,7 +94,7 @@ export default function NewJobForm() {
       ></div>
       <div className={styles.modal}>
         <div className={styles.formHeader}>
-          <p>Add Job</p>
+          <p className={styles.headerText}>Add New Job</p>
           <button onClick={() => dispatch(handleToggleForm([false, null]))}>
             <i className='bi bi-x-lg'></i>
           </button>

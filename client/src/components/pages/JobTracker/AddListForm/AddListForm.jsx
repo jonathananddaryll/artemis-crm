@@ -3,6 +3,7 @@ import styles from './AddListForm.module.scss';
 import { useDispatch } from 'react-redux';
 import { addColumn } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
+import Button from '../../../layout/Button/Button';
 
 export default function AddListForm({
   setAddListToggle,
@@ -40,19 +41,38 @@ export default function AddListForm({
 
   return (
     <div className={styles.form_wrapper}>
-      <p>ADD LIST FORM</p>
-      <p>{columnStatus}</p>
-      <form onSubmit={e => onSubmit(e)}>
-        <input
-          type='text'
-          name='columnStatus'
-          value={columnStatus}
-          onChange={e => onChangeHandler(e)}
-          required
-        />
-        <input type='submit' value='Add List' />
-      </form>
-      <button onClick={() => setAddListToggle(false)}>Cancel</button>
+      <div
+        className={styles.popupOuter}
+        onClick={() => setConfirmationToggle(false)}
+      ></div>
+      <div className={styles.popupBox}>
+        <form onSubmit={e => onSubmit(e)}>
+          <input
+            className={styles.columnStatusInput}
+            type='text'
+            name='columnStatus'
+            value={columnStatus}
+            onChange={e => onChangeHandler(e)}
+            required
+          />
+          <div className={styles.buttonsContainer}>
+            <Button
+              type={'button'}
+              value={'Cancel'}
+              color={'white'}
+              // size={'small'}
+              onClick={() => setAddListToggle(false)}
+            />
+            <Button
+              type={'submit'}
+              value={'Add New List'}
+              color={'blue'}
+              // size={'small'}
+            />
+          </div>
+        </form>
+        {/* <button onClick={() => setAddListToggle(false)}>Cancel</button> */}
+      </div>
     </div>
   );
 }
