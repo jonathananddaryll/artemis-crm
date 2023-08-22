@@ -11,7 +11,7 @@ import {
 import { useSession } from '@clerk/clerk-react';
 
 import Column from './Column';
-import styles from './KanbanBoard.module.scss';
+import styles from './KanbanBoard.module.css';
 
 export default function KanbanBoard({
   setAddListToggle,
@@ -91,12 +91,7 @@ export default function KanbanBoard({
         {/* Add list column only shows when there's less than 10 total status columns */}
         {selectedBoard.total_cols < 10 && (
           <div className={styles.addlistContainer}>
-            <button
-              className={styles.newListButton}
-              onClick={() => setAddListToggle(true)}
-            >
-              Add list +
-            </button>
+            <button onClick={() => setAddListToggle(true)}>Add list</button>
           </div>
         )}
       </DragDropContext>

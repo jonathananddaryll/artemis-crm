@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
+import Button from '../../../layout/Button/Button';
 
-import styles from './UpdateForm.module.css';
+import styles from './UpdateForm.module.scss';
 
-export default function NewBoardForm({ toggleHandler }) {
+export default function NewBoardForm({ toggleHandler, setFormToggle }) {
   const [title, setTitle] = useState('');
   const dispatch = useDispatch();
 
@@ -25,7 +26,9 @@ export default function NewBoardForm({ toggleHandler }) {
 
     // Clears the form then close it
     setTitle('');
-    toggleHandler();
+
+    // Close the Form
+    setFormToggle(false);
   }
 
   return (
@@ -41,16 +44,20 @@ export default function NewBoardForm({ toggleHandler }) {
             required
           />
           <div className={styles.formButtons}>
-            <input
-              type='submit'
-              value='Create'
-              className={styles.updateBoardButton}
-            />
-            <input
-              type='button'
-              value='Cancel'
+            <Button
+              type={'button'}
+              value={'Cancel'}
+              color={'white'}
+              size={'small'}
               onClick={() => toggleHandler()}
-              className={styles.updateBoardButton}
+            />
+
+            <Button
+              type={'submit'}
+              value={'Create'}
+              color={'blue'}
+              size={'small'}
+              disabled={title === ''}
             />
           </div>
         </form>

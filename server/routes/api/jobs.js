@@ -5,7 +5,8 @@ const { Client, config } = require('../../config/db');
 
 const {
   myRequestHeaders,
-  validateRequest
+  validateRequest,
+  jobInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -14,10 +15,11 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @desc      Add a new job
 // @access    Private
 // [check('title', 'Title of the board is required').not().isEmpty()],
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', jobInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
+
   const {
     company,
     job_title,

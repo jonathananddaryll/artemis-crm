@@ -1,22 +1,22 @@
 .tasksTabContainer {
-  padding: 20px;
+  padding: 1.2rem 2rem;
   position: relative;
 }
 
 .buttonsContainer {
-  height: 50px;
+  height: 5rem;
   text-align: right;
   /* background-color: red; */
 }
 
 .newTaskForm {
   width: 80%;
-  margin: 0 auto 15px auto;
+  margin: 0 auto 1.5rem auto;
 }
 
 .formGroup {
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
 
   > label {
     display: block;
@@ -25,14 +25,14 @@
 
   > input[type='text'] {
     width: 100%;
-    padding: 2px 5px;
+    padding: 0.2rem 0.5rem;
   }
 
   > textarea {
     width: 100%;
-    padding: 2px 5px;
+    padding: 0.2rem 0.5rem;
     resize: none;
-    height: 120px;
+    height: 12rem;
   }
 
   text-align: left;
@@ -41,13 +41,13 @@
 .categoriesInput {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1rem;
 
   > p {
     /* background-color: yellow; */
     border: 1px solid black;
     border-radius: 5px;
-    padding: 3px 10px;
+    padding: 0.3rem 1rem;
     line-height: 1;
     cursor: pointer;
   }
@@ -59,9 +59,9 @@
 
 .createTaskButton {
   /* float: right; */
-  height: 40px;
-  padding: 0 20px;
-  margin-left: 10px;
+  height: 4rem;
+  padding: 0 2rem;
+  margin-left: 1rem;
 }
 
 /* .tasksContentContainer {
@@ -81,23 +81,23 @@
 
 .taskCard {
   /* background: red; */
-  padding: 15px;
-  margin-bottom: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   border: 2px solid rgba(213, 238, 250, 0.692);
   border-radius: 5px;
   display: flex;
 
-  gap: 40px;
+  gap: 4rem;
 }
 
 .taskText {
   margin: 0;
-  font-size: 16px;
+  font-size: 1.6rem;
 
   > i {
     cursor: pointer;
-    margin-right: 5px;
-    font-size: 14px;
+    margin-right: 0.5rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -105,21 +105,21 @@
   background: rgb(70, 141, 70);
   border: 0;
   border-radius: 5px;
-  padding: 3px 10px;
+  padding: 0.3rem 1rem;
   line-height: 1;
   color: white;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 
 .completedTaskText {
   margin: 0;
   text-decoration-line: line-through;
-  font-size: 16px;
+  font-size: 1.6rem;
 
   > i {
     cursor: pointer;
-    margin-right: 5px;
-    font-size: 14px;
+    margin-right: 0.5rem;
+    font-size: 1.4rem;
   }
 }
 

@@ -11,16 +11,44 @@ const myRequestHeaders = [
     .withMessage('Authorization Token is not Bearer')
 ];
 
-// const myRequestHeadersWithChecks= [
-//   header('authorization')
-//     .exists({ checkFalsy: true })
-//     .withMessage('Missing Authorization Header') // you can specify the message to show if a validation has failed
-//     .bail() // not necessary, but it stops execution if previous validation failed
-//     //you can chain different validation rules
-//     .contains('Bearer')
-//     .withMessage('Authorization Token is not Bearer'),
-//   check('title', 'Title of the board is required').not().isEmpty()
-// ];
+// for Job
+const jobInputValidator = [
+  ...myRequestHeaders,
+  check('company', 'Please enter a Company with atleast 2 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 2 }),
+  check('job_title', 'Please enter a Job Title with atleast 5 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 5 }),
+  check('location', 'Please enter a Location with atleast 5 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 5 })
+];
+
+const boardInputValidator = [
+  ...myRequestHeaders,
+  check('title', 'Please enter a Board Title with atleast 4 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 4 })
+];
+
+const addColumnInputValidator = [
+  ...myRequestHeaders,
+  check('columnStatus', 'Please enter a Board Title with atleast 3 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 3 })
+];
+
+// @TODO:
+// 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
+// 2. Notes: Create and update
+// 3. Tasks: Create and update
+// 4. Interview: Create and Update
 
 // export const myRequestHeaders1 = [
 //   header('authorization')
@@ -43,10 +71,14 @@ function validateRequest(req, res, next) {
   if (!validationErrors.isEmpty()) {
     return res.status(403).json({ errors: errorMessages });
   }
+
   next();
 }
 
 module.exports = {
   myRequestHeaders: myRequestHeaders,
-  validateRequest: validateRequest
+  validateRequest: validateRequest,
+  jobInputValidator: jobInputValidator,
+  boardInputValidator: boardInputValidator,
+  addColumnInputValidator: addColumnInputValidator
 };

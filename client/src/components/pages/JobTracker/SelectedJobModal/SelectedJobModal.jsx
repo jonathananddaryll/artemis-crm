@@ -7,6 +7,8 @@ import {
   handleToggleForm
 } from '../../../../reducers/BoardReducer';
 
+import Button from '../../../layout/Button/Button';
+
 import {
   getAllTimelines,
   resetSelectedJobItems,
@@ -19,7 +21,7 @@ import {
   updateTaskStatus
 } from '../../../../reducers/SelectedJobReducer';
 
-import InterviewTab from './InterviewTab/InterviewTab';
+import InterviewsTab from './InterviewsTab/InterviewsTab';
 import ContactsTab from './ContactsTab/ContactsTab';
 import DocumentsTab from './DocumentsTab/DocumentsTab';
 import JobInfoTab from './JobInfoTab/JobInfoTab';
@@ -30,7 +32,7 @@ import Timeline from './Timeline/Timeline';
 
 import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
-import styles from './SelectedJobModal.module.css';
+import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {
   const dispatch = useDispatch();
@@ -105,8 +107,22 @@ export default function SelectedJobModal() {
       <div className={styles.modalContainer}>
         <div className={styles.mainContainer}>
           <div className={styles.actionButtonsContainer}>
-            <button onClick={() => setConfirmationToggle(true)}>Delete</button>
-            <button onClick={() => handleClosingModal()}>Close</button>
+            {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
+            {/* <button onClick={() => handleClosingModal()}>Close</button> */}
+            <Button
+              type={'button'}
+              value={'Delete'}
+              color={'red'}
+              size={'small'}
+              onClick={() => setConfirmationToggle(true)}
+            />
+            <Button
+              type={'button'}
+              value={'Close'}
+              color={'white'}
+              size={'small'}
+              onClick={() => handleClosingModal()}
+            />
           </div>
           <div className={styles.header}>
             <div className={styles.headerLogo}></div>
@@ -176,7 +192,7 @@ export default function SelectedJobModal() {
               updateTaskStatus={updateTaskStatus}
             />
           )}
-          {activeItem === 5 && <InterviewTab interviews={interviews} />}
+          {activeItem === 5 && <InterviewsTab interviews={interviews} />}
         </div>
         <div className={styles.timelineContainer}>
           <Timeline

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './SideBar.module.css';
+import styles from './SideBar.module.scss';
 import {
   useClerk,
   UserButton,
@@ -7,6 +7,8 @@ import {
   useUser,
   SignOutButton
 } from '@clerk/clerk-react';
+
+import DemoSignIn from './DemoSignIn';
 
 import { NavLink } from 'react-router-dom';
 
@@ -45,6 +47,8 @@ export default function SideBar() {
             </NavLink>
           ))}
         </div>
+        {/* // Demo Sign in Button put this in landing page later */}
+        {user === null && <DemoSignIn />}
       </div>
       {isLoaded && user !== null && (
         <div className={styles.footer}>

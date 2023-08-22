@@ -1,6 +1,7 @@
 import React from 'react';
+import Button from '../../../../layout/Button/Button';
 
-import styles from './DeletePopup.module.css';
+import styles from './DeletePopup.module.scss';
 
 export default function DeletePopup({
   handleDeleteJob,
@@ -13,10 +14,23 @@ export default function DeletePopup({
         onClick={() => setConfirmationToggle(false)}
       ></div>
       <div className={styles.popupBox}>
-        <p>Are you sure you want to delete this job?</p>
+        <p className={styles.textPopup}>
+          Are you sure you want to delete this job?
+        </p>
         <div className={styles.popupButtons}>
-          <button onClick={() => setConfirmationToggle(false)}>Cancel</button>
-          <button onClick={() => handleDeleteJob()}>OK</button>
+          {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
+          <Button
+            type={'button'}
+            value={'Cancel'}
+            color={'white'}
+            onClick={() => setConfirmationToggle(false)}
+          />
+          <Button
+            type={'button'}
+            value={'OK'}
+            color={'blue'}
+            onClick={() => handleDeleteJob()}
+          />
         </div>
       </div>
     </div>

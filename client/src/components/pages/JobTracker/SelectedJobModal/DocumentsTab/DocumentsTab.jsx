@@ -1,15 +1,32 @@
 import React from 'react';
-import styles from './DocumentsTab.module.css';
+import styles from './DocumentsTab.module.scss';
+import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noDocuments from '../../../../../assets/nofiles.svg';
 
 export default function DocumentsTab() {
   return (
     <div className={styles.documentsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <button className={styles.createDocumentButton}>Add Document</button>
-        <button className={styles.linkDocumentButton}>Link Document</button>
+        <Button
+          type={'button'}
+          value={'Link Document'}
+          color={'white'}
+          size={'small'}
+        />
+        <Button
+          type={'button'}
+          value={'Add Document'}
+          color={'blue'}
+          size={'small'}
+        />
       </div>
       <div className={styles.documentsContentContainer}>
-        <p>no linked documents.. make this pretty later</p>
+        <NoDataPlaceholder
+          image={noDocuments}
+          header={'NO LINKED DOCUMENTS'}
+          subHeader={'Here you can add and link documents'}
+        />
       </div>
     </div>
   );

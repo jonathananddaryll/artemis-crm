@@ -1,18 +1,18 @@
 .notesTabContainer {
-  padding: 20px;
+  padding: 1.2rem 2rem;
   position: relative;
 }
 
 .buttonsContainer {
-  height: 50px;
+  // height: 5rem;
   text-align: right;
   /* background-color: red; */
 }
 
 .newNoteButton {
   /* float: right; */
-  height: 40px;
-  padding: 0 20px;
+  height: 4rem;
+  padding: 0 2rem;
 }
 
 .formGroup {
@@ -24,7 +24,7 @@
 
 .textarea {
   width: 99%;
-  height: 100px;
+  height: 10rem;
 }
 
 .submitButton {
@@ -34,12 +34,12 @@
 /* NOTES BOX */
 .notesBox {
   /* width: 100%; */
-  padding: 15px;
+  padding: 1.5rem;
   background-color: rgb(238, 238, 210);
-  max-height: 230px;
+  max-height: 23rem;
   /* min-height: 100px; */
-  border-radius: 10px;
-  margin-bottom: 20px;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
 }
 
 .notesFooter {
@@ -47,8 +47,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 35px;
-  padding-top: 5px;
+  height: 3.5rem;
+  padding-top: 0.5rem;
 }
 
 .notesFooter p {

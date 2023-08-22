@@ -2,12 +2,16 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import timeSince from '../../../../helpers/convertDate';
-import styles from './KanbanBoard.module.scss';
-import { useDispatch } from 'react-redux';
+
 import {
   handleToggleForm,
   changeSelectedJob
 } from '../../../../reducers/BoardReducer';
+import { useDispatch } from 'react-redux';
+
+// FOR INTERVIEW and TASK ICON
+/* <i class="bi bi-calendar-check"></i> */
+/* <i class="bi bi-check2-square"></i> */
 
 const Container = styled.div`
   border-radius: 10px;
@@ -16,11 +20,59 @@ const Container = styled.div`
   // margin-bottom: 8px;
   margin: 0 5px 8px 5px;
   background-color: #fff;
-  cursor: pointer !important;
+  cursor: pointer;
   align-items: top;
   background-color: ${props => (props.isDragging ? '#b8d5fc' : 'white')};
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+`;
+
+const TextContent = styled.div`
+  text-align: left;
+  // margin-left: 10px;
+  color: #343949;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  gap: 10px;
+  padding-bottom: 3px;
+  line-height: 1.2;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  height: 20px;
+`;
+
+const Reminders = styled.div`
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: #97a2b6;
+  line-height: 1;
+`;
+
+const TitleText = styled.p`
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const CompanyText = styled.p`
+  text-transform: capitalize;
+  font-size: 15px;
+
+  i {
+    font-size: 13px;
+    margin-right: 4px;
+  }
+`;
+
+const CreatedText = styled.p`
+  font-size: 12px;
+  color: #97a2b6;
 `;
 
 export default function Job({ job, index }) {
@@ -35,22 +87,21 @@ export default function Job({ job, index }) {
           isDragging={snapshot.isDragging}
           onClick={() => dispatch(changeSelectedJob([true, job]))}
         >
-          <div className={styles.jobBox}>
-            <p className={styles.textJobTitle}>
-              {job.job_title.substring(0, 28)}
-            </p>
-            <div className={styles.jobInfoFlex}>
-              <p className={styles.textCompany}>
+          <TextContent>
+            <TitleText>{job.job_title.substring(0, 28)}</TitleText>
+            <Flex>
+              <CompanyText>
                 <i className='bi bi-building-fill'></i>
                 {job.company}
-              </p>
-              <p className={styles.textCompany}>
+              </CompanyText>
+              <CompanyText>
                 <i className='bi bi-geo-alt-fill'></i>
                 {job.location}
-              </p>
-            </div>
-            <div className={styles.footer}>
-              <div className={styles.reminders}>
+              </CompanyText>
+            </Flex>
+
+            <Footer>
+              <Reminders>
                 {/* for incomplete task count */}
                 {job.incomplete_task_count > 0 && (
                   <i className='bi bi-check2-square'></i>
@@ -63,13 +114,10 @@ export default function Job({ job, index }) {
                 {job.pending_interview_count > 0 && (
                   <i className='bi bi-telephone'></i>
                 )}
-              </div>
-              <p className={styles.textCreated}>
-                {timeSince(job.date_created)}
-              </p>
-            </div>
-          </div>
-
+              </Reminders>
+              <CreatedText>{timeSince(job.date_created)}</CreatedText>
+            </Footer>
+          </TextContent>
           {provided.placeholder}
         </Container>
       )}

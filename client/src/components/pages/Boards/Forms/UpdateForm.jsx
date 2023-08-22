@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateBoardName } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 
-import styles from './UpdateForm.module.css';
+import styles from './UpdateForm.module.scss';
+import Button from '../../../layout/Button/Button';
 
 export default function UpdateForm({ board, handleToggleUpdateForm }) {
   const [newTitle, setNewTitle] = useState(board.title);
@@ -46,18 +47,21 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
             required
           />
           <div className={styles.formButtons}>
-            <input
-              type='submit'
-              value='Update'
-              className={styles.updateBoardButton}
-            />
-            <input
-              type='button'
-              value='Cancel'
-              className={styles.updateBoardButton}
+            <Button
+              type={'button'}
+              value={'Cancel'}
+              color={'white'}
+              size={'small'}
               onClick={() =>
                 handleToggleUpdateForm({ ind: null, state: false })
               }
+            />
+            <Button
+              type={'submit'}
+              value={'Update'}
+              color={'blue'}
+              size={'small'}
+              disabled={newTitle === ''}
             />
           </div>
         </form>

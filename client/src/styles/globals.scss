@@ -74,18 +74,21 @@ h6 {
   margin: 0 auto;
   text-align: center;
   max-height: 100vh;
+
+  @include mixin.phone {
+    max-height: 100dvh;
+  }
 }
 
 /* MERGE THIS WITH THE RESET ON TOP  */
-#__next {
-  margin: 0 auto;
-  text-align: center;
-  max-height: 100vh;
-}
 
 .flex {
   display: flex;
   height: 100vh;
+
+  @include mixin.phone {
+    max-height: 100dvh;
+  }
 }
 
 button {
@@ -105,6 +108,16 @@ h6 {
   font-family: 'Montserrat', sans-serif;
 }
 
+// Input - Change to better font later
+input {
+  font-family: 'Montserrat', sans-serif;
+}
+
+// Label - Change to better font later
+label {
+  font-family: 'Montserrat', sans-serif;
+}
+
 /* font-family: 'Barlow Condensed', sans-serif; */
 /* font-family: 'Montserrat', sans-serif; */
 
@@ -115,27 +128,45 @@ html {
   font-size: 62.5%;
 
   @include mixin.tabLandscape {
-    // width < 1200
+    // width < 1200px
     font-size: 56.25%; // 1 rem = 9px   9/16 = 50%
   }
 
   @include mixin.tabPortrait {
-    // width < 900
+    // width < 900px
     font-size: 50%; // 1 rem = 8px    8/16 = 50%;
   }
 
   @include mixin.phone {
-    // width < 600
-    font-size: 43.75%; // 1 rem = 8px    7/16 = 43.75%;
+    // width < 600px
+    // font-size: 43.75%; // 1 rem = 7px    7/16 = 43.75%;
+    font-size: 50%; // 1 rem = 8px    8/16 = 50%;
   }
 
   @include mixin.smallPhone {
-    // width < 600
-    font-size: 43.75%; // 1 rem = 8px    8/16 = 43.75%;
+    // width < 450px
+    // font-size: 43.75%; // 1 rem = 7px    7/16 = 43.75%;
+
+    // width < 450px
+    font-size: 50%; // 1 rem = 8px    8/16 = 50%;
   }
 
   // Probably wont use this but just in case
-  @include mixin.bigDesktop {
-    font-size: 68.75%; // 1rem = 12px     12/16 = 75%
+  // @include mixin.bigDesktop {
+  //   font-size: 68.75%; // 1rem = 12px     12/16 = 75%
+  // }
+}
+
+// Toastify Styling
+.Toastify__toast-container {
+  font-size: 1.4rem;
+}
+
+// For input text so it doesnt do zoom in since phone needs atleast 16px font-size
+// maybe change this to a better solution so we can use smaller font-size and it doesn't zoom in.
+input[type='text'],
+textarea {
+  @include mixin.phone {
+    font-size: 2rem !important;
   }
 }

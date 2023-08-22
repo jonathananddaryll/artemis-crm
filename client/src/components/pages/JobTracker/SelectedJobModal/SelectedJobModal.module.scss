@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .wrapper {
   background-color: #483375ea;
   position: absolute;
@@ -15,9 +17,9 @@
 
 .modalContainer {
   height: 85vh;
-  max-width: 1100px;
+  max-width: 110rem;
   width: 90%;
-  background-color: #fdfdff;
+  background-color: #ffffff;
   position: absolute;
   top: 48%;
   left: 50%;
@@ -25,6 +27,13 @@
   display: flex;
   border-radius: 10px;
   overflow: hidden;
+
+  @include mixin.tabPortrait {
+    width: 100%;
+    // height: 100%;
+    top: 50%;
+    overflow: scroll;
+  }
 }
 
 .mainContainer {
@@ -33,38 +42,50 @@
 
 /* BUTTONS IN HEADER SECTION */
 .actionButtonsContainer {
-  height: 60px;
+  height: 6rem;
   /* background: green; */
   display: flex;
   justify-content: end;
-  padding: 0 15px;
+  padding: 0 1.5rem;
   align-items: center;
+
+  // Margin button
+  input {
+    margin-left: 1rem;
+  }
 }
 
-.actionButtonsContainer button {
-  height: 30px;
-  margin-left: 10px;
-  width: 70px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgb(157, 157, 240);
-}
+// .actionButtonsContainer button {
+//   // height: 3rem;
+//   margin-left: 1rem;
+//   // width: 7rem;
+//   border-radius: 5px;
+//   padding: 0.5rem 1rem;
+//   border: none;
+//   background-color: transparent;
+//   font-size: 2rem;
+//   color: rgb(77, 57, 57);
+// }
 
 /* HEADER SECTION */
 .header {
   display: flex;
-  padding: 0 35px 50px 35px;
+  padding: 0 3.5rem 5rem 3.5rem;
+
+  @include mixin.phone {
+    padding: 0 2rem 2rem 2rem;
+  }
 }
 
 .headerLogo {
-  width: 80px;
+  width: 8rem;
   background: rgb(230, 230, 236);
-  height: 80px;
-  border-radius: 10px;
+  height: 8rem;
+  border-radius: 1rem;
 }
 
 .headerInfo {
-  margin-left: 20px;
+  margin-left: 2rem;
   text-align: left;
 }
 
@@ -74,21 +95,25 @@
 
 .textJobTitle {
   text-transform: capitalize;
-  font-size: 35px;
-  margin: 0 0 5px;
+  font-size: 3.5rem;
+  margin: 0 0 0.5rem;
+
+  @include mixin.phone {
+    font-size: 2.7rem;
+  }
 }
 
 .textSub {
   text-transform: capitalize;
-  font-size: 20px;
+  font-size: 2rem;
 
   /* change margin to 0 later and have an icon on the left of the text */
-  margin: 0 20px 0 0;
+  margin: 0 2rem 0 0;
 }
 
 .textSub i {
-  font-size: 17px;
-  margin-right: 2px;
+  font-size: 1.7rem;
+  margin-right: 0.2rem;
 }
 
 /* SUB NAVIGATION SECTION */
@@ -96,6 +121,10 @@
   /* padding: 0 35px; */
   /* border-bottom: 1px solid black; */
   background-color: #ccccdb;
+
+  @include mixin.phone {
+    overflow-x: auto;
+  }
 }
 
 .subNavigationItems {
@@ -103,15 +132,20 @@
   justify-content: space-between;
   margin: 0;
   padding: 0;
-  height: 50px;
+  height: 5rem;
   align-items: center;
+
+  @include mixin.phone {
+    width: 130%;
+    overflow: hidden;
+  }
 }
 
 .subNavigationItem {
   cursor: pointer;
   height: 100%;
   width: 100%;
-  line-height: 50px;
+  line-height: 5rem;
   border-top: 2px solid #bdbdcc;
   transition: all 0.3s ease;
 }
@@ -127,18 +161,22 @@
 .subNavigationText {
   text-transform: capitalize;
   margin: 0;
-  font-size: 17px;
+  font-size: 1.7rem;
 }
 
 .subNavigationText i {
-  font-size: 15px;
-  margin-right: 5px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
 }
 
 /* TIMELINE SECTION */
 .timelineContainer {
-  width: 350px;
-  background: #eeeef3;
-  padding: 0 10px 0 18px;
+  width: 35rem;
+  background: #f1f1f3;
+  padding: 0 1rem 0 1.8rem;
   height: 100%;
+
+  @include mixin.phone {
+    display: none;
+  }
 }

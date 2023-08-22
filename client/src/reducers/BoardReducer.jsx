@@ -49,17 +49,13 @@ export const createBoard = createAsyncThunk(
       }
     };
 
-    // Makes the string an obj to send a json to the post route
-    // const formData = {
-    //   title: title
-    // };
-
     try {
       const res = await axios.post('/api/boards', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -84,9 +80,10 @@ export const addColumn = createAsyncThunk(
 
       // return res.data;
       return formData.columnStatus;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -138,18 +135,13 @@ export const updateBoardName = createAsyncThunk(
 
       // return res.data;
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
-
-// @TODO:
-// 1. update board (name)
-// 2. update board (column)
-// 3. delete board (make sure no jobs in it)
-//////////////////////////// JOBS //////////////////////////////////////////////
 
 // Gets all the job with boardId
 export const getjobswithBoardId = createAsyncThunk(
@@ -181,9 +173,10 @@ export const addJob = createAsyncThunk(
     try {
       const res = await axios.post('/api/jobs', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -347,6 +340,11 @@ const boardSlice = createSlice({
       toast.success('Successfully Created a New Board');
     });
 
+    // Display errors in createBoard with toastify
+    builder.addCase(createBoard.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     builder.addCase(addColumn.fulfilled, (state, action) => {
       state.selectedBoardStatusCols = {
         ...state.selectedBoardStatusCols,
@@ -358,6 +356,11 @@ const boardSlice = createSlice({
       toast.success(
         `Successfully Added a Column in ${state.selectedBoard.title}`
       );
+    });
+
+    // Display errors in addColumn with toastify
+    builder.addCase(addColumn.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
@@ -372,6 +375,11 @@ const boardSlice = createSlice({
       toast.success('Successfully Renamed a Board');
     });
 
+    // Display errors in addJob with toastify
+    builder.addCase(updateBoardName.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
     builder.addCase(addJob.fulfilled, (state, action) => {
       state.selectedBoardStatusCols[action.payload.status] = [
@@ -383,20 +391,20 @@ const boardSlice = createSlice({
       toast.success('Successfully Added a New Job');
     });
 
+    // Display errors in addJob with toastify
+    builder.addCase(addJob.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     builder.addCase(getjobswithBoardId.fulfilled, (state, action) => {
       // @@@@@@@@ I MIGHT NOT NEED TO KEEP TRACK OF JOBS STATES SINCE IT'S ALREADY IN THE STATUS COLUMN INSIDE BOARD
       // state.jobs = action.payload;
       state.jobsLoading = false;
-
       const jobs = action.payload;
-      const cols = state.selectedBoardStatusCols;
+      // const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
       state.jobs = jobs;
     });
-
-    // builder.addCase(updateJobStatus.pending, (state, action) => {
-    //   toast.info('Updating Job Status', { autoClose: 500 });
-    // });
 
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
       // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
@@ -418,6 +426,7 @@ const boardSlice = createSlice({
 
       state.selectedBoardStatusCols[action.payload.status] =
         jobsWithoutDeletedJob;
+      toast.success('Successfully Deleted a Job');
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////

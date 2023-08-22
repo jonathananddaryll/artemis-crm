@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
-import styles from './Boards.module.css';
+import styles from './Boards.module.scss';
 import NewBoardForm from './Forms/NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
 import UpdateForm from './Forms/UpdateForm';
@@ -31,8 +31,10 @@ export default function BoardsPage() {
 
   // // get all the jobs
   useEffect(() => {
-    // this will be loaded with the current loggedIn user's id or clerk_id
-    dispatch(getBoards(userId));
+    // this will be loaded with the current loggedIn user's user_id
+    if (boardsLoading) {
+      dispatch(getBoards(userId));
+    }
   }, []);
 
   const handleBoardClick = board => {
@@ -42,7 +44,7 @@ export default function BoardsPage() {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.header}>
-        <h3>My Personal Boards</h3>
+        <h3 className={styles.textHeader}>My Personal Boards</h3>
       </div>
 
       {boardsLoading ? (
@@ -65,7 +67,10 @@ export default function BoardsPage() {
                   + New Board
                 </button>
               ) : (
-                <NewBoardForm toggleHandler={toggleHandler} />
+                <NewBoardForm
+                  toggleHandler={toggleHandler}
+                  setFormToggle={setFormToggle}
+                />
               )}
             </div>
           </div>
@@ -80,14 +85,17 @@ export default function BoardsPage() {
                   className={styles.boardBox}
                   onClick={() => handleBoardClick(board)}
                 >
-                  <p key={board.id} className={styles.textBoardTitle}>
-                    {board.title}
-                  </p>
+                  <div className={styles.boardBoxHeader}>
+                    <p key={board.id} className={styles.textBoardTitle}>
+                      {board.title}
+                    </p>
+                  </div>
+
                   <p className={styles.textBoardDateCreated}>
                     Created {timeSince(board.date_created)}
                   </p>
                 </div>
-              </Link>{' '}
+              </Link>
               <button
                 className={styles.editButton}
                 onClick={e =>
@@ -99,6 +107,7 @@ export default function BoardsPage() {
               >
                 <i className='bi bi-pencil'></i>
               </button>
+
               {titleFormToggle.state && titleFormToggle.ind === idx && (
                 <UpdateForm
                   board={board}

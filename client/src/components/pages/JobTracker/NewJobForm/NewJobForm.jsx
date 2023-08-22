@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import styles from './NewJobForm.module.css';
+import styles from './NewJobForm.module.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
 import { handleToggleForm, addJob } from '../../../../reducers/BoardReducer';
+
+import Button from '../../../layout/Button/Button';
 
 export default function NewJobForm() {
   const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =
@@ -92,7 +94,7 @@ export default function NewJobForm() {
       ></div>
       <div className={styles.modal}>
         <div className={styles.formHeader}>
-          <p>Add Job</p>
+          <p className={styles.headerText}>Add New Job</p>
           <button onClick={() => dispatch(handleToggleForm([false, null]))}>
             <i className='bi bi-x-lg'></i>
           </button>
@@ -100,7 +102,9 @@ export default function NewJobForm() {
         <div className={styles.formContainer}>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
-              <label>Company</label>
+              <label>
+                Company<span> *</span>
+              </label>
               <input
                 type='text'
                 name='company'
@@ -111,7 +115,9 @@ export default function NewJobForm() {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Job Title</label>
+              <label>
+                Job Title<span> *</span>
+              </label>
               <input
                 type='text'
                 name='job_title'
@@ -122,7 +128,9 @@ export default function NewJobForm() {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Location</label>
+              <label>
+                Location<span> *</span>
+              </label>
               <input
                 type='text'
                 name='location'
@@ -150,27 +158,29 @@ export default function NewJobForm() {
                   type='text'
                   name='status'
                   value={status}
-                  readonly
+                  readOnly
                   required
                 />
               </div>
               <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
                 <label>Link Contact</label>
-                <input type='text' name='contact' readonly />
+                <input type='text' name='contact' readOnly />
               </div>
             </div>
             <div className={styles.buttonsContainer}>
-              <input className={styles.button} type='submit' value='Save Job' />
-              <input
-                className={styles.button}
-                type='button'
-                value='Cancel'
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
                 onClick={() => dispatch(handleToggleForm([false, null]))}
               />
+              <Button
+                type={'submit'}
+                value={'Save Job'}
+                color={'blue'}
+                disabled={company === '' || job_title === '' || location === ''}
+              />
             </div>
-            {/* <button onClick={() => dispatch(handleToggleForm([false, null]))}>
-                CANCEL NEW JOB FORM
-              </button> */}
           </form>
         </div>
       </div>

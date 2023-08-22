@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
-import styles from './ContactsTab.module.css';
+import styles from './ContactsTab.module.scss';
+import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noContacts from '../../../../../assets/nocontacts.svg';
 
 export default function ContactsTab() {
   return (
     <div className={styles.contactsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <button className={styles.createContactButton}>Create Contact</button>
-        <button className={styles.linkContactButton}>Link Contact</button>
+        <Button
+          type={'button'}
+          value={'Link Contact'}
+          color={'white'}
+          size={'small'}
+        />
+        <Button
+          type={'button'}
+          value={'Create Contact'}
+          color={'blue'}
+          size={'small'}
+        />
       </div>
       <div className={styles.contactsContentContainer}>
-        <p>no linked contacts.. make this pretty later</p>
+        <NoDataPlaceholder
+          image={noContacts}
+          header={'NO LINKED CONTACTS'}
+          subHeader={'Here you can create and link contacts'}
+        />
       </div>
     </div>
   );

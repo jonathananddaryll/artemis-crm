@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
-import styles from './NotesTab.module.css';
+import styles from './NotesTab.module.scss';
 import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
+
+import noNotes from '../../../../../assets/nonotes.svg';
 
 export default function NotesTab({
   createNote,
@@ -93,12 +97,13 @@ export default function NotesTab({
     <div className={styles.notesTabContainer}>
       {!noteFormToggle ? (
         <div className={styles.buttonsContainer}>
-          <button
-            className={styles.newNoteButton}
+          <Button
+            type={'button'}
+            value={'Create New Note'}
+            color={'blue'}
+            size={'small'}
             onClick={() => setNoteFormToggle(true)}
-          >
-            Create New Note
-          </button>
+          />
         </div>
       ) : (
         <div className={styles.newNoteContainer}>
@@ -128,7 +133,13 @@ export default function NotesTab({
         <p>notes loading</p>
       ) : (
         <div className={styles.notesContentContainer}>
-          {notes.length > 0 ? (
+          {notes.length === 0 && !noteFormToggle ? (
+            <NoDataPlaceholder
+              image={noNotes}
+              header={'NO NOTES'}
+              subHeader={'Here you can write notes'}
+            />
+          ) : (
             <>
               {notes.map(note => (
                 <div key={note.id} className={styles.notesBox}>
@@ -147,12 +158,8 @@ export default function NotesTab({
                     </div>
                   </div>
                 </div>
-              ))}{' '}
+              ))}
             </>
-          ) : (
-            <div className={styles.noNotes}>
-              <p>NO NOTES.... MAKE THIS PRETTY LATER</p>
-            </div>
           )}
         </div>
       )}

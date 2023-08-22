@@ -6,7 +6,9 @@ const { Client, config } = require('../../config/db');
 // const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
-  validateRequest
+  validateRequest,
+  boardInputValidator,
+  addColumnInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -75,7 +77,7 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
 // @desc      Add a new board
 // @access    Private
 // [check('title', 'Title of the board is required').not().isEmpty()],
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', boardInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
@@ -117,7 +119,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
 // @access    Private
 router.patch(
   '/:board_id/add',
-  myRequestHeaders,
+  addColumnInputValidator,
   validateRequest,
   async (req, res) => {
     // do the calculating of what colum to add to. have a keeper of first empty column in redux
@@ -232,7 +234,7 @@ router.patch(
 // @access    Private
 router.patch(
   '/:board_id/update/name',
-  myRequestHeaders,
+  boardInputValidator,
   validateRequest,
   async (req, res) => {
     // const errors = validationResult(req);
