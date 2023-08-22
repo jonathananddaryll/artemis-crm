@@ -1,17 +1,17 @@
 import React from 'react';
 import styles from './Button.module.scss';
 
-const Button = ({ value, onClick, color, size, disabled }) => {
+const Button = ({ type, value, onClick, color, size, disabled }) => {
   return (
-    <button
+    <input
+      type={type}
       className={
         `${styles.button}` + ' ' + `${styles[color]}` + ' ' + `${styles[size]}`
       }
       onClick={onClick}
       disabled={disabled}
-    >
-      {value}
-    </button>
+      value={value}
+    />
   );
 };
 

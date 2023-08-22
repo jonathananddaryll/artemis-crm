@@ -6,8 +6,18 @@ export default function DocumentsTab() {
   return (
     <div className={styles.documentsTabContainer}>
       <div className={styles.buttonsContainer}>
-        <Button value={'Link Document'} color={'blue'} size={'small'} />
-        <Button value={'Add Document'} color={'blue'} size={'small'} />
+        <Button
+          type={'button'}
+          value={'Link Document'}
+          color={'white'}
+          size={'small'}
+        />
+        <Button
+          type={'button'}
+          value={'Add Document'}
+          color={'blue'}
+          size={'small'}
+        />
       </div>
       <div className={styles.documentsContentContainer}>
         <p>no linked documents.. make this pretty later</p>

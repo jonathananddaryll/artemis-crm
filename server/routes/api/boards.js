@@ -6,7 +6,8 @@ const { Client, config } = require('../../config/db');
 // const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
-  validateRequest
+  validateRequest,
+  boardInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -75,7 +76,7 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
 // @desc      Add a new board
 // @access    Private
 // [check('title', 'Title of the board is required').not().isEmpty()],
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', boardInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
@@ -232,7 +233,7 @@ router.patch(
 // @access    Private
 router.patch(
   '/:board_id/update/name',
-  myRequestHeaders,
+  boardInputValidator,
   validateRequest,
   async (req, res) => {
     // const errors = validationResult(req);

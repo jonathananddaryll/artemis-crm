@@ -110,12 +110,14 @@ export default function SelectedJobModal() {
             {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
             {/* <button onClick={() => handleClosingModal()}>Close</button> */}
             <Button
+              type={'button'}
               value={'Delete'}
               color={'red'}
               size={'small'}
               onClick={() => setConfirmationToggle(true)}
             />
             <Button
+              type={'button'}
               value={'Close'}
               color={'white'}
               size={'small'}

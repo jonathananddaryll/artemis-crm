@@ -28,6 +28,14 @@ const jobInputValidator = [
     .isLength({ min: 5 })
 ];
 
+const boardInputValidator = [
+  ...myRequestHeaders,
+  check('title', 'Please enter a Board Title with atleast 4 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 4 })
+];
+
 // export const myRequestHeaders1 = [
 //   header('authorization')
 //     .exists({ checkFalsy: true })
@@ -49,11 +57,13 @@ function validateRequest(req, res, next) {
   if (!validationErrors.isEmpty()) {
     return res.status(403).json({ errors: errorMessages });
   }
+
   next();
 }
 
 module.exports = {
   myRequestHeaders: myRequestHeaders,
   validateRequest: validateRequest,
-  jobInputValidator: jobInputValidator
+  jobInputValidator: jobInputValidator,
+  boardInputValidator: boardInputValidator
 };

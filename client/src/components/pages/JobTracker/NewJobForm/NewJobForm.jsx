@@ -100,7 +100,7 @@ export default function NewJobForm() {
           </button>
         </div>
         <div className={styles.formContainer}>
-          <form>
+          <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
               <label>
                 Company<span> *</span>
@@ -168,31 +168,19 @@ export default function NewJobForm() {
               </div>
             </div>
             <div className={styles.buttonsContainer}>
-              {/* <input
-                className={styles.button}
-                type='button'
-                value='Cancel'
-                onClick={() => dispatch(handleToggleForm([false, null]))}
-              /> */}
-              {/* <input className={styles.button} type='submit' value='Save Job' /> */}
-
               <Button
+                type={'button'}
                 value={'Cancel'}
                 color={'white'}
-                size={'small'}
                 onClick={() => dispatch(handleToggleForm([false, null]))}
               />
               <Button
+                type={'submit'}
                 value={'Save Job'}
                 color={'blue'}
-                // size={'small'}
-                onClick={e => onSubmitHandler(e)}
                 disabled={company === '' || job_title === '' || location === ''}
               />
             </div>
-            {/* <button onClick={() => dispatch(handleToggleForm([false, null]))}>
-                CANCEL NEW JOB FORM
-              </button> */}
           </form>
         </div>
       </div>

@@ -19,6 +19,7 @@ router.post('/', jobInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
+
   const {
     company,
     job_title,

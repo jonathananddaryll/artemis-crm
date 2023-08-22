@@ -95,6 +95,7 @@ export default function NotesTab({
       {!noteFormToggle ? (
         <div className={styles.buttonsContainer}>
           <Button
+            type={'button'}
             value={'Create New Note'}
             color={'blue'}
             size={'small'}

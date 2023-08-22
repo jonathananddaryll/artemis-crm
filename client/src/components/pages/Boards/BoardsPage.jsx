@@ -67,7 +67,10 @@ export default function BoardsPage() {
                   + New Board
                 </button>
               ) : (
-                <NewBoardForm toggleHandler={toggleHandler} />
+                <NewBoardForm
+                  toggleHandler={toggleHandler}
+                  setFormToggle={setFormToggle}
+                />
               )}
             </div>
           </div>

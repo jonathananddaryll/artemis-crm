@@ -6,7 +6,7 @@ import Button from '../../../layout/Button/Button';
 
 import styles from './UpdateForm.module.scss';
 
-export default function NewBoardForm({ toggleHandler }) {
+export default function NewBoardForm({ toggleHandler, setFormToggle }) {
   const [title, setTitle] = useState('');
   const dispatch = useDispatch();
 
@@ -26,13 +26,15 @@ export default function NewBoardForm({ toggleHandler }) {
 
     // Clears the form then close it
     setTitle('');
-    toggleHandler();
+
+    // Close the Form
+    setFormToggle(false);
   }
 
   return (
     <div className={styles.updateFormContainer}>
       <div className={styles.updateForm}>
-        <form>
+        <form onSubmit={e => onSubmitHandler(e)}>
           <input
             type='text'
             value={title}
@@ -42,29 +44,20 @@ export default function NewBoardForm({ toggleHandler }) {
             required
           />
           <div className={styles.formButtons}>
-            {/* <input
-              type='submit'
-              value='Create'
-              className={styles.updateBoardButton}
-            />
-            <input
-              type='button'
-              value='Cancel'
-              onClick={() => toggleHandler()}
-              className={styles.updateBoardButton}
-            /> */}
-
             <Button
+              type={'button'}
               value={'Cancel'}
               color={'white'}
               size={'small'}
               onClick={() => toggleHandler()}
             />
+
             <Button
+              type={'submit'}
               value={'Create'}
               color={'blue'}
               size={'small'}
-              onClick={e => onSubmitHandler(e)}
+              disabled={title === ''}
             />
           </div>
         </form>

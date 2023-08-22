@@ -112,6 +112,7 @@ export default function TasksTab({
       {!toggleForm ? (
         <div className={styles.buttonsContainer}>
           <Button
+            type={'button'}
             value={'Create Task'}
             color={'blue'}
             onClick={() => setToggleForm(true)}

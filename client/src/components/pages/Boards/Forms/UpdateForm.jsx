@@ -37,7 +37,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
   return (
     <div className={styles.updateFormContainer}>
       <div className={styles.updateForm}>
-        <form>
+        <form onSubmit={e => onSubmitHandler(e)}>
           <input
             type='text'
             value={newTitle}
@@ -48,6 +48,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
           />
           <div className={styles.formButtons}>
             <Button
+              type={'button'}
               value={'Cancel'}
               color={'white'}
               size={'small'}
@@ -56,10 +57,11 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
               }
             />
             <Button
+              type={'submit'}
               value={'Update'}
               color={'blue'}
               size={'small'}
-              onClick={e => onSubmitHandler(e)}
+              disabled={newTitle === ''}
             />
           </div>
         </form>
