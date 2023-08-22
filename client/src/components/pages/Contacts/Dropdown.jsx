@@ -1,4 +1,4 @@
-import styles from './Dropdown.module.css';
+import styles from './Dropdown.module.scss';
 import React, { useState } from 'react';
 
 export default function Dropdown (props) {
@@ -32,7 +32,7 @@ return (
         onMouseLeave={() => setHidden()}
     >
         <div 
-            className={menuHiding? styles.menuHiddenHeader: styles.menuShownHeader} 
+            className={menuHiding ? styles.menuHiddenHeader : styles.menuShownHeader} 
         >
         {header}
         </div>
@@ -40,7 +40,7 @@ return (
             items.map(element => {
                 return (
                     <a 
-                        className={menuHiding? styles.menuHiddenItem: styles.menuShownItem} 
+                        className={menuHiding ? styles.menuHiddenItem : styles.menuShownItem} 
                         onClick={() => {setSearchType(element)}}
                         key={element}
                     >
@@ -49,7 +49,7 @@ return (
                 )
             })
         }
-        <div className={menuHiding? styles.menuHiddenFooter: styles.menuShownFooter}></div>
+        <div className={menuHiding ? styles.menuHiddenFooter : styles.menuShownFooter}></div>
     </section>
 )};
 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { searchArray } from '../helpers/searchArray';
 import axios from 'axios';
 
 // State for contact organizer:
@@ -41,43 +42,43 @@ export const getUserContactsTable = createAsyncThunk(
 // TODO: rewrite the backend api to not require the parameters from this async thunk, and then
 // TODO: all you have to do is rewrite the new getUserContactsTable to say getContacts, and that's it.
 // Search within all contacts for a user
-export const getContacts = createAsyncThunk(
-  'contacts/getContacts',
-  async ( searchQuery, thunkAPI ) => {
-    try {
-        // Send user_id from clerk, along with first, last in req.body
-        const params = {
-          user_id: searchQuery.user_id,
-          type: searchQuery.type
-        }
-        if(params.type === 'name'){
-          params.first = searchQuery.first;
-          params.last = searchQuery.last;
-        }else if(params.type === 'init'){
+// export const getContactsSearch = createAsyncThunk(
+//   'contacts/getContactsSearch',
+//   async ( searchQuery, thunkAPI ) => {
+//     try {
+//         // Send user_id from clerk, along with first, last in req.body
+//         const params = {
+//           user_id: searchQuery.user_id,
+//           type: searchQuery.type
+//         }
+//         if(params.type === 'name'){
+//           params.first = searchQuery.first;
+//           params.last = searchQuery.last;
+//         }else if(params.type === 'init'){
           
-        }else{
-          params.strValue = searchQuery.strValue;
-        }
-        const config = {
-          method: 'GET',
-          url: '/api/contacts',
-          withCredentials: false,
-          params: {
-            ...params
-          },
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${searchQuery.token}`
-          }
-        }
-        const res = await axios.get(`/api/contacts/`, config)
-        console.log(res)
-        return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
+//         }else{
+//           params.strValue = searchQuery.strValue;
+//         }
+//         const config = {
+//           method: 'GET',
+//           url: '/api/contacts/search',
+//           withCredentials: false,
+//           params: {
+//             ...params
+//           },
+//           headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: `Bearer ${searchQuery.token}`
+//           }
+//         }
+//         const res = state.
+//         console.log(res)
+//         return res.data;
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// );
 
 // DELETE a users contact
 export const deleteContact = createAsyncThunk(
@@ -175,7 +176,7 @@ export const createContact = createAsyncThunk(
 const contactSlice = createSlice({
   name: 'contact',
   initialState: {
-    contactsCache: {},
+    contactsCache: [],
     contactResults: [],
     newContactStaging: {},
     contactInFocus: {},
@@ -187,15 +188,16 @@ const contactSlice = createSlice({
       type: "name",
       strValue: "",
     },
+    searchFilters: []
   },
   reducers: {
     updateContactInFocus: (state, action) => {
       if(action.payload.empty){
         state.contactInFocus = {};
-        state.contactLoading = true;
+        state.contactsLoading = true;
       }else{
         state.contactInFocus = action.payload;
-        state.contactLoading = false;
+        state.contactsLoading = false;
       }
     },
     setNewContactStaging: (state, action) => {
@@ -205,30 +207,25 @@ const contactSlice = createSlice({
       state.newContactStaging = {};
     },
     clearContactInFocus: (state, action) => {
-      state.contactInFocus = {}
+      state.contactInFocus = {};
     },
     updateSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
-    searchContactsCache: (state, action) => {
-      // using searchQuery, parse the search into it's type and string values
-      // validate the search parameters and search the contactsCache for the 
-      // contact matching those filters.
-      // set contactResults equal to the results of the search
+    getContactsSearch: (state, action) => {
+      const { searchString, searchType } = action.payload;
+      let searchResults = searchArray(searchString, state.contactsCache, searchType);
+      state.contactResults = [...searchResults];
     }
   },
   extraReducers: builder => {
     builder.addCase(getContacts.fulfilled, (state, action) => {
-      state.contactResults = action.payload;
-      state.contactLoading = false;
-      // This will be the destination for data coming from the current getUserContactsTable
-      // thunk.
-      // 1) set contactsCache equal to the payload.
-      // 2) change a state to track that initial loading set was received?
+      state.contactsCache = action.payload;
+      state.contactsLoading = false;
     });
     builder.addCase(getContacts.pending, (state, action) => {
       // loading or searching animation
-      state.contactLoading = true;
+      state.contactsLoading = true;
     });
     builder.addCase(getContacts.rejected, (state, action) => {
       // if state tracking initial load says already successful, return 

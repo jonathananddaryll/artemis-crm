@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getContacts } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
-import styles from './ContactCard.module.css';
+import styles from './ContactCard.module.scss';
 
 export default function ContactCard(props) {
     const { image, name, contactInfo } = props;
@@ -20,19 +20,19 @@ export default function ContactCard(props) {
             <h2 className={styles.contactInit}>{name[0].toUpperCase() + name.split(" ")[1][0].toUpperCase()}</h2>
                 <section className={styles.cardHero}>
                     <p className={styles.contactName}>{name}</p>
-                    {contactInfo.title !== ""? <p className={styles.contactTitle}>{contactInfo.title}</p>: ""}
-                    {contactInfo.location !== ""? <p className={styles.contactLocation}>{contactInfo.location}</p>: ""}
+                    {contactInfo.title !== "" ? <p className={styles.contactTitle}>{contactInfo.title}</p>: ""}
+                    {contactInfo.location !== "" ? <p className={styles.contactLocation}>{contactInfo.location}</p>: ""}
                 </section>
                 <div className={styles.cardDetails}>
                     <div className={styles.contactInfo}>
-                        {contactInfo.phone !== ""? <p className={styles.contactPhone}>{contactInfo.phone}</p>: ""}
-                        {contactInfo.email !== ""? <p className={styles.contactEmail}>{contactInfo.email}</p>: ""}
-                        {contactInfo.linkedin !== ""? 
+                        {contactInfo.phone !== "" ? <p className={styles.contactPhone}>{contactInfo.phone}</p>: ""}
+                        {contactInfo.email !== "" ? <p className={styles.contactEmail}>{contactInfo.email}</p>: ""}
+                        {contactInfo.linkedin !== "" ? 
                             <button type="button" onClick={() => window.open(contactInfo.linkedin)} className={styles.contactLinkedin}>
                             <i className="fa-brands fa-linkedin"></i>
                             </button>
                             : ""} 
-                        {contactInfo.otherSocial !== ""? 
+                        {contactInfo.otherSocial !== "" ? 
                             <button type="button" onClick={() => window.open(contactInfo.otherSocial)} className={styles.contactSocial}>
                             <i className="fa-solid fa-link"></i>
                             </button>

@@ -11,14 +11,10 @@ import {
   UserButton
 } from '@clerk/clerk-react';
 
-<<<<<<< HEAD
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-import SideBar from './components/layout/SideBar/SideBar';
-=======
 import SideBar from './components/layout/SideBar/Sidebar';
->>>>>>> d1fcd08 (fixes for some import errors in contactspage)
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
@@ -41,8 +37,7 @@ function App() {
       <BrowserRouter>
         <ClerkProvider
           publishableKey={clerkPubKey}
-          navigate={to => navigate(to)}
-        >
+          navigate={to => navigate(to)}>
           <div className='flex'>
             <SideBar />
             <Routes>
@@ -69,31 +64,6 @@ function App() {
                 }
               ></Route>
 
-<<<<<<< HEAD
-              <Route
-                path='/boards/:board_id/jobs'
-                element={
-                  <>
-                    <SignedIn>
-                      <JobTrackerPage />
-                    </SignedIn>
-                    <SignedOut>
-                      <RedirectToSignIn></RedirectToSignIn>
-                    </SignedOut>
-                  </>
-                }
-              ></Route>
-              <Route path='/contacts' element={<Contacts />}>
-              <>
-              <SignedIn>
-                < ContactsPage />
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn></RedirectToSignIn>
-              </SignedOut>
-              </>
-            </Route>
-=======
             <Route
               path='/boards/:board_id/jobs'
               element={
@@ -120,7 +90,6 @@ function App() {
                 </>
               }
               ></Route>
->>>>>>> d1fcd08 (fixes for some import errors in contactspage)
           </Routes>
           </div>
         </ClerkProvider>

@@ -5,6 +5,9 @@
     max-height: 100vh;
     overflow:hidden;
   }
+.contactsContainer{
+  overflow: scroll;
+}
 .menuContainer{
   margin: auto;
   height: 4em;
@@ -81,5 +84,5 @@
   display: flex;
   flex-flow: row wrap;
   justify-content:space-evenly;
-
+  border: solid red 1px;
 }

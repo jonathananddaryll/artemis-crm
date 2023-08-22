@@ -13,7 +13,7 @@ import {
 import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
-import styles from './ContactForm.module.css';
+import styles from './ContactForm.module.scss';
 
 export default function ContactForm() {
 

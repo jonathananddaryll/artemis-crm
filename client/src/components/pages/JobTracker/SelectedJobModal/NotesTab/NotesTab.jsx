@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 
 import styles from './NotesTab.module.css';
-import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
+import ConfirmationPopUp from '../../../../layout/ConfirmationPopUp/ConfirmationPopUp';
 
 export default function NotesTab({
   createNote,

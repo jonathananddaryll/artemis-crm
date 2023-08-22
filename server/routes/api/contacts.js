@@ -1,18 +1,92 @@
 const express = require('express');
 const router = express.Router();
-<<<<<<< HEAD
-=======
-const Client = require('../../config/db');
+const { Client, config } = require('../../config/db');
 const format = require('pg-format');
->>>>>>> 05be52a (added more client query structure)
 
 // TODO:
 // 1) Integrate backend auth (grab user_id from clerk frontend token)
 // 2) Input validation and sql injection check
 // 3) Error handling and response object formatting
 
-// @ROUTE  GET api/contacts/:user_id
+// @ROUTE  GET api/contacts/search
 // @DESC   READ api for individual users contacts
+// @ACCESS Private
+router.get('/search', async (req, res) => {
+    try{
+
+        // Uses first OR last name to search contacts. Receives a request body with 'first', 'last', 
+        // and 'user_id' fields. User_id is required, and must provide at least one of the two other
+        // values, or you will get an error with the message 'not found'.
+
+        // TODO:
+        // 1) add LIKE into postgresql query to add more flexible search
+        // 
+        const { first, last, user_id, type, strValue, token } = req.query
+        // Query string will always begin with:
+        let queryStarter = 'SELECT * FROM %I WHERE user_id = %L'
+        // But if both first name and last name were added to the search,
+        if(first && last){
+            const query = format(queryStarter = queryStarter + ` AND first_name = %L  AND last_name = %L ORDER BY timestamp DESC;`, 'contact', user_id, first, last)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'})
+                }
+                res.status(200).json(response.rows)
+                client.end()
+            })
+        }else if(first){
+            queryStarter = queryStarter + ` AND first_name = %L`
+            const query = format(queryStarter + ` ORDER BY timestamp DESC;`, 'contact', user_id, first)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'});
+                }
+                res.status(200).json(response.rows)
+                client.end()
+            })
+        }else if(last){
+            queryStarter = queryStarter + ` AND last_name = %L`;
+            const query = format(queryStarter + ` ORDER BY timestamp DESC;`, 'contact', user_id, last)
+            const client = new Client(config)
+            client.connect()
+            client.query(query, (err, response) => {
+                if(err) {
+                    console.error(err)
+                    res.status(500).json({msg: 'query error'})
+                }
+                res.status(200).json(response.rows)
+                client.end()
+            })
+        }else{
+            if(type === "init"){
+                const query = format(queryStarter, 'contact', user_id)
+                const client = new Client(config)
+                client.connect();
+                client.query(query, (err, response) => {
+                    if(err){
+                        console.error(err)
+                        res.status(500).json({msg: 'user has no contacts, or db error'})
+                    }
+                    res.status(200).json(response.rows)
+                    client.end()
+                })
+            }else{
+                return res.status(400).json({msg: 'not found'})
+            }
+        }
+    }catch (err) {
+        res.status(500).json({msg: 'server error'})
+    }
+});
+
+// @ROUTE  GET api/contacts/
+// @DESC   READ api for individual users contacts table
 // @ACCESS Private
 router.get('/', async (req, res) => {
     try{

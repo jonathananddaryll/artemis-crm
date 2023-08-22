@@ -28,7 +28,7 @@ import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from './DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
 
-import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
+import ConfirmationPopUp from '../../../layout/ConfirmationPopUp/ConfirmationPopUp';
 
 import styles from './SelectedJobModal.module.css';
 

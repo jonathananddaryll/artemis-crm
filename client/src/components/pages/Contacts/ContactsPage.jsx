@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from '../../../reducers/ContactReducer';
+import { getContactsSearch, getUserContactsTable } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
-import styles from './ContactsPage.module.css';
+import styles from './ContactsPage.module.scss';
 
 export default function ContactsPage() {
 
@@ -35,7 +35,7 @@ export default function ContactsPage() {
             const token = await getToken()
             validated.token = token;
             dispatch(updateSearchQuery(validated))
-            dispatch(getContacts(validated));
+            dispatch(getContactsSearch(validated));
         }
       }
     const addContact = () => {
@@ -60,6 +60,7 @@ export default function ContactsPage() {
             "token": {}
         }
         if(searchObj.strValue === ""){
+            console.log('you didnt type anything valid')
             return false
         }
         if(searchObj.type !== "name"){
@@ -95,14 +96,14 @@ export default function ContactsPage() {
     useEffect(() => {
         const grabSessionToken = async () => {
             const token = await getToken()
-            searchParams.token = token
-            dispatch(getContacts(searchParams))
+            dispatch(getUserContactsTable( { user_id: user_id, token: token } ))
         }
         grabSessionToken()
         .catch(console.error)
     }, [dispatch]);
     return (
         <div className={styles.pageWrapper}>
+            <div className={styles.contactsContainer}>
             <nav className={styles.menuContainer}>
                 <ul className={styles.menu}>
                     <li className={styles.menuLinks}><a onClick={() => {addContact()}}>add+</a></li>
@@ -112,7 +113,7 @@ export default function ContactsPage() {
             </nav>
             <section className={styles.searchBar}>
                 <input onChange={ (e) => updateSearchString(e) } type="text" inputMode="search" name="searchBar"  className={styles.contactSearchInput} value={searchParams.strValue} placeholder={searchType}/>
-                <a onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></a>
+                <button onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></button>
                 <Dropdown 
                     items={["name", "company", "location"]}
                     header={"options"}
@@ -140,6 +141,7 @@ export default function ContactsPage() {
                         />                  )
                 })}
             </section>
+            </div>
             
         </div>
     );
