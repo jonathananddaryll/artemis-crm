@@ -183,7 +183,7 @@ export default function TasksTab({
         </div>
       )}
       <div className={styles.tasksContentContainer}>
-        {tasks.length === 0 && completedTasks.length === 0 ? (
+        {tasks.length === 0 && completedTasks.length === 0 && !toggleForm ? (
           <NoDataPlaceholder
             image={noTasks}
             header={'NO ACTIVITIES'}

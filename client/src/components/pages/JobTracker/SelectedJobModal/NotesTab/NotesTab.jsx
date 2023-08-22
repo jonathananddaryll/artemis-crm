@@ -133,7 +133,13 @@ export default function NotesTab({
         <p>notes loading</p>
       ) : (
         <div className={styles.notesContentContainer}>
-          {notes.length > 0 ? (
+          {notes.length === 0 && !noteFormToggle ? (
+            <NoDataPlaceholder
+              image={noNotes}
+              header={'NO NOTES'}
+              subHeader={'Here you can write notes'}
+            />
+          ) : (
             <>
               {notes.map(note => (
                 <div key={note.id} className={styles.notesBox}>
@@ -152,14 +158,8 @@ export default function NotesTab({
                     </div>
                   </div>
                 </div>
-              ))}{' '}
+              ))}
             </>
-          ) : (
-            <NoDataPlaceholder
-              image={noNotes}
-              header={'NO NOTES'}
-              subHeader={'Here you can write notes'}
-            />
           )}
         </div>
       )}
