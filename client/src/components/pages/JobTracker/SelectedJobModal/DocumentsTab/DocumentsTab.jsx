@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './DocumentsTab.module.scss';
 import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noDocuments from '../../../../../assets/nofiles.svg';
 
 export default function DocumentsTab() {
   return (
@@ -20,7 +22,11 @@ export default function DocumentsTab() {
         />
       </div>
       <div className={styles.documentsContentContainer}>
-        <p>no linked documents.. make this pretty later</p>
+        <NoDataPlaceholder
+          image={noDocuments}
+          header={'NO LINKED DOCUMENTS'}
+          subHeader={'Here you can add and link documents'}
+        />
       </div>
     </div>
   );

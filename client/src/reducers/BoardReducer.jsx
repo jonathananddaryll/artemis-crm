@@ -80,9 +80,10 @@ export const addColumn = createAsyncThunk(
 
       // return res.data;
       return formData.columnStatus;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -355,6 +356,11 @@ const boardSlice = createSlice({
       toast.success(
         `Successfully Added a Column in ${state.selectedBoard.title}`
       );
+    });
+
+    // Display errors in addColumn with toastify
+    builder.addCase(addColumn.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {

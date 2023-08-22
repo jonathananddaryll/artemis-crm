@@ -36,6 +36,20 @@ const boardInputValidator = [
     .isLength({ min: 4 })
 ];
 
+const addColumnInputValidator = [
+  ...myRequestHeaders,
+  check('columnStatus', 'Please enter a Board Title with atleast 3 characters')
+    .not()
+    .isEmpty()
+    .isLength({ min: 3 })
+];
+
+// @TODO:
+// 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
+// 2. Notes: Create and update
+// 3. Tasks: Create and update
+// 4. Interview: Create and Update
+
 // export const myRequestHeaders1 = [
 //   header('authorization')
 //     .exists({ checkFalsy: true })
@@ -65,5 +79,6 @@ module.exports = {
   myRequestHeaders: myRequestHeaders,
   validateRequest: validateRequest,
   jobInputValidator: jobInputValidator,
-  boardInputValidator: boardInputValidator
+  boardInputValidator: boardInputValidator,
+  addColumnInputValidator: addColumnInputValidator
 };

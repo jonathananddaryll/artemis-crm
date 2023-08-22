@@ -7,7 +7,8 @@ const { Client, config } = require('../../config/db');
 const {
   myRequestHeaders,
   validateRequest,
-  boardInputValidator
+  boardInputValidator,
+  addColumnInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -118,7 +119,7 @@ router.post('/', boardInputValidator, validateRequest, async (req, res) => {
 // @access    Private
 router.patch(
   '/:board_id/add',
-  myRequestHeaders,
+  addColumnInputValidator,
   validateRequest,
   async (req, res) => {
     // do the calculating of what colum to add to. have a keeper of first empty column in redux

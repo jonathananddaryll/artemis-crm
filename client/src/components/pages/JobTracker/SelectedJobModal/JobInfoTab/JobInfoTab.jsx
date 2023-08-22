@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './JobInfoTab.module.scss';
+import Button from '../../../../layout/Button/Button';
 
 export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const [formData, setFormData] = useState({
@@ -90,7 +91,13 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
               onChange={e => onChangeHandler(e)}
             />
           </div>
-          <input type='submit' value='save' />
+          {/* <input type='submit' value='save' /> */}
+          <Button
+            type={'submit'}
+            value={'Save'}
+            color={'blue'}
+            disabled={job_title === '' || company === '' || location === ''}
+          />
         </form>
       </div>
     </div>

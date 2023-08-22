@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styles from './ContactsTab.module.scss';
 import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noContacts from '../../../../../assets/nocontacts.svg';
 
 export default function ContactsTab() {
   return (
@@ -20,7 +22,11 @@ export default function ContactsTab() {
         />
       </div>
       <div className={styles.contactsContentContainer}>
-        <p>no linked contacts.. make this pretty later</p>
+        <NoDataPlaceholder
+          image={noContacts}
+          header={'NO LINKED CONTACTS'}
+          subHeader={'Here you can create and link contacts'}
+        />
       </div>
     </div>
   );

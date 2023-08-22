@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
 import styles from './NotesTab.module.scss';
 import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
+
+import noNotes from '../../../../../assets/nonotes.svg';
 
 export default function NotesTab({
   createNote,
@@ -152,9 +155,11 @@ export default function NotesTab({
               ))}{' '}
             </>
           ) : (
-            <div className={styles.noNotes}>
-              <p>NO NOTES.... MAKE THIS PRETTY LATER</p>
-            </div>
+            <NoDataPlaceholder
+              image={noNotes}
+              header={'NO NOTES'}
+              subHeader={'Here you can write notes'}
+            />
           )}
         </div>
       )}

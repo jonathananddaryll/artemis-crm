@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import styles from './TasksTab.module.scss';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
-
 import timeSince from '../../../../../helpers/convertDate';
-
 import Button from '../../../../layout/Button/Button';
-
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
 import { taskCategories } from '../../../../../data/taskCategories';
+
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noTasks from '../../../../../assets/notasks.svg';
 
 export default function TasksTab({
   tasks,
@@ -185,7 +184,11 @@ export default function TasksTab({
       )}
       <div className={styles.tasksContentContainer}>
         {tasks.length === 0 && completedTasks.length === 0 ? (
-          <p>NO TASKS MAKE THIS PRETTIER LATER</p>
+          <NoDataPlaceholder
+            image={noTasks}
+            header={'NO ACTIVITIES'}
+            subHeader={'Here you can create tasks'}
+          />
         ) : (
           <>
             {tasks.length > 0 && (

@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './InterviewsTab.module.scss';
 import Button from '../../../../layout/Button/Button';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import noInterviews from '../../../../../assets/nointerviews.svg';
 
 export default function InteviewTab({ interviews }) {
   return (
@@ -23,7 +25,11 @@ export default function InteviewTab({ interviews }) {
           ))}
         </div>
       ) : (
-        <p>No interview scheduled for this job</p>
+        <NoDataPlaceholder
+          image={noInterviews}
+          header={'NO UPCOMING INTERVIEWS'}
+          subHeader={'Here you can add and see upcoming interviews'}
+        />
       )}
     </div>
   );
