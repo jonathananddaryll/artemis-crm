@@ -59,6 +59,7 @@ export default function TasksTab({
       is_done: is_done,
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
+      date_completed: is_done === true ? start_date.toLocaleString() : null,
       token: await session.getToken()
     };
 
@@ -120,9 +121,6 @@ export default function TasksTab({
         </div>
       ) : (
         <div className={styles.newTaskForm}>
-          <div className={styles.formHeader}>
-            <p>Create New Task</p>
-          </div>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
               <label>Title</label>
@@ -155,6 +153,7 @@ export default function TasksTab({
                   : 'Finish Task By'}
               </label>
               <DatePicker
+                className={styles.datePicker}
                 selected={start_date}
                 onChange={date =>
                   setFormData({ ...formData, start_date: date })
@@ -174,11 +173,39 @@ export default function TasksTab({
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Mark as completed</label>
+              <div className={styles.checkInput}>
+                {is_done ? (
+                  <i
+                    className='bi bi-check-square'
+                    onClick={() => setFormData({ ...formData, is_done: false })}
+                  ></i>
+                ) : (
+                  <i
+                    className='bi bi-square'
+                    onClick={() => setFormData({ ...formData, is_done: true })}
+                  ></i>
+                )}
+                <label>Mark as completed</label>
+              </div>
             </div>
 
-            <input type='submit' value='save' />
-            <button onClick={() => setToggleForm(false)}>Cancel</button>
+            {/* <input type='submit' value='save' /> */}
+            {/* <button onClick={() => setToggleForm(false)}>Cancel</button> */}
+            <div className={styles.formButtonsContainer}>
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
+                onClick={() => setToggleForm(false)}
+                size={'small'}
+              />
+              <Button
+                type={'submit'}
+                value={'Create Task'}
+                color={'blue'}
+                size={'small'}
+              />
+            </div>
           </form>
         </div>
       )}
@@ -193,7 +220,7 @@ export default function TasksTab({
           <>
             {tasks.length > 0 && (
               <div className={styles.tasksBox}>
-                <p>Tasks Todo</p>
+                <p className={styles.taskBoxHeaderText}>Tasks Todo</p>
                 {tasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
                     <p className={styles.taskText}>
@@ -211,7 +238,7 @@ export default function TasksTab({
             )}
             {completedTasks.length > 0 && (
               <div className={styles.completedTasksBox}>
-                <p>Completed Tasks</p>
+                <p className={styles.taskBoxHeaderText}>Completed Tasks</p>
                 {completedTasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
                     <p className={styles.completedTaskText}>

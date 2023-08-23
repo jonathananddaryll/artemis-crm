@@ -122,12 +122,10 @@ export default function NotesTab({
       ) : (
         <div className={styles.newNoteContainer}>
           <ReactQuill
-            className={styles.quillTextarea}
             modules={module}
             value={noteText}
             theme='snow'
             name='noteText'
-            // htmlFormats={htmlFormats}
             onChange={setNoteText}
           />
           <div className={styles.formButtonsContainer}>
@@ -172,20 +170,6 @@ export default function NotesTab({
           ) : (
             <div className={styles.noteslist}>
               {notes.map(note => (
-                // <div key={note.id} className={styles.notesBox}>
-                //   <div className={styles.notesText}>{note.text}</div>
-                //   <div className={styles.notesFooter}>
-                //     <div className={styles.notesInfo}>
-                //       <p>{note.date_created}</p>
-                //     </div>
-                //     <div className={styles.notesActionsItems}>
-                //       <button onClick={() => onEditHandler(note)}>Edit</button>
-                //       <button onClick={() => handleDeleteNote(note.id)}>
-                //         Delete
-                //       </button>
-                //     </div>
-                //   </div>
-                // </div>
                 <div key={note.id} className={styles.notesBox}>
                   <ReactQuill
                     value={note.text}

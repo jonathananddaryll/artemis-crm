@@ -183,6 +183,7 @@ const selectedJobSlice = createSlice({
       state.notes = [];
       state.tasks = [];
       state.interviews = [];
+      state.completedTasks = [];
     }
   },
   extraReducers: builder => {
@@ -237,7 +238,9 @@ const selectedJobSlice = createSlice({
 
     builder.addCase(createTask.fulfilled, (state, action) => {
       const newAddedTask = action.payload[0].rows[0];
-      state.tasks = [newAddedTask, ...state.tasks];
+      newAddedTask.is_done === false
+        ? (state.tasks = [newAddedTask, ...state.tasks])
+        : (state.completedTasks = [newAddedTask, ...state.completedTasks]);
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
 
       // Check if the new added task is interview or screen type

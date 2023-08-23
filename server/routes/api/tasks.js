@@ -62,6 +62,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
     start_date,
     note,
     is_done,
+    date_completed,
     jobId,
     selectedboard_user_id
   } = req.body;
@@ -77,11 +78,12 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `INSERT INTO task (title, category, note, is_done, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+      `INSERT INTO task (title, category, note, is_done, date_completed, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
       title,
       category,
       note,
       is_done,
+      date_completed,
       start_date,
       jobId,
       jobId,

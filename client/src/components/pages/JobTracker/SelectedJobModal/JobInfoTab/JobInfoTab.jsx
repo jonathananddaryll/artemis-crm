@@ -25,21 +25,22 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const [desc, setDesc] = useState('');
+  const [noteDesc, setNoteDesc] = useState('');
 
   const onSubmitHandler = e => {
     e.preventDefault();
   };
 
   const toolbarOption = [
-    ['bold', 'italic'],
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: 1 }, { header: 2 }],
+    ['bold', 'italic', 'underline'],
     [{ list: 'ordered' }, { list: 'bullet' }]
   ];
 
   const module = {
     toolbar: toolbarOption
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.jobInfoForm}>
@@ -109,11 +110,10 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
           <div className={styles.formGroup}>
             <ReactQuill
               modules={module}
-              value={desc}
+              value={noteDesc}
               theme='snow'
-              name='description'
-              // htmlFormats={htmlFormats}
-              onChange={setDesc}
+              name='noteDesc'
+              onChange={setNoteDesc}
             />
           </div>
           <Button

@@ -34,7 +34,7 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
                         {timeline.update_type}
                       </p>
                       <p className={styles.textDescription}>
-                        {timeline.description.substring(0, 35)}
+                        {timeline.description.substring(0, 30)}
                       </p>
                       <p className={styles.textDateCreated}>
                         {timeSince(timeline.date_created)}
