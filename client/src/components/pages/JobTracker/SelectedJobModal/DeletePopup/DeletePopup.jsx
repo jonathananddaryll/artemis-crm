@@ -5,7 +5,8 @@ import styles from './DeletePopup.module.scss';
 
 export default function DeletePopup({
   handleDeleteJob,
-  setConfirmationToggle
+  setConfirmationToggle,
+  popUpText
 }) {
   return (
     <div className={styles.popupWrapper}>
@@ -14,9 +15,7 @@ export default function DeletePopup({
         onClick={() => setConfirmationToggle(false)}
       ></div>
       <div className={styles.popupBox}>
-        <p className={styles.textPopup}>
-          Are you sure you want to delete this job?
-        </p>
+        <p className={styles.textPopup}>{popUpText}</p>
         <div className={styles.popupButtons}>
           {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
           <Button

@@ -4,7 +4,7 @@
 }
 
 .buttonsContainer {
-  height: 5rem;
+  // height: 5rem;
   text-align: right;
   /* background-color: red; */
 }
@@ -130,7 +130,7 @@
 
 .createTaskButton {
   /* float: right; */
-  height: 4rem;
+  // height: 4rem;
   padding: 0 2rem;
   margin-left: 1rem;
 }
@@ -143,6 +143,7 @@
 .tasksBox {
   /* flex: 0 0 45%; */
   text-align: left;
+  margin-bottom: 5rem;
 }
 
 .taskBoxHeaderText {
@@ -163,13 +164,11 @@
   border: 2px solid rgba(213, 238, 250, 0.692);
   border-radius: 5px;
   display: flex;
+  cursor: pointer;
+  align-items: center;
+  flex-wrap: wrap;
 
-  gap: 4rem;
-}
-
-.taskText {
-  margin: 0;
-  font-size: 1.6rem;
+  // transition: all 0.5s;
 
   > i {
     cursor: pointer;
@@ -178,12 +177,57 @@
   }
 }
 
+.taskCardInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.taskCardFlexLeft {
+  flex: 0 0 40%;
+}
+
+.taskCardFlexMiddle {
+  // flex: 0 0 25%;
+  text-align: center;
+}
+
+.taskCardFlexRight {
+  flex: 0 0 30%;
+  text-align: right;
+}
+
+.taskCardFlexBottom {
+  border-top: 2px solid rgba(213, 238, 250, 0.692);
+  margin-top: 1.3rem;
+  flex: 0 0 100%;
+  padding: 1rem 0 0 0;
+
+  p {
+    font-size: 1.5rem;
+  }
+}
+
+.taskCardButtons {
+  text-align: right;
+
+  input {
+    margin-left: 1rem;
+  }
+}
+
+.taskText {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
 .categoryText {
   background: rgb(70, 141, 70);
   border: 0;
   border-radius: 5px;
-  padding: 0.3rem 1rem;
-  line-height: 1;
+  padding: 0.3rem 1.2rem;
+
   color: white;
   font-size: 1.4rem;
 }
@@ -198,6 +242,10 @@
     margin-right: 0.5rem;
     font-size: 1.4rem;
   }
+}
+
+.dueText {
+  font-size: 1.4rem;
 }
 
 /* upper case first letter of the text */

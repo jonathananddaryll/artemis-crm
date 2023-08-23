@@ -172,7 +172,9 @@ const selectedJobSlice = createSlice({
     timelines: [],
     notes: [],
     tasks: [],
-    completedTasks: []
+    completedTasks: [],
+    interviews: [],
+    completedInterviews: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
@@ -183,6 +185,7 @@ const selectedJobSlice = createSlice({
       state.notes = [];
       state.tasks = [];
       state.interviews = [];
+      state.completedInterviews = [];
       state.completedTasks = [];
     }
   },
@@ -229,10 +232,21 @@ const selectedJobSlice = createSlice({
       state.tasks = tasks.filter(task => task.is_done === false);
       state.completedTasks = tasks.filter(task => task.is_done === true);
       state.tasksLoading = false;
+
+      // Upcoming Interviews
       state.interviews = tasks.filter(
         task =>
-          task.category.includes('e Interview') ||
-          (task.category.includes('Screen') && task.start_date > new Date())
+          (task.category.includes('e Interview') ||
+            task.category.includes('Screen')) &&
+          task.is_done === false
+      );
+
+      // Completed Interviews
+      state.completedInterviews = tasks.filter(
+        task =>
+          (task.category.includes('e Interview') ||
+            task.category.includes('Screen')) &&
+          task.is_done === true
       );
     });
 

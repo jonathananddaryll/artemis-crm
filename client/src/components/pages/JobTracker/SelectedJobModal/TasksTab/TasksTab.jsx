@@ -22,6 +22,11 @@ export default function TasksTab({
   const [toggleForm, setToggleForm] = useState(false);
   const [nameText, setNameText] = useState('');
 
+  const [selectedTask, setSelectedTask] = useState({
+    isActive: false,
+    taskId: null
+  });
+
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -29,8 +34,6 @@ export default function TasksTab({
     start_date: new Date(),
     is_done: false
   });
-
-  const timestamp = { seconds: 1627282008, nanoseconds: 285000000 };
 
   // Deconstruct formData
   const { title, category, note, start_date, is_done } = formData;
@@ -223,15 +226,58 @@ export default function TasksTab({
                 <p className={styles.taskBoxHeaderText}>Tasks Todo</p>
                 {tasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
-                    <p className={styles.taskText}>
-                      <i
-                        onClick={() => onUpdateStatusHandler(task)}
-                        className='bi bi-square'
-                      ></i>
-                      {task.title}
-                    </p>
-                    <p className={styles.categoryText}>{task.category}</p>
-                    <p>Due {timeSince(task.start_date)}</p>
+                    <i
+                      onClick={() => onUpdateStatusHandler(task)}
+                      className='bi bi-square'
+                    ></i>
+                    <div
+                      className={styles.taskCardInfo}
+                      onClick={() =>
+                        setSelectedTask({
+                          isActive: true,
+                          taskId: task.id
+                        })
+                      }
+                    >
+                      <div className={styles.taskCardFlexLeft}>
+                        <p className={styles.taskText}>{task.title}</p>
+                      </div>
+                      <div className={styles.taskCardFlexMiddle}>
+                        <p className={styles.categoryText}>{task.category}</p>
+                      </div>
+                      <div className={styles.taskCardFlexRight}>
+                        <p className={styles.dueText}>
+                          Due {timeSince(task.start_date)}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedTask.isActive === true &&
+                      selectedTask.taskId === task.id && (
+                        <div className={styles.taskCardFlexBottom}>
+                          <p>afsasfafsa</p>
+                          <div className={styles.taskCardButtons}>
+                            <Button
+                              type={'button'}
+                              value={'Close'}
+                              color={'white'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                setSelectedTask({
+                                  isActive: false,
+                                  taskId: null
+                                })
+                              }
+                            />
+
+                            <Button
+                              type={'button'}
+                              value={'Delete Note'}
+                              color={'red'}
+                              size={'xsmall'}
+                            />
+                          </div>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>
@@ -241,14 +287,58 @@ export default function TasksTab({
                 <p className={styles.taskBoxHeaderText}>Completed Tasks</p>
                 {completedTasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
-                    <p className={styles.completedTaskText}>
-                      <i
-                        className='bi bi-check-square'
-                        onClick={() => onUpdateStatusHandler(task)}
-                      ></i>
-                      {task.title}
-                    </p>
-                    <p>Completed {timeSince(task.date_completed)}</p>
+                    <i
+                      className='bi bi-check-square'
+                      onClick={() => onUpdateStatusHandler(task)}
+                    ></i>
+                    <div
+                      className={styles.taskCardInfo}
+                      onClick={() =>
+                        setSelectedTask({
+                          isActive: true,
+                          taskId: task.id
+                        })
+                      }
+                    >
+                      <div className={styles.taskCardFlexLeft}>
+                        <p className={styles.completedTaskText}>{task.title}</p>
+                      </div>
+                      <div className={styles.taskCardFlexMiddle}>
+                        <p className={styles.categoryText}>{task.category}</p>
+                      </div>
+                      <div className={styles.taskCardFlexRight}>
+                        <p className={styles.dueText}>
+                          Completed {timeSince(task.date_completed)}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedTask.isActive === true &&
+                      selectedTask.taskId === task.id && (
+                        <div className={styles.taskCardFlexBottom}>
+                          {/* <p>afsasfafsa</p> */}
+                          <div className={styles.taskCardButtons}>
+                            <Button
+                              type={'button'}
+                              value={'Close'}
+                              color={'white'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                setSelectedTask({
+                                  isActive: false,
+                                  taskId: null
+                                })
+                              }
+                            />
+
+                            <Button
+                              type={'button'}
+                              value={'Delete Note'}
+                              color={'red'}
+                              size={'xsmall'}
+                            />
+                          </div>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>

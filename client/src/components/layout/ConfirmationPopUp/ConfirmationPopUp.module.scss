@@ -3,6 +3,9 @@
   width: 100%;
   height: 100%;
   background-color: #483375ea;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .popupOuter {
@@ -17,23 +20,24 @@
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgb(228, 233, 228);
-  width: 500px;
-  height: 120px;
+  background: #fff;
+  width: 50rem;
+  padding: 1rem;
+  border-radius: 10px;
+  padding-top: 1.8rem;
 }
 
-// .popupButtons {
-//   padding: 10px;
-//   position: absolute;
-//   right: 0;
-//   bottom: 0;
-// }
+.popupButtons {
+  text-align: right;
+  margin-top: 2rem;
 
-// .popupButtons button {
-//   height: 35px;
-//   margin-left: 10px;
-// }
+  input {
+    margin-left: 1rem;
+  }
+}
 
 .textPopup {
   font-size: 1.6rem;
+  // Change this font-family later
+  font-family: 'Montserrat', sans-serif;
 }

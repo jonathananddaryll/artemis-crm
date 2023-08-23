@@ -36,9 +36,9 @@ export default function Job({ job, index }) {
           onClick={() => dispatch(changeSelectedJob([true, job]))}
         >
           <div className={styles.jobBox}>
-            <p className={styles.textJobTitle}>
+            <h5 className={styles.textJobTitle}>
               {job.job_title.substring(0, 28)}
-            </p>
+            </h5>
             <div className={styles.jobInfoFlex}>
               <p className={styles.textCompany}>
                 <i className='bi bi-building-fill'></i>

@@ -49,7 +49,8 @@ export default function SelectedJobModal() {
     tasks,
     completedTasks,
     tasksLoading,
-    interviews
+    interviews,
+    completedInterviews
   } = useSelector(state => ({
     ...state.selectedJob
   }));
@@ -192,7 +193,12 @@ export default function SelectedJobModal() {
               updateTaskStatus={updateTaskStatus}
             />
           )}
-          {activeItem === 5 && <InterviewsTab interviews={interviews} />}
+          {activeItem === 5 && (
+            <InterviewsTab
+              interviews={interviews}
+              completedInterviews={completedInterviews}
+            />
+          )}
         </div>
         <div className={styles.timelineContainer}>
           <Timeline
@@ -205,6 +211,7 @@ export default function SelectedJobModal() {
           <DeletePopup
             handleDeleteJob={handleDeleteJob}
             setConfirmationToggle={setConfirmationToggle}
+            popUpText={'Are you sure you want to delete this job?'}
           />
           // <ConfirmationPopUp
           //   popUpText={'Are you sure you want to delete this job?'}

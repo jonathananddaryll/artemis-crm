@@ -30,11 +30,12 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
                   </div>
                   <div className={styles.box}>
                     <div key={timeline.id} className={styles.timelineCard}>
-                      <p className={styles.textUpdateType}>
+                      <h5 className={styles.textUpdateType}>
                         {timeline.update_type}
-                      </p>
+                      </h5>
                       <p className={styles.textDescription}>
-                        {timeline.description.substring(0, 30)}
+                        {/* {timeline.description.substring(0, 30)} */}
+                        {timeline.description}
                       </p>
                       <p className={styles.textDateCreated}>
                         {timeSince(timeline.date_created)}

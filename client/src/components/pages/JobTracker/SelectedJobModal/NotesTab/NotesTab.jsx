@@ -5,12 +5,14 @@ import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
 import styles from './NotesTab.module.scss';
-import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
+import ConfirmationPopUp from '../../../../layout/ConfirmationPopUp/ConfirmationPopUp';
+import timeSince from '../../../../../helpers/convertDate';
 
 import noNotes from '../../../../../assets/nonotes.svg';
 
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 export default function NotesTab({
   createNote,
@@ -22,7 +24,12 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
-  const [confirmationToggle, setConfirmationToggle] = useState(false);
+  // const [confirmationToggle, setConfirmationToggle] = useState(false);
+
+  const [selectedNote, setSelectedNote] = useState({
+    isActive: false,
+    noteId: null
+  });
 
   const [noteText, setNoteText] = useState('');
   // This is just to keeptrack of the selected noteId for Updating purposes
@@ -91,9 +98,8 @@ export default function NotesTab({
 
     dispatch(deleteNote(formData));
 
-    // APPLY THIS LATER FOR CONFIRMATION DELETE MODAL POPUP
-    // change selectedJob to null and modal off
-    // dispatch(changeSelectedJob([false, null]));
+    // Resets the selectedNoteId and toggles off the confirmation pop up
+    setSelectedNote({ isActive: false, noteId: null });
   }
 
   const toolbarOption = [
@@ -177,7 +183,9 @@ export default function NotesTab({
                     theme={'bubble'}
                   />
                   <div className={styles.notesFooter}>
-                    <p className={styles.dateText}>{note.date_created}</p>
+                    <p className={styles.dateText}>
+                      Created {timeSince(note.date_created)}
+                    </p>
 
                     <div className={styles.notesActionsButtons}>
                       <Button
@@ -192,7 +200,13 @@ export default function NotesTab({
                         value={'Delete'}
                         color={'red'}
                         size={'xsmall'}
-                        onClick={() => handleDeleteNote(note.id)}
+                        // onClick={() => handleDeleteNote(note.id)}
+                        onClick={() =>
+                          setSelectedNote({
+                            isActive: true,
+                            noteId: note.id
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -201,6 +215,14 @@ export default function NotesTab({
             </div>
           )}
         </div>
+      )}
+      {selectedNote.isActive === true && (
+        <ConfirmationPopUp
+          popUpText={'Are you sure you want to delete this note?'}
+          setSelectedNote={setSelectedNote}
+          noteId={selectedNote.noteId}
+          handleDeleteNote={handleDeleteNote}
+        />
       )}
     </div>
   );

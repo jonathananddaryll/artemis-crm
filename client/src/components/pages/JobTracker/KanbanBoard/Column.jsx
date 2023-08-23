@@ -43,7 +43,7 @@ export default function ({ title, jobs, id }) {
   return (
     <div className={styles.columnContainer}>
       <div className={styles.header}>
-        <p className={styles.textStatus}>{title}</p>
+        <h4 className={styles.textStatus}>{title}</h4>
         <p className={styles.textTotalJobs}>{jobs.length}</p>
         <button className={styles.buttonEdit}>
           <i className='bi bi-three-dots'></i>

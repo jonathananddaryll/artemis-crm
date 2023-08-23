@@ -17,7 +17,7 @@
 .addlistContainer {
   background-color: rgb(234, 236, 240);
   border-radius: 10px;
-  width: 27rem;
+  width: 28rem;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
   overflow: hidden;
 
@@ -53,7 +53,7 @@
   border-radius: 1rem;
   overflow: hidden;
   margin-right: 0.5rem;
-  width: 27rem;
+  width: 28rem;
   padding: 0 0.5rem 4rem 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 
@@ -76,6 +76,7 @@
   text-transform: capitalize;
   font-size: 2rem;
   color: #6c788d;
+  font-weight: normal;
 }
 
 .textTotalJobs {
@@ -160,13 +161,13 @@
 
 .textJobTitle {
   text-transform: capitalize;
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  // font-weight: 700;
 }
 
 .textCompany {
   text-transform: capitalize;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 
   > i {
     font-size: 1.3rem;
