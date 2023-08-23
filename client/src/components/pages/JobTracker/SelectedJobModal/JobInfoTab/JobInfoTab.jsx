@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styles from './JobInfoTab.module.scss';
 import Button from '../../../../layout/Button/Button';
+import TextEditor from '../../../../layout/TextEditor/TextEditor';
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const [formData, setFormData] = useState({
@@ -21,8 +25,19 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const [desc, setDesc] = useState('');
+
   const onSubmitHandler = e => {
     e.preventDefault();
+  };
+
+  const toolbarOption = [
+    ['bold', 'italic'],
+    [{ list: 'ordered' }, { list: 'bullet' }]
+  ];
+
+  const module = {
+    toolbar: toolbarOption
   };
 
   return (
@@ -83,15 +98,24 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
               onChange={e => onChangeHandler(e)}
             />
           </div>
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>Description</label>
             <textarea
               name='description'
               value={description}
               onChange={e => onChangeHandler(e)}
             />
+          </div> */}
+          <div className={styles.formGroup}>
+            <ReactQuill
+              modules={module}
+              value={desc}
+              theme='snow'
+              name='description'
+              // htmlFormats={htmlFormats}
+              onChange={setDesc}
+            />
           </div>
-          {/* <input type='submit' value='save' /> */}
           <Button
             type={'submit'}
             value={'Save'}

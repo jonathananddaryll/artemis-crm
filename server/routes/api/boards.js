@@ -19,7 +19,7 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 router.get('/:user_id', async (req, res) => {
   const userId = req.params.user_id;
   const query = format(
-    'SELECT * FROM board WHERE user_id = %L ORDER BY date_created ASC',
+    'SELECT * FROM board WHERE user_id = %L ORDER BY date_created DESC',
     userId
   );
   const client = new Client(config);

@@ -9,6 +9,9 @@ import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/Confirmation
 
 import noNotes from '../../../../../assets/nonotes.svg';
 
+import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 export default function NotesTab({
   createNote,
   selectedBoard_userId,
@@ -93,6 +96,17 @@ export default function NotesTab({
     // dispatch(changeSelectedJob([false, null]));
   }
 
+  const toolbarOption = [
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: 1 }, { header: 2 }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }]
+  ];
+
+  const module = {
+    toolbar: toolbarOption
+  };
+
   return (
     <div className={styles.notesTabContainer}>
       {!noteFormToggle ? (
@@ -107,25 +121,41 @@ export default function NotesTab({
         </div>
       ) : (
         <div className={styles.newNoteContainer}>
-          <p>Add note</p>
-          <form onSubmit={e => onSubmitHandler(e)}>
-            <div className={styles.formGroup}>
-              <textarea
-                className={styles.textarea}
-                name='noteText'
-                value={noteText}
-                onChange={e => setNoteText(e.target.value)}
-                placeholder="Add your notes about the company's history, culture, and any relevant information here..."
-              ></textarea>
-              <button onClick={() => onCancelFormHandler()}>Cancel</button>
-
+          <ReactQuill
+            className={styles.quillTextarea}
+            modules={module}
+            value={noteText}
+            theme='snow'
+            name='noteText'
+            // htmlFormats={htmlFormats}
+            onChange={setNoteText}
+          />
+          <div className={styles.formButtonsContainer}>
+            <form onSubmit={e => onSubmitHandler(e)}>
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
+                size={'small'}
+                onClick={() => onCancelFormHandler(false)}
+              />
               {!isUpdate ? (
-                <input type='submit' value='Save Note' />
+                <Button
+                  type={'submit'}
+                  value={'Save Note'}
+                  color={'blue'}
+                  size={'small'}
+                />
               ) : (
-                <input type='submit' value='Update Note' />
+                <Button
+                  type={'submit'}
+                  value={'Update Note'}
+                  color={'blue'}
+                  size={'small'}
+                />
               )}
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       )}
       {/* NOTES BLOCKS TO ADD LATER ON */}
@@ -140,26 +170,51 @@ export default function NotesTab({
               subHeader={'Here you can write notes'}
             />
           ) : (
-            <>
+            <div className={styles.noteslist}>
               {notes.map(note => (
+                // <div key={note.id} className={styles.notesBox}>
+                //   <div className={styles.notesText}>{note.text}</div>
+                //   <div className={styles.notesFooter}>
+                //     <div className={styles.notesInfo}>
+                //       <p>{note.date_created}</p>
+                //     </div>
+                //     <div className={styles.notesActionsItems}>
+                //       <button onClick={() => onEditHandler(note)}>Edit</button>
+                //       <button onClick={() => handleDeleteNote(note.id)}>
+                //         Delete
+                //       </button>
+                //     </div>
+                //   </div>
+                // </div>
                 <div key={note.id} className={styles.notesBox}>
-                  <div className={styles.notesText}>
-                    <p>{note.text}</p>
-                  </div>
+                  <ReactQuill
+                    value={note.text}
+                    readOnly={true}
+                    theme={'bubble'}
+                  />
                   <div className={styles.notesFooter}>
-                    <div className={styles.notesInfo}>
-                      <p>{note.date_created}</p>
-                    </div>
-                    <div className={styles.notesActionsItems}>
-                      <button onClick={() => onEditHandler(note)}>Edit</button>
-                      <button onClick={() => handleDeleteNote(note.id)}>
-                        Delete
-                      </button>
+                    <p className={styles.dateText}>{note.date_created}</p>
+
+                    <div className={styles.notesActionsButtons}>
+                      <Button
+                        type={'button'}
+                        value={'Edit'}
+                        color={'blue'}
+                        size={'xsmall'}
+                        onClick={() => onEditHandler(note)}
+                      />
+                      <Button
+                        type={'button'}
+                        value={'Delete'}
+                        color={'red'}
+                        size={'xsmall'}
+                        onClick={() => handleDeleteNote(note.id)}
+                      />
                     </div>
                   </div>
                 </div>
               ))}
-            </>
+            </div>
           )}
         </div>
       )}
