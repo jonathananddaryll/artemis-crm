@@ -31,9 +31,10 @@ export const createNote = createAsyncThunk(
     try {
       const res = await axios.post('/api/notes', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -56,8 +57,10 @@ export const updateNote = createAsyncThunk(
         config
       );
       return res.data;
-    } catch (error) {
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -209,6 +212,11 @@ const selectedJobSlice = createSlice({
       toast.success('Successfully Created a New Note');
     });
 
+    // Display errors in createNote with toastify
+    builder.addCase(createNote.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     builder.addCase(updateNote.fulfilled, (state, action) => {
       // Find the index of the updated note then change it to the updated note
       const index = state.notes.findIndex(
@@ -216,6 +224,11 @@ const selectedJobSlice = createSlice({
       );
       state.notes[index] = action.payload;
       toast.success('Successfully Updated a Note');
+    });
+
+    // Display errors in updateNote with toastify
+    builder.addCase(updateNote.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(deleteNote.fulfilled, (state, action) => {

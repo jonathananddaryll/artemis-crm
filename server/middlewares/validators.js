@@ -44,6 +44,10 @@ const addColumnInputValidator = [
     .isLength({ min: 3 })
 ];
 
+const noteInputValidator = [
+  ...myRequestHeaders,
+  check('text', 'Note is too short').not().isEmpty().isLength({ min: 13 })
+];
 // @TODO:
 // 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
 // 2. Notes: Create and update
@@ -76,9 +80,10 @@ function validateRequest(req, res, next) {
 }
 
 module.exports = {
-  myRequestHeaders: myRequestHeaders,
-  validateRequest: validateRequest,
-  jobInputValidator: jobInputValidator,
-  boardInputValidator: boardInputValidator,
-  addColumnInputValidator: addColumnInputValidator
+  myRequestHeaders,
+  validateRequest,
+  jobInputValidator,
+  boardInputValidator,
+  addColumnInputValidator,
+  noteInputValidator
 };

@@ -149,6 +149,7 @@ export default function NotesTab({
                   value={'Save Note'}
                   color={'blue'}
                   size={'small'}
+                  disabled={noteText === ''}
                 />
               ) : (
                 <Button
@@ -156,6 +157,7 @@ export default function NotesTab({
                   value={'Update Note'}
                   color={'blue'}
                   size={'small'}
+                  disabled={noteText.length < 12}
                 />
               )}
             </form>
