@@ -19,8 +19,7 @@ export default function TasksTab({
   jobId,
   updateTaskStatus
 }) {
-  const [toggleForm, setToggleForm] = useState(false);
-  const [nameText, setNameText] = useState('');
+  const [formToggle, setFormToggle] = useState(false);
 
   const [selectedTask, setSelectedTask] = useState({
     isActive: false,
@@ -45,11 +44,6 @@ export default function TasksTab({
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // const handleDateChange = d => {
-  //   setFormData({ ...formData, start_date: d });
-  //   console.log(d);
-  // };
-
   // Submit handler
   async function onSubmitHandler(e) {
     e.preventDefault();
@@ -68,11 +62,8 @@ export default function TasksTab({
 
     dispatch(createTask(formD));
 
-    // Clears the noteText then close it
-    setNameText('');
-
-    // hide the form after creating a note
-    setToggleForm(false);
+    // hide the form after creating a new task
+    setFormToggle(false);
 
     const resetFormData = {
       title: '',
@@ -104,21 +95,15 @@ export default function TasksTab({
     dispatch(updateTaskStatus(formD));
   }
 
-  // Cancels the edit/create form
-  const onCancelFormHandler = () => {
-    setNameText('');
-    setToggleForm(false);
-  };
-
   return (
     <div className={styles.tasksTabContainer}>
-      {!toggleForm ? (
+      {!formToggle ? (
         <div className={styles.buttonsContainer}>
           <Button
             type={'button'}
             value={'Create Task'}
             color={'blue'}
-            onClick={() => setToggleForm(true)}
+            onClick={() => setFormToggle(true)}
             size={'small'}
           />
         </div>
@@ -193,13 +178,13 @@ export default function TasksTab({
             </div>
 
             {/* <input type='submit' value='save' /> */}
-            {/* <button onClick={() => setToggleForm(false)}>Cancel</button> */}
+            {/* <button onClick={() => setFormToggle(false)}>Cancel</button> */}
             <div className={styles.formButtonsContainer}>
               <Button
                 type={'button'}
                 value={'Cancel'}
                 color={'white'}
-                onClick={() => setToggleForm(false)}
+                onClick={() => setFormToggle(false)}
                 size={'small'}
               />
               <Button
@@ -213,7 +198,7 @@ export default function TasksTab({
         </div>
       )}
       <div className={styles.tasksContentContainer}>
-        {tasks.length === 0 && completedTasks.length === 0 && !toggleForm ? (
+        {tasks.length === 0 && completedTasks.length === 0 && !formToggle ? (
           <NoDataPlaceholder
             image={noTasks}
             header={'NO ACTIVITIES'}
@@ -254,7 +239,7 @@ export default function TasksTab({
                     {selectedTask.isActive === true &&
                       selectedTask.taskId === task.id && (
                         <div className={styles.taskCardFlexBottom}>
-                          <p>afsasfafsa</p>
+                          <p>{task.note}</p>
                           <div className={styles.taskCardButtons}>
                             <Button
                               type={'button'}

@@ -197,6 +197,9 @@ export default function SelectedJobModal() {
             <InterviewsTab
               interviews={interviews}
               completedInterviews={completedInterviews}
+              createTask={createTask}
+              jobId={selectedJob.id}
+              selectedBoard_userId={selectedBoard.user_id}
             />
           )}
         </div>
