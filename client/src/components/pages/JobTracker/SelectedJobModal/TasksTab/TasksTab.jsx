@@ -17,7 +17,8 @@ export default function TasksTab({
   createTask,
   selectedBoard_userId,
   jobId,
-  updateTaskStatus
+  updateTaskStatus,
+  deleteTask
 }) {
   const [formToggle, setFormToggle] = useState(false);
 
@@ -93,6 +94,21 @@ export default function TasksTab({
     };
 
     dispatch(updateTaskStatus(formD));
+  }
+
+  // Delete Task
+  async function handleDeleteTask(taskId) {
+    const formData = {
+      jobId: jobId,
+      selectedboard_user_id: selectedBoard_userId,
+      taskId: taskId,
+      token: await session.getToken()
+    };
+
+    dispatch(deleteTask(formData));
+
+    // Resets the setSelectedTask and toggles off the confirmation pop up
+    setSelectedTask({ isActive: false, taskId: null });
   }
 
   return (
@@ -259,6 +275,7 @@ export default function TasksTab({
                               value={'Delete Note'}
                               color={'red'}
                               size={'xsmall'}
+                              onClick={() => handleDeleteTask(task.id)}
                             />
                           </div>
                         </div>

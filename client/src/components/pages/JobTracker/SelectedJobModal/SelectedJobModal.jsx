@@ -18,7 +18,8 @@ import {
   updateNote,
   getAllTasks,
   createTask,
-  updateTaskStatus
+  updateTaskStatus,
+  deleteTask
 } from '../../../../reducers/SelectedJobReducer';
 
 import InterviewsTab from './InterviewsTab/InterviewsTab';
@@ -191,6 +192,7 @@ export default function SelectedJobModal() {
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
               updateTaskStatus={updateTaskStatus}
+              deleteTask={deleteTask}
             />
           )}
           {activeItem === 5 && (

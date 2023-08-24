@@ -87,11 +87,6 @@ export const deleteNote = createAsyncThunk(
       Authorization: `Bearer ${formData.token}`
     };
 
-    // const data = {
-    //   formData
-    // };
-
-    console.log(formData);
     try {
       const res = await axios.delete(`/api/notes/${formData.noteId}`, {
         data: { formData },
@@ -161,6 +156,28 @@ export const updateTaskStatus = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
+      console.log(err);
+    }
+  }
+);
+
+// Deletes a task
+export const deleteTask = createAsyncThunk(
+  'job/deleteTask',
+  async (formData, thunkAPI) => {
+    const headers = {
+      Authorization: `Bearer ${formData.token}`
+    };
+
+    try {
+      const res = await axios.delete(`/api/tasks/${formData.taskId}`, {
+        data: { formData },
+        headers
+      });
+
+      return res.data;
+    } catch (error) {
+      // have a better error catch later
       console.log(err);
     }
   }
@@ -302,6 +319,15 @@ const selectedJobSlice = createSlice({
         state.tasks = [...state.tasks, updatedTask];
         toast.success('Dont Forget to Finish That Task');
       }
+    });
+
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      // Filter notes without the deleted note
+      state.tasks = state.tasks.filter(
+        task => task.id !== action.payload[0].rows[0].id
+      );
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+      toast.success('Successfully Deleted a Task');
     });
   }
 });

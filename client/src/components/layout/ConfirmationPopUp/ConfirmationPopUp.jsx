@@ -29,7 +29,7 @@ export default function ConfirmationPopUp({
             type={'button'}
             value={'Cancel'}
             color={'white'}
-            // size={'small'}
+            size={'small'}
             onClick={() =>
               setSelectedNote({
                 isActive: false,
@@ -42,7 +42,7 @@ export default function ConfirmationPopUp({
             type={'button'}
             value={'OK'}
             color={'blue'}
-            // size={'small'}
+            size={'small'}
             onClick={() => handleDeleteNote(noteId)}
           />
           {/* <button onClick={() => cancelDelete(false)}>Cancel</button>

@@ -20,12 +20,14 @@ export default function DeletePopup({
           {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
           <Button
             type={'button'}
+            size={'small'}
             value={'Cancel'}
             color={'white'}
             onClick={() => setConfirmationToggle(false)}
           />
           <Button
             type={'button'}
+            size={'small'}
             value={'OK'}
             color={'blue'}
             onClick={() => handleDeleteJob()}
