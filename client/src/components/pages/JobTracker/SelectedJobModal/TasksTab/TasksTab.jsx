@@ -209,6 +209,7 @@ export default function TasksTab({
                 value={'Create Task'}
                 color={'blue'}
                 size={'small'}
+                disabled={title === '' || category === '' || note === ''}
               />
             </div>
           </form>

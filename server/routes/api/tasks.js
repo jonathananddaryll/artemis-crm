@@ -6,7 +6,8 @@ const { Client, config } = require('../../config/db');
 // const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
-  validateRequest
+  validateRequest,
+  taskInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -52,7 +53,7 @@ router.get('/job/:job_id', async (req, res) => {
 // @route     POST api/tasks
 // @desc      Add a new task
 // @access    Private
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', taskInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();

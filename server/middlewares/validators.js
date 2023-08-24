@@ -48,9 +48,22 @@ const noteInputValidator = [
   ...myRequestHeaders,
   check('text', 'Note is too short').not().isEmpty().isLength({ min: 13 })
 ];
+
+const taskInputValidator = [
+  ...myRequestHeaders,
+  check('title', 'Please enter atleast 4 characters for title')
+    .not()
+    .isEmpty()
+    .isLength({ min: 4 }),
+  check('category', 'Please choose a category').not().isEmpty(),
+  check('start_date', 'Please choose a date').not().isEmpty(),
+  check('title', 'Please enter atleast 5 characters for note')
+    .not()
+    .isEmpty()
+    .isLength({ min: 5 })
+];
 // @TODO:
 // 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
-// 2. Notes: Create and update
 // 3. Tasks: Create and update
 // 4. Interview: Create and Update
 
@@ -85,5 +98,6 @@ module.exports = {
   jobInputValidator,
   boardInputValidator,
   addColumnInputValidator,
-  noteInputValidator
+  noteInputValidator,
+  taskInputValidator
 };

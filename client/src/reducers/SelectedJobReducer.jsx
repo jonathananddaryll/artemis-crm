@@ -130,9 +130,10 @@ export const createTask = createAsyncThunk(
     try {
       const res = await axios.post('/api/tasks', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -296,6 +297,11 @@ const selectedJobSlice = createSlice({
       }
 
       toast.success('Successfully Created a New Task');
+    });
+
+    // Display errors in createTask with toastify
+    builder.addCase(createTask.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
