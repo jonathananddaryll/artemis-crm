@@ -30,26 +30,27 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
+  line-height: 1.3;
 }
 
 .interviewCardFlexLeft {
-  flex: 0 0 40%;
+  flex: 0 0 41%;
   text-align: left;
 }
 
 .interviewCardFlexMiddle {
-  // flex: 0 0 25%;
+  flex: 0 0 25%;
   text-align: center;
 }
 
 .interviewCardFlexRight {
-  flex: 0 0 30%;
+  flex: 0 0 28%;
   text-align: right;
 }
 
 .titleText {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 .categoryText {
@@ -63,7 +64,7 @@
 }
 
 .dateText {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 // NEW INTERVIEW FORM STYLING

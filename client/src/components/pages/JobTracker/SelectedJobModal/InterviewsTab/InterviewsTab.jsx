@@ -195,7 +195,8 @@ export default function InteviewTab({
                   </div>
                   <div className={styles.interviewCardFlexRight}>
                     <p className={styles.dateText}>
-                      {timeSince(interview.start_date)}
+                      {/* {timeSince(interview.start_date)} */}
+                      Completed {timeSince(interview.date_completed)}
                     </p>
                   </div>
                 </div>

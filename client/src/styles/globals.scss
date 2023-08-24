@@ -113,7 +113,8 @@ h6 {
 
 // Input - Change to better font later
 input {
-  font-family: 'Montserrat', sans-serif;
+  // font-family: 'Montserrat', sans-serif;
+  font-family: 'Spectral', serif;
 }
 
 // Label - Change to better font later
@@ -170,6 +171,7 @@ html {
 input[type='text'],
 textarea {
   @include mixin.phone {
-    font-size: 2rem !important;
+    font-size: 1.7rem !important;
+    // font-size: 2rem !important;
   }
 }

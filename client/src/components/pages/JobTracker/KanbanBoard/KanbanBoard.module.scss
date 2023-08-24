@@ -22,19 +22,19 @@
   overflow: hidden;
 
   @include mixin.phone {
-    width: 25rem;
+    width: 29rem;
   }
 }
 
 .newListButton {
   // height: 2rem;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Karla', sans-serif;
   padding: 1.5rem 0;
-
+  font-weight: 500;
   // margin: 0;
   text-align: center;
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: #6c788d;
   background-color: transparent;
   border: none;
@@ -58,7 +58,7 @@
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 
   @include mixin.phone {
-    width: 22rem;
+    width: 29rem;
     padding: 0 0.5rem 6rem 0.5rem;
   }
 }
@@ -74,9 +74,9 @@
   // margin: 0;
   text-align: center;
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: #6c788d;
-  font-weight: normal;
+  font-weight: 500;
 }
 
 .textTotalJobs {

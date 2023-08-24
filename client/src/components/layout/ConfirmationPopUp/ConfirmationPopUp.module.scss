@@ -1,3 +1,5 @@
+@use '../../../styles/mixins.scss' as mixin;
+
 .popupWrapper {
   position: absolute;
   width: 100%;
@@ -25,6 +27,10 @@
   padding: 1rem;
   border-radius: 10px;
   padding-top: 1.8rem;
+
+  @include mixin.phone {
+    width: 80%;
+  }
 }
 
 .popupButtons {

@@ -185,19 +185,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  line-height: 1.3;
 }
 
 .taskCardFlexLeft {
-  flex: 0 0 40%;
+  flex: 0 0 41%;
 }
 
 .taskCardFlexMiddle {
-  // flex: 0 0 25%;
+  flex: 0 0 25%;
   text-align: center;
 }
 
 .taskCardFlexRight {
-  flex: 0 0 30%;
+  flex: 0 0 28%;
   text-align: right;
 }
 
@@ -222,7 +223,7 @@
 
 .taskText {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 .categoryText {
@@ -238,7 +239,7 @@
 .completedTaskText {
   margin: 0;
   text-decoration-line: line-through;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 
   > i {
     cursor: pointer;

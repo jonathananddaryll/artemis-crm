@@ -1,5 +1,11 @@
 @use '../../../styles//mixins.scss' as mixin;
 
+.loaderContainer {
+  font-family: 'Karla', sans-serif;
+  font-weight: 700;
+  color: rgb(190, 156, 156);
+}
+
 /* For Boards Loader */
 .imageStyle_1 {
   width: 15%;
