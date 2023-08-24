@@ -74,11 +74,15 @@ export default function SelectedJobModal() {
 
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
-    { name: 'notes', icon: 'bi bi-journal' },
+    { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
     { name: 'contacts', icon: 'bi bi-people' },
     { name: 'documents', icon: 'bi bi-file-earmark-text' },
-    { name: 'tasks', icon: 'bi bi-list-task' },
-    { name: 'interview', icon: 'bi bi-calendar-check' }
+    { name: 'tasks', icon: 'bi bi-list-task', itemL: tasks.length },
+    {
+      name: 'interview',
+      icon: 'bi bi-calendar-check',
+      itemL: interviews.length
+    }
   ];
 
   async function handleDeleteJob() {
@@ -158,6 +162,10 @@ export default function SelectedJobModal() {
                   <p className={styles.subNavigationText}>
                     <i className={item.icon}></i>
                     {item.name}
+
+                    {item.itemL > 0 && (
+                      <span className={styles.itemCount}>{item.itemL}</span>
+                    )}
                   </p>
                 </div>
               ))}

@@ -64,7 +64,7 @@ const taskInputValidator = [
 ];
 // @TODO:
 // 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
-// 3. Tasks: Create and update
+// 3. Tasks: update
 // 4. Interview: Create and Update
 
 // export const myRequestHeaders1 = [
