@@ -97,11 +97,12 @@ export default function TasksTab({
   }
 
   // Delete Task
-  async function handleDeleteTask(taskId) {
+  async function handleDeleteTask(taskId, taskTitle) {
     const formData = {
       jobId: jobId,
       selectedboard_user_id: selectedBoard_userId,
       taskId: taskId,
+      taskTitle: taskTitle,
       token: await session.getToken()
     };
 
@@ -269,13 +270,14 @@ export default function TasksTab({
                                 })
                               }
                             />
-
                             <Button
                               type={'button'}
-                              value={'Delete Note'}
+                              value={'Delete Task'}
                               color={'red'}
                               size={'xsmall'}
-                              onClick={() => handleDeleteTask(task.id)}
+                              onClick={() =>
+                                handleDeleteTask(task.id, task.title)
+                              }
                             />
                           </div>
                         </div>
@@ -331,12 +333,14 @@ export default function TasksTab({
                                 })
                               }
                             />
-
                             <Button
                               type={'button'}
                               value={'Delete Note'}
                               color={'red'}
                               size={'xsmall'}
+                              onClick={() =>
+                                handleDeleteTask(task.id, task.title)
+                              }
                             />
                           </div>
                         </div>

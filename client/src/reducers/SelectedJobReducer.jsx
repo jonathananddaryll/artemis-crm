@@ -303,29 +303,70 @@ const selectedJobSlice = createSlice({
       var updatedTask = action.payload;
 
       ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_tASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
-      if (action.payload.is_done === true) {
+      if (updatedTask.is_done === true) {
         const filteredTasks = state.tasks.filter(
-          task => task.id !== action.payload.id
+          task => task.id !== updatedTask.id
         );
         state.tasks = filteredTasks;
         state.completedTasks = [...state.completedTasks, updatedTask];
 
+        // Updates the completedInterview
+        if (
+          updatedTask.category.includes('e Interview') ||
+          updatedTask.category.includes('Screen')
+        ) {
+          // Take out the updated task
+          const filteredInterviews = state.interviews.filter(
+            task => task.id !== updatedTask.id
+          );
+          state.interviews = filteredInterviews;
+
+          // Add updated task
+          state.completedInterviews = [
+            ...state.completedInterviews,
+            updatedTask
+          ];
+        }
+
         toast.success('Good Job Completing a Task');
       } else {
         const filteredTasks = state.completedTasks.filter(
-          task => task.id !== action.payload.id
+          task => task.id !== updatedTask.id
         );
         state.completedTasks = filteredTasks;
         state.tasks = [...state.tasks, updatedTask];
+
+        // Updates the interview
+        if (
+          updatedTask.category.includes('e Interview') ||
+          updatedTask.category.includes('Screen')
+        ) {
+          // Take out the updated task
+          const filteredInterviews = state.completedInterviews.filter(
+            task => task.id !== updatedTask.id
+          );
+          state.completedInterviews = filteredInterviews;
+
+          // Add updated Task
+          state.interviews = [...state.interviews, updatedTask];
+        }
+
         toast.success('Dont Forget to Finish That Task');
       }
     });
 
     builder.addCase(deleteTask.fulfilled, (state, action) => {
       // Filter notes without the deleted note
-      state.tasks = state.tasks.filter(
-        task => task.id !== action.payload[0].rows[0].id
-      );
+      if (action.payload[0].rows[0].is_done === false) {
+        state.tasks = state.tasks.filter(
+          task => task.id !== action.payload[0].rows[0].id
+        );
+      } else {
+        state.completedTasks = state.completedTasks.filter(
+          task => task.id !== action.payload[0].rows[0].id
+        );
+      }
+
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
       toast.success('Successfully Deleted a Task');
     });

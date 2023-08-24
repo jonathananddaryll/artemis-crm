@@ -88,7 +88,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       jobId,
       jobId,
       'New task created',
-      category
+      title
     );
 
     console.log(query);
@@ -174,7 +174,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   const client = new Client(config);
   client.connect();
 
-  const { selectedboard_user_id, jobId } = req.body.formData;
+  const { selectedboard_user_id, jobId, taskTitle } = req.body.formData;
   const id = req.params.id; // taskId
 
   const decodedToken = decodeToken(req.headers.authorization);
@@ -194,7 +194,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
       jobId,
       jobId,
       'Task deleted',
-      'You deleted a task'
+      taskTitle
     );
 
     try {

@@ -55,7 +55,7 @@ export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
             <div className={styles.box}>
               <div className={styles.timelineCard}>
                 <p className={styles.textUpdateType}>New Job Created</p>
-                <p className={styles.textDescription}>You added a new job</p>
+                <p className={styles.textDescription}>You added this job</p>
                 <p className={styles.textDateCreated}>
                   {timeSince(dateCreated)}
                 </p>

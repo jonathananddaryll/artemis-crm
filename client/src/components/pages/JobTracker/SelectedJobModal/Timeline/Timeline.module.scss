@@ -41,7 +41,7 @@
 
   background: #d3d3db;
   border-radius: 5px;
-  padding: 1rem;
+  padding: 0.5rem 0.8rem;
   text-align: left;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 }
@@ -62,9 +62,10 @@
 }
 
 .textDateCreated {
-  margin: 0;
+  margin: 0.5rem 0 0 0;
   font-size: 1.2rem;
   text-align: right;
+  color: rgb(27, 26, 26);
 }
 
 /* TIMELINE left line to show timeline */
