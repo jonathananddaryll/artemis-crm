@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
 import styles from './ContactCard.module.scss';

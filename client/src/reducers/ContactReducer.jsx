@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { searchArray } from '../helpers/searchArray';
+import SearchArray from '../helpers/searchArray';
 import axios from 'axios';
 
 // State for contact organizer:
@@ -12,7 +12,7 @@ import axios from 'axios';
   // object. Immer will abstract this for me if I do it in redux.
 
 export const getUserContactsTable = createAsyncThunk(
-    'contacts/getUserContactsTable',
+  'contacts/getUserContactsTable',
     // received idAndToken object that has key:value pair user_id(clerk) and session token(clerk)
     // Returns all contacts associated with the user. Only for initial logon and any sort of 'refresh' button.
   async ( idAndToken, thunkAPI) => {
@@ -31,7 +31,8 @@ export const getUserContactsTable = createAsyncThunk(
       };
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
-    }catch{
+    }catch(error){
+      console.log(error)
       // If error, do I need different handling for refresh or initialization? no, this should be handled in redux.
       return { msg: "server error" };
     }
@@ -182,9 +183,6 @@ const contactSlice = createSlice({
     contactInFocus: {},
     contactsLoading: true,
     searchQuery: {
-      user_id: "",
-      first: "",
-      last: "",
       type: "name",
       strValue: "",
     },
@@ -213,21 +211,30 @@ const contactSlice = createSlice({
       state.searchQuery = action.payload;
     },
     getContactsSearch: (state, action) => {
-      const { searchString, searchType } = action.payload;
-      let searchResults = searchArray(searchString, state.contactsCache, searchType);
-      state.contactResults = [...searchResults];
+      // action.payload is not needed, request is already in searchQuery
+      let searchResults = SearchArray(state.searchQuery.strValue, state.contactsCache, state.searchQuery.type);
+      let results = []
+      for(let result = 0; result < searchResults.length; result++){
+        results.push(state.contactsCache[searchResults[result]])
+      }
+      state.contactResults = [...results];
+    },
+    getContactsPriority: (state, action) => {
+      state.contactResults = state.contactsCache.filter(element => element.is_priority)
     }
   },
   extraReducers: builder => {
-    builder.addCase(getContacts.fulfilled, (state, action) => {
+    builder.addCase(getUserContactsTable.fulfilled, (state, action) => {
       state.contactsCache = action.payload;
+      state.contactResults = action.payload;
+      // if there is anything else to do for first load, do it
       state.contactsLoading = false;
     });
-    builder.addCase(getContacts.pending, (state, action) => {
+    builder.addCase(getUserContactsTable.pending, (state, action) => {
       // loading or searching animation
       state.contactsLoading = true;
     });
-    builder.addCase(getContacts.rejected, (state, action) => {
+    builder.addCase(getUserContactsTable.rejected, (state, action) => {
       // if state tracking initial load says already successful, return 
       // a msg that refresh was unsuccessful
       // Otherwise return error based on backend response (no contacts,
@@ -274,5 +281,9 @@ export default contactSlice.reducer;
 export const {
   updateContactInFocus,
   setNewContactStaging,
+  clearNewContactStaging,
+  clearContactInFocus,
+  getContactsSearch,
+  getContactsPriority,
   updateSearchQuery,
 } = contactSlice.actions;

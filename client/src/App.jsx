@@ -77,7 +77,6 @@ function App() {
                 </>
               }
             ></Route>
-<<<<<<< HEAD
             <Route 
               path='/contacts/' 
               element={
@@ -91,8 +90,6 @@ function App() {
                 </>
               }
               ></Route>
-=======
->>>>>>> 285c43a12c6cc57cd08e271d8f05f7221a710cee
           </Routes>
           </div>
         </ClerkProvider>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContactsSearch, getUserContactsTable } from '../../../reducers/ContactReducer';
+import { getContactsSearch, getUserContactsTable, getContactsPriority, updateSearchQuery } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
@@ -19,31 +19,27 @@ export default function ContactsPage() {
 
     const [ searchType, setSearchType ] = useState("name");
     const [ searchParams, setSearchParams ] = useState({
-        user_id: userId,
-        first: "",
-        last: "",
-        type: "init",
+        type: "name",
         strValue: "",
-        token: {}
     });
 
-    async function searchSubmit(e) {
+    function searchSubmit(e) {
         const validated = validateSearchParams(searchParams);
         if(!validated){
             console.log('please enter text to search with')
         }else{
-            const token = await getToken()
-            validated.token = token;
             dispatch(updateSearchQuery(validated))
             dispatch(getContactsSearch(validated));
         }
-      }
+    }
+
     const addContact = () => {
         
     }
 
     const priorityContacts = () => {
         // place in search results only the contacts with priority === true
+        dispatch(getContactsPriority())
     }
 
     const contactHistory = () => {
@@ -51,36 +47,19 @@ export default function ContactsPage() {
         // this could be from events table where sort top 10 recent events with
         // an event type of '{tbd}', pull the contact for that linked job on the event
     }
+
     const validateSearchParams = (searchObj) => {
         let validated = {
-            "first": "",
-            "last": "",
-            "type": "",
+            "type": searchObj.type,
             "strValue": "",
-            "token": {}
         }
         if(searchObj.strValue === ""){
             console.log('you didnt type anything valid')
             return false
-        }
-        if(searchObj.type !== "name"){
-            return searchObj
         }else{
             let stringTrimmed = searchObj.strValue.trim();
-            if(stringTrimmed.split("").includes(" ")){
-                if(stringTrimmed.split("").length > 2){
-                    validated.first = stringTrimmed.split(" ")[0];
-                    validated.last = stringTrimmed.split(validated.first)[1];
-                    return validated
-                }else{
-                    validated.first = stringTrimmed.split(" ")[0];
-                    validated.last = stringTrimmed.split(" ")[1];
-                    return validated
-                }
-            }else{
-                validated.strValue = stringTrimmed;
-                return validated
-            }
+            validated.strValue = stringTrimmed;
+            return validated
         }
     }
 
@@ -96,7 +75,7 @@ export default function ContactsPage() {
     useEffect(() => {
         const grabSessionToken = async () => {
             const token = await getToken()
-            dispatch(getUserContactsTable( { user_id: user_id, token: token } ))
+            dispatch(getUserContactsTable( { user_id: userId, token: token } ))
         }
         grabSessionToken()
         .catch(console.error)
@@ -113,7 +92,7 @@ export default function ContactsPage() {
             </nav>
             <section className={styles.searchBar}>
                 <input onChange={ (e) => updateSearchString(e) } type="text" inputMode="search" name="searchBar"  className={styles.contactSearchInput} value={searchParams.strValue} placeholder={searchType}/>
-                <button onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></button>
+                <button className={styles.searchButton} onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></button>
                 <Dropdown 
                     items={["name", "company", "location"]}
                     header={"options"}
@@ -121,7 +100,7 @@ export default function ContactsPage() {
                 />
             </section>
             <section className={styles.searchResultsContainer}>
-                {searchResults && searchResults.map((element, idx) => {
+                {searchResults && searchResults.map(element => {
                     return (
                         // a business card.
                         < ContactCard 

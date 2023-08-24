@@ -1,12 +1,13 @@
 .dropdownContainer{
     display: flex;
     flex-direction: column;
-    min-height: 2em;
-    width: 10em;
-    line-height: 2em;
-    margin-left: 1.5em;
+    min-height: 2rem;
+    width: 15rem;
+    line-height: 2rem;
+    margin-left: 1.5rem;
     padding-left: 0;
     text-align: left;
+    font-size: 1.6rem;
 }
 .menuHiddenHeader{
     padding-left: 2em;

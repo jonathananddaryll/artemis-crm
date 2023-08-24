@@ -10,8 +10,9 @@
 }
 .menuContainer{
   margin: auto;
-  height: 4em;
+  height: 4rem;
   border-bottom: solid black 2px;
+  font-size: 1.6rem;
 }
 .menu {
   display: flex;
@@ -66,6 +67,19 @@
 }
 .contactSearchInput:focus{
   background-color: rgb(236, 236, 236);
+}
+.searchButton{
+  border: none;
+  background-color: white;
+}
+.searchButton:hover{
+  background-color: black;
+  color: white;
+}
+.searchButton:active{
+  background-color: white;
+  color: black;
+  border: solid black 1px;
 }
 .searchIcon{
   margin-left: 0.5em;
