@@ -4,12 +4,19 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuth } from '@clerk/clerk-react';
 
+import { updateContactInFocus, updateContactSelected } from '../../../reducers/ContactReducer';
+
 import styles from './ContactCard.module.scss';
 
 export default function ContactCard(props) {
     const { image, name, contactInfo } = props;
     const dispatch = useDispatch();
     const searchResults = useSelector((state) => state.contact.contactResults);
+    
+    function openCard () {
+        dispatch(updateContactInFocus(contactInfo));
+        dispatch(updateContactSelected());
+    }
     // create a context for toggling the form(edit form/in-depth form)
     // send the action to redux along with the contact id so that
     // redux can pass the contact id to the form
@@ -39,7 +46,7 @@ export default function ContactCard(props) {
                     </div>
                 </div>
                 <div className={styles.cardOpen}>
-                        <button>
+                        <button onClick={() => openCard()}>
                             see more
                         </button>
                     </div>

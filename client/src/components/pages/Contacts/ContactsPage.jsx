@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getContactsSearch, getUserContactsTable, getContactsPriority, updateSearchQuery } from '../../../reducers/ContactReducer';
+import { 
+    getContactsSearch, 
+    getUserContactsTable, 
+    getContactsPriority, 
+    updateSearchQuery, 
+    updateContactInFocus, 
+    updateContactSelected 
+        } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
 import Dropdown from './Dropdown';
@@ -16,6 +23,7 @@ export default function ContactsPage() {
 
     const dispatch = useDispatch();
     const searchResults = useSelector((state) => state.contact.contactResults);
+    const isSelected = useSelector((state) => state.contact.contactSelected)
 
     const [ searchType, setSearchType ] = useState("name");
     const [ searchParams, setSearchParams ] = useState({
@@ -23,29 +31,13 @@ export default function ContactsPage() {
         strValue: "",
     });
 
-    function searchSubmit(e) {
-        const validated = validateSearchParams(searchParams);
-        if(!validated){
-            console.log('please enter text to search with')
-        }else{
-            dispatch(updateSearchQuery(validated))
-            dispatch(getContactsSearch(validated));
-        }
-    }
-
-    const addContact = () => {
-        
-    }
-
-    const priorityContacts = () => {
-        // place in search results only the contacts with priority === true
-        dispatch(getContactsPriority())
-    }
-
-    const contactHistory = () => {
-        // place in search results only the contacts with recent communications
-        // this could be from events table where sort top 10 recent events with
-        // an event type of '{tbd}', pull the contact for that linked job on the event
+    function updateSearchString(e) {
+        setSearchParams(oldParams => {
+            return {
+                ...oldParams,
+                strValue: e.target.value
+            }
+        });
     }
 
     const validateSearchParams = (searchObj) => {
@@ -63,13 +55,48 @@ export default function ContactsPage() {
         }
     }
 
-    function updateSearchString(e) {
-        setSearchParams(oldParams => {
-            return {
-                ...oldParams,
-                strValue: e.target.value
-            }
-        });
+    function searchSubmit(e) {
+        const validated = validateSearchParams(searchParams);
+        if(!validated){
+            console.log('please enter text to search with')
+        }else{
+            dispatch(updateSearchQuery(validated))
+            dispatch(getContactsSearch(validated));
+        }
+    }
+
+    const addContact = () => {
+        // first, set contactInFocus object values to ""
+        dispatch(updateContactInFocus({
+            first_name: "",
+            last_name: "",
+            company: "",
+            current_job_title: "",
+            location: "",
+            phone: "",
+            email: "",
+            linkedin: "",
+            twitter: "",
+            instagram: "",
+            other_social: "",
+            personal_site: "",
+            linked_job_opening: "",
+        }))
+        // then toggle the form visibility
+        dispatch(updateContactSelected())
+    }
+
+    const priorityContacts = () => {
+        // place in search results only the contacts with priority === true
+        dispatch(getContactsPriority())
+    }
+
+    async function contactHistory() {
+        // place in search results only the contacts with recent communications
+        // this could be from events table where sort top 10 recent events with
+        // an event type of '{tbd}', pull the contact for that linked job on the event
+        const token = await getToken();
+        dispatch(getContactHistory(userId, token))
     }
 
     useEffect(() => {
@@ -83,14 +110,14 @@ export default function ContactsPage() {
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.contactsContainer}>
-            <nav className={styles.menuContainer}>
+                <nav className={styles.menuContainer}>
                 <ul className={styles.menu}>
                     <li className={styles.menuLinks}><a onClick={() => {addContact()}}>add+</a></li>
                     <li className={styles.menuLinks}><a onClick={() => {priorityContacts()}}>priority</a></li>
                     <li className={styles.menuLinks}><a onClick={() => {contactHistory()}}>history</a></li>
                 </ul>
-            </nav>
-            <section className={styles.searchBar}>
+                </nav>
+                <section className={styles.searchBar}>
                 <input onChange={ (e) => updateSearchString(e) } type="text" inputMode="search" name="searchBar"  className={styles.contactSearchInput} value={searchParams.strValue} placeholder={searchType}/>
                 <button className={styles.searchButton} onClick={searchSubmit}><i className={"fa-solid fa-magnifying-glass " + styles.searchIcon}></i></button>
                 <Dropdown 
@@ -98,9 +125,9 @@ export default function ContactsPage() {
                     header={"options"}
                     setSearchType={setSearchType}
                 />
-            </section>
-            <section className={styles.searchResultsContainer}>
-                {searchResults && searchResults.map(element => {
+                </section>
+                <section className={styles.searchResultsContainer}>
+                {!!searchResults && searchResults.map(element => {
                     return (
                         // a business card.
                         < ContactCard 
@@ -108,20 +135,16 @@ export default function ContactsPage() {
                             name={element.first_name + " " + element.last_name}
                             contactInfo={
                                 {
-                                    phone: "888-708-7077",
-                                    email: "joncodes@gmail.com",
-                                    location: "Mallorca, Spain",
-                                    title: "Software Engineer",
-                                    linkedin: "https://linkedin.com/in/jonnymnemonic",
-                                    otherSocial: "https://github.com/jonnymnemonic"
+                                    ...element
                                 }
                             }
                             key={element.id}
                         />                  )
                 })}
-            </section>
+                </section>
+                {!!isSelected && <ContactForm
+                />}
             </div>
-            
         </div>
     );
 }

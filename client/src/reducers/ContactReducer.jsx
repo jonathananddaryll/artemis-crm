@@ -181,6 +181,7 @@ const contactSlice = createSlice({
     contactResults: [],
     newContactStaging: {},
     contactInFocus: {},
+    contactSelected: false,
     contactsLoading: true,
     searchQuery: {
       type: "name",
@@ -196,6 +197,16 @@ const contactSlice = createSlice({
       }else{
         state.contactInFocus = action.payload;
         state.contactsLoading = false;
+      }
+    },
+    updateContactSelected: (state, action) => {
+      if(!state.contactSelected){
+        state.contactSelected = true;
+      }else{
+        state.contactSelected = false;
+        // anything to wrap up the contactForm? If canceling, should there be a message?
+        // if done, should there be a message?
+        // should contactInFocus be set to empty again?
       }
     },
     setNewContactStaging: (state, action) => {
@@ -253,8 +264,11 @@ const contactSlice = createSlice({
     builder.addCase(updateContact.fulfilled, (state, action) => {
       // Once confirmed updated, set state entry to updated entry.
       // If update fails, call getContacts and refresh the state with a clean start.
+      // have redux wait for a successful response to:
+        state.contactInFocus = action.payload
     });
     builder.addCase(updateContact.pending, (state, action) => {
+      
       // While updating, make sure components render with updated info.
     });
     builder.addCase(updateContact.rejected, (state, action) => {
@@ -286,4 +300,5 @@ export const {
   getContactsSearch,
   getContactsPriority,
   updateSearchQuery,
+  updateContactSelected
 } = contactSlice.actions;
