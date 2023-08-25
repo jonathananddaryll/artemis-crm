@@ -122,7 +122,7 @@ router.post('/', async (req, res) => {
         // TODO: 
         // 1) Check that request has sufficient data for creation of a new row
         const { names, values } = req.body;
-        const query = format(`INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${req.body.user_id}, %L);`, 'contact', values)
+        const query = format(`INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${req.body.user_id}, %L) RETURNING *;`, 'contact', values)
         const client = new Client(config)
         client.connect()
         client.query(query, (err, response) => {
@@ -156,7 +156,7 @@ router.patch('/', async (req, res) => {
         // EXAMPLE:  <row_name> = '<new_row_value>' 
             return `${element} = '${updateTo[index]}'`
         })
-        const query = `UPDATE contact SET ${setUpdate.join(", ")} WHERE user_id = ${user_id} AND id = ${id};`;
+        const query = `UPDATE contact SET ${setUpdate.join(", ")} WHERE user_id = ${user_id} AND id = ${id} RETURNING *;`;
         const client = new Client(config)
         client.connect()
         client.query(query, (err, response) => {
@@ -187,7 +187,7 @@ router.delete('/', async (req, res) => {
         // 1) Verify that the user_id is deleting a contact that it owns before deleting it.
 
         const { user_id, id } = req.body;
-        const query = `DELETE FROM contact WHERE user_id = ${user_id} AND id = ${id};`;
+        const query = `DELETE FROM contact WHERE user_id = ${user_id} AND id = ${id} RETURNING *;`;
         const client = new Client(config)
         client.connect()
         client.query(query, (err, response) => {
