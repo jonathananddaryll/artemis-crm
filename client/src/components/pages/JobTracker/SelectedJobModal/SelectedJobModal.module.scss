@@ -111,7 +111,7 @@
 
 .textSub {
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.8rem;
 
   /* change margin to 0 later and have an icon on the left of the text */
   margin: 0 2rem 0 0;
@@ -121,9 +121,21 @@
   }
 }
 
-.textSub i {
-  font-size: 1.7rem;
-  margin-right: 0.2rem;
+.textSub i,
+.textSubAdded i {
+  font-size: 1.5rem;
+  margin-right: 0.4rem;
+}
+
+.textSubAdded {
+  font-size: 1.8rem;
+
+  /* change margin to 0 later and have an icon on the left of the text */
+  margin: 0 2rem 0 0;
+
+  @include mixin.phone {
+    font-size: 1.8rem;
+  }
 }
 
 /* SUB NAVIGATION SECTION */

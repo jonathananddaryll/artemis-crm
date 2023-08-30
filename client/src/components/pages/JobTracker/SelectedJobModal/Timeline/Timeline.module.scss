@@ -70,28 +70,28 @@
 
 /* TIMELINE left line to show timeline */
 .topLine {
-  width: 0.2rem;
+  width: 1px;
   height: 40%;
   margin: 0 auto;
-  border: 2px solid rgb(201, 209, 243);
-  background-color: rgb(201, 209, 243);
+  border: 2px solid rgb(213, 219, 247);
+  background-color: rgb(213, 219, 247);
 }
 
 .middleDot {
   width: 1.4rem;
   height: 1.4rem;
   border-radius: 100%;
-  background-color: rgb(100, 100, 223);
-  border: 3px solid rgb(255, 255, 255);
+  background-color: rgb(155, 155, 250);
+  border: 3px solid #fefeff;
   margin: 0 auto;
 }
 
 .bottomLine {
-  width: 0.2rem;
+  width: 1px;
   height: 50%;
   margin: 0 auto;
-  background-color: rgb(155, 173, 253);
-  border: 2px solid rgb(201, 209, 243);
+  background-color: rgb(213, 219, 247);
+  border: 2px solid rgb(213, 219, 247);
 }
 
 .timelineScroll {

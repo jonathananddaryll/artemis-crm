@@ -145,6 +145,10 @@ export default function SelectedJobModal() {
                   <i className='bi bi-geo-alt' />
                   {selectedJob.location}
                 </p>
+                <p className={styles.textSubAdded}>
+                  <i className='bi bi-calendar3'></i>
+                  Added on {selectedJob.date_added}
+                </p>
               </div>
             </div>
           </div>

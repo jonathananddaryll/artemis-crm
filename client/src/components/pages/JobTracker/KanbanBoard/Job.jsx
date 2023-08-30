@@ -65,7 +65,7 @@ export default function Job({ job, index }) {
                 )}
               </div>
               <p className={styles.textCreated}>
-                {timeSince(job.date_created)}
+                Added {timeSince(job.date_created)}
               </p>
             </div>
           </div>
