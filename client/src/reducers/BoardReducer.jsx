@@ -2,7 +2,13 @@ import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { updateTaskStatus, createTask } from './SelectedJobReducer';
+import {
+  updateTaskStatus,
+  createTask,
+  deleteTask,
+  createNote,
+  deleteNote
+} from './SelectedJobReducer';
 
 // Create action
 
@@ -491,7 +497,7 @@ const boardSlice = createSlice({
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////
-    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task update
+    // Updates the incomplete_task_count and pending_interview_count in selectedJob, selectedBoardStatusCols, and jobs on successful task update
     builder.addMatcher(isAnyOf(updateTaskStatus.fulfilled), (state, action) => {
       // Finds the index of the updated job in selectedBoardStatusCols
       const selectedJobIndex = state.selectedBoardStatusCols[
@@ -540,11 +546,10 @@ const boardSlice = createSlice({
       }
     });
 
-    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
+    // Updates the incomplete_task_count and pending_interview_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
     builder.addMatcher(isAnyOf(createTask.fulfilled), (state, action) => {
       const newAddedTask = action.payload[0].rows[0];
 
-      console.log(newAddedTask);
       // Finds the index
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
@@ -573,6 +578,82 @@ const boardSlice = createSlice({
           selectedJobIndex
         ].pending_interview_count++;
         state.jobs[jobIndexInJobs].pending_interview_count++;
+      }
+    });
+
+    // Updates the total_note_count in selectedJob, selectedBoardStatusCols, and jobs on successful note creation
+    builder.addMatcher(isAnyOf(createNote.fulfilled), (state, action) => {
+      const newAddedNote = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === newAddedNote.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === newAddedNote.job_id
+      );
+
+      state.selectedJob.total_note_count++;
+      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
+        .total_note_count++;
+      state.jobs[jobIndexInJobs].total_note_count++;
+    });
+
+    // Updates the total_note_count in selectedJob, selectedBoardStatusCols, and jobs on successful note deletion
+    builder.addMatcher(isAnyOf(deleteNote.fulfilled), (state, action) => {
+      const deletedNote = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === deletedNote.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === deletedNote.job_id
+      );
+
+      state.selectedJob.total_note_count--;
+      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
+        .total_note_count--;
+      state.jobs[jobIndexInJobs].total_note_count--;
+    });
+
+    // @TODO : update on deleteTask
+    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
+    builder.addMatcher(isAnyOf(deleteTask.fulfilled), (state, action) => {
+      const deletedTask = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === deletedTask.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === deletedTask.job_id
+      );
+
+      if (deletedTask.is_done === false) {
+        state.selectedJob.incomplete_task_count--;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count--;
+        state.jobs[jobIndexInJobs].incomplete_task_count--;
+      }
+
+      if (
+        (deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')) &&
+        deletedTask.is_done === false
+      ) {
+        state.selectedJob.pending_interview_count--;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].pending_interview_count--;
+        state.jobs[jobIndexInJobs].pending_interview_count--;
       }
     });
   }

@@ -20,7 +20,6 @@ export const getAllTimelines = createAsyncThunk(
 export const createNote = createAsyncThunk(
   'note/createNote',
   async (formData, thunkAPI) => {
-    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -363,14 +362,34 @@ const selectedJobSlice = createSlice({
 
     builder.addCase(deleteTask.fulfilled, (state, action) => {
       // Filter notes without the deleted note
-      if (action.payload[0].rows[0].is_done === false) {
-        state.tasks = state.tasks.filter(
-          task => task.id !== action.payload[0].rows[0].id
-        );
+      const deletedTask = action.payload[0].rows[0];
+
+      if (deletedTask.is_done === false) {
+        state.tasks = state.tasks.filter(task => task.id !== deletedTask.id);
+
+        // Remove the deleted task in the interviews if the task is an interview type
+        if (
+          deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')
+        ) {
+          state.interviews = state.interviews.filter(
+            task => task.id !== deletedTask.id
+          );
+        }
       } else {
         state.completedTasks = state.completedTasks.filter(
-          task => task.id !== action.payload[0].rows[0].id
+          task => task.id !== deletedTask.id
         );
+
+        // Remove the deleted task in the completedinterviews if the task is an interview type
+        if (
+          deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')
+        ) {
+          state.completedInterviews = state.completedInterviews.filter(
+            task => task.id !== deletedTask.id
+          );
+        }
       }
 
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
