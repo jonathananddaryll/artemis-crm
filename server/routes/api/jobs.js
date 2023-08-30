@@ -154,14 +154,6 @@ router.patch(
         .status(405)
         .json({ msg: 'Error: The user does not own the board' });
     } else {
-      // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
-      // const query = format(
-      //   `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *`,
-      //   newStatus,
-      //   jobId,
-      //   boardId
-      // );
-
       const query = format(
         `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)`,
         newStatus,
@@ -181,6 +173,71 @@ router.patch(
 
           // return the updated job
           res.status(200).json(response[0].rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
+
+// @route     POST api/jobs/:job_id/jobinfo
+// @desc      update jobinfo
+// @access    Private
+router.patch(
+  '/:job_id/jobinfo',
+  jobInputValidator,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+
+    const {
+      company,
+      job_title,
+      location,
+      rate_of_pay,
+      job_url,
+      description,
+      selectedBoard_userId
+    } = req.body;
+
+    const jobId = req.params.job_id;
+
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+
+    // Checks if the loggedIn user owns the board
+    if (selectedBoard_userId !== userId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE job SET company = %L, job_title = %L, location = %L, rate_of_pay = %L, job_url = %L, description = %L  WHERE id = %s RETURNING *;`,
+        company,
+        job_title,
+        location,
+        rate_of_pay,
+        job_url,
+        description,
+        jobId
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          console.log(response.rows[0]);
+
+          // return the updated job
+          res.status(200).json(response.rows[0]);
           client.end();
         });
       } catch (err) {

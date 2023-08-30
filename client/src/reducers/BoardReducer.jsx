@@ -207,6 +207,33 @@ export const updateJobStatus = createAsyncThunk(
   }
 );
 
+// Updates a job information
+export const updateJobInfo = createAsyncThunk(
+  'board/updateJobInfo',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/jobs/${formData.job_id}/jobinfo`,
+        formData,
+        config
+      );
+
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
 // Deletes a job
 export const deleteJob = createAsyncThunk(
   'job/deleteJob',
@@ -407,8 +434,6 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
-      // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
-      // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
       // job status is already updating in the reducer when user drop a job to a different status it
       const foundIndex = state.selectedBoardStatusCols[
         action.payload.status
@@ -416,6 +441,42 @@ const boardSlice = createSlice({
       state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
         action.payload.status;
       toast.success('Successfully Updated Job Status');
+    });
+
+    builder.addCase(updateJobInfo.fulfilled, (state, action) => {
+      // Find the index of the updated job in the selectedBoardStatusCols
+      const foundIndex = state.selectedBoardStatusCols[
+        action.payload.status
+      ].findIndex(job => job.id === action.payload.id);
+
+      // Find the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === action.payload.id
+      );
+
+      // Temporary SelectedJob with the updated Info and the counts
+      const tempSelectedJob = action.payload;
+      tempSelectedJob.incomplete_task_count =
+        state.selectedJob.incomplete_task_count;
+      tempSelectedJob.total_note_count = state.selectedJob.total_note_count;
+      tempSelectedJob.pending_interview_count =
+        state.selectedJob.pending_interview_count;
+
+      // Updates the selectedJob
+      state.selectedJob = tempSelectedJob;
+
+      // Updates the updated job in the jobs state
+      state.jobs[jobIndexInJobs] = tempSelectedJob;
+
+      // Updates the job in the selectedBoardStatusCols to display the update in the kanban board
+      state.selectedBoardStatusCols[action.payload.status][foundIndex] =
+        tempSelectedJob;
+      toast.success('Successfully Updated Job Info');
+    });
+
+    // Display errors in updateJobInfo with toastify
+    builder.addCase(updateJobInfo.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
@@ -430,45 +491,88 @@ const boardSlice = createSlice({
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////
-    // Updates the incomplete_task_count both in selectedJob and selectedBoardStatusCols
+    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task update
     builder.addMatcher(isAnyOf(updateTaskStatus.fulfilled), (state, action) => {
-      // Finds the index
+      // Finds the index of the updated job in selectedBoardStatusCols
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
       ].findIndex(job => job.id === action.payload.job_id);
 
-      action.payload.is_done === false
-        ? state.selectedJob['incomplete_task_count']++ &&
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === action.payload.job_id
+      );
+
+      if (action.payload.is_done === false) {
+        // Updates incomplete_task_count in selectedJob
+        state.selectedJob.incomplete_task_count++;
+
+        // Updates incomplete_task_count in selectedBoardStatusCols
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count++;
+
+        // Updates incomplete_task_count in jobs
+        state.jobs[jobIndexInJobs].incomplete_task_count++;
+      } else {
+        // Updates incomplete_task_count in selectedJob
+        state.selectedJob.incomplete_task_count--;
+
+        // Updates incomplete_task_count in selectedBoardStatusCols
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count--;
+
+        // Updates incomplete_task_count in jobs
+        state.jobs[jobIndexInJobs].incomplete_task_count--;
+
+        // Updates the pending_interview_count if the task being updated is an interview type
+        if (
+          action.payload.category.includes('e Interview') ||
+          action.payload.category.includes('Screen')
+        ) {
+          state.selectedJob.pending_interview_count--;
           state.selectedBoardStatusCols[state.selectedJob.status][
             selectedJobIndex
-          ].incomplete_task_count++
-        : state.selectedJob['incomplete_task_count']-- &&
-          state.selectedBoardStatusCols[state.selectedJob.status][
-            selectedJobIndex
-          ].incomplete_task_count--;
+          ].pending_interview_count--;
+          state.jobs[jobIndexInJobs].pending_interview_count--;
+        }
+      }
     });
 
-    // Updates the selectedJob and
+    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
     builder.addMatcher(isAnyOf(createTask.fulfilled), (state, action) => {
-      console.log('create task fulfilled hit in boardreducer');
       const newAddedTask = action.payload[0].rows[0];
-      // Finds the index
+
       console.log(newAddedTask);
+      // Finds the index
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
       ].findIndex(job => job.id === newAddedTask.job_id);
 
-      state.selectedJob['incomplete_task_count']++;
-      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
-        .incomplete_task_count++;
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === newAddedTask.job_id
+      );
+
+      if (newAddedTask.is_done === false) {
+        state.selectedJob.incomplete_task_count++;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count++;
+        state.jobs[jobIndexInJobs].incomplete_task_count++;
+      }
 
       if (
-        newAddedTask.category.includes('e Interview') ||
-        newAddedTask.category.includes('Screen')
+        (newAddedTask.category.includes('e Interview') ||
+          newAddedTask.category.includes('Screen')) &&
+        newAddedTask.is_done === false
       ) {
+        state.selectedJob.pending_interview_count++;
         state.selectedBoardStatusCols[state.selectedJob.status][
           selectedJobIndex
         ].pending_interview_count++;
+        state.jobs[jobIndexInJobs].pending_interview_count++;
       }
     });
   }

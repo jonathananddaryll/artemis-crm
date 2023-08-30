@@ -4,7 +4,8 @@ import { useSession } from '@clerk/clerk-react';
 import {
   changeSelectedJob,
   deleteJob,
-  handleToggleForm
+  handleToggleForm,
+  updateJobInfo
 } from '../../../../reducers/BoardReducer';
 
 import Button from '../../../layout/Button/Button';
@@ -31,7 +32,7 @@ import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from './DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
 
-import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
+// import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
 import styles from './SelectedJobModal.module.scss';
 
@@ -176,6 +177,8 @@ export default function SelectedJobModal() {
             <JobInfoTab
               selectedJob={selectedJob}
               selectedBoard_userId={selectedBoard.user_id}
+              updateJobInfo={updateJobInfo}
+              jobId={selectedJob.id}
             />
           )}
           {activeItem === 1 && (
