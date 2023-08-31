@@ -15,7 +15,7 @@
 }
 
 .addlistContainer {
-  background-color: rgb(234, 236, 240);
+  background-color: #f7f7f7;
   border-radius: 10px;
   width: 28rem;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
@@ -68,6 +68,20 @@
   padding: 1.5rem;
   align-items: center;
   position: relative;
+  justify-content: space-between;
+}
+
+.textContainer {
+  flex: 0 0 1;
+  display: flex;
+  align-items: center;
+}
+
+.buttonsContainer {
+  // flex: 0 0 6rem;
+  display: flex;
+  // background-color: red;
+  gap: 0.5rem;
 }
 
 .textStatus {
@@ -91,16 +105,19 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.buttonEdit {
-  position: absolute;
-  right: 1.5rem;
+.statusButton {
   border: none;
   background-color: transparent;
   color: #97a2b6;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    color: #3c4350;
+  }
 
   @include mixin.phone {
-    // right: 0;
+    font-size: 2rem;
     padding: 0 0 0 1rem;
   }
 }

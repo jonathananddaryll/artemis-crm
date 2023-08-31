@@ -49,15 +49,28 @@ export default function ({
   return (
     <div className={styles.columnContainer}>
       <div className={styles.header}>
-        <h4 className={styles.textStatus}>{title}</h4>
-        <p className={styles.textTotalJobs}>{jobs.length}</p>
-        {columnNumber > 6 && jobs.length === 0 && (
-          <button
-            className={styles.buttonEdit}
-            onClick={() => handleColumnDelete(columnNumber, title)}
-          >
-            <i className='bi bi-three-dots'></i>
-          </button>
+        <div className={styles.textContainer}>
+          <h4 className={styles.textStatus}>{title}</h4>
+          <p className={styles.textTotalJobs}>{jobs.length}</p>
+        </div>
+        {columnNumber > 6 && (
+          <div className={styles.buttonsContainer}>
+            {jobs.length === 0 && (
+              <button
+                className={styles.statusButton}
+                onClick={() => handleColumnDelete(columnNumber, title)}
+              >
+                <i className='bi bi-trash3'></i>
+              </button>
+            )}
+
+            <button
+              className={styles.statusButton}
+              onClick={() => handleColumnDelete(columnNumber, title)}
+            >
+              <i className='bi bi-pencil'></i>
+            </button>
+          </div>
         )}
       </div>
 

@@ -400,55 +400,7 @@ router.patch(
   }
 );
 
-// // -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
-// // @route     POST api/boards/:board_id/remove
-// // @desc      remove a column status
-// // @access    Private
-// router.patch(
-//   '/:board_id/remove',
-//   myRequestHeaders,
-//   validateRequest,
-//   async (req, res) => {
-//     // do the calculating of what colum to add to. have a keeper of first empty column in redux
-//     const client = new Client(config);
-//     client.connect();
-//     const { columnToRemove, totalCols } = req.body;
-//     const boardId = req.params.board_id;
-//     const columnToAdd = 'column'.concat(totalCols + 1);
-
-//     const query = format(
-//       `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s`,
-//       columnToAdd,
-//       columnStatus,
-//       boardId,
-//       111
-//     );
-
-//     if (totalCols === 0) {
-//       return res.status(405).json({ msg: 'Error. No column to remove' });
-//     }
-
-//     try {
-//       client.query(query, (err, response) => {
-//         if (err) {
-//           console.error(err);
-//           res.status(500).json({ msg: 'query error' });
-//         }
-
-//         // return the new column status that is added
-//         res.status(200).json(response);
-//         client.end();
-//       });
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send('Server Error');
-//     }
-//   }
-// );
-
-// @route     DELETE api/boards/:id
-// @desc      delete a board
-// @access    Private
+// @TODO: implement this
 router.delete(
   '/:board_id',
   myRequestHeaders,
