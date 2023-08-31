@@ -23,6 +23,8 @@ export default function JobInfoTab({
     job_url: selectedJob.job_url !== null ? selectedJob.job_url : ''
   });
 
+  const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
+
   // Deconstruct formData
   const { company, job_title, location, rate_of_pay, job_url } = formData;
 
@@ -55,6 +57,9 @@ export default function JobInfoTab({
     console.log(formD);
     // dispatch the updateCall
     dispatch(updateJobInfo(formD));
+
+    // Show the Clickable URL
+    if (formD.job_url !== '') setShowUrl(true);
 
     // Dont clear the form
   }
@@ -119,13 +124,24 @@ export default function JobInfoTab({
           </div>
           <div className={styles.formGroup}>
             <label>Job URL</label>
-            <input
-              type='text'
-              name='job_url'
-              value={job_url}
-              placeholder={job_url !== '' ? job_url : 'Add URL'}
-              onChange={e => onChangeHandler(e)}
-            />
+            {!showUrl ? (
+              <input
+                type='text'
+                name='job_url'
+                value={job_url}
+                placeholder={job_url !== '' ? job_url : 'Add URL'}
+                onChange={e => onChangeHandler(e)}
+              />
+            ) : (
+              <div className={styles.urlBox}>
+                <a href={`${job_url}`} target='_blank'>
+                  {job_url}
+                </a>
+                <button onClick={() => setShowUrl(false)}>
+                  <i className='bi bi-pencil'></i>
+                </button>
+              </div>
+            )}
           </div>
           {/* <div className={styles.formGroup}>
             <label>Description</label>

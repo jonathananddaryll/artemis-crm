@@ -206,7 +206,7 @@ export const updateJobStatus = createAsyncThunk(
       );
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
