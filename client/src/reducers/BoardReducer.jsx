@@ -66,7 +66,7 @@ export const createBoard = createAsyncThunk(
   }
 );
 
-// Adds a new column/status in the board
+// Adds a new column/status to a board
 export const addColumn = createAsyncThunk(
   'board/addColumn',
   async (formData, thunkAPI) => {
@@ -79,7 +79,7 @@ export const addColumn = createAsyncThunk(
 
     try {
       const res = await axios.patch(
-        `/api/boards/${formData.id}/add`,
+        `/api/boards/${formData.id}/add/column`,
         formData,
         config
       );
@@ -94,7 +94,40 @@ export const addColumn = createAsyncThunk(
   }
 );
 
-// Update a column status
+// Deletes a column/status of a board
+export const deleteColumn = createAsyncThunk(
+  'board/deleteColumn',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+    try {
+      const res = await axios.patch(
+        `/api/boards/${formData.id}/delete/column`,
+        formData,
+        config
+      );
+
+      const resData = [res.data, formData.columnStatusToDelete];
+
+      // console.log(res.data);
+      return resData;
+
+      // return formData.columnStatus;
+      // RETURN A NEW BOARD WITHOUT THE DELETED COLUMN
+    } catch (err) {
+      // If there's errors
+      console.log(err);
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// Update a column status name
 export const updateBoardColumn = createAsyncThunk(
   'board/updateColumnStatus',
   async (formData, thunkAPI) => {
@@ -114,7 +147,7 @@ export const updateBoardColumn = createAsyncThunk(
 
       // return res.data;
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
@@ -255,7 +288,7 @@ export const deleteJob = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
@@ -394,6 +427,20 @@ const boardSlice = createSlice({
     // Display errors in addColumn with toastify
     builder.addCase(addColumn.rejected, (state, action) => {
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(deleteColumn.fulfilled, (state, action) => {
+      console.log(action.payload);
+
+      delete state.selectedBoardStatusCols[action.payload[1]];
+      state.selectedBoard = action.payload[0];
+
+      // const newCol = 'column' + (state.selectedBoard.total_cols + 1);
+      // state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
+      // state.selectedBoard[newCol] = action.payload;
+      toast.success(
+        `Successfully Deleted a Column in ${state.selectedBoard.title}`
+      );
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {

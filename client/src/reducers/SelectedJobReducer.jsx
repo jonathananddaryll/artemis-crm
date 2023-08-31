@@ -93,7 +93,7 @@ export const deleteNote = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
@@ -155,7 +155,7 @@ export const updateTaskStatus = createAsyncThunk(
         config
       );
       return res.data;
-    } catch (error) {
+    } catch (err) {
       console.log(err);
     }
   }
@@ -176,7 +176,7 @@ export const deleteTask = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }

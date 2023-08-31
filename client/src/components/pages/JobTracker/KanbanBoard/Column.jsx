@@ -37,7 +37,13 @@ const JobList = styled.div`
   }
 `;
 
-export default function ({ title, jobs, id }) {
+export default function ({
+  jobs,
+  id,
+  columnNumber,
+  handleColumnDelete,
+  title
+}) {
   const dispatch = useDispatch();
 
   return (
@@ -45,9 +51,14 @@ export default function ({ title, jobs, id }) {
       <div className={styles.header}>
         <h4 className={styles.textStatus}>{title}</h4>
         <p className={styles.textTotalJobs}>{jobs.length}</p>
-        <button className={styles.buttonEdit}>
-          <i className='bi bi-three-dots'></i>
-        </button>
+        {columnNumber > 6 && jobs.length === 0 && (
+          <button
+            className={styles.buttonEdit}
+            onClick={() => handleColumnDelete(columnNumber, title)}
+          >
+            <i className='bi bi-three-dots'></i>
+          </button>
+        )}
       </div>
 
       <Droppable droppableId={id}>

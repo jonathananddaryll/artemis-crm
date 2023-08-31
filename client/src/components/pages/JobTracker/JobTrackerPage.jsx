@@ -94,29 +94,11 @@ export default function JobTrackerPage() {
 
   // Redirects the user when they try to go to board page that they do not own
   const navigate = useNavigate();
+
   if (selectedBoard !== null && selectedBoard.user_id !== userId) {
     // console.log('redirecting since you do not own the board');
     navigate('/boards');
   }
-
-  // IF THE LOADING STOP WORKING, REVERT TO THIS
-  // jobs loading
-  // if (
-  //   jobsLoading &&
-  //   board_id !== null &&
-  //   loadStart1 &&
-  //   selectedBoardStatusCols === null &&
-  //   selectedBoard !== null
-  // ) {
-  //   // Gets all the job with the selectedBoard Id
-  //   dispatch(getjobswithBoardId(board_id));
-  //   setLoadStart1(false);
-  // }
-
-  // // Once the selectedBoard is loaded and the selectedBoardStatusCols has not been filled with the selectedBoard's column status
-  // if (selectedBoard !== null && selectedBoardStatusCols === null) {
-  //   dispatch(changeBoard(selectedBoard));
-  // }
 
   return (
     <div className={styles.container}>

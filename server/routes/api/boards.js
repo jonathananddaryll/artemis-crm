@@ -114,11 +114,11 @@ router.post('/', boardInputValidator, validateRequest, async (req, res) => {
   }
 });
 
-// @route     POST api/boards/:id/add
+// @route     POST api/boards/:id/add/column
 // @desc      Add a new column
 // @access    Private
 router.patch(
-  '/:board_id/add',
+  '/:board_id/add/column',
   addColumnInputValidator,
   validateRequest,
   async (req, res) => {
@@ -128,7 +128,7 @@ router.patch(
     const client = new Client(config);
     client.connect();
     const { columnStatus, totalCols, userId } = req.body;
-    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
+
     const newTotalCols = totalCols + 1;
     const boardId = req.params.board_id;
     const columnToAdd = 'column'.concat(newTotalCols);
@@ -142,6 +142,13 @@ router.patch(
         .status(405)
         .json({ msg: 'Error: The user does not own the board' });
     } else {
+      // DO NOTE let the user add more than 10 columns
+      if (totalCols === 10) {
+        return res
+          .status(405)
+          .json({ msg: 'Error. Only 10 column is allowed per board' });
+      }
+
       const query = format(
         `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *`,
         columnToAdd,
@@ -152,11 +159,118 @@ router.patch(
         decodedUserId
       );
 
-      if (totalCols === 10) {
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the new column status that is added
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
+
+// @route     POST api/boards/:id/delete/column
+// @desc      delete a column
+// @access    Private
+router.patch(
+  '/:board_id/delete/column',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    // do the calculating of what colum to add to. have a keeper of first empty column in redux
+
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const {
+      totalCols,
+      columnToDelete,
+      userId,
+      col10Status,
+      col9Status,
+      col8Status
+    } = req.body;
+
+    console.log('it got here in the beginning');
+
+    const boardId = req.params.board_id;
+    const newTotalCol = totalCols - 1;
+    // const newTotalCol = parseInt(totalCols) - 1;
+
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const decodedUserId = decodedToken.userId;
+
+    if (userId !== decodedUserId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      // DO NOT let the user add more than 10 columns
+      if (columnToDelete < 7 || columnToDelete > 10) {
         return res
           .status(405)
-          .json({ msg: 'Error. Only 10 column is allowed per board' });
+          .json({ msg: 'Error. Can only delete column 7 to 10' });
       }
+
+      // MAKE SURE TO NOT LET USER DELETE IF THERE ARE JOBS WITH BOARDID AND STATUS AS THE ONE GETTING DELETED
+      // If deleting Column10
+
+      let query;
+
+      if (columnToDelete === 10) {
+        query = format(
+          `UPDATE BOARD SET column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          newTotalCol,
+          boardId,
+          decodedUserId
+        );
+      }
+
+      if (columnToDelete === 9) {
+        query = format(
+          `UPDATE BOARD SET column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          col10Status,
+          newTotalCol,
+          boardId,
+          decodedUserId
+        );
+      }
+
+      if (columnToDelete === 8) {
+        query = format(
+          `UPDATE BOARD SET column8 = %L, column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          col9Status,
+          col10Status,
+          newTotalCol,
+          boardId,
+          decodedUserId
+        );
+      }
+
+      if (columnToDelete === 7) {
+        query = format(
+          `UPDATE BOARD SET column7 = %L, column8 = %L, column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          col8Status,
+          col9Status,
+          col10Status,
+          newTotalCol,
+          boardId,
+          decodedUserId
+        );
+      }
+
+      console.log('IT GOT HEERE');
+      console.log(query);
 
       try {
         client.query(query, (err, response) => {
@@ -178,7 +292,7 @@ router.patch(
 );
 
 // @route     POST api/boards/:id/update/column
-// @desc      update column
+// @desc      update column Name
 // @access    Private
 router.patch(
   '/:board_id/update/column',
@@ -189,7 +303,6 @@ router.patch(
     const client = new Client(config);
     client.connect();
     const { columnStatus, columnToUpdate, userId } = req.body;
-    // addcolumn or updatecolumn --> make sure to pass 'action' along with everytrhing in body
     const boardId = req.params.board_id;
 
     // Decode the token
@@ -202,12 +315,19 @@ router.patch(
         .status(405)
         .json({ msg: 'Error: The user does not own the board' });
     } else {
+      // DO NOT let the user update the first  6 default columns
+      if (columnToUpdate < 6) {
+        return res
+          .status(405)
+          .json({ msg: 'Error. Only 10 column is allowed per board' });
+      }
+
       const query = format(
         `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING *`,
         columnToUpdate,
         columnStatus,
         boardId,
-        'user_2SWlvSMY0DKPuKthQBIRgFoDvdi'
+        decodedUserId
       );
 
       try {
@@ -280,48 +400,51 @@ router.patch(
   }
 );
 
-// -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
-// @route     POST api/boards/:board_id/remove
-// @desc      remove a column status
-// @access    Private
-router.patch('/:board_id/remove', async (req, res) => {
-  // do the calculating of what colum to add to. have a keeper of first empty column in redux
+// // -------------------------------------- ADD HEADER AUTHENTICATION LATER ON
+// // @route     POST api/boards/:board_id/remove
+// // @desc      remove a column status
+// // @access    Private
+// router.patch(
+//   '/:board_id/remove',
+//   myRequestHeaders,
+//   validateRequest,
+//   async (req, res) => {
+//     // do the calculating of what colum to add to. have a keeper of first empty column in redux
+//     const client = new Client(config);
+//     client.connect();
+//     const { columnToRemove, totalCols } = req.body;
+//     const boardId = req.params.board_id;
+//     const columnToAdd = 'column'.concat(totalCols + 1);
 
-  // const errors = validationResult(req);
-  const client = new Client(config);
-  client.connect();
-  const { columnToRemove, totalCols } = req.body;
-  const boardId = req.params.board_id;
-  const columnToAdd = 'column'.concat(totalCols + 1);
+//     const query = format(
+//       `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s`,
+//       columnToAdd,
+//       columnStatus,
+//       boardId,
+//       111
+//     );
 
-  const query = format(
-    `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %s`,
-    columnToAdd,
-    columnStatus,
-    boardId,
-    111
-  );
+//     if (totalCols === 0) {
+//       return res.status(405).json({ msg: 'Error. No column to remove' });
+//     }
 
-  if (totalCols === 0) {
-    return res.status(405).json({ msg: 'Error. No column to remove' });
-  }
+//     try {
+//       client.query(query, (err, response) => {
+//         if (err) {
+//           console.error(err);
+//           res.status(500).json({ msg: 'query error' });
+//         }
 
-  try {
-    client.query(query, (err, response) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
-      }
-
-      // return the new column status that is added
-      res.status(200).json(response);
-      client.end();
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
+//         // return the new column status that is added
+//         res.status(200).json(response);
+//         client.end();
+//       });
+//     } catch (err) {
+//       console.error(err.message);
+//       res.status(500).send('Server Error');
+//     }
+//   }
+// );
 
 // @route     DELETE api/boards/:id
 // @desc      delete a board

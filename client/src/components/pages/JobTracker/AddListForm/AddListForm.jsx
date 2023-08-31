@@ -30,13 +30,10 @@ export default function AddListForm({
     // IMPORTANT..... MAKE SURE THIS PART OF ADDING TOKEN TO THE FORMDATA IS UNIFORM ACROSS EVERY FORMDATA. FIX THIS LATER, MAKE SURE IT'S CODED BETTER AND CLEANER
     // const token = await session.getToken();
     const formD = formData;
-    formD['token'] = await session.getToken();
-    console.log(formD);
+    formD.token = await session.getToken();
 
     dispatch(addColumn(formD));
     setAddListToggle(false);
-
-    // CALL THE ACTION REDUCER here
   }
 
   return (
@@ -71,7 +68,6 @@ export default function AddListForm({
             />
           </div>
         </form>
-        {/* <button onClick={() => setAddListToggle(false)}>Cancel</button> */}
       </div>
     </div>
   );
