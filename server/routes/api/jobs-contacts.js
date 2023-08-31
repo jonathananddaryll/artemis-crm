@@ -14,15 +14,16 @@ const { decodeToken } = require("../../middlewares/decodeToken");
 // MANY TO MANY jobs-contacts table
 
 router.post("/", myRequestHeaders, validateRequest, async (req, res) => {
-  try {
-    const decodedToken = decodeToken(req.headers.authorization);
-    const userId = decodedToken.userId;
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
 
-    const { jobId, contactId } = req.query;
-    const query = format(
-      `INSERT INTO job_contact(job_id, contact_id) VALUES(${jobId}, ${contactId}) RETURNING *`
-    );
-    const client = new Client(config);
+  const { jobId, contactId } = req.query;
+  const query = format(
+    `INSERT INTO job_contact(job_id, contact_id) VALUES(${jobId}, ${contactId}) RETURNING *`
+  );
+  const client = new Client(config);
+
+  try {
     client.connect();
     client.query(query, (error, response) => {
       if (error) {
@@ -38,15 +39,15 @@ router.post("/", myRequestHeaders, validateRequest, async (req, res) => {
 });
 
 router.get("/", myRequestHeaders, validateRequest, async (req, res) => {
-  try {
-    const decodedToken = decodeToken(req.headers.authorization);
-    const userId = decodedToken.userId;
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
 
-    const { searchingFor, searchingWith, id } = req.query;
-    const query = format(
-      `SELECT ${searchingFor} FROM job_contact WHERE ${searchingWith} = ${id};`
-    );
-    const client = new Client(config);
+  const { searchingFor, searchingWith, id } = req.query;
+  const query = format(
+    `SELECT ${searchingFor} FROM job_contact WHERE ${searchingWith} = ${id};`
+  );
+  const client = new Client(config);
+  try {
     client.query(query, (error, response) => {
       if (error) {
         console.error(error);
@@ -61,14 +62,14 @@ router.get("/", myRequestHeaders, validateRequest, async (req, res) => {
 });
 
 router.delete("/", myRequestHeaders, validateRequest, async (req, res) => {
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
+  const { jobId, contactId } = req.query;
+  const query = format(
+    `DELETE FROM job_contact WHERE job_id = ${jobId} AND contact_id = ${contactId} RETURNING *`
+  );
+  const client = new Client(config);
   try {
-    const decodedToken = decodeToken(req.headers.authorization);
-    const userId = decodedToken.userId;
-    const { jobId, contactId } = req.query;
-    const query = format(
-      `DELETE FROM job_contact WHERE job_id = ${jobId} AND contact_id = ${contactId} RETURNING *`
-    );
-    const client = new Client(config);
     client.query(query, (error, response) => {
       if (error) {
         console.error(error);

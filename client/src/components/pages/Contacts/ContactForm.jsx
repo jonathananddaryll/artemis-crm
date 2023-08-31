@@ -105,7 +105,7 @@ export default function ContactForm() {
     // When editing is turned on, make sure the form is set to redux state values for the contact
     // If editing is turned off, don't know if it's after a submit, so pull from redux state values still.
     // Call the updateContactInFocus hook when a successful UPDATE response object from api/contacts is
-    // received. If it's not a good idea I'll have issues with the new values not showing in the form
+    // received. If I did this incorrectly I'll have issues with the new values not showing in the form
     // after submitting an update, and maybe even the same thing with new contacts as well.
 
     setContactForm((oldForm) => contactInFocus);
