@@ -152,7 +152,7 @@ router.patch(
       const query = format(
         `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *`,
         columnToAdd,
-        columnStatus,
+        columnStatus.toLowerCase(),
         'total_cols',
         newTotalCols,
         boardId,
@@ -269,9 +269,6 @@ router.patch(
         );
       }
 
-      console.log('IT GOT HEERE');
-      console.log(query);
-
       try {
         client.query(query, (err, response) => {
           if (err) {
@@ -296,13 +293,13 @@ router.patch(
 // @access    Private
 router.patch(
   '/:board_id/update/column',
-  myRequestHeaders,
+  addColumnInputValidator,
   validateRequest,
   async (req, res) => {
     // const errors = validationResult(req);
     const client = new Client(config);
     client.connect();
-    const { columnStatus, columnToUpdate, userId } = req.body;
+    const { columnStatus, columnToUpdate, userId, oldColumnStatus } = req.body;
     const boardId = req.params.board_id;
 
     // Decode the token
@@ -323,11 +320,15 @@ router.patch(
       }
 
       const query = format(
-        `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING *`,
+        `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING %I; UPDATE JOB SET status = %L WHERE board_id = %s AND status = %L RETURNING *`,
         columnToUpdate,
-        columnStatus,
+        columnStatus.toLowerCase(),
         boardId,
-        decodedUserId
+        decodedUserId,
+        columnToUpdate,
+        columnStatus.toLowerCase(),
+        boardId,
+        oldColumnStatus
       );
 
       try {
@@ -337,8 +338,9 @@ router.patch(
             res.status(500).json({ msg: 'query error' });
           }
 
-          // return the updated column
-          res.status(200).json(response.rows[0]);
+          // response[0] = updated board
+          // response[1] = updated jobs
+          res.status(200).json(response);
           client.end();
         });
       } catch (err) {

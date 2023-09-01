@@ -23,6 +23,7 @@ export default function StatusUpdateForm({
       userId: selectedBoard.user_id,
       columnToUpdate: statusFormToggle.column,
       columnStatus: newTitle,
+      oldColumnStatus: statusFormToggle.ind,
       token: await session.getToken()
     };
 
@@ -30,6 +31,7 @@ export default function StatusUpdateForm({
     // setStatusFormToggle({ ind: null, state: false });
 
     dispatch(updateBoardColumn(formData));
+    setStatusFormToggle({ ind: null, state: false, column: null });
     // console.log(newTitle);
     // console.log(statusFormToggle.column);
   }
@@ -52,7 +54,9 @@ export default function StatusUpdateForm({
               value={'Cancel'}
               color={'white'}
               size={'small'}
-              onClick={() => setStatusFormToggle({ ind: null, state: false })}
+              onClick={() =>
+                setStatusFormToggle({ ind: null, state: false, column: null })
+              }
             />
             {/* <Button
             type={'submit'}

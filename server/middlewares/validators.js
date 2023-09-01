@@ -38,7 +38,10 @@ const boardInputValidator = [
 
 const addColumnInputValidator = [
   ...myRequestHeaders,
-  check('columnStatus', 'Please enter a Board Title with atleast 3 characters')
+  check(
+    'columnStatus',
+    'Please enter a Column Status Name with atleast 3 characters'
+  )
     .not()
     .isEmpty()
     .isLength({ min: 3 })

@@ -75,6 +75,9 @@
   flex: 0 0 1;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 
 .buttonsContainer {

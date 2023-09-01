@@ -145,11 +145,16 @@ export const updateBoardColumn = createAsyncThunk(
         config
       );
 
+      // [0] = res.data
+      // [1] = old Column Status Name - will be used to find the key to update selectedBoardStatusCols
+      return [res.data, formData.oldColumnStatus];
       // return res.data;
-      return res.data;
+
+      // return formData;
     } catch (err) {
-      // have a better error catch later
-      console.log(err);
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -444,7 +449,21 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
+      const columnName = Object.keys(action.payload[0][0].rows[0])[0];
+      const newStatusName = Object.values(action.payload[0][0].rows[0])[0];
+      const oldStatusName = action.payload[1];
+
+      // Updates the key of selectedBoardStatusCols and the jobs inside it with the updated jobs
+      delete Object.assign(state.selectedBoardStatusCols, {
+        [newStatusName]: action.payload[0][1].rows
+      })[oldStatusName];
+
+      state.selectedBoard[columnName] = newStatusName;
+    });
+
+    // Display errors in updateBoardColumn with toastify
+    builder.addCase(updateBoardColumn.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(updateBoardName.fulfilled, (state, action) => {
