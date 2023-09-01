@@ -6,7 +6,8 @@ import {
   removeFromStatus,
   addToStatus,
   updateJobStatus,
-  deleteColumn
+  deleteColumn,
+  updateBoardColumn
 } from '../../../../reducers/BoardReducer';
 
 import { useSession } from '@clerk/clerk-react';
@@ -19,10 +20,11 @@ export default function KanbanBoard({
   selectedBoard,
   selectedBoardStatusCols
 }) {
-  // PASSED selectedBoard and selectedBoardStatusCols as a props instead of using useSelector hook. delete this later once everything is finalized and working as planned
-  // const { selectedBoard, selectedBoardStatusCols } = useSelector(state => ({
-  //   ...state.board
-  // }));
+  const [statusFormToggle, setStatusFormToggle] = useState({
+    ind: null,
+    state: false,
+    column: null
+  });
 
   const dispatch = useDispatch();
   const { board_id } = useParams();
@@ -108,6 +110,10 @@ export default function KanbanBoard({
             title={keyName}
             columnNumber={index + 1}
             handleColumnDelete={handleColumnDelete}
+            setStatusFormToggle={setStatusFormToggle}
+            statusFormToggle={statusFormToggle}
+            selectedBoard={selectedBoard}
+            updateBoardColumn={updateBoardColumn}
           />
         ))}
         {/* Add list column only shows when there's less than 10 total status columns */}

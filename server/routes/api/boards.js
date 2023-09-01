@@ -238,7 +238,7 @@ router.patch(
 
       if (columnToDelete === 9) {
         query = format(
-          `UPDATE BOARD SET column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          `UPDATE BOARD SET column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
           col10Status,
           newTotalCol,
           boardId,
@@ -248,7 +248,7 @@ router.patch(
 
       if (columnToDelete === 8) {
         query = format(
-          `UPDATE BOARD SET column8 = %L, column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          `UPDATE BOARD SET column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
           col9Status,
           col10Status,
           newTotalCol,
@@ -259,7 +259,7 @@ router.patch(
 
       if (columnToDelete === 7) {
         query = format(
-          `UPDATE BOARD SET column7 = %L, column8 = %L, column9 = %L, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          `UPDATE BOARD SET column7 = %L, column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
           col8Status,
           col9Status,
           col10Status,

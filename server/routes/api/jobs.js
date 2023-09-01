@@ -41,7 +41,7 @@ router.post('/', jobInputValidator, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board' });
   } else {
     const query = format(
-      'INSERT INTO job (job_title, company, location, status, job_url, board_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *',
+      'INSERT INTO job (job_title, company, location, status, job_url, board_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING * ',
       job_title,
       company,
       location,
@@ -233,8 +233,6 @@ router.patch(
             console.error(err);
             res.status(500).json({ msg: 'query error' });
           }
-
-          console.log(response.rows[0]);
 
           // return the updated job
           res.status(200).json(response.rows[0]);

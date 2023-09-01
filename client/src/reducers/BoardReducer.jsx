@@ -154,7 +154,7 @@ export const updateBoardColumn = createAsyncThunk(
   }
 );
 
-// Update a column name
+// Update a board name
 export const updateBoardName = createAsyncThunk(
   'board/updateBoardName',
   async (formData, thunkAPI) => {

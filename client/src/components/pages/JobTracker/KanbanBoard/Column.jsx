@@ -7,6 +7,7 @@ import {
   handleColumnUpdateForm
 } from '../../../../reducers/BoardReducer';
 import { useDispatch } from 'react-redux';
+import StatusUpdateForm from './StatusUpdateForm/StatusUpdateForm';
 import styles from './KanbanBoard.module.scss';
 
 const JobList = styled.div`
@@ -42,7 +43,11 @@ export default function ({
   id,
   columnNumber,
   handleColumnDelete,
-  title
+  title,
+  setStatusFormToggle,
+  statusFormToggle,
+  selectedBoard,
+  updateBoardColumn
 }) {
   const dispatch = useDispatch();
 
@@ -53,6 +58,7 @@ export default function ({
           <h4 className={styles.textStatus}>{title}</h4>
           <p className={styles.textTotalJobs}>{jobs.length}</p>
         </div>
+
         {columnNumber > 6 && (
           <div className={styles.buttonsContainer}>
             {jobs.length === 0 && (
@@ -66,13 +72,28 @@ export default function ({
 
             <button
               className={styles.statusButton}
-              onClick={() => handleColumnDelete(columnNumber, title)}
+              onClick={e =>
+                setStatusFormToggle({
+                  ind: id,
+                  state: true,
+                  column: `column${columnNumber}`
+                })
+              }
             >
               <i className='bi bi-pencil'></i>
             </button>
           </div>
         )}
       </div>
+      {statusFormToggle.state && statusFormToggle.ind === id && (
+        // <p>AYOOOOOOOOO</p>
+        <StatusUpdateForm
+          setStatusFormToggle={setStatusFormToggle}
+          selectedBoard={selectedBoard}
+          statusFormToggle={statusFormToggle}
+          updateBoardColumn={updateBoardColumn}
+        />
+      )}
 
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
