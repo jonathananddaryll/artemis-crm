@@ -7,14 +7,20 @@ import Button from '../Button/Button';
 
 export default function ConfirmationPopUp({
   popUpText,
-  handleDelete,
-  cancelDelete
+  setSelectedNote,
+  handleDeleteNote,
+  noteId
 }) {
   return (
     <div className={styles.popupWrapper}>
       <div
         className={styles.popupOuter}
-        onClick={() => cancelDelete(false)}
+        onClick={() =>
+          setSelectedNote({
+            isActive: false,
+            noteId: null
+          })
+        }
       ></div>
       <div className={styles.popupBox}>
         <p className={styles.textPopup}>{popUpText}</p>
@@ -23,13 +29,21 @@ export default function ConfirmationPopUp({
             type={'button'}
             value={'Cancel'}
             color={'white'}
-            // size={'small'}
+            size={'small'}
+            onClick={() =>
+              setSelectedNote({
+                isActive: false,
+                noteId: null
+              })
+            }
           />
+
           <Button
             type={'button'}
             value={'OK'}
             color={'blue'}
-            // size={'small'}
+            size={'small'}
+            onClick={() => handleDeleteNote(noteId)}
           />
           {/* <button onClick={() => cancelDelete(false)}>Cancel</button>
           <button onClick={() => handleDelete()}>OK</button> */}

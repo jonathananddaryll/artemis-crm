@@ -6,6 +6,7 @@ const { Client, config } = require('../../config/db');
 // const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
+  noteInputValidator,
   validateRequest
 } = require('../../middlewares/validators');
 
@@ -42,7 +43,7 @@ router.get('/job/:job_id', async (req, res) => {
 // @route     POST api/notes
 // @desc      Add a new note
 // @access    Private
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', noteInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
@@ -92,7 +93,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
 // @route     PATCH api/notes/:id
 // @desc      updates a note
 // @access    Private
-router.patch('/:id', myRequestHeaders, validateRequest, async (req, res) => {
+router.patch('/:id', noteInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();

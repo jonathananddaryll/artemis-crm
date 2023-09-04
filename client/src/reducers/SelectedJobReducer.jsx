@@ -20,7 +20,6 @@ export const getAllTimelines = createAsyncThunk(
 export const createNote = createAsyncThunk(
   'note/createNote',
   async (formData, thunkAPI) => {
-    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -31,9 +30,10 @@ export const createNote = createAsyncThunk(
     try {
       const res = await axios.post('/api/notes', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -56,8 +56,10 @@ export const updateNote = createAsyncThunk(
         config
       );
       return res.data;
-    } catch (error) {
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -84,11 +86,6 @@ export const deleteNote = createAsyncThunk(
       Authorization: `Bearer ${formData.token}`
     };
 
-    // const data = {
-    //   formData
-    // };
-
-    console.log(formData);
     try {
       const res = await axios.delete(`/api/notes/${formData.noteId}`, {
         data: { formData },
@@ -96,7 +93,7 @@ export const deleteNote = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
@@ -132,9 +129,10 @@ export const createTask = createAsyncThunk(
     try {
       const res = await axios.post('/api/tasks', formData, config);
       return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -157,7 +155,29 @@ export const updateTaskStatus = createAsyncThunk(
         config
       );
       return res.data;
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+// Deletes a task
+export const deleteTask = createAsyncThunk(
+  'job/deleteTask',
+  async (formData, thunkAPI) => {
+    const headers = {
+      Authorization: `Bearer ${formData.token}`
+    };
+
+    try {
+      const res = await axios.delete(`/api/tasks/${formData.taskId}`, {
+        data: { formData },
+        headers
+      });
+
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
       console.log(err);
     }
   }
@@ -172,7 +192,9 @@ const selectedJobSlice = createSlice({
     timelines: [],
     notes: [],
     tasks: [],
-    completedTasks: []
+    completedTasks: [],
+    interviews: [],
+    completedInterviews: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
@@ -183,6 +205,8 @@ const selectedJobSlice = createSlice({
       state.notes = [];
       state.tasks = [];
       state.interviews = [];
+      state.completedInterviews = [];
+      state.completedTasks = [];
     }
   },
   extraReducers: builder => {
@@ -205,6 +229,11 @@ const selectedJobSlice = createSlice({
       toast.success('Successfully Created a New Note');
     });
 
+    // Display errors in createNote with toastify
+    builder.addCase(createNote.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     builder.addCase(updateNote.fulfilled, (state, action) => {
       // Find the index of the updated note then change it to the updated note
       const index = state.notes.findIndex(
@@ -212,6 +241,11 @@ const selectedJobSlice = createSlice({
       );
       state.notes[index] = action.payload;
       toast.success('Successfully Updated a Note');
+    });
+
+    // Display errors in updateNote with toastify
+    builder.addCase(updateNote.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(deleteNote.fulfilled, (state, action) => {
@@ -228,16 +262,29 @@ const selectedJobSlice = createSlice({
       state.tasks = tasks.filter(task => task.is_done === false);
       state.completedTasks = tasks.filter(task => task.is_done === true);
       state.tasksLoading = false;
+
+      // Upcoming Interviews
       state.interviews = tasks.filter(
         task =>
-          task.category.includes('e Interview') ||
-          (task.category.includes('Screen') && task.start_date > new Date())
+          (task.category.includes('e Interview') ||
+            task.category.includes('Screen')) &&
+          task.is_done === false
+      );
+
+      // Completed Interviews
+      state.completedInterviews = tasks.filter(
+        task =>
+          (task.category.includes('e Interview') ||
+            task.category.includes('Screen')) &&
+          task.is_done === true
       );
     });
 
     builder.addCase(createTask.fulfilled, (state, action) => {
       const newAddedTask = action.payload[0].rows[0];
-      state.tasks = [newAddedTask, ...state.tasks];
+      newAddedTask.is_done === false
+        ? (state.tasks = [newAddedTask, ...state.tasks])
+        : (state.completedTasks = [newAddedTask, ...state.completedTasks]);
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
 
       // Check if the new added task is interview or screen type
@@ -251,27 +298,102 @@ const selectedJobSlice = createSlice({
       toast.success('Successfully Created a New Task');
     });
 
+    // Display errors in createTask with toastify
+    builder.addCase(createTask.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
       // Find the index of the updated task then change it to the updated task
       var updatedTask = action.payload;
 
       ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_tASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
-      if (action.payload.is_done === true) {
+      if (updatedTask.is_done === true) {
         const filteredTasks = state.tasks.filter(
-          task => task.id !== action.payload.id
+          task => task.id !== updatedTask.id
         );
         state.tasks = filteredTasks;
         state.completedTasks = [...state.completedTasks, updatedTask];
 
+        // Updates the completedInterview
+        if (
+          updatedTask.category.includes('e Interview') ||
+          updatedTask.category.includes('Screen')
+        ) {
+          // Take out the updated task
+          const filteredInterviews = state.interviews.filter(
+            task => task.id !== updatedTask.id
+          );
+          state.interviews = filteredInterviews;
+
+          // Add updated task
+          state.completedInterviews = [
+            ...state.completedInterviews,
+            updatedTask
+          ];
+        }
+
         toast.success('Good Job Completing a Task');
       } else {
         const filteredTasks = state.completedTasks.filter(
-          task => task.id !== action.payload.id
+          task => task.id !== updatedTask.id
         );
         state.completedTasks = filteredTasks;
         state.tasks = [...state.tasks, updatedTask];
+
+        // Updates the interview
+        if (
+          updatedTask.category.includes('e Interview') ||
+          updatedTask.category.includes('Screen')
+        ) {
+          // Take out the updated task
+          const filteredInterviews = state.completedInterviews.filter(
+            task => task.id !== updatedTask.id
+          );
+          state.completedInterviews = filteredInterviews;
+
+          // Add updated Task
+          state.interviews = [...state.interviews, updatedTask];
+        }
+
         toast.success('Dont Forget to Finish That Task');
       }
+    });
+
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      // Filter notes without the deleted note
+      const deletedTask = action.payload[0].rows[0];
+
+      if (deletedTask.is_done === false) {
+        state.tasks = state.tasks.filter(task => task.id !== deletedTask.id);
+
+        // Remove the deleted task in the interviews if the task is an interview type
+        if (
+          deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')
+        ) {
+          state.interviews = state.interviews.filter(
+            task => task.id !== deletedTask.id
+          );
+        }
+      } else {
+        state.completedTasks = state.completedTasks.filter(
+          task => task.id !== deletedTask.id
+        );
+
+        // Remove the deleted task in the completedinterviews if the task is an interview type
+        if (
+          deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')
+        ) {
+          state.completedInterviews = state.completedInterviews.filter(
+            task => task.id !== deletedTask.id
+          );
+        }
+      }
+
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+      toast.success('Successfully Deleted a Task');
     });
   }
 });

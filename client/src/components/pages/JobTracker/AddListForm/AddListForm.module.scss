@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins.scss' as mixin;
+
 .form_wrapper {
   background-color: #483375ea;
   position: absolute;
@@ -66,4 +68,10 @@
   width: 30rem;
   border-radius: 10px;
   padding: 2rem 1.8rem 1.4rem 1.8rem;
+
+  @include mixin.phone {
+    width: 80%;
+
+    top: 30%;
+  }
 }

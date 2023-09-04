@@ -8,5 +8,16 @@ export const taskCategories = [
   'Technical Screen',
   'Phone Interview',
   'On Site Interview',
+  'Offer Received',
+  'Accept Offer',
+  'Decline Offer',
+  'Rejected',
   'Send Thank You'
+];
+
+export const interviewCategories = [
+  'Phone Screen',
+  'Technical Screen',
+  'Phone Interview',
+  'On Site Interview'
 ];

@@ -17,10 +17,15 @@ export default function TasksTab({
   createTask,
   selectedBoard_userId,
   jobId,
-  updateTaskStatus
+  updateTaskStatus,
+  deleteTask
 }) {
-  const [toggleForm, setToggleForm] = useState(false);
-  const [nameText, setNameText] = useState('');
+  const [formToggle, setFormToggle] = useState(false);
+
+  const [selectedTask, setSelectedTask] = useState({
+    isActive: false,
+    taskId: null
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -29,8 +34,6 @@ export default function TasksTab({
     start_date: new Date(),
     is_done: false
   });
-
-  const timestamp = { seconds: 1627282008, nanoseconds: 285000000 };
 
   // Deconstruct formData
   const { title, category, note, start_date, is_done } = formData;
@@ -41,11 +44,6 @@ export default function TasksTab({
   // onChange Hander
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  // const handleDateChange = d => {
-  //   setFormData({ ...formData, start_date: d });
-  //   console.log(d);
-  // };
 
   // Submit handler
   async function onSubmitHandler(e) {
@@ -59,16 +57,14 @@ export default function TasksTab({
       is_done: is_done,
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
+      date_completed: is_done === true ? start_date.toLocaleString() : null,
       token: await session.getToken()
     };
 
     dispatch(createTask(formD));
 
-    // Clears the noteText then close it
-    setNameText('');
-
-    // hide the form after creating a note
-    setToggleForm(false);
+    // hide the form after creating a new task
+    setFormToggle(false);
 
     const resetFormData = {
       title: '',
@@ -100,29 +96,36 @@ export default function TasksTab({
     dispatch(updateTaskStatus(formD));
   }
 
-  // Cancels the edit/create form
-  const onCancelFormHandler = () => {
-    setNameText('');
-    setToggleForm(false);
-  };
+  // Delete Task
+  async function handleDeleteTask(taskId, taskTitle) {
+    const formData = {
+      jobId: jobId,
+      selectedboard_user_id: selectedBoard_userId,
+      taskId: taskId,
+      taskTitle: taskTitle,
+      token: await session.getToken()
+    };
+
+    dispatch(deleteTask(formData));
+
+    // Resets the setSelectedTask and toggles off the confirmation pop up
+    setSelectedTask({ isActive: false, taskId: null });
+  }
 
   return (
     <div className={styles.tasksTabContainer}>
-      {!toggleForm ? (
+      {!formToggle ? (
         <div className={styles.buttonsContainer}>
           <Button
             type={'button'}
             value={'Create Task'}
             color={'blue'}
-            onClick={() => setToggleForm(true)}
+            onClick={() => setFormToggle(true)}
             size={'small'}
           />
         </div>
       ) : (
         <div className={styles.newTaskForm}>
-          <div className={styles.formHeader}>
-            <p>Create New Task</p>
-          </div>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
               <label>Title</label>
@@ -155,6 +158,7 @@ export default function TasksTab({
                   : 'Finish Task By'}
               </label>
               <DatePicker
+                className={styles.datePicker}
                 selected={start_date}
                 onChange={date =>
                   setFormData({ ...formData, start_date: date })
@@ -174,16 +178,45 @@ export default function TasksTab({
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Mark as completed</label>
+              <div className={styles.checkInput}>
+                {is_done ? (
+                  <i
+                    className='bi bi-check-square'
+                    onClick={() => setFormData({ ...formData, is_done: false })}
+                  ></i>
+                ) : (
+                  <i
+                    className='bi bi-square'
+                    onClick={() => setFormData({ ...formData, is_done: true })}
+                  ></i>
+                )}
+                <label>Mark as completed</label>
+              </div>
             </div>
 
-            <input type='submit' value='save' />
-            <button onClick={() => setToggleForm(false)}>Cancel</button>
+            {/* <input type='submit' value='save' /> */}
+            {/* <button onClick={() => setFormToggle(false)}>Cancel</button> */}
+            <div className={styles.formButtonsContainer}>
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
+                onClick={() => setFormToggle(false)}
+                size={'small'}
+              />
+              <Button
+                type={'submit'}
+                value={'Create Task'}
+                color={'blue'}
+                size={'small'}
+                disabled={title === '' || category === '' || note === ''}
+              />
+            </div>
           </form>
         </div>
       )}
       <div className={styles.tasksContentContainer}>
-        {tasks.length === 0 && completedTasks.length === 0 && !toggleForm ? (
+        {tasks.length === 0 && completedTasks.length === 0 && !formToggle ? (
           <NoDataPlaceholder
             image={noTasks}
             header={'NO ACTIVITIES'}
@@ -193,35 +226,126 @@ export default function TasksTab({
           <>
             {tasks.length > 0 && (
               <div className={styles.tasksBox}>
-                <p>Tasks Todo</p>
+                <p className={styles.taskBoxHeaderText}>Tasks Todo</p>
                 {tasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
-                    <p className={styles.taskText}>
-                      <i
-                        onClick={() => onUpdateStatusHandler(task)}
-                        className='bi bi-square'
-                      ></i>
-                      {task.title}
-                    </p>
-                    <p className={styles.categoryText}>{task.category}</p>
-                    <p>Due {timeSince(task.start_date)}</p>
+                    <i
+                      onClick={() => onUpdateStatusHandler(task)}
+                      className='bi bi-square'
+                    ></i>
+                    <div
+                      className={styles.taskCardInfo}
+                      onClick={() =>
+                        setSelectedTask({
+                          isActive: true,
+                          taskId: task.id
+                        })
+                      }
+                    >
+                      <div className={styles.taskCardFlexLeft}>
+                        <p className={styles.taskText}>{task.title}</p>
+                      </div>
+                      <div className={styles.taskCardFlexMiddle}>
+                        <p className={styles.categoryText}>{task.category}</p>
+                      </div>
+                      <div className={styles.taskCardFlexRight}>
+                        <p className={styles.dueText}>
+                          Due {timeSince(task.start_date)}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedTask.isActive === true &&
+                      selectedTask.taskId === task.id && (
+                        <div className={styles.taskCardFlexBottom}>
+                          <p>{task.note}</p>
+                          <div className={styles.taskCardButtons}>
+                            <Button
+                              type={'button'}
+                              value={'Close'}
+                              color={'white'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                setSelectedTask({
+                                  isActive: false,
+                                  taskId: null
+                                })
+                              }
+                            />
+                            <Button
+                              type={'button'}
+                              value={'Delete Task'}
+                              color={'red'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                handleDeleteTask(task.id, task.title)
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>
             )}
             {completedTasks.length > 0 && (
               <div className={styles.completedTasksBox}>
-                <p>Completed Tasks</p>
+                <p className={styles.taskBoxHeaderText}>Completed Tasks</p>
                 {completedTasks.map(task => (
                   <div key={task.id} className={styles.taskCard}>
-                    <p className={styles.completedTaskText}>
-                      <i
-                        className='bi bi-check-square'
-                        onClick={() => onUpdateStatusHandler(task)}
-                      ></i>
-                      {task.title}
-                    </p>
-                    <p>Completed {timeSince(task.date_completed)}</p>
+                    <i
+                      className='bi bi-check-square'
+                      onClick={() => onUpdateStatusHandler(task)}
+                    ></i>
+                    <div
+                      className={styles.taskCardInfo}
+                      onClick={() =>
+                        setSelectedTask({
+                          isActive: true,
+                          taskId: task.id
+                        })
+                      }
+                    >
+                      <div className={styles.taskCardFlexLeft}>
+                        <p className={styles.completedTaskText}>{task.title}</p>
+                      </div>
+                      <div className={styles.taskCardFlexMiddle}>
+                        <p className={styles.categoryText}>{task.category}</p>
+                      </div>
+                      <div className={styles.taskCardFlexRight}>
+                        <p className={styles.dueText}>
+                          Completed {timeSince(task.date_completed)}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedTask.isActive === true &&
+                      selectedTask.taskId === task.id && (
+                        <div className={styles.taskCardFlexBottom}>
+                          {/* <p>afsasfafsa</p> */}
+                          <div className={styles.taskCardButtons}>
+                            <Button
+                              type={'button'}
+                              value={'Close'}
+                              color={'white'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                setSelectedTask({
+                                  isActive: false,
+                                  taskId: null
+                                })
+                              }
+                            />
+                            <Button
+                              type={'button'}
+                              value={'Delete Note'}
+                              color={'red'}
+                              size={'xsmall'}
+                              onClick={() =>
+                                handleDeleteTask(task.id, task.title)
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>

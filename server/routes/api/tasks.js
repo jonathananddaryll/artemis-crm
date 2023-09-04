@@ -6,7 +6,8 @@ const { Client, config } = require('../../config/db');
 // const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
-  validateRequest
+  validateRequest,
+  taskInputValidator
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');
@@ -52,7 +53,7 @@ router.get('/job/:job_id', async (req, res) => {
 // @route     POST api/tasks
 // @desc      Add a new task
 // @access    Private
-router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', taskInputValidator, validateRequest, async (req, res) => {
   // const errors = validationResult(req);
   const client = new Client(config);
   client.connect();
@@ -62,6 +63,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
     start_date,
     note,
     is_done,
+    date_completed,
     jobId,
     selectedboard_user_id
   } = req.body;
@@ -77,16 +79,17 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `INSERT INTO task (title, category, note, is_done, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+      `INSERT INTO task (title, category, note, is_done, date_completed, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
       title,
       category,
       note,
       is_done,
+      date_completed,
       start_date,
       jobId,
       jobId,
       'New task created',
-      category
+      title
     );
 
     console.log(query);
@@ -165,42 +168,55 @@ router.patch(
   }
 );
 
-// // @route     GET api/tasks/job/:job_id/interview
-// // @desc      get all tasks for the job with job_id
-// // @access    public ----> GOTTA MAKE THIS PRIVATE LATER
-// router.get('/job/:job_id/interview', async (req, res) => {
-//   const jobId = req.params.job_id;
+// @route     DELETE /api/tasks/:id
+// @desc      delete a task
+// @access    Private
+router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
+  const client = new Client(config);
+  client.connect();
 
-//   // UPDATE THIS LATER AND MAKE THE CATEGORY OR         -----> TYPE IT BETTER WHERE IT IS NOT REPETITIVE
-//   // const query = format(
-//   //   `SELECT * FROM task WHERE job_id = %s AND (category = 'Phone Screen' OR category = 'Technical Screen' OR category = 'Phone Interview' OR category ='On Site Interview') ORDER BY date_created DESC`,
-//   //   jobId,
-//   //   '%Interview%'
-//   // );
-//   const query = format(
-//     `SELECT * FROM task WHERE job_id = %s AND ((category like %L) OR (category like %L)) ORDER BY date_created DESC`,
-//     jobId,
-//     '%e Interview%',
-//     '%Screen%'
-//   );
+  const { selectedboard_user_id, jobId, taskTitle } = req.body.formData;
+  const id = req.params.id; // taskId
 
-//   const client = new Client(config);
-//   client.connect();
+  const decodedToken = decodeToken(req.headers.authorization);
+  const userId = decodedToken.userId;
 
-//   try {
-//     client.query(query, (err, response) => {
-//       if (err) {
-//         console.error(err);
-//         res.status(500).json({ msg: 'query error' });
-//       }
+  // Checks if the loggedIn user owns the board
+  if (userId === undefined || selectedboard_user_id !== userId) {
+    return res
+      .status(405)
+      .json({ msg: 'Error: The user does not own the board and the job' });
+  } else {
+    // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
+    // @TODO: CHANGE 'You deleted a task' to 'You deleted TASK CATEGORY'
+    const query = format(
+      `DELETE FROM task WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * `,
+      id,
+      jobId,
+      jobId,
+      'Task deleted',
+      taskTitle
+    );
 
-//       res.status(200).json(response.rows);
-//       client.end();
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send('Server Error');
-//   }
-// });
+    try {
+      client.query(query, (err, response) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ msg: 'query error' });
+        }
+
+        // For deleted note
+        // response.rows[0];
+        // Timeline
+        // response.rows[1];
+        res.status(200).json(response);
+        client.end();
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+});
 
 module.exports = router;

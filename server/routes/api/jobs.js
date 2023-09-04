@@ -41,7 +41,7 @@ router.post('/', jobInputValidator, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board' });
   } else {
     const query = format(
-      'INSERT INTO job (job_title, company, location, status, job_url, board_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING *',
+      'INSERT INTO job (job_title, company, location, status, job_url, board_id) VALUES(%L, %L, %L, %L, %L, %s) RETURNING * ',
       job_title,
       company,
       location,
@@ -95,7 +95,7 @@ router.get('/board/:board_id', async (req, res) => {
   // CHECK IF I NEED THE SELECT is_done there.. is is_done good? it's working even without anything there. should i take it out?
   // GOING TO HAVE TO CHANGE THIS QUERY AND ADD IF DATE IS LATER THAN THE CURRENT DATE SHOW IT.
   const query = format(
-    `  select j.*,
+    `  select j.*, TO_CHAR(j.date_created, 'Month dd, yyyy') date_added,
     (select count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count,
     (select count(*)::int from note n WHERE n.job_id = j.id) total_note_count,
     (select count(*)::int from task t WHERE t.job_id = j.id AND ((t.category like %L) OR (t.category like %L)) AND t.start_date > NOW() AND t.is_done = false) pending_interview_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
@@ -154,14 +154,6 @@ router.patch(
         .status(405)
         .json({ msg: 'Error: The user does not own the board' });
     } else {
-      // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
-      // const query = format(
-      //   `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *`,
-      //   newStatus,
-      //   jobId,
-      //   boardId
-      // );
-
       const query = format(
         `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)`,
         newStatus,
@@ -181,6 +173,69 @@ router.patch(
 
           // return the updated job
           res.status(200).json(response[0].rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
+
+// @route     POST api/jobs/:job_id/jobinfo
+// @desc      update jobinfo
+// @access    Private
+router.patch(
+  '/:job_id/jobinfo',
+  jobInputValidator,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+
+    const {
+      company,
+      job_title,
+      location,
+      rate_of_pay,
+      job_url,
+      description,
+      selectedBoard_userId
+    } = req.body;
+
+    const jobId = req.params.job_id;
+
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+
+    // Checks if the loggedIn user owns the board
+    if (selectedBoard_userId !== userId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board' });
+    } else {
+      const query = format(
+        `UPDATE job SET company = %L, job_title = %L, location = %L, rate_of_pay = %L, job_url = %L, description = %L  WHERE id = %s RETURNING *;`,
+        company,
+        job_title,
+        location,
+        rate_of_pay,
+        job_url,
+        description,
+        jobId
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // return the updated job
+          res.status(200).json(response.rows[0]);
           client.end();
         });
       } catch (err) {

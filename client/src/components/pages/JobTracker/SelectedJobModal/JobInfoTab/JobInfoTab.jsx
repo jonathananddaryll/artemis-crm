@@ -1,30 +1,79 @@
 import React, { useState } from 'react';
+import { useSession } from '@clerk/clerk-react';
+import { useDispatch } from 'react-redux';
 import styles from './JobInfoTab.module.scss';
 import Button from '../../../../layout/Button/Button';
+import TextEditor from '../../../../layout/TextEditor/TextEditor';
 
-export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+export default function JobInfoTab({
+  selectedJob,
+  selectedBoard_userId,
+  jobId,
+  updateJobInfo
+}) {
   const [formData, setFormData] = useState({
     company: selectedJob.company,
     job_title: selectedJob.job_title,
     location: selectedJob.location,
     rate_of_pay:
       selectedJob.rate_of_pay !== null ? selectedJob.rate_of_pay : '',
-    job_url: selectedJob.job_url !== null ? selectedJob.job_url : '',
-    description: selectedJob.description !== null ? selectedJob.description : ''
+    job_url: selectedJob.job_url !== null ? selectedJob.job_url : ''
   });
 
+  const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
+
   // Deconstruct formData
-  const { company, job_title, location, rate_of_pay, job_url, description } =
-    formData;
+  const { company, job_title, location, rate_of_pay, job_url } = formData;
+
+  const { session } = useSession();
+  const dispatch = useDispatch();
 
   // onChange Hander
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmitHandler = e => {
-    e.preventDefault();
-  };
+  const [noteDesc, setNoteDesc] = useState(
+    selectedJob.description !== null ? selectedJob.description : ''
+  );
 
+  async function onSubmitHandler(e) {
+    e.preventDefault();
+
+    const formD = {
+      company: company,
+      job_title: job_title,
+      location: location,
+      rate_of_pay: rate_of_pay !== '' ? rate_of_pay : null,
+      job_url: job_url,
+      description: noteDesc,
+      job_id: jobId,
+      selectedBoard_userId: selectedBoard_userId,
+      token: await session.getToken()
+    };
+
+    console.log(formD);
+    // dispatch the updateCall
+    dispatch(updateJobInfo(formD));
+
+    // Show the Clickable URL
+    if (formD.job_url !== '') setShowUrl(true);
+
+    // Dont clear the form
+  }
+
+  const toolbarOption = [
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: 1 }, { header: 2 }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }]
+  ];
+
+  const module = {
+    toolbar: toolbarOption
+  };
   return (
     <div className={styles.container}>
       <div className={styles.jobInfoForm}>
@@ -65,7 +114,7 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
             <div className={styles.formGroup}>
               <label>Salary</label>
               <input
-                type='text'
+                type='number'
                 name='rate_of_pay'
                 value={rate_of_pay}
                 placeholder={rate_of_pay !== '' ? rate_of_pay : 'Add Salary'}
@@ -75,23 +124,43 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
           </div>
           <div className={styles.formGroup}>
             <label>Job URL</label>
-            <input
-              type='text'
-              name='job_url'
-              value={job_url}
-              placeholder={job_url !== '' ? job_url : 'Add URL'}
-              onChange={e => onChangeHandler(e)}
-            />
+            {!showUrl ? (
+              <input
+                type='text'
+                name='job_url'
+                value={job_url}
+                placeholder={job_url !== '' ? job_url : 'Add URL'}
+                onChange={e => onChangeHandler(e)}
+              />
+            ) : (
+              <div className={styles.urlBox}>
+                <a href={`${job_url}`} target='_blank'>
+                  {job_url}
+                </a>
+                <button onClick={() => setShowUrl(false)}>
+                  <i className='bi bi-pencil'></i>
+                </button>
+              </div>
+            )}
           </div>
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>Description</label>
             <textarea
               name='description'
               value={description}
               onChange={e => onChangeHandler(e)}
             />
+          </div> */}
+          <div className={styles.formGroup}>
+            <label>Description</label>
+            <ReactQuill
+              modules={module}
+              value={noteDesc}
+              theme='snow'
+              name='noteDesc'
+              onChange={setNoteDesc}
+            />
           </div>
-          {/* <input type='submit' value='save' /> */}
           <Button
             type={'submit'}
             value={'Save'}

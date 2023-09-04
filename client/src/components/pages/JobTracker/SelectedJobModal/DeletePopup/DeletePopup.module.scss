@@ -1,3 +1,5 @@
+@use '../../../../../styles/mixins.scss' as mixin;
+
 .popupWrapper {
   position: absolute;
   width: 100%;
@@ -22,6 +24,11 @@
   padding: 1rem;
   border-radius: 10px;
   padding-top: 1.8rem;
+
+  @include mixin.phone {
+    width: 80%;
+    top: 30%;
+  }
 }
 
 .popupButtons {
@@ -34,7 +41,7 @@
 }
 
 .textPopup {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   // Change this font-family later
   font-family: 'Montserrat', sans-serif;
 }

@@ -4,7 +4,8 @@ import { useSession } from '@clerk/clerk-react';
 import {
   changeSelectedJob,
   deleteJob,
-  handleToggleForm
+  handleToggleForm,
+  updateJobInfo
 } from '../../../../reducers/BoardReducer';
 
 import Button from '../../../layout/Button/Button';
@@ -18,7 +19,8 @@ import {
   updateNote,
   getAllTasks,
   createTask,
-  updateTaskStatus
+  updateTaskStatus,
+  deleteTask
 } from '../../../../reducers/SelectedJobReducer';
 
 import InterviewsTab from './InterviewsTab/InterviewsTab';
@@ -30,7 +32,7 @@ import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from './DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
 
-import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
+// import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
 import styles from './SelectedJobModal.module.scss';
 
@@ -49,7 +51,8 @@ export default function SelectedJobModal() {
     tasks,
     completedTasks,
     tasksLoading,
-    interviews
+    interviews,
+    completedInterviews
   } = useSelector(state => ({
     ...state.selectedJob
   }));
@@ -72,11 +75,15 @@ export default function SelectedJobModal() {
 
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
-    { name: 'notes', icon: 'bi bi-journal' },
+    { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
     { name: 'contacts', icon: 'bi bi-people' },
     { name: 'documents', icon: 'bi bi-file-earmark-text' },
-    { name: 'tasks', icon: 'bi bi-list-task' },
-    { name: 'interview', icon: 'bi bi-calendar-check' }
+    { name: 'tasks', icon: 'bi bi-list-task', itemL: tasks.length },
+    {
+      name: 'interview',
+      icon: 'bi bi-calendar-check',
+      itemL: interviews.length
+    }
   ];
 
   async function handleDeleteJob() {
@@ -138,6 +145,10 @@ export default function SelectedJobModal() {
                   <i className='bi bi-geo-alt' />
                   {selectedJob.location}
                 </p>
+                <p className={styles.textSubAdded}>
+                  <i className='bi bi-calendar3'></i>
+                  Added on {selectedJob.date_added}
+                </p>
               </div>
             </div>
           </div>
@@ -156,6 +167,10 @@ export default function SelectedJobModal() {
                   <p className={styles.subNavigationText}>
                     <i className={item.icon}></i>
                     {item.name}
+
+                    {item.itemL > 0 && (
+                      <span className={styles.itemCount}>{item.itemL}</span>
+                    )}
                   </p>
                 </div>
               ))}
@@ -166,6 +181,8 @@ export default function SelectedJobModal() {
             <JobInfoTab
               selectedJob={selectedJob}
               selectedBoard_userId={selectedBoard.user_id}
+              updateJobInfo={updateJobInfo}
+              jobId={selectedJob.id}
             />
           )}
           {activeItem === 1 && (
@@ -190,9 +207,18 @@ export default function SelectedJobModal() {
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
               updateTaskStatus={updateTaskStatus}
+              deleteTask={deleteTask}
             />
           )}
-          {activeItem === 5 && <InterviewsTab interviews={interviews} />}
+          {activeItem === 5 && (
+            <InterviewsTab
+              interviews={interviews}
+              completedInterviews={completedInterviews}
+              createTask={createTask}
+              jobId={selectedJob.id}
+              selectedBoard_userId={selectedBoard.user_id}
+            />
+          )}
         </div>
         <div className={styles.timelineContainer}>
           <Timeline
@@ -205,6 +231,7 @@ export default function SelectedJobModal() {
           <DeletePopup
             handleDeleteJob={handleDeleteJob}
             setConfirmationToggle={setConfirmationToggle}
+            popUpText={'Are you sure you want to delete this job?'}
           />
           // <ConfirmationPopUp
           //   popUpText={'Are you sure you want to delete this job?'}

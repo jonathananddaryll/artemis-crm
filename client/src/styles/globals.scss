@@ -3,6 +3,7 @@
 // Imported Fonts and Icons
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;700&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Spectral:wght@300;400;500;600;700&display=swap');
 
 /*
   1. Use a more-intuitive box-sizing model.
@@ -96,7 +97,8 @@ button {
 }
 
 p {
-  font-family: 'Barlow Condensed', sans-serif;
+  // font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Spectral', serif;
 }
 
 h1,
@@ -105,12 +107,14 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Montserrat', sans-serif;
+  // font-family: 'Montserrat', sans-serif;
+  font-family: 'Karla', sans-serif;
 }
 
 // Input - Change to better font later
 input {
-  font-family: 'Montserrat', sans-serif;
+  // font-family: 'Montserrat', sans-serif;
+  font-family: 'Spectral', serif;
 }
 
 // Label - Change to better font later
@@ -167,6 +171,7 @@ html {
 input[type='text'],
 textarea {
   @include mixin.phone {
-    font-size: 2rem !important;
+    font-size: 1.7rem !important;
+    // font-size: 2rem !important;
   }
 }

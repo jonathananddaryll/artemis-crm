@@ -82,6 +82,11 @@
   background: rgb(230, 230, 236);
   height: 8rem;
   border-radius: 1rem;
+
+  @include mixin.phone {
+    width: 6rem;
+    height: 6rem;
+  }
 }
 
 .headerInfo {
@@ -99,21 +104,38 @@
   margin: 0 0 0.5rem;
 
   @include mixin.phone {
-    font-size: 2.7rem;
+    font-size: 2.3rem;
+    line-height: 1;
   }
 }
 
 .textSub {
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.8rem;
 
   /* change margin to 0 later and have an icon on the left of the text */
   margin: 0 2rem 0 0;
+
+  @include mixin.phone {
+    font-size: 1.8rem;
+  }
 }
 
-.textSub i {
-  font-size: 1.7rem;
-  margin-right: 0.2rem;
+.textSub i,
+.textSubAdded i {
+  font-size: 1.5rem;
+  margin-right: 0.4rem;
+}
+
+.textSubAdded {
+  font-size: 1.8rem;
+
+  /* change margin to 0 later and have an icon on the left of the text */
+  margin: 0 2rem 0 0;
+
+  @include mixin.phone {
+    font-size: 1.8rem;
+  }
 }
 
 /* SUB NAVIGATION SECTION */
@@ -122,7 +144,7 @@
   /* border-bottom: 1px solid black; */
   background-color: #ccccdb;
 
-  @include mixin.phone {
+  @include mixin.tabPortrait {
     overflow-x: auto;
   }
 }
@@ -136,7 +158,7 @@
   align-items: center;
 
   @include mixin.phone {
-    width: 130%;
+    width: 140%;
     overflow: hidden;
   }
 }
@@ -161,12 +183,21 @@
 .subNavigationText {
   text-transform: capitalize;
   margin: 0;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 
 .subNavigationText i {
   font-size: 1.5rem;
   margin-right: 0.5rem;
+}
+
+.itemCount {
+  background: rgb(158, 134, 134);
+  font-size: 1.1rem;
+  border-radius: 50%;
+  padding: 0 5px;
+  color: white;
+  margin-left: 3px;
 }
 
 /* TIMELINE SECTION */

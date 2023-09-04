@@ -2,7 +2,13 @@ import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { updateTaskStatus, createTask } from './SelectedJobReducer';
+import {
+  updateTaskStatus,
+  createTask,
+  deleteTask,
+  createNote,
+  deleteNote
+} from './SelectedJobReducer';
 
 // Create action
 
@@ -60,7 +66,7 @@ export const createBoard = createAsyncThunk(
   }
 );
 
-// Adds a new column/status in the board
+// Adds a new column/status to a board
 export const addColumn = createAsyncThunk(
   'board/addColumn',
   async (formData, thunkAPI) => {
@@ -73,7 +79,7 @@ export const addColumn = createAsyncThunk(
 
     try {
       const res = await axios.patch(
-        `/api/boards/${formData.id}/add`,
+        `/api/boards/${formData.id}/add/column`,
         formData,
         config
       );
@@ -88,7 +94,40 @@ export const addColumn = createAsyncThunk(
   }
 );
 
-// Update a column status
+// Deletes a column/status of a board
+export const deleteColumn = createAsyncThunk(
+  'board/deleteColumn',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+    try {
+      const res = await axios.patch(
+        `/api/boards/${formData.id}/delete/column`,
+        formData,
+        config
+      );
+
+      const resData = [res.data, formData.columnStatusToDelete];
+
+      // console.log(res.data);
+      return resData;
+
+      // return formData.columnStatus;
+      // RETURN A NEW BOARD WITHOUT THE DELETED COLUMN
+    } catch (err) {
+      // If there's errors
+      console.log(err);
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// Update a column status name
 export const updateBoardColumn = createAsyncThunk(
   'board/updateColumnStatus',
   async (formData, thunkAPI) => {
@@ -106,16 +145,21 @@ export const updateBoardColumn = createAsyncThunk(
         config
       );
 
+      // [0] = res.data
+      // [1] = old Column Status Name - will be used to find the key to update selectedBoardStatusCols
+      return [res.data, formData.oldColumnStatus];
       // return res.data;
-      return res.data;
-    } catch (error) {
-      // have a better error catch later
-      console.log(err);
+
+      // return formData;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
 
-// Update a column name
+// Update a board name
 export const updateBoardName = createAsyncThunk(
   'board/updateBoardName',
   async (formData, thunkAPI) => {
@@ -200,9 +244,36 @@ export const updateJobStatus = createAsyncThunk(
       );
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
+    }
+  }
+);
+
+// Updates a job information
+export const updateJobInfo = createAsyncThunk(
+  'board/updateJobInfo',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/jobs/${formData.job_id}/jobinfo`,
+        formData,
+        config
+      );
+
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -222,7 +293,7 @@ export const deleteJob = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // have a better error catch later
       console.log(err);
     }
@@ -363,8 +434,36 @@ const boardSlice = createSlice({
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
-    builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
+    builder.addCase(deleteColumn.fulfilled, (state, action) => {
       console.log(action.payload);
+
+      delete state.selectedBoardStatusCols[action.payload[1]];
+      state.selectedBoard = action.payload[0];
+
+      // const newCol = 'column' + (state.selectedBoard.total_cols + 1);
+      // state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
+      // state.selectedBoard[newCol] = action.payload;
+      toast.success(
+        `Successfully Deleted a Column in ${state.selectedBoard.title}`
+      );
+    });
+
+    builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
+      const columnName = Object.keys(action.payload[0][0].rows[0])[0];
+      const newStatusName = Object.values(action.payload[0][0].rows[0])[0];
+      const oldStatusName = action.payload[1];
+
+      // Updates the key of selectedBoardStatusCols and the jobs inside it with the updated jobs
+      delete Object.assign(state.selectedBoardStatusCols, {
+        [newStatusName]: action.payload[0][1].rows
+      })[oldStatusName];
+
+      state.selectedBoard[columnName] = newStatusName;
+    });
+
+    // Display errors in updateBoardColumn with toastify
+    builder.addCase(updateBoardColumn.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(updateBoardName.fulfilled, (state, action) => {
@@ -407,8 +506,6 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
-      // ADD A ALERT OR LOADING BAR FOR UI.. FIGURE OUT A BETTER WAY TO IMPLEMENT THIS LATER ON, FOR NOW, HAVE THE REDUX CHANGE RIGHT AWAY USING THE REDUCER
-      // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
       // job status is already updating in the reducer when user drop a job to a different status it
       const foundIndex = state.selectedBoardStatusCols[
         action.payload.status
@@ -416,6 +513,42 @@ const boardSlice = createSlice({
       state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
         action.payload.status;
       toast.success('Successfully Updated Job Status');
+    });
+
+    builder.addCase(updateJobInfo.fulfilled, (state, action) => {
+      // Find the index of the updated job in the selectedBoardStatusCols
+      const foundIndex = state.selectedBoardStatusCols[
+        action.payload.status
+      ].findIndex(job => job.id === action.payload.id);
+
+      // Find the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === action.payload.id
+      );
+
+      // Temporary SelectedJob with the updated Info and the counts
+      const tempSelectedJob = action.payload;
+      tempSelectedJob.incomplete_task_count =
+        state.selectedJob.incomplete_task_count;
+      tempSelectedJob.total_note_count = state.selectedJob.total_note_count;
+      tempSelectedJob.pending_interview_count =
+        state.selectedJob.pending_interview_count;
+
+      // Updates the selectedJob
+      state.selectedJob = tempSelectedJob;
+
+      // Updates the updated job in the jobs state
+      state.jobs[jobIndexInJobs] = tempSelectedJob;
+
+      // Updates the job in the selectedBoardStatusCols to display the update in the kanban board
+      state.selectedBoardStatusCols[action.payload.status][foundIndex] =
+        tempSelectedJob;
+      toast.success('Successfully Updated Job Info');
+    });
+
+    // Display errors in updateJobInfo with toastify
+    builder.addCase(updateJobInfo.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
@@ -430,45 +563,163 @@ const boardSlice = createSlice({
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////
-    // Updates the incomplete_task_count both in selectedJob and selectedBoardStatusCols
+    // Updates the incomplete_task_count and pending_interview_count in selectedJob, selectedBoardStatusCols, and jobs on successful task update
     builder.addMatcher(isAnyOf(updateTaskStatus.fulfilled), (state, action) => {
-      // Finds the index
+      // Finds the index of the updated job in selectedBoardStatusCols
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
       ].findIndex(job => job.id === action.payload.job_id);
 
-      action.payload.is_done === false
-        ? state.selectedJob['incomplete_task_count']++ &&
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === action.payload.job_id
+      );
+
+      if (action.payload.is_done === false) {
+        // Updates incomplete_task_count in selectedJob
+        state.selectedJob.incomplete_task_count++;
+
+        // Updates incomplete_task_count in selectedBoardStatusCols
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count++;
+
+        // Updates incomplete_task_count in jobs
+        state.jobs[jobIndexInJobs].incomplete_task_count++;
+      } else {
+        // Updates incomplete_task_count in selectedJob
+        state.selectedJob.incomplete_task_count--;
+
+        // Updates incomplete_task_count in selectedBoardStatusCols
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count--;
+
+        // Updates incomplete_task_count in jobs
+        state.jobs[jobIndexInJobs].incomplete_task_count--;
+
+        // Updates the pending_interview_count if the task being updated is an interview type
+        if (
+          action.payload.category.includes('e Interview') ||
+          action.payload.category.includes('Screen')
+        ) {
+          state.selectedJob.pending_interview_count--;
           state.selectedBoardStatusCols[state.selectedJob.status][
             selectedJobIndex
-          ].incomplete_task_count++
-        : state.selectedJob['incomplete_task_count']-- &&
-          state.selectedBoardStatusCols[state.selectedJob.status][
-            selectedJobIndex
-          ].incomplete_task_count--;
+          ].pending_interview_count--;
+          state.jobs[jobIndexInJobs].pending_interview_count--;
+        }
+      }
     });
 
-    // Updates the selectedJob and
+    // Updates the incomplete_task_count and pending_interview_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
     builder.addMatcher(isAnyOf(createTask.fulfilled), (state, action) => {
-      console.log('create task fulfilled hit in boardreducer');
       const newAddedTask = action.payload[0].rows[0];
+
       // Finds the index
-      console.log(newAddedTask);
       const selectedJobIndex = state.selectedBoardStatusCols[
         state.selectedJob.status
       ].findIndex(job => job.id === newAddedTask.job_id);
 
-      state.selectedJob['incomplete_task_count']++;
-      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
-        .incomplete_task_count++;
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === newAddedTask.job_id
+      );
+
+      if (newAddedTask.is_done === false) {
+        state.selectedJob.incomplete_task_count++;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count++;
+        state.jobs[jobIndexInJobs].incomplete_task_count++;
+      }
 
       if (
-        newAddedTask.category.includes('e Interview') ||
-        newAddedTask.category.includes('Screen')
+        (newAddedTask.category.includes('e Interview') ||
+          newAddedTask.category.includes('Screen')) &&
+        newAddedTask.is_done === false
       ) {
+        state.selectedJob.pending_interview_count++;
         state.selectedBoardStatusCols[state.selectedJob.status][
           selectedJobIndex
         ].pending_interview_count++;
+        state.jobs[jobIndexInJobs].pending_interview_count++;
+      }
+    });
+
+    // Updates the total_note_count in selectedJob, selectedBoardStatusCols, and jobs on successful note creation
+    builder.addMatcher(isAnyOf(createNote.fulfilled), (state, action) => {
+      const newAddedNote = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === newAddedNote.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === newAddedNote.job_id
+      );
+
+      state.selectedJob.total_note_count++;
+      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
+        .total_note_count++;
+      state.jobs[jobIndexInJobs].total_note_count++;
+    });
+
+    // Updates the total_note_count in selectedJob, selectedBoardStatusCols, and jobs on successful note deletion
+    builder.addMatcher(isAnyOf(deleteNote.fulfilled), (state, action) => {
+      const deletedNote = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === deletedNote.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === deletedNote.job_id
+      );
+
+      state.selectedJob.total_note_count--;
+      state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
+        .total_note_count--;
+      state.jobs[jobIndexInJobs].total_note_count--;
+    });
+
+    // @TODO : update on deleteTask
+    // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
+    builder.addMatcher(isAnyOf(deleteTask.fulfilled), (state, action) => {
+      const deletedTask = action.payload[0].rows[0];
+
+      // Finds the index
+      const selectedJobIndex = state.selectedBoardStatusCols[
+        state.selectedJob.status
+      ].findIndex(job => job.id === deletedTask.job_id);
+
+      // Finds the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === deletedTask.job_id
+      );
+
+      if (deletedTask.is_done === false) {
+        state.selectedJob.incomplete_task_count--;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].incomplete_task_count--;
+        state.jobs[jobIndexInJobs].incomplete_task_count--;
+      }
+
+      if (
+        (deletedTask.category.includes('e Interview') ||
+          deletedTask.category.includes('Screen')) &&
+        deletedTask.is_done === false
+      ) {
+        state.selectedJob.pending_interview_count--;
+        state.selectedBoardStatusCols[state.selectedJob.status][
+          selectedJobIndex
+        ].pending_interview_count--;
+        state.jobs[jobIndexInJobs].pending_interview_count--;
       }
     });
   }

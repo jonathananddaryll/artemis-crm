@@ -38,16 +38,36 @@ const boardInputValidator = [
 
 const addColumnInputValidator = [
   ...myRequestHeaders,
-  check('columnStatus', 'Please enter a Board Title with atleast 3 characters')
+  check(
+    'columnStatus',
+    'Please enter a Column Status Name with atleast 3 characters'
+  )
     .not()
     .isEmpty()
     .isLength({ min: 3 })
 ];
 
+const noteInputValidator = [
+  ...myRequestHeaders,
+  check('text', 'Note is too short').not().isEmpty().isLength({ min: 13 })
+];
+
+const taskInputValidator = [
+  ...myRequestHeaders,
+  check('title', 'Please enter atleast 4 characters for title')
+    .not()
+    .isEmpty()
+    .isLength({ min: 4 }),
+  check('category', 'Please choose a category').not().isEmpty(),
+  check('start_date', 'Please choose a date').not().isEmpty(),
+  check('title', 'Please enter atleast 5 characters for note')
+    .not()
+    .isEmpty()
+    .isLength({ min: 5 })
+];
 // @TODO:
 // 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
-// 2. Notes: Create and update
-// 3. Tasks: Create and update
+// 3. Tasks: update
 // 4. Interview: Create and Update
 
 // export const myRequestHeaders1 = [
@@ -76,9 +96,11 @@ function validateRequest(req, res, next) {
 }
 
 module.exports = {
-  myRequestHeaders: myRequestHeaders,
-  validateRequest: validateRequest,
-  jobInputValidator: jobInputValidator,
-  boardInputValidator: boardInputValidator,
-  addColumnInputValidator: addColumnInputValidator
+  myRequestHeaders,
+  validateRequest,
+  jobInputValidator,
+  boardInputValidator,
+  addColumnInputValidator,
+  noteInputValidator,
+  taskInputValidator
 };

@@ -41,53 +41,57 @@
 
   background: #d3d3db;
   border-radius: 5px;
-  padding: 1rem;
+  padding: 0.5rem 0.8rem;
   text-align: left;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 }
 
 .textUpdateType {
   /* margin: 0 0 5px 0; */
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-size: 1.3rem;
+  font-weight: 700;
+  // line-height: 1;
 }
 
 .textDescription {
+  // font-family: 'Barlow Condensed', sans-serif;
   margin: 0;
-  font-size: 1.4rem;
-  margin: 0 0 0.1rem 0;
+  font-size: 1.2rem;
+  // margin: 0 0 0.1rem 0;
+  line-height: 1.1;
 }
 
 .textDateCreated {
-  margin: 0;
-  font-size: 1.2rem;
+  margin: 0.5rem 0 0 0;
+  font-size: 1.1rem;
   text-align: right;
+  color: rgb(27, 26, 26);
 }
 
 /* TIMELINE left line to show timeline */
 .topLine {
-  width: 0.2rem;
+  width: 1px;
   height: 40%;
   margin: 0 auto;
-  border: 2px solid rgb(201, 209, 243);
-  background-color: rgb(201, 209, 243);
+  border: 2px solid rgb(213, 219, 247);
+  background-color: rgb(213, 219, 247);
 }
 
 .middleDot {
   width: 1.4rem;
   height: 1.4rem;
   border-radius: 100%;
-  background-color: rgb(100, 100, 223);
-  border: 3px solid rgb(255, 255, 255);
+  background-color: rgb(155, 155, 250);
+  border: 3px solid #fefeff;
   margin: 0 auto;
 }
 
 .bottomLine {
-  width: 0.2rem;
+  width: 1px;
   height: 50%;
   margin: 0 auto;
-  background-color: rgb(155, 173, 253);
-  border: 2px solid rgb(201, 209, 243);
+  background-color: rgb(213, 219, 247);
+  border: 2px solid rgb(213, 219, 247);
 }
 
 .timelineScroll {

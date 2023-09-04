@@ -22,13 +22,6 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
       token: await session.getToken()
     };
 
-    // dispatch(createBoard(formData));
-
-    // console.log(formData);
-
-    // Clears the form then close it
-    // setNewTitle('');
-    // toggleHandler();
     dispatch(updateBoardName(formData));
     handleToggleUpdateForm({ ind: null, state: false });
     console.log(formData);

@@ -4,38 +4,106 @@
 }
 
 .buttonsContainer {
-  height: 5rem;
+  // height: 5rem;
   text-align: right;
   /* background-color: red; */
 }
 
 .newTaskForm {
-  width: 80%;
-  margin: 0 auto 1.5rem auto;
+  // width: 90%;
+  margin: 3rem auto 1.5rem auto;
+  border: 1px solid rgb(238, 228, 228);
+  border-radius: 10px;
+  padding: 3rem;
 }
 
 .formGroup {
   width: 100%;
-  margin-bottom: 1.5rem;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
 
-  > label {
+  label {
     display: block;
-    text-align: left;
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+    font-weight: 500;
+
+    span {
+      font-weight: 600;
+      color: rgb(180, 155, 155);
+      font-size: 16px;
+    }
   }
 
-  > input[type='text'] {
+  > input,
+  textarea {
     width: 100%;
-    padding: 0.2rem 0.5rem;
+    position: relative;
+    cursor: text;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    padding: 0 1.6rem;
+    height: 4rem;
+    background-color: #fff;
+    border: 1px solid #d6d6e7;
+    border-radius: 3px;
+    color: rgb(35, 38, 59);
+    box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
+    overflow: hidden;
+    transition: all 100ms ease-in-out;
+
+    &:focus {
+      border-color: #3c4fe0;
+      box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: rgb(212, 190, 190);
+    }
   }
 
   > textarea {
-    width: 100%;
-    padding: 0.2rem 0.5rem;
+    padding: 1.3rem 1.6rem;
     resize: none;
-    height: 12rem;
+    height: 10rem;
+    font-size: 1.6rem;
   }
+}
 
-  text-align: left;
+.formButtonsContainer {
+  text-align: right;
+  input {
+    margin-left: 1rem;
+  }
+}
+
+.checkInput {
+  display: flex;
+  gap: 7px;
+  cursor: pointer;
+
+  i {
+    font-size: 1.4rem;
+  }
+}
+
+.datePicker {
+  font-size: 1.4rem;
+  position: relative;
+  cursor: text;
+  width: 120%;
+  line-height: 2rem;
+  padding: 0 1.6rem;
+  height: 4rem;
+  background-color: #fff;
+  border: 1px solid #d6d6e7;
+  border-radius: 3px;
+  color: rgb(35, 38, 59);
+  box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
+  overflow: hidden;
+  transition: all 100ms ease-in-out;
 }
 
 .categoriesInput {
@@ -45,21 +113,27 @@
 
   > p {
     /* background-color: yellow; */
-    border: 1px solid black;
+    // border: 1px solid rgb(221, 186, 186);
     border-radius: 5px;
-    padding: 0.3rem 1rem;
+    padding: 0.6rem 1rem;
     line-height: 1;
     cursor: pointer;
+    font-size: 1.4rem;
+
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
+      rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
   }
 }
 
 .selectedCategory {
   background-color: green;
+  color: white;
+  border: none;
 }
 
 .createTaskButton {
   /* float: right; */
-  height: 4rem;
+  // height: 4rem;
   padding: 0 2rem;
   margin-left: 1rem;
 }
@@ -72,6 +146,13 @@
 .tasksBox {
   /* flex: 0 0 45%; */
   text-align: left;
+  margin-bottom: 5rem;
+}
+
+.taskBoxHeaderText {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .completedTasksBox {
@@ -86,13 +167,11 @@
   border: 2px solid rgba(213, 238, 250, 0.692);
   border-radius: 5px;
   display: flex;
+  cursor: pointer;
+  align-items: center;
+  flex-wrap: wrap;
 
-  gap: 4rem;
-}
-
-.taskText {
-  margin: 0;
-  font-size: 1.6rem;
+  // transition: all 0.5s;
 
   > i {
     cursor: pointer;
@@ -101,12 +180,58 @@
   }
 }
 
+.taskCardInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1.3;
+}
+
+.taskCardFlexLeft {
+  flex: 0 0 41%;
+}
+
+.taskCardFlexMiddle {
+  flex: 0 0 25%;
+  text-align: center;
+}
+
+.taskCardFlexRight {
+  flex: 0 0 28%;
+  text-align: right;
+}
+
+.taskCardFlexBottom {
+  border-top: 2px solid rgba(213, 238, 250, 0.692);
+  margin-top: 1.3rem;
+  flex: 0 0 100%;
+  padding: 1rem 0 0 0;
+
+  p {
+    font-size: 1.5rem;
+  }
+}
+
+.taskCardButtons {
+  text-align: right;
+
+  input {
+    margin-left: 1rem;
+  }
+}
+
+.taskText {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
 .categoryText {
-  background: rgb(70, 141, 70);
+  background: rgb(14, 139, 14);
   border: 0;
   border-radius: 5px;
-  padding: 0.3rem 1rem;
-  line-height: 1;
+  padding: 0.3rem 1.2rem;
+
   color: white;
   font-size: 1.4rem;
 }
@@ -114,13 +239,17 @@
 .completedTaskText {
   margin: 0;
   text-decoration-line: line-through;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 
   > i {
     cursor: pointer;
     margin-right: 0.5rem;
     font-size: 1.4rem;
   }
+}
+
+.dueText {
+  font-size: 1.4rem;
 }
 
 /* upper case first letter of the text */

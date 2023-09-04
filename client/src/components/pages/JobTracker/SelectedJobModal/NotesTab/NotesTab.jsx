@@ -5,9 +5,14 @@ import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
 import styles from './NotesTab.module.scss';
-import ConfirmationPopUp from '../../../../layout/ConfirmationPopup/ConfirmationPopup';
+import ConfirmationPopUp from '../../../../layout/ConfirmationPopUp/ConfirmationPopUp';
+import timeSince from '../../../../../helpers/convertDate';
 
 import noNotes from '../../../../../assets/nonotes.svg';
+
+import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 export default function NotesTab({
   createNote,
@@ -19,7 +24,12 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
-  const [confirmationToggle, setConfirmationToggle] = useState(false);
+  // const [confirmationToggle, setConfirmationToggle] = useState(false);
+
+  const [selectedNote, setSelectedNote] = useState({
+    isActive: false,
+    noteId: null
+  });
 
   const [noteText, setNoteText] = useState('');
   // This is just to keeptrack of the selected noteId for Updating purposes
@@ -88,10 +98,20 @@ export default function NotesTab({
 
     dispatch(deleteNote(formData));
 
-    // APPLY THIS LATER FOR CONFIRMATION DELETE MODAL POPUP
-    // change selectedJob to null and modal off
-    // dispatch(changeSelectedJob([false, null]));
+    // Resets the selectedNoteId and toggles off the confirmation pop up
+    setSelectedNote({ isActive: false, noteId: null });
   }
+
+  const toolbarOption = [
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: 1 }, { header: 2 }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }]
+  ];
+
+  const module = {
+    toolbar: toolbarOption
+  };
 
   return (
     <div className={styles.notesTabContainer}>
@@ -107,25 +127,41 @@ export default function NotesTab({
         </div>
       ) : (
         <div className={styles.newNoteContainer}>
-          <p>Add note</p>
-          <form onSubmit={e => onSubmitHandler(e)}>
-            <div className={styles.formGroup}>
-              <textarea
-                className={styles.textarea}
-                name='noteText'
-                value={noteText}
-                onChange={e => setNoteText(e.target.value)}
-                placeholder="Add your notes about the company's history, culture, and any relevant information here..."
-              ></textarea>
-              <button onClick={() => onCancelFormHandler()}>Cancel</button>
-
+          <ReactQuill
+            modules={module}
+            value={noteText}
+            theme='snow'
+            name='noteText'
+            onChange={setNoteText}
+          />
+          <div className={styles.formButtonsContainer}>
+            <form onSubmit={e => onSubmitHandler(e)}>
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
+                size={'small'}
+                onClick={() => onCancelFormHandler(false)}
+              />
               {!isUpdate ? (
-                <input type='submit' value='Save Note' />
+                <Button
+                  type={'submit'}
+                  value={'Save Note'}
+                  color={'blue'}
+                  size={'small'}
+                  disabled={noteText === ''}
+                />
               ) : (
-                <input type='submit' value='Update Note' />
+                <Button
+                  type={'submit'}
+                  value={'Update Note'}
+                  color={'blue'}
+                  size={'small'}
+                  disabled={noteText.length < 12}
+                />
               )}
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       )}
       {/* NOTES BLOCKS TO ADD LATER ON */}
@@ -140,28 +176,55 @@ export default function NotesTab({
               subHeader={'Here you can write notes'}
             />
           ) : (
-            <>
+            <div className={styles.noteslist}>
               {notes.map(note => (
                 <div key={note.id} className={styles.notesBox}>
-                  <div className={styles.notesText}>
-                    <p>{note.text}</p>
-                  </div>
+                  <ReactQuill
+                    value={note.text}
+                    readOnly={true}
+                    theme={'bubble'}
+                  />
                   <div className={styles.notesFooter}>
-                    <div className={styles.notesInfo}>
-                      <p>{note.date_created}</p>
-                    </div>
-                    <div className={styles.notesActionsItems}>
-                      <button onClick={() => onEditHandler(note)}>Edit</button>
-                      <button onClick={() => handleDeleteNote(note.id)}>
-                        Delete
-                      </button>
+                    <p className={styles.dateText}>
+                      Created {timeSince(note.date_created)}
+                    </p>
+
+                    <div className={styles.notesActionsButtons}>
+                      <Button
+                        type={'button'}
+                        value={'Edit'}
+                        color={'blue'}
+                        size={'xsmall'}
+                        onClick={() => onEditHandler(note)}
+                      />
+                      <Button
+                        type={'button'}
+                        value={'Delete'}
+                        color={'red'}
+                        size={'xsmall'}
+                        // onClick={() => handleDeleteNote(note.id)}
+                        onClick={() =>
+                          setSelectedNote({
+                            isActive: true,
+                            noteId: note.id
+                          })
+                        }
+                      />
                     </div>
                   </div>
                 </div>
               ))}
-            </>
+            </div>
           )}
         </div>
+      )}
+      {selectedNote.isActive === true && (
+        <ConfirmationPopUp
+          popUpText={'Are you sure you want to delete this note?'}
+          setSelectedNote={setSelectedNote}
+          noteId={selectedNote.noteId}
+          handleDeleteNote={handleDeleteNote}
+        />
       )}
     </div>
   );

@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   removeFromStatus,
   addToStatus,
-  updateJobStatus
+  updateJobStatus,
+  deleteColumn,
+  updateBoardColumn
 } from '../../../../reducers/BoardReducer';
 
 import { useSession } from '@clerk/clerk-react';
@@ -18,10 +20,11 @@ export default function KanbanBoard({
   selectedBoard,
   selectedBoardStatusCols
 }) {
-  // PASSED selectedBoard and selectedBoardStatusCols as a props instead of using useSelector hook. delete this later once everything is finalized and working as planned
-  // const { selectedBoard, selectedBoardStatusCols } = useSelector(state => ({
-  //   ...state.board
-  // }));
+  const [statusFormToggle, setStatusFormToggle] = useState({
+    ind: null,
+    state: false,
+    column: null
+  });
 
   const dispatch = useDispatch();
   const { board_id } = useParams();
@@ -68,24 +71,49 @@ export default function KanbanBoard({
     dispatch(updateJobStatus(formData));
   }
 
-  // Find item by id
-  function findItemById(id, array) {
-    return array.find(item => item.id == id);
+  async function handleColumnDelete(columnNum, columnStatus) {
+    const formD = {
+      id: selectedBoard.id,
+      userId: selectedBoard.user_id,
+      totalCols: selectedBoard.total_cols,
+      columnToDelete: columnNum,
+      columnStatusToDelete: columnStatus,
+      selectedBoard_userId: selectedBoard.user_id,
+      token: await session.getToken(),
+      col10Status:
+        selectedBoard.column10 !== null ? selectedBoard.column10 : null,
+      col9Status: selectedBoard.column9 !== null ? selectedBoard.column9 : null,
+      col8Status: selectedBoard.column8 !== null ? selectedBoard.column8 : null
+    };
+
+    dispatch(deleteColumn(formD));
   }
 
-  function removeItemById(id, array) {
-    return array.filter(item => item.id != id);
-  }
+  // // Find item by ID
+  // function findItemById(id, array) {
+  //   return array.find(item => item.id == id);
+  // }
+
+  // // Remove item by ID
+  // function removeItemById(id, array) {
+  //   return array.filter(item => item.id != id);
+  // }
 
   return (
     <div className={styles.kanbanContainer}>
       <DragDropContext onDragEnd={handleDragEnd}>
         {Object.keys(selectedBoardStatusCols).map((keyName, index) => (
           <Column
-            title={keyName}
             jobs={selectedBoardStatusCols[keyName]}
             id={keyName}
             key={index}
+            title={keyName}
+            columnNumber={index + 1}
+            handleColumnDelete={handleColumnDelete}
+            setStatusFormToggle={setStatusFormToggle}
+            statusFormToggle={statusFormToggle}
+            selectedBoard={selectedBoard}
+            updateBoardColumn={updateBoardColumn}
           />
         ))}
         {/* Add list column only shows when there's less than 10 total status columns */}

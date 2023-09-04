@@ -15,26 +15,26 @@
 }
 
 .addlistContainer {
-  background-color: rgb(234, 236, 240);
+  background-color: #f7f7f7;
   border-radius: 10px;
-  width: 27rem;
+  width: 28rem;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
   overflow: hidden;
 
   @include mixin.phone {
-    width: 25rem;
+    width: 29rem;
   }
 }
 
 .newListButton {
   // height: 2rem;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Karla', sans-serif;
   padding: 1.5rem 0;
-
+  font-weight: 500;
   // margin: 0;
   text-align: center;
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: #6c788d;
   background-color: transparent;
   border: none;
@@ -53,12 +53,12 @@
   border-radius: 1rem;
   overflow: hidden;
   margin-right: 0.5rem;
-  width: 27rem;
+  width: 28rem;
   padding: 0 0.5rem 4rem 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 
   @include mixin.phone {
-    width: 22rem;
+    width: 29rem;
     padding: 0 0.5rem 6rem 0.5rem;
   }
 }
@@ -68,14 +68,32 @@
   padding: 1.5rem;
   align-items: center;
   position: relative;
+  justify-content: space-between;
+}
+
+.textContainer {
+  flex: 0 0 1;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+}
+
+.buttonsContainer {
+  // flex: 0 0 6rem;
+  display: flex;
+  // background-color: red;
+  gap: 0.5rem;
 }
 
 .textStatus {
   // margin: 0;
   text-align: center;
   text-transform: capitalize;
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: #6c788d;
+  font-weight: 500;
 }
 
 .textTotalJobs {
@@ -90,16 +108,19 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.buttonEdit {
-  position: absolute;
-  right: 1.5rem;
+.statusButton {
   border: none;
   background-color: transparent;
   color: #97a2b6;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    color: #3c4350;
+  }
 
   @include mixin.phone {
-    // right: 0;
+    font-size: 2rem;
     padding: 0 0 0 1rem;
   }
 }
@@ -160,13 +181,13 @@
 
 .textJobTitle {
   text-transform: capitalize;
-  font-size: 1.6rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  // font-weight: 700;
 }
 
 .textCompany {
   text-transform: capitalize;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 
   > i {
     font-size: 1.3rem;

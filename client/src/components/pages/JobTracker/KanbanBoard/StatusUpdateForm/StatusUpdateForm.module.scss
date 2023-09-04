@@ -1,0 +1,15 @@
+.updateForm {
+  position: absolute;
+  top: 0;
+  padding: 1.5rem;
+  width: 100%;
+  left: 0;
+
+  input[type='text'] {
+    width: 100%;
+  }
+}
+
+.formGroup {
+  display: flex;
+}
