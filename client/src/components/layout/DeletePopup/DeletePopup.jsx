@@ -1,19 +1,12 @@
 import React from 'react';
-import Button from '../../../../layout/Button/Button';
+import Button from '../Button/Button';
 
 import styles from './DeletePopup.module.scss';
 
-export default function DeletePopup({
-  handleDeleteJob,
-  setConfirmationToggle,
-  popUpText
-}) {
+export default function DeletePopup({ handleDelete, closePopUp, popUpText }) {
   return (
     <div className={styles.popupWrapper}>
-      <div
-        className={styles.popupOuter}
-        onClick={() => setConfirmationToggle(false)}
-      ></div>
+      <div className={styles.popupOuter} onClick={() => closePopUp()}></div>
       <div className={styles.popupBox}>
         <p className={styles.textPopup}>{popUpText}</p>
         <div className={styles.popupButtons}>
@@ -23,14 +16,14 @@ export default function DeletePopup({
             size={'small'}
             value={'Cancel'}
             color={'white'}
-            onClick={() => setConfirmationToggle(false)}
+            onClick={() => closePopUp()}
           />
           <Button
             type={'button'}
             size={'small'}
             value={'OK'}
             color={'blue'}
-            onClick={() => handleDeleteJob()}
+            onClick={() => handleDelete()}
           />
         </div>
       </div>

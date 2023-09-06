@@ -5,7 +5,7 @@ import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
 import styles from './NotesTab.module.scss';
-import ConfirmationPopUp from '../../../../layout/ConfirmationPopUp/ConfirmationPopUp';
+import NotesDeletePopUp from '../../../../layout/NotesDeletePopUp/NotesDeletePopUp';
 import timeSince from '../../../../../helpers/convertDate';
 
 import noNotes from '../../../../../assets/nonotes.svg';
@@ -219,7 +219,7 @@ export default function NotesTab({
         </div>
       )}
       {selectedNote.isActive === true && (
-        <ConfirmationPopUp
+        <NotesDeletePopUp
           popUpText={'Are you sure you want to delete this note?'}
           setSelectedNote={setSelectedNote}
           noteId={selectedNote.noteId}

@@ -7,6 +7,7 @@ import Button from '../../../../layout/Button/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { taskCategories } from '../../../../../data/taskCategories';
+import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
 
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noTasks from '../../../../../assets/notasks.svg';
@@ -21,10 +22,12 @@ export default function TasksTab({
   deleteTask
 }) {
   const [formToggle, setFormToggle] = useState(false);
+  const [confirmationToggle, setConfirmationToggle] = useState(false);
 
   const [selectedTask, setSelectedTask] = useState({
     isActive: false,
-    taskId: null
+    taskId: null,
+    taskTitle: null
   });
 
   const [formData, setFormData] = useState({
@@ -110,6 +113,7 @@ export default function TasksTab({
 
     // Resets the setSelectedTask and toggles off the confirmation pop up
     setSelectedTask({ isActive: false, taskId: null });
+    setConfirmationToggle(false);
   }
 
   return (
@@ -238,7 +242,8 @@ export default function TasksTab({
                       onClick={() =>
                         setSelectedTask({
                           isActive: true,
-                          taskId: task.id
+                          taskId: task.id,
+                          taskTitle: task.title
                         })
                       }
                     >
@@ -267,7 +272,8 @@ export default function TasksTab({
                               onClick={() =>
                                 setSelectedTask({
                                   isActive: false,
-                                  taskId: null
+                                  taskId: null,
+                                  taskTitle: null
                                 })
                               }
                             />
@@ -276,9 +282,7 @@ export default function TasksTab({
                               value={'Delete Task'}
                               color={'red'}
                               size={'xsmall'}
-                              onClick={() =>
-                                handleDeleteTask(task.id, task.title)
-                              }
+                              onClick={() => setConfirmationToggle(true)}
                             />
                           </div>
                         </div>
@@ -301,7 +305,8 @@ export default function TasksTab({
                       onClick={() =>
                         setSelectedTask({
                           isActive: true,
-                          taskId: task.id
+                          taskId: task.id,
+                          taskTitle: task.title
                         })
                       }
                     >
@@ -330,18 +335,17 @@ export default function TasksTab({
                               onClick={() =>
                                 setSelectedTask({
                                   isActive: false,
-                                  taskId: null
+                                  taskId: null,
+                                  taskTitle: null
                                 })
                               }
                             />
                             <Button
                               type={'button'}
-                              value={'Delete Note'}
+                              value={'Delete Task'}
                               color={'red'}
                               size={'xsmall'}
-                              onClick={() =>
-                                handleDeleteTask(task.id, task.title)
-                              }
+                              onClick={() => setConfirmationToggle(true)}
                             />
                           </div>
                         </div>
@@ -353,6 +357,16 @@ export default function TasksTab({
           </>
         )}
       </div>
+      {/* Pop up Modal for Delete Confirmation */}
+      {confirmationToggle && (
+        <DeletePopup
+          handleDelete={() =>
+            handleDeleteTask(selectedTask.taskId, selectedTask.taskTitle)
+          }
+          closePopUp={() => setConfirmationToggle(false)}
+          popUpText={'Are you sure you want to delete this task?'}
+        />
+      )}
     </div>
   );
 }

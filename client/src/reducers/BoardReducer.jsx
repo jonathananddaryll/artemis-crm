@@ -316,16 +316,12 @@ const boardSlice = createSlice({
     toggleJobForm: false,
     selectedStatusToAdd: null,
     toggleSelectedJobModal: false,
-    toggleColumnUpdateForm: false,
     selectedJob: null
   },
   reducers: {
     handleToggleForm: (state, action) => {
       state.toggleJobForm = action.payload[0];
       state.selectedStatusToAdd = action.payload[1];
-    },
-    handleColumnUpdateForm: (state, action) => {
-      state.toggleColumnUpdateForm = action.payload;
     },
     changeSelectedJob: (state, action) => {
       state.toggleSelectedJobModal = action.payload[0];
@@ -554,13 +550,14 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
-      // filters jobs without the deleted job
-      const jobsWithoutDeletedJob = state.selectedBoardStatusCols[
-        action.payload.status
-      ].filter(job => job.id !== action.payload.id);
-
+      // Remove the deleted job from state.selectedBoardStatusCols
       state.selectedBoardStatusCols[action.payload.status] =
-        jobsWithoutDeletedJob;
+        state.selectedBoardStatusCols[action.payload.status].filter(
+          job => job.id !== action.payload.id
+        );
+
+      // Remove the deleted job from state.jobs
+      state.jobs = state.jobs.filter(job => job.id !== action.payload.id);
       toast.success('Successfully Deleted a Job');
     });
 
@@ -735,6 +732,5 @@ export const {
   addToStatus,
   changeSelectedJob,
   handleToggleForm,
-  handleColumnUpdateForm,
   filterJob
 } = boardSlice.actions;

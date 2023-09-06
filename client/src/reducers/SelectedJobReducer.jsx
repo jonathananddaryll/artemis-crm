@@ -305,14 +305,14 @@ const selectedJobSlice = createSlice({
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
       // Find the index of the updated task then change it to the updated task
-      var updatedTask = action.payload;
+      let updatedTask = action.payload;
 
-      ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_tASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
+      ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_TASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
       if (updatedTask.is_done === true) {
-        const filteredTasks = state.tasks.filter(
-          task => task.id !== updatedTask.id
-        );
-        state.tasks = filteredTasks;
+        // const filteredTasks = state.tasks.filter(
+        //   task => task.id !== updatedTask.id
+        // );
+        state.tasks = state.tasks.filter(task => task.id !== updatedTask.id);
         state.completedTasks = [...state.completedTasks, updatedTask];
 
         // Updates the completedInterview
@@ -321,10 +321,12 @@ const selectedJobSlice = createSlice({
           updatedTask.category.includes('Screen')
         ) {
           // Take out the updated task
-          const filteredInterviews = state.interviews.filter(
+          // const filteredInterviews = state.interviews.filter(
+          //   task => task.id !== updatedTask.id
+          // );
+          state.interviews = state.interviews.filter(
             task => task.id !== updatedTask.id
           );
-          state.interviews = filteredInterviews;
 
           // Add updated task
           state.completedInterviews = [
@@ -335,10 +337,12 @@ const selectedJobSlice = createSlice({
 
         toast.success('Good Job Completing a Task');
       } else {
-        const filteredTasks = state.completedTasks.filter(
+        // const filteredTasks = state.completedTasks.filter(
+        //   task => task.id !== updatedTask.id
+        // );
+        state.completedTasks = state.completedTasks.filter(
           task => task.id !== updatedTask.id
         );
-        state.completedTasks = filteredTasks;
         state.tasks = [...state.tasks, updatedTask];
 
         // Updates the interview
@@ -347,10 +351,12 @@ const selectedJobSlice = createSlice({
           updatedTask.category.includes('Screen')
         ) {
           // Take out the updated task
-          const filteredInterviews = state.completedInterviews.filter(
+          // const filteredInterviews = state.completedInterviews.filter(
+          //   task => task.id !== updatedTask.id
+          // );
+          state.completedInterviews = state.completedInterviews.filter(
             task => task.id !== updatedTask.id
           );
-          state.completedInterviews = filteredInterviews;
 
           // Add updated Task
           state.interviews = [...state.interviews, updatedTask];

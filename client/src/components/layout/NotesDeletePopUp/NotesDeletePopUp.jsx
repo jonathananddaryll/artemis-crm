@@ -1,11 +1,11 @@
 import React from 'react';
 
-import styles from './ConfirmationPopUp.module.scss';
+import styles from './NotesDeletePopUp.module.scss';
 import Button from '../Button/Button';
 
 // import styles from '../../pages/JobTracker/SelectedJobModal/DeletePopup/DeletePopup.module.css';
 
-export default function ConfirmationPopUp({
+export default function NotesDeletePopUp({
   popUpText,
   setSelectedNote,
   handleDeleteNote,

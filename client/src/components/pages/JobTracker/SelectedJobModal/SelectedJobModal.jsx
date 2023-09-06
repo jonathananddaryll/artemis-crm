@@ -4,7 +4,6 @@ import { useSession } from '@clerk/clerk-react';
 import {
   changeSelectedJob,
   deleteJob,
-  handleToggleForm,
   updateJobInfo
 } from '../../../../reducers/BoardReducer';
 
@@ -29,10 +28,8 @@ import DocumentsTab from './DocumentsTab/DocumentsTab';
 import JobInfoTab from './JobInfoTab/JobInfoTab';
 import NotesTab from './NotesTab/NotesTab';
 import TasksTab from './TasksTab/TasksTab';
-import DeletePopup from './DeletePopup/DeletePopup';
+import DeletePopup from '../../../layout/DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
-
-// import ConfirmationPopUp from '../../../layout/ConfirmationPopup/ConfirmationPopup';
 
 import styles from './SelectedJobModal.module.scss';
 
@@ -229,15 +226,10 @@ export default function SelectedJobModal() {
         </div>
         {confirmationToggle && (
           <DeletePopup
-            handleDeleteJob={handleDeleteJob}
-            setConfirmationToggle={setConfirmationToggle}
+            handleDelete={handleDeleteJob}
+            closePopUp={() => setConfirmationToggle(false)}
             popUpText={'Are you sure you want to delete this job?'}
           />
-          // <ConfirmationPopUp
-          //   popUpText={'Are you sure you want to delete this job?'}
-          //   handleDelete={handleDeleteJob}
-          //   cancelDelete={setConfirmationToggle}
-          // />
         )}
       </div>
     </div>
