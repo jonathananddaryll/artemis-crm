@@ -5,7 +5,7 @@ import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 
 import styles from './NotesTab.module.scss';
-import NotesDeletePopUp from '../../../../layout/NotesDeletePopUp/NotesDeletePopUp';
+import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
 import timeSince from '../../../../../helpers/convertDate';
 
 import noNotes from '../../../../../assets/nonotes.svg';
@@ -24,8 +24,6 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
-  // const [confirmationToggle, setConfirmationToggle] = useState(false);
-
   const [selectedNote, setSelectedNote] = useState({
     isActive: false,
     noteId: null
@@ -218,12 +216,25 @@ export default function NotesTab({
           )}
         </div>
       )}
-      {selectedNote.isActive === true && (
+      {/* {selectedNote.isActive === true && (
         <NotesDeletePopUp
           popUpText={'Are you sure you want to delete this note?'}
           setSelectedNote={setSelectedNote}
           noteId={selectedNote.noteId}
           handleDeleteNote={handleDeleteNote}
+        />
+      )} */}
+
+      {selectedNote.isActive && (
+        <DeletePopup
+          handleDelete={() => handleDeleteNote(selectedNote.noteId)}
+          closePopUp={() =>
+            setSelectedNote({
+              isActive: false,
+              noteId: null
+            })
+          }
+          popUpText={'Are you sure you want to delete this note?'}
         />
       )}
     </div>
