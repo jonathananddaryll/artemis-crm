@@ -481,12 +481,14 @@ const boardSlice = createSlice({
 
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
     builder.addCase(addJob.fulfilled, (state, action) => {
+      // Updates the Kanban Board
       state.selectedBoardStatusCols[action.payload.status] = [
         action.payload,
         ...state.selectedBoardStatusCols[action.payload.status]
       ];
-      // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
-      // state.boards = [...state.boards, action.payload];
+
+      // Updates the jobs state
+      state.jobs = [action.payload, ...state.jobs];
       toast.success('Successfully Added a New Job');
     });
 
