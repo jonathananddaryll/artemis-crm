@@ -282,15 +282,15 @@ export const updateJobInfo = createAsyncThunk(
 export const deleteJob = createAsyncThunk(
   'job/deleteJob',
   async (formData, thunkAPI) => {
-    const headers = {
-      Authorization: `Bearer ${formData.token}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${formData.token}`
+      },
+      data: { formData }
     };
 
     try {
-      const res = await axios.delete(`/api/jobs/${formData.jobId}`, {
-        data: { formData },
-        headers
-      });
+      const res = await axios.delete(`/api/jobs/${formData.jobId}`, config);
 
       return res.data;
     } catch (err) {

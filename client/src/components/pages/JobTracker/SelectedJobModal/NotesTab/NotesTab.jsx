@@ -24,6 +24,7 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
+
   const [selectedNote, setSelectedNote] = useState({
     isActive: false,
     noteId: null
