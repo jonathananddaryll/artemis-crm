@@ -95,10 +95,10 @@ router.get('/board/:board_id', async (req, res) => {
   // CHECK IF I NEED THE SELECT is_done there.. is is_done good? it's working even without anything there. should i take it out?
   // GOING TO HAVE TO CHANGE THIS QUERY AND ADD IF DATE IS LATER THAN THE CURRENT DATE SHOW IT.
   const query = format(
-    `  select j.*, TO_CHAR(j.date_created, 'Month dd, yyyy') date_added,
-    (select count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count,
-    (select count(*)::int from note n WHERE n.job_id = j.id) total_note_count,
-    (select count(*)::int from task t WHERE t.job_id = j.id AND ((t.category like %L) OR (t.category like %L)) AND t.start_date > NOW() AND t.is_done = false) pending_interview_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
+    `SELECT j.*, TO_CHAR(j.date_created, 'Month dd, yyyy') date_added,
+    (SELECT count(*)::int from task t WHERE t.job_id = j.id AND is_done = false) incomplete_task_count,
+    (SELECT count(*)::int from note n WHERE n.job_id = j.id) total_note_count,
+    (SELECT count(*)::int from task t WHERE t.job_id = j.id AND ((t.category like %L) OR (t.category like %L)) AND t.start_date > NOW() AND t.is_done = false) pending_interview_count FROM job j WHERE board_id = %s ORDER BY j.date_created DESC`,
     '%e Interview%',
     '%Screen%',
     boardId

@@ -228,7 +228,10 @@ export default function SelectedJobModal() {
           <DeletePopup
             handleDelete={handleDeleteJob}
             closePopUp={() => setConfirmationToggle(false)}
-            popUpText={'Are you sure you want to delete this job?'}
+            mainText={'Are you sure you want to delete this job?'}
+            subText={
+              'This will delete this job permanently. You cannot undo this action'
+            }
           />
         )}
       </div>

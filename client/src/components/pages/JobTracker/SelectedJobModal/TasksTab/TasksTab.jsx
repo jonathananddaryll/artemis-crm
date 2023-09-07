@@ -364,7 +364,10 @@ export default function TasksTab({
             handleDeleteTask(selectedTask.taskId, selectedTask.taskTitle)
           }
           closePopUp={() => setConfirmationToggle(false)}
-          popUpText={'Are you sure you want to delete this task?'}
+          mainText={'Are you sure you want to delete this task?'}
+          subText={
+            'This will delete this task permanently. You cannot undo this action'
+          }
         />
       )}
     </div>

@@ -235,7 +235,10 @@ export default function NotesTab({
               noteId: null
             })
           }
-          popUpText={'Are you sure you want to delete this note?'}
+          mainText={'Are you sure you want to delete this note?'}
+          subText={
+            'This will delete this note permanently. You cannot undo this action'
+          }
         />
       )}
     </div>

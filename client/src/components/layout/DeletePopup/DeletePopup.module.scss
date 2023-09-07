@@ -7,6 +7,7 @@
   background-color: #483375ea;
   top: 0;
   left: 0;
+  z-index: 99;
 }
 
 .popupOuter {
@@ -22,10 +23,17 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
-  width: 50rem;
-  padding: 1rem;
+  width: 55rem;
+  padding: 2rem 2rem;
   border-radius: 10px;
-  padding-top: 1.8rem;
+  // padding-top: 1.8rem;
+
+  text-align: left;
+
+  @include mixin.tabPortrait {
+    width: 70%;
+    top: 30%;
+  }
 
   @include mixin.phone {
     width: 80%;
@@ -42,8 +50,17 @@
   }
 }
 
-.textPopup {
-  font-size: 1.4rem;
+.popupMainText {
+  font-size: 1.7rem;
+  font-weight: bold;
   // Change this font-family later
   font-family: 'Montserrat', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.popupSubText {
+  font-size: 1.5rem;
+  // font-weight: bold;
+  // Change this font-family later
+  // font-family: 'Montserrat', sans-serif;
 }

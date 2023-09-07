@@ -19,7 +19,7 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 router.get('/:user_id', async (req, res) => {
   const userId = req.params.user_id;
   const query = format(
-    'SELECT * FROM board WHERE user_id = %L ORDER BY date_created DESC',
+    'SELECT b.*, (SELECT count(*)::int from job j WHERE j.board_id = b.id) total_jobs_count FROM board b WHERE user_id = %L ORDER BY date_created DESC',
     userId
   );
   const client = new Client(config);
@@ -48,10 +48,16 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
   const userId = req.params.user_id;
   const boardId = req.params.board_id;
   const query = format(
-    'SELECT * FROM board WHERE user_id = %L and id = %s',
+    'SELECT b.*, (SELECT count(*)::int from job j WHERE j.board_id = b.id) total_jobs_count FROM board b WHERE user_id = %L and id = %s',
     userId,
     boardId
   );
+
+  // const query = format(
+  //   'SELECT * FROM board WHERE user_id = %L and id = %s',
+  //   userId,
+  //   boardId
+  // );
 
   const client = new Client(config);
   client.connect();
