@@ -431,8 +431,6 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(deleteColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
-
       delete state.selectedBoardStatusCols[action.payload[1]];
       state.selectedBoard = action.payload[0];
 
@@ -450,11 +448,15 @@ const boardSlice = createSlice({
       const oldStatusName = action.payload[1];
 
       // Updates the key of selectedBoardStatusCols and the jobs inside it with the updated jobs
-      delete Object.assign(state.selectedBoardStatusCols, {
-        [newStatusName]: action.payload[0][1].rows
-      })[oldStatusName];
+      if (newStatusName !== oldStatusName) {
+        delete Object.assign(state.selectedBoardStatusCols, {
+          [newStatusName]: action.payload[0][1].rows
+        })[oldStatusName];
 
-      state.selectedBoard[columnName] = newStatusName;
+        state.selectedBoard[columnName] = newStatusName;
+      }
+
+      toast.success('Successfully Renamed a List');
     });
 
     // Display errors in updateBoardColumn with toastify

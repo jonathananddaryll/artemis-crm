@@ -120,10 +120,8 @@ export default function ({
         <DeletePopup
           handleDelete={() => handleColumnDelete(columnNumber, title)}
           closePopUp={() => setConfirmationToggle(false)}
-          mainText={`Are you sure you want to delete '${title}' list?`}
-          subText={
-            'This will delete this list permanently. You cannot undo this action'
-          }
+          mainText={`Are you sure delete '${title}' list?`}
+          subText={'This action cannot be undone'}
         />
       )}
     </div>

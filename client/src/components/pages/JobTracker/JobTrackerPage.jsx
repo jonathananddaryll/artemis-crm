@@ -20,14 +20,11 @@ import BoardHeader from './BoardHeader/BoardHeader';
 
 import Loader from '../../layout/Loader/Loader';
 
-import SearchBar from './SearchBar/SearchBar';
-
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
 
 export default function JobTrackerPage() {
   const {
     selectedBoard,
-    jobsLoading,
     toggleJobForm,
     selectedBoardStatusCols,
     toggleSelectedJobModal,

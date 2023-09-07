@@ -28,10 +28,8 @@ export default function BoardHeader({ title, filterJob, totalJobsCount }) {
         <DeletePopup
           // handleDelete={handleDeleteJob}
           closePopUp={() => setConfirmationToggle(false)}
-          mainText={`Are you sure you want to delete ${title} board?`}
-          subText={
-            'This will delete this board permanently. You cannot undo this action'
-          }
+          mainText={`Are you sure delete '${title}' board?`}
+          subText={'This action cannot be undone'}
         />
       )}
     </div>

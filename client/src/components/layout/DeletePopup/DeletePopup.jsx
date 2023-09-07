@@ -13,6 +13,9 @@ export default function DeletePopup({
     <div className={styles.popupWrapper}>
       <div className={styles.popupOuter} onClick={() => closePopUp()}></div>
       <div className={styles.popupBox}>
+        <button className={styles.closeButton} onClick={() => closePopUp()}>
+          <i className='bi bi-x-lg'></i>
+        </button>
         <p className={styles.popupMainText}>{mainText}</p>
         <p className={styles.popupSubText}>{subText}</p>
 
@@ -20,16 +23,16 @@ export default function DeletePopup({
           {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
           <Button
             type={'button'}
-            size={'small'}
+            // size={'small'}
             value={'Cancel'}
             color={'white'}
             onClick={() => closePopUp()}
           />
           <Button
             type={'button'}
-            size={'small'}
-            value={'OK'}
-            color={'blue'}
+            // size={'small'}
+            value={'Delete'}
+            color={'red'}
             onClick={() => handleDelete()}
           />
         </div>

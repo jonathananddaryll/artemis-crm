@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import ReactQuill, { Quill } from 'react-quill';
+import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
-
-import styles from './NotesTab.module.scss';
 import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
-import timeSince from '../../../../../helpers/convertDate';
-
-import noNotes from '../../../../../assets/nonotes.svg';
-
-import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
+import noNotes from '../../../../../assets/nonotes.svg';
+import styles from './NotesTab.module.scss';
 
 export default function NotesTab({
   createNote,
@@ -217,14 +214,6 @@ export default function NotesTab({
           )}
         </div>
       )}
-      {/* {selectedNote.isActive === true && (
-        <NotesDeletePopUp
-          popUpText={'Are you sure you want to delete this note?'}
-          setSelectedNote={setSelectedNote}
-          noteId={selectedNote.noteId}
-          handleDeleteNote={handleDeleteNote}
-        />
-      )} */}
 
       {selectedNote.isActive && (
         <DeletePopup
@@ -235,10 +224,8 @@ export default function NotesTab({
               noteId: null
             })
           }
-          mainText={'Are you sure you want to delete this note?'}
-          subText={
-            'This will delete this note permanently. You cannot undo this action'
-          }
+          mainText={'Are you sure delete this note?'}
+          subText={'This action cannot be undone'}
         />
       )}
     </div>

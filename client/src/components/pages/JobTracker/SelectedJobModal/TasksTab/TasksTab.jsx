@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import styles from './TasksTab.module.scss';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import DatePicker from 'react-datepicker';
 import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { taskCategories } from '../../../../../data/taskCategories';
 import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
-
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
+import { taskCategories } from '../../../../../data/taskCategories';
 import noTasks from '../../../../../assets/notasks.svg';
+import 'react-datepicker/dist/react-datepicker.css';
+import styles from './TasksTab.module.scss';
 
 export default function TasksTab({
   tasks,
@@ -364,10 +363,8 @@ export default function TasksTab({
             handleDeleteTask(selectedTask.taskId, selectedTask.taskTitle)
           }
           closePopUp={() => setConfirmationToggle(false)}
-          mainText={'Are you sure you want to delete this task?'}
-          subText={
-            'This will delete this task permanently. You cannot undo this action'
-          }
+          mainText={'Are you sure delete this task?'}
+          subText={'This action cannot be undone'}
         />
       )}
     </div>

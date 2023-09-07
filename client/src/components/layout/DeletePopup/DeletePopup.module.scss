@@ -41,6 +41,13 @@
   }
 }
 
+.closeButton {
+  float: right;
+  font-size: 1.6rem;
+  border: none;
+  background-color: transparent;
+}
+
 .popupButtons {
   text-align: right;
   margin-top: 2rem;
@@ -51,16 +58,19 @@
 }
 
 .popupMainText {
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   font-weight: bold;
   // Change this font-family later
   font-family: 'Montserrat', sans-serif;
-  margin-bottom: 2rem;
+  margin: 3rem 0 1rem 0;
+  color: rgb(34, 32, 32);
 }
 
 .popupSubText {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
   // font-weight: bold;
   // Change this font-family later
-  // font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  color: rgb(104, 99, 99);
 }
