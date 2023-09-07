@@ -501,10 +501,9 @@ const boardSlice = createSlice({
 
     // Remove the deleted board from state.boards and state.selectedBoard to null
     builder.addCase(deleteBoard.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.selectedBoard = null;
       state.selectedBoardStatusCols = null;
-      state.selectedBoardLoading = true;
+      // state.selectedBoardLoading = true;
 
       // Removes the deleted board from the state.boards
       state.boards = state.boards.filter(

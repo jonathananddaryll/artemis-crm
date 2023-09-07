@@ -90,14 +90,15 @@ export default function JobTrackerPage() {
     setLoadStart1(false);
   }
 
-  // Redirects the user when they try to go to board page that they do not own
   const navigate = useNavigate();
+  useEffect(() => {
+    // Redirects the user when they try to go to board page that they do not own
+    if (selectedBoard !== null && selectedBoard.user_id !== userId) {
+      navigate('/boards');
+    }
+  }, [selectedBoard]);
 
-  if (selectedBoard !== null && selectedBoard.user_id !== userId) {
-    // console.log('redirecting since you do not own the board');
-    navigate('/boards');
-  }
-
+  // Redirects after board deletion
   if (selectedBoard === null && selectedBoardStatusCols === null) {
     navigate('/boards');
   }
