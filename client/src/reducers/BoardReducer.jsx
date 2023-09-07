@@ -498,7 +498,7 @@ const boardSlice = createSlice({
       toast.success('Successfully Renamed a Board');
     });
 
-    // Display errors in addJob with toastify
+    // Display errors in updateBoardName with toastify
     builder.addCase(updateBoardName.rejected, (state, action) => {
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
@@ -526,6 +526,17 @@ const boardSlice = createSlice({
 
       // Updates the jobs state
       state.jobs = [action.payload, ...state.jobs];
+
+      // Updates total_jobs_count
+      state.selectedBoard.total_jobs_count++;
+
+      if (state.boards.length !== 0) {
+        const index = state.boards.findIndex(
+          board => board.id === action.payload.board_id
+        );
+        state.boards[index].total_jobs_count++;
+      }
+
       toast.success('Successfully Added a New Job');
     });
 
@@ -582,6 +593,7 @@ const boardSlice = createSlice({
       // Updates the job in the selectedBoardStatusCols to display the update in the kanban board
       state.selectedBoardStatusCols[action.payload.status][foundIndex] =
         tempSelectedJob;
+
       toast.success('Successfully Updated Job Info');
     });
 
@@ -599,6 +611,17 @@ const boardSlice = createSlice({
 
       // Remove the deleted job from state.jobs
       state.jobs = state.jobs.filter(job => job.id !== action.payload.id);
+
+      // Updates total_jobs_count
+      state.selectedBoard.total_jobs_count--;
+
+      if (state.boards.length !== 0) {
+        const index = state.boards.findIndex(
+          board => board.id === action.payload.board_id
+        );
+        state.boards[index].total_jobs_count--;
+      }
+
       toast.success('Successfully Deleted a Job');
     });
 
