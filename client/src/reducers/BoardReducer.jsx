@@ -187,6 +187,28 @@ export const updateBoardName = createAsyncThunk(
   }
 );
 
+// Deletes a board
+export const deleteBoard = createAsyncThunk(
+  'job/deleteBoard',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${formData.token}`
+      },
+      data: formData
+    };
+
+    try {
+      const res = await axios.delete(`/api/boards/${formData.boardId}`, config);
+
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 // Gets all the job with boardId
 export const getjobswithBoardId = createAsyncThunk(
   'board/getJobswithBoardId',
@@ -286,7 +308,7 @@ export const deleteJob = createAsyncThunk(
       headers: {
         Authorization: `Bearer ${formData.token}`
       },
-      data: { formData }
+      data: formData
     };
 
     try {
@@ -477,6 +499,20 @@ const boardSlice = createSlice({
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
+    // Remove the deleted board from state.boards and state.selectedBoard to null
+    builder.addCase(deleteBoard.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.selectedBoard = null;
+      state.selectedBoardStatusCols = null;
+      state.selectedBoardLoading = true;
+
+      // Removes the deleted board from the state.boards
+      state.boards = state.boards.filter(
+        board => board.id !== action.payload.id
+      );
+
+      toast.success('Successfully Deleted a Board');
+    });
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
     builder.addCase(addJob.fulfilled, (state, action) => {
       // Updates the Kanban Board

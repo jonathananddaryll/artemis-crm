@@ -5,7 +5,8 @@ import {
   getjobswithBoardId,
   getBoard,
   changeBoard,
-  filterJob
+  filterJob,
+  deleteBoard
 } from '../../../reducers/BoardReducer';
 import { useNavigate } from 'react-router-dom';
 import styles from './JobTrackerPage.module.scss';
@@ -97,14 +98,18 @@ export default function JobTrackerPage() {
     navigate('/boards');
   }
 
+  if (selectedBoard === null && selectedBoardStatusCols === null) {
+    navigate('/boards');
+  }
+
   return (
     <div className={styles.container}>
       {selectedBoardStatusCols !== null ? (
         <>
           <BoardHeader
-            title={selectedBoard.title}
             filterJob={filterJob}
-            totalJobsCount={selectedBoard.total_jobs_count}
+            selectedBoard={selectedBoard}
+            deleteBoard={deleteBoard}
           />
           <div className={styles.kanbanBoardContainer}>
             <KanbanBoard

@@ -1,11 +1,34 @@
 import React, { useState } from 'react';
-import styles from './BoardHeader.module.scss';
+import { useDispatch } from 'react-redux';
+import { useSession } from '@clerk/clerk-react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button from '../../../layout/Button/Button';
 import DeletePopup from '../../../layout/DeletePopup/DeletePopup';
+import styles from './BoardHeader.module.scss';
 
-export default function BoardHeader({ title, filterJob, totalJobsCount }) {
+export default function BoardHeader({
+  filterJob,
+  deleteBoard,
+  selectedBoard: { id, user_id, title, total_jobs_count }
+}) {
   const [confirmationToggle, setConfirmationToggle] = useState(false);
+
+  const dispatch = useDispatch();
+  const { session } = useSession();
+
+  async function handleDeleteBoard() {
+    const formData = {
+      boardId: id,
+      selectedBoard_userId: user_id,
+      token: await session.getToken()
+    };
+
+    dispatch(deleteBoard(formData));
+
+    // change selectedJob to null and modal off
+    // dispatch(changeSelectedJob([false, null]));
+  }
+
   return (
     <div className={styles.boardContainer}>
       <SearchBar filterJob={filterJob} />
@@ -19,14 +42,14 @@ export default function BoardHeader({ title, filterJob, totalJobsCount }) {
           size={'small'}
           value={'Delete Board'}
           color={'red'}
-          disabled={totalJobsCount > 0}
+          disabled={total_jobs_count > 0}
           onClick={() => setConfirmationToggle(true)}
         />
       </div>
 
       {confirmationToggle && (
         <DeletePopup
-          // handleDelete={handleDeleteJob}
+          handleDelete={handleDeleteBoard}
           closePopUp={() => setConfirmationToggle(false)}
           mainText={`Are you sure delete '${title}' board?`}
           subText={'This action cannot be undone'}

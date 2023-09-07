@@ -253,7 +253,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   const client = new Client(config);
   client.connect();
 
-  const { selectedBoard_userId, selectedBoard_id } = req.body.formData;
+  const { selectedBoard_userId, selectedBoard_id } = req.body;
   const id = req.params.id;
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;

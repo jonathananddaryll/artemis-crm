@@ -408,7 +408,6 @@ router.patch(
   }
 );
 
-// @TODO: implement this
 router.delete(
   '/:board_id',
   myRequestHeaders,
@@ -424,7 +423,6 @@ router.delete(
 
     // Checks if the loggedIn user owns the board
     if (userId === undefined || selectedBoard_userId !== userId) {
-      console.log('invalid user');
       return res
         .status(405)
         .json({ msg: 'Error: The user does not own the board' });
@@ -442,7 +440,7 @@ router.delete(
           }
 
           // ------------------------------- ADD A RETURN IF THE QUERY DOESNT RETURN ANYTHIHNG
-          res.status(200).json(response);
+          res.status(200).json(response.rows[0]);
           client.end();
         });
       } catch (err) {
@@ -450,14 +448,6 @@ router.delete(
         res.status(500).send('Server Error');
       }
     }
-
-    //check authorization header
-
-    // check if there are any jobs in the board with the board_id
-
-    // throws an error if there is,
-
-    // DELETE the board if it meets all condition
   }
 );
 module.exports = router;
