@@ -50,6 +50,11 @@ export default function ({
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const dispatch = useDispatch();
 
+  const handleDelete = (colNum, statusTitle) => {
+    handleColumnDelete(colNum, statusTitle);
+    setConfirmationToggle(false);
+  };
+
   return (
     <div className={styles.columnContainer}>
       <div className={styles.header}>
@@ -118,7 +123,7 @@ export default function ({
       {/* Pop up Modal for Delete Confirmation */}
       {confirmationToggle && (
         <DeletePopup
-          handleDelete={() => handleColumnDelete(columnNumber, title)}
+          handleDelete={() => handleDelete(columnNumber, title)}
           closePopUp={() => setConfirmationToggle(false)}
           mainText={`Are you sure delete '${title}' list?`}
           subText={'This action cannot be undone'}

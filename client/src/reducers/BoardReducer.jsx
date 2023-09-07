@@ -425,7 +425,11 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(createBoard.fulfilled, (state, action) => {
-      state.boards = [action.payload, ...state.boards];
+      state.boards = [
+        { ...action.payload, total_jobs_count: 0 },
+        ...state.boards
+      ];
+
       toast.success('Successfully Created a New Board');
     });
 
