@@ -129,6 +129,14 @@ router.get("/", async (req, res) => {
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
 router.post("/", async (req, res) => {
+  const { names, values } = req.body;
+  const query = format(
+    `INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${
+      req.body.user_id
+    }, %L) RETURNING *;`,
+    "contact",
+    values
+  );
   try {
     // Receives an array of column 'names', and an array of column 'values'
     // to fill the row with. Will return an error if insufficient data to create a new
@@ -136,14 +144,6 @@ router.post("/", async (req, res) => {
 
     // TODO:
     // 1) Check that request has sufficient data for creation of a new row
-    const { names, values } = req.body;
-    const query = format(
-      `INSERT INTO %I(user_id, ${names.join(", ")}) VALUES(${
-        req.body.user_id
-      }, %L) RETURNING *;`,
-      "contact",
-      values
-    );
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
@@ -178,7 +178,7 @@ router.patch("/", async (req, res) => {
     });
     const query = `UPDATE contact SET ${setUpdate.join(
       ", "
-    )} WHERE user_id = ${user_id} AND id = ${id} RETURNING *;`;
+    )} WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
@@ -199,6 +199,8 @@ router.patch("/", async (req, res) => {
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
 router.delete("/", async (req, res) => {
+  const { user_id, id, token } = req.body.deleteRequest;
+  const query = `DELETE FROM contact WHERE user_id = ${user_id} AND id = ${id} RETURNING *;`;
   try {
     // Receives the typical user_id, the id of the contact. Verifies ownership,
     // validates inputs for injections, and then deletes the contact.
@@ -206,9 +208,7 @@ router.delete("/", async (req, res) => {
     // TODO:
 
     // 1) Verify that the user_id is deleting a contact that it owns before deleting it.
-
-    const { user_id, id } = req.body;
-    const query = `DELETE FROM contact WHERE user_id = ${user_id} AND id = ${id} RETURNING *;`;
+    console.log("test")
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {

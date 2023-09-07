@@ -20,11 +20,8 @@ export default function ContactForm() {
   const { userId, getToken } = useAuth();
   const dispatch = useDispatch();
 
-  const newContactStaging = useSelector(
-    (state) => state.contact.newContactStaging
-  );
-  const contactInFocus = useSelector(
-    (state) => state.contact.contactInFocus
+  const { newContactStaging, contactInFocus } = useSelector(
+    (state) => state.contact
   );
 
   // When disallowing edits on a form, I need to tell the difference between a new contact,
@@ -33,85 +30,81 @@ export default function ContactForm() {
   // toggling isEditing should determine whether the form is editable or not.
   // However, what about what a new form is doing?
 
-  const [contactForm, setContactForm] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(newContactStaging ? true: false);
   const [updatedColumns, setUpdatedColumns] = useState([]);
+  const [contactForm, setContactForm] = useState(contactInFocus);
 
   async function submitUpdate(e) {
-    e.preventDefault();
     let updatedValues = [];
     // only the fields that have been changed will be added to the query.
     // can't tell the difference between multiple edits resulting in the original
     // string, but it's an easy optimization.
-    updatedColumns.map((element) => updatedValues.push(contactForm[element]));
-    const updateForm = {
-      user_id: userId,
-      updateWhat: updatedColumns,
-      updateTo: updatedValues,
-      token: await getToken(),
-    };
-
-    dispatch(updateContact(updateForm));
-    setIsEditing(false);
-    // show an updating/in progress toastify msg
+    if (updatedColumns.length > 0) {
+      updatedColumns.map((element) => updatedValues.push(contactForm[element]));
+      const updateForm = {
+        user_id: userId,
+        updateWhat: updatedColumns,
+        updateTo: updatedValues,
+        token: await getToken(),
+        id: contactForm.id,
+      };
+      dispatch(updateContact(updateForm));
+      // toggle the form visibility
+      setIsEditing(false);
+      // show an updating/in progress toastify msg
+    } else {
+      // show toastify msg that form has no updates to make? Do nothing?
+    }
   }
 
   function onChangeHandler(e) {
     const target = e.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-
+    setContactForm({
+      ...contactForm,
+      [name]: value,
+    })
     // track which inputs have had changes made to them to avoid unnecessary work
     if (!updatedColumns.includes(name)) {
       setUpdatedColumns((oldArray) => {
         return [...oldArray, name];
       });
     }
-
-    setContactForm((oldForm) => {
-      return {
-        ...oldForm,
-        [name]: value,
-      };
-    });
   }
 
-  function exitForm() {
-    // show user the prompt if the form has changes (check updatedColumns)
-    // otherwise reset contactInFocus, reset isEditing, reset contactSelected?
-    if (!updatedColumns.length) {
-      dispatch(updateContactInFocus({}));
-      setIsEditing(false);
-      dispatch(updateContactSelected());
-    } else {
-      // show the prompt, let the prompt send the same actions if user decides to
-      // dispatch(updateContactInFocus({}))
-      // setIsEditing(false)
-      // dispatch(updateContactSelected())
+  function exitForm(event) {
+    if(event.target.className.includes("wrapper")){
+      if (!updatedColumns.length) {
+        dispatch(updateContactInFocus({}));
+        setIsEditing(false);
+        dispatch(updateContactSelected());
+      } else {
+        // show the prompt, let the prompt send the same actions if user decides to
+        // "You have unsaved changes, etc etc"
+        dispatch(updateContactInFocus({}))
+        setIsEditing(false)
+        dispatch(updateContactSelected())
+      }
     }
   }
 
   async function deleteContact() {
     // show user the prompt to confirm delete, then let it handle the calls to
-    // const token = await getToken();
-    // dispatch(deleteContact({
-    //     user_id: userId,
-    //     id: contactInFocus.id,
-    //     token: token
-    // }))
+    // Toggle Confirm form visibility first, then call this function from there
+    const token = await getToken();
+    dispatch(deleteContact({
+        user_id: userId,
+        id: contactForm.id,
+        token: token
+    }))
   }
 
   useEffect(() => {
-    // When editing is turned on, make sure the form is set to redux state values for the contact
-    // If editing is turned off, don't know if it's after a submit, so pull from redux state values still.
-    // Call the updateContactInFocus hook when a successful UPDATE response object from api/contacts is
-    // received. If I did this incorrectly I'll have issues with the new values not showing in the form
-    // after submitting an update, and maybe even the same thing with new contacts as well.
-
-    setContactForm((oldForm) => contactInFocus);
-  }, [isEditing]);
+    console.log("rerender of form ")
+  }, [contactInFocus])
   return (
-    <div className={styles.wrapper} onClick={() => exitForm()}>
+    <div className={styles.wrapper} onClick={e => exitForm(e)}>
       <form name="contactForm" className={styles.formContainer}>
         <section className={styles.title}>
           <label className={styles.formLabels}>
@@ -119,7 +112,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="first_name"
-              value={contactForm.first_name}
+              value={contactForm.first_name ?? ""}
               placeholder="first name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -132,7 +125,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="last_name"
-              value={contactInFocus.last_name}
+              value={contactForm.last_name ?? ""}
               placeholder="last name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -147,7 +140,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="company"
-              value={contactInFocus.company}
+              value={contactForm.company ?? ""}
               placeholder="company"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -159,7 +152,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="current_job_title"
-              value={contactInFocus.current_job_title}
+              value={contactForm.current_job_title ?? ""}
               placeholder="title"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -171,7 +164,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="location"
-              value={contactInFocus.location}
+              value={contactForm.location ?? ""}
               placeholder="location"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -183,13 +176,13 @@ export default function ContactForm() {
             <input
               type="checkbox"
               name="is_priority"
-              ischecked={contactInFocus.linked_job_opening}
+              ischecked={contactForm.linked_job_opening ?? ""}
               onChange={(e) => onChangeHandler(e)}
               className={styles.checksInput}
               readOnly={!isEditing}
             ></input>
           </label>
-          <p>Added on {contactInFocus.timestamp}</p>
+          <p>Added on {contactForm.date_created}</p>
         </section>
         <section className={styles.directContact}>
           <label className={styles.formLabels}>
@@ -197,7 +190,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="phone"
-              value={contactInFocus.phone}
+              value={contactForm.phone ?? ""}
               placeholder="Add contact phone"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -209,7 +202,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="email"
-              value={contactInFocus.email}
+              value={contactForm.email ?? ""}
               placeholder="Add contact email"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -223,7 +216,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="linkedin"
-              value={contactInFocus.linkedin}
+              value={contactForm.linkedin ?? ""}
               placeholder="Add contact linkedin"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -235,7 +228,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="twitter"
-              value={contactInFocus.twitter}
+              value={contactForm.twitter ?? ""}
               placeholder="Add contact name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -247,7 +240,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="instagram"
-              value={contactInFocus.instagram}
+              value={contactForm.instagram ?? ""}
               placeholder="Add contact name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -259,7 +252,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="other_social"
-              value={contactInFocus.other_social}
+              value={contactForm.other_social ?? ""}
               placeholder="Add contact name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -271,7 +264,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="personal_site"
-              value={contactInFocus.personal_site}
+              value={contactForm.personal_site ?? ""}
               placeholder="Add contact name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -285,7 +278,7 @@ export default function ContactForm() {
             <input
               type="text"
               name="linked_job_opening"
-              value={contactInFocus.linked_job_opening}
+              value={contactForm.linked_job_opening ?? ""}
               placeholder="Add contact name"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
@@ -304,14 +297,14 @@ export default function ContactForm() {
           </button>
           <button
             className={isEditing ? styles.editsMade : styles.editsSaved}
-            type="submit"
+            type="button"
             onClick={() => submitUpdate()}
           >
             Save
           </button>
           <button
             className={
-              !contactInFocus.id ? styles.createInProgress : styles.deleteButton
+              !contactForm.id ? styles.createInProgress : styles.deleteButton
             }
             type="button"
             onClick={() => deleteContact()}

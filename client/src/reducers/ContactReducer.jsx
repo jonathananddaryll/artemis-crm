@@ -16,19 +16,19 @@ export const getUserContactsTable = createAsyncThunk(
   // received idAndToken object that has key:value pair user_id(clerk) and session token(clerk)
   // Returns all contacts associated with the user. Only for initial logon and any sort of 'refresh' button.
   async (idAndToken, thunkAPI) => {
+    const config = {
+      method: "GET",
+      url: "/api/contacts",
+      withCredentials: false,
+      params: {
+        user_id: idAndToken.user_id,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idAndToken.token}`,
+      },
+    };
     try {
-      const config = {
-        method: "GET",
-        url: "/api/contacts",
-        withCredentials: false,
-        params: {
-          user_id: idAndToken.user_id,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idAndToken.token}`,
-        },
-      };
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
     } catch (error) {
@@ -85,22 +85,17 @@ export const getUserContactsTable = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (deleteRequest, thunkAPI) => {
+    const config = {
+      data: {deleteRequest},
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${deleteRequest.token}`,
+      }
+    }
     try {
-      const { user_id, id, token } = deleteRequest;
-      // send the user_id along with the contact id to delete.
-      const res = await axios.delete({
-        method: "DELETE",
-        url: "/api/contacts/",
-        withCredentials: false,
-        body: {
-          user_id: user_id,
-          id: id,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.delete("/api/contacts/", config);
+      // response object should include the row that was deleted, used to
+      // confirm that the delete occurred in the backend.
       return res.data;
     } catch (err) {
       return {
@@ -118,21 +113,25 @@ export const updateContact = createAsyncThunk(
     try {
       // with user_id, send two stringified arrays, one of the column names (str) and one
       // of the column value to set it to (also str)
-      const { user_id, updateWhat, updateTo, token } = updateRequest;
-      const res = await axios.patch({
-        method: "UPDATE",
-        url: "/api/contacts/",
+      const { user_id, updateWhat, updateTo, token, id } = updateRequest;
+      console.log(user_id, updateWhat, updateTo, token)
+      const config = {
         withCredentials: false,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: {
-          user_id: user_id,
-          updateWhat: updateWhat,
-          updateTo: updateTo,
-        },
-      });
+
+      }
+      const body = {
+        user_id: user_id,
+        updateWhat: updateWhat,
+        updateTo: updateTo,
+        id: id
+      }
+      const res = await axios.patch("/api/contacts/", body, config);
+      // Response object should include the row that was successfully updated, so
+      // to confirm contactsCache is synced.
       return res.data;
     } catch (err) {
       return {
@@ -148,22 +147,21 @@ export const updateContact = createAsyncThunk(
 export const createContact = createAsyncThunk(
   "contacts/createContact",
   async (createRequest, thunkAPI) => {
+    const { user_id, contactRows, contactValues, token } = createRequest;
+    const config = {
+      withCredentials: false,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    }
+    const body = {
+      user_id: user_id,
+      contactRows: contactRows,
+      contactValues: contactValues,
+    }
     try {
-      const { user_id, contactRows, contactValues, token } = createRequest;
-      const res = await axios.create({
-        method: "CREATE",
-        url: "/api/contacts/",
-        withCredentials: false,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: {
-          user_id,
-          contactRows,
-          contactValues,
-        },
-      });
+      const res = await axios.post("/api/contacts/", body, config);
       return res.data;
     } catch (err) {
       return {
@@ -178,7 +176,7 @@ const contactSlice = createSlice({
   name: "contact",
   initialState: {
     contactsCache: [],
-    contactResults: [],
+    searchResults: [],
     newContactStaging: false,
     contactInFocus: {},
     contactSelected: false,
@@ -191,9 +189,9 @@ const contactSlice = createSlice({
   },
   reducers: {
     updateContactInFocus: (state, action) => {
-      if (action.payload.empty) {
+      if (action.payload === "clear") {
         state.contactInFocus = {};
-        state.contactsLoading = true;
+        state.contactsLoading = false;
       } else {
         state.contactInFocus = action.payload;
         state.contactsLoading = false;
@@ -212,12 +210,6 @@ const contactSlice = createSlice({
     setNewContactStaging: (state, action) => {
       state.newContactStaging = action.payload;
     },
-    clearNewContactStaging: (state, action) => {
-      state.newContactStaging = {};
-    },
-    clearContactInFocus: (state, action) => {
-      state.contactInFocus = {};
-    },
     updateSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
@@ -232,10 +224,10 @@ const contactSlice = createSlice({
       for (let result = 0; result < searchResults.length; result++) {
         results.push(state.contactsCache[searchResults[result]]);
       }
-      state.contactResults = [...results];
+      state.searchResults = [...results];
     },
     getContactsPriority: (state, action) => {
-      state.contactResults = state.contactsCache.filter(
+      state.searchResults = state.contactsCache.filter(
         (element) => element.is_priority
       );
     },
@@ -243,7 +235,7 @@ const contactSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getUserContactsTable.fulfilled, (state, action) => {
       state.contactsCache = action.payload;
-      state.contactResults = action.payload;
+      state.searchResults = action.payload;
       // if there is anything else to do for first load, do it
       state.contactsLoading = false;
     });
@@ -252,20 +244,28 @@ const contactSlice = createSlice({
       state.contactsLoading = true;
     });
     builder.addCase(getUserContactsTable.rejected, (state, action) => {
-      // if state tracking initial load says already successful, return
+      // return payload is { msg: "error" }
+      // if state tracking setup cache says it was already set up once, return
       // a msg that refresh was unsuccessful
       // Otherwise return error based on backend response (no contacts,
       // no user by that name, etc) and send to toastify
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
-      // find the contact in the contactsCache, and delete it.
-      // set contact in focus to empty, and display toastify msg that delete was successful.
+      // since contactsCache is an array, I need the index of the contact,
+      // then I delete it using slice.
+      // i.e.
+      // action.payload is the
+      // state.contactInFocus = state.contactInFocus.splice(startingIndex, 1(for 1 element removing))
+      // toastify msg for successful DELETE
+      console.log(action.payload)
     });
     builder.addCase(deleteContact.pending, (state, action) => {
       // While it's pending deleted, load toastify message ("delete pending")
     });
     builder.addCase(deleteContact.rejected, (state, action) => {
       // display toastify (`delete failed, ${error}`) etc etc
+      // Delete failed, leave the state as is, but maybe log this somewhere
+      // for us to notice.
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
       // Once confirmed updated, set state entry to updated entry.
@@ -300,7 +300,6 @@ export default contactSlice.reducer;
 export const {
   updateContactInFocus,
   setNewContactStaging,
-  clearNewContactStaging,
   clearContactInFocus,
   getContactsSearch,
   getContactsPriority,

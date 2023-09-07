@@ -19,11 +19,11 @@ import ContactForm from "./ContactForm";
 import styles from "./ContactsPage.module.scss";
 
 export default function ContactsPage() {
+
   const { userId, getToken } = useAuth();
 
   const dispatch = useDispatch();
-  const searchResults = useSelector((state) => state.contact.contactResults);
-  const isSelected = useSelector((state) => state.contact.contactSelected);
+  const { searchResults, contactSelected } = useSelector((state) => state.contact);
 
   const [searchType, setSearchType] = useState("name");
   const [searchParams, setSearchParams] = useState({
@@ -70,19 +70,19 @@ export default function ContactsPage() {
     dispatch(setNewContactStaging(true));
     dispatch(
       updateContactInFocus({
-        first_name: "",
-        last_name: "",
-        company: "",
-        current_job_title: "",
-        location: "",
-        phone: "",
-        email: "",
-        linkedin: "",
-        twitter: "",
-        instagram: "",
-        other_social: "",
-        personal_site: "",
-        linked_job_opening: "",
+        first_name: null,
+        last_name: null,
+        company: null,
+        current_job_title: null,
+        location: null,
+        phone: null,
+        email: null,
+        linkedin: null,
+        twitter: null,
+        instagram: null,
+        other_social: null,
+        personal_site: null,
+        linked_job_opening: null,
       })
     );
     // then toggle the form visibility
@@ -173,17 +173,15 @@ export default function ContactsPage() {
               return (
                 // a business card.
                 <ContactCard
-                  image={""}
+                  image={""} // an open end here for profile pictures?
                   name={element.first_name + " " + element.last_name}
-                  contactInfo={{
-                    ...element,
-                  }}
+                  contactInfo={...element}
                   key={element.id}
                 />
               );
             })}
         </section>
-        {!!isSelected && <ContactForm />}
+        {!!contactSelected && <ContactForm />}
       </div>
     </div>
   );

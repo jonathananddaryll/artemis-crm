@@ -12,17 +12,16 @@ import {
 import styles from "./ContactCard.module.scss";
 
 export default function ContactCard(props) {
+
   const { image, name, contactInfo } = props;
+  
   const dispatch = useDispatch();
-  const searchResults = useSelector((state) => state.contact.contactResults);
-  console.log(contactInfo.linkedin === "", contactInfo.other_social === "");
+  const searchResults = useSelector((state) => state.contact.searchResults);
+
   function openCard() {
     dispatch(updateContactInFocus(contactInfo));
     dispatch(updateContactSelected());
   }
-  // create a context for toggling the form(edit form/in-depth form)
-  // send the action to redux along with the contact id so that
-  // redux can pass the contact id to the form
   return (
     <section className={styles.ContactCard}>
       <div className={styles.contactFrame}>
@@ -31,12 +30,12 @@ export default function ContactCard(props) {
         </h2>
         <section className={styles.cardHero}>
           <p className={styles.contactName}>{name}</p>
-          {contactInfo.title !== "" ? (
+          {contactInfo.title !== null || "" ? (
             <p className={styles.contactTitle}>{contactInfo.title}</p>
           ) : (
             ""
           )}
-          {contactInfo.location !== "" ? (
+          {contactInfo.location !== null || "" ? (
             <p className={styles.contactLocation}>{contactInfo.location}</p>
           ) : (
             ""
@@ -44,17 +43,17 @@ export default function ContactCard(props) {
         </section>
         <div className={styles.cardDetails}>
           <div className={styles.contactInfo}>
-            {contactInfo.phone !== "" ? (
+            {contactInfo.phone !== null || "" ? (
               <p className={styles.contactPhone}>{contactInfo.phone}</p>
             ) : (
               ""
             )}
-            {contactInfo.email !== "" ? (
+            {contactInfo.email !== null || "" ? (
               <p className={styles.contactEmail}>{contactInfo.email}</p>
             ) : (
               ""
             )}
-            {contactInfo.linkedin !== "" ? (
+            {contactInfo.linkedin !== null || "" ? (
               <button
                 type="button"
                 onClick={() => window.open(contactInfo.linkedin)}
@@ -65,7 +64,7 @@ export default function ContactCard(props) {
             ) : (
               ""
             )}
-            {contactInfo.other_social !== "" ? (
+            {contactInfo.other_social !== null || "" ? (
               <button
                 type="button"
                 onClick={() => window.open(contactInfo.other_social)}
