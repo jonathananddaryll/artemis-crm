@@ -50,12 +50,6 @@ router.post('/', jobInputValidator, validateRequest, async (req, res) => {
       board_id
     );
 
-    // This is mainly for the input validation and header validation
-    // Returns errors to use for Alert components later
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-
     try {
       client.query(query, (err, response) => {
         if (err) {

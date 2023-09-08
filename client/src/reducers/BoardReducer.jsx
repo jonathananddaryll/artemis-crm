@@ -337,8 +337,7 @@ const boardSlice = createSlice({
     selectedJob: null,
     toggleJobForm: false,
     selectedStatusToAdd: null,
-    toggleSelectedJobModal: false,
-    selectedJob: null
+    toggleSelectedJobModal: false
   },
   reducers: {
     handleToggleForm: (state, action) => {
