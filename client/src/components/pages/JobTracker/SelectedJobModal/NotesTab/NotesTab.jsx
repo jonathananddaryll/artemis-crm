@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import ReactQuill, { Quill } from 'react-quill';
+import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
-
-import styles from './NotesTab.module.scss';
-import ConfirmationPopUp from '../../../../layout/ConfirmationPopUp/ConfirmationPopUp';
-import timeSince from '../../../../../helpers/convertDate';
-
-import noNotes from '../../../../../assets/nonotes.svg';
-
-import ReactQuill, { Quill } from 'react-quill';
+import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
+import noNotes from '../../../../../assets/nonotes.svg';
+import styles from './NotesTab.module.scss';
 
 export default function NotesTab({
   createNote,
@@ -24,7 +21,6 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
-  // const [confirmationToggle, setConfirmationToggle] = useState(false);
 
   const [selectedNote, setSelectedNote] = useState({
     isActive: false,
@@ -218,12 +214,18 @@ export default function NotesTab({
           )}
         </div>
       )}
-      {selectedNote.isActive === true && (
-        <ConfirmationPopUp
-          popUpText={'Are you sure you want to delete this note?'}
-          setSelectedNote={setSelectedNote}
-          noteId={selectedNote.noteId}
-          handleDeleteNote={handleDeleteNote}
+
+      {selectedNote.isActive && (
+        <DeletePopup
+          handleDelete={() => handleDeleteNote(selectedNote.noteId)}
+          closePopUp={() =>
+            setSelectedNote({
+              isActive: false,
+              noteId: null
+            })
+          }
+          mainText={'Are you sure delete this note?'}
+          subText={'This action cannot be undone'}
         />
       )}
     </div>

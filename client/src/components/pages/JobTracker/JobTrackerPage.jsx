@@ -5,7 +5,8 @@ import {
   getjobswithBoardId,
   getBoard,
   changeBoard,
-  filterJob
+  filterJob,
+  deleteBoard
 } from '../../../reducers/BoardReducer';
 import { useNavigate } from 'react-router-dom';
 import styles from './JobTrackerPage.module.scss';
@@ -20,14 +21,11 @@ import BoardHeader from './BoardHeader/BoardHeader';
 
 import Loader from '../../layout/Loader/Loader';
 
-import SearchBar from './SearchBar/SearchBar';
-
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
 
 export default function JobTrackerPage() {
   const {
     selectedBoard,
-    jobsLoading,
     toggleJobForm,
     selectedBoardStatusCols,
     toggleSelectedJobModal,
@@ -92,11 +90,16 @@ export default function JobTrackerPage() {
     setLoadStart1(false);
   }
 
-  // Redirects the user when they try to go to board page that they do not own
   const navigate = useNavigate();
+  useEffect(() => {
+    // Redirects the user when they try to go to board page that they do not own
+    if (selectedBoard !== null && selectedBoard.user_id !== userId) {
+      navigate('/boards');
+    }
+  }, [selectedBoard]);
 
-  if (selectedBoard !== null && selectedBoard.user_id !== userId) {
-    // console.log('redirecting since you do not own the board');
+  // Redirects after board deletion
+  if (selectedBoard === null && selectedBoardStatusCols === null) {
     navigate('/boards');
   }
 
@@ -104,7 +107,11 @@ export default function JobTrackerPage() {
     <div className={styles.container}>
       {selectedBoardStatusCols !== null ? (
         <>
-          <BoardHeader title={selectedBoard.title} filterJob={filterJob} />
+          <BoardHeader
+            filterJob={filterJob}
+            selectedBoard={selectedBoard}
+            deleteBoard={deleteBoard}
+          />
           <div className={styles.kanbanBoardContainer}>
             <KanbanBoard
               setAddListToggle={setAddListToggle}

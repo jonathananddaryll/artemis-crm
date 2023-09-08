@@ -187,6 +187,28 @@ export const updateBoardName = createAsyncThunk(
   }
 );
 
+// Deletes a board
+export const deleteBoard = createAsyncThunk(
+  'job/deleteBoard',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${formData.token}`
+      },
+      data: formData
+    };
+
+    try {
+      const res = await axios.delete(`/api/boards/${formData.boardId}`, config);
+
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 // Gets all the job with boardId
 export const getjobswithBoardId = createAsyncThunk(
   'board/getJobswithBoardId',
@@ -282,15 +304,15 @@ export const updateJobInfo = createAsyncThunk(
 export const deleteJob = createAsyncThunk(
   'job/deleteJob',
   async (formData, thunkAPI) => {
-    const headers = {
-      Authorization: `Bearer ${formData.token}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${formData.token}`
+      },
+      data: formData
     };
 
     try {
-      const res = await axios.delete(`/api/jobs/${formData.jobId}`, {
-        data: { formData },
-        headers
-      });
+      const res = await axios.delete(`/api/jobs/${formData.jobId}`, config);
 
       return res.data;
     } catch (err) {
@@ -315,17 +337,12 @@ const boardSlice = createSlice({
     selectedJob: null,
     toggleJobForm: false,
     selectedStatusToAdd: null,
-    toggleSelectedJobModal: false,
-    toggleColumnUpdateForm: false,
-    selectedJob: null
+    toggleSelectedJobModal: false
   },
   reducers: {
     handleToggleForm: (state, action) => {
       state.toggleJobForm = action.payload[0];
       state.selectedStatusToAdd = action.payload[1];
-    },
-    handleColumnUpdateForm: (state, action) => {
-      state.toggleColumnUpdateForm = action.payload;
     },
     changeSelectedJob: (state, action) => {
       state.toggleSelectedJobModal = action.payload[0];
@@ -407,7 +424,11 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(createBoard.fulfilled, (state, action) => {
-      state.boards = [action.payload, ...state.boards];
+      state.boards = [
+        { ...action.payload, total_jobs_count: 0 },
+        ...state.boards
+      ];
+
       toast.success('Successfully Created a New Board');
     });
 
@@ -435,8 +456,6 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(deleteColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
-
       delete state.selectedBoardStatusCols[action.payload[1]];
       state.selectedBoard = action.payload[0];
 
@@ -454,11 +473,15 @@ const boardSlice = createSlice({
       const oldStatusName = action.payload[1];
 
       // Updates the key of selectedBoardStatusCols and the jobs inside it with the updated jobs
-      delete Object.assign(state.selectedBoardStatusCols, {
-        [newStatusName]: action.payload[0][1].rows
-      })[oldStatusName];
+      if (newStatusName !== oldStatusName) {
+        delete Object.assign(state.selectedBoardStatusCols, {
+          [newStatusName]: action.payload[0][1].rows
+        })[oldStatusName];
 
-      state.selectedBoard[columnName] = newStatusName;
+        state.selectedBoard[columnName] = newStatusName;
+      }
+
+      toast.success('Successfully Renamed a List');
     });
 
     // Display errors in updateBoardColumn with toastify
@@ -474,19 +497,45 @@ const boardSlice = createSlice({
       toast.success('Successfully Renamed a Board');
     });
 
-    // Display errors in addJob with toastify
+    // Display errors in updateBoardName with toastify
     builder.addCase(updateBoardName.rejected, (state, action) => {
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
+    // Remove the deleted board from state.boards and state.selectedBoard to null
+    builder.addCase(deleteBoard.fulfilled, (state, action) => {
+      state.selectedBoard = null;
+      state.selectedBoardStatusCols = null;
+      // state.selectedBoardLoading = true;
+
+      // Removes the deleted board from the state.boards
+      state.boards = state.boards.filter(
+        board => board.id !== action.payload.id
+      );
+
+      toast.success('Successfully Deleted a Board');
+    });
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
     builder.addCase(addJob.fulfilled, (state, action) => {
+      // Updates the Kanban Board
       state.selectedBoardStatusCols[action.payload.status] = [
         action.payload,
         ...state.selectedBoardStatusCols[action.payload.status]
       ];
-      // state.selectedBoardStatusCols[action.payload.status].push(action.payload);
-      // state.boards = [...state.boards, action.payload];
+
+      // Updates the jobs state
+      state.jobs = [action.payload, ...state.jobs];
+
+      // Updates total_jobs_count
+      state.selectedBoard.total_jobs_count++;
+
+      if (state.boards.length !== 0) {
+        const index = state.boards.findIndex(
+          board => board.id === action.payload.board_id
+        );
+        state.boards[index].total_jobs_count++;
+      }
+
       toast.success('Successfully Added a New Job');
     });
 
@@ -543,6 +592,7 @@ const boardSlice = createSlice({
       // Updates the job in the selectedBoardStatusCols to display the update in the kanban board
       state.selectedBoardStatusCols[action.payload.status][foundIndex] =
         tempSelectedJob;
+
       toast.success('Successfully Updated Job Info');
     });
 
@@ -552,13 +602,25 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
-      // filters jobs without the deleted job
-      const jobsWithoutDeletedJob = state.selectedBoardStatusCols[
-        action.payload.status
-      ].filter(job => job.id !== action.payload.id);
-
+      // Remove the deleted job from state.selectedBoardStatusCols
       state.selectedBoardStatusCols[action.payload.status] =
-        jobsWithoutDeletedJob;
+        state.selectedBoardStatusCols[action.payload.status].filter(
+          job => job.id !== action.payload.id
+        );
+
+      // Remove the deleted job from state.jobs
+      state.jobs = state.jobs.filter(job => job.id !== action.payload.id);
+
+      // Updates total_jobs_count
+      state.selectedBoard.total_jobs_count--;
+
+      if (state.boards.length !== 0) {
+        const index = state.boards.findIndex(
+          board => board.id === action.payload.board_id
+        );
+        state.boards[index].total_jobs_count--;
+      }
+
       toast.success('Successfully Deleted a Job');
     });
 
@@ -733,6 +795,5 @@ export const {
   addToStatus,
   changeSelectedJob,
   handleToggleForm,
-  handleColumnUpdateForm,
   filterJob
 } = boardSlice.actions;

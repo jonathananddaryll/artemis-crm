@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Job from './Job';
 import styled from 'styled-components';
-import {
-  handleToggleForm,
-  handleColumnUpdateForm
-} from '../../../../reducers/BoardReducer';
+import { handleToggleForm } from '../../../../reducers/BoardReducer';
 import { useDispatch } from 'react-redux';
 import StatusUpdateForm from './StatusUpdateForm/StatusUpdateForm';
+import DeletePopup from '../../../layout/DeletePopup/DeletePopup';
 import styles from './KanbanBoard.module.scss';
 
 const JobList = styled.div`
@@ -49,7 +47,13 @@ export default function ({
   selectedBoard,
   updateBoardColumn
 }) {
+  const [confirmationToggle, setConfirmationToggle] = useState(false);
   const dispatch = useDispatch();
+
+  const handleDelete = (colNum, statusTitle) => {
+    handleColumnDelete(colNum, statusTitle);
+    setConfirmationToggle(false);
+  };
 
   return (
     <div className={styles.columnContainer}>
@@ -64,7 +68,7 @@ export default function ({
             {jobs.length === 0 && (
               <button
                 className={styles.statusButton}
-                onClick={() => handleColumnDelete(columnNumber, title)}
+                onClick={() => setConfirmationToggle(true)}
               >
                 <i className='bi bi-trash3'></i>
               </button>
@@ -116,6 +120,15 @@ export default function ({
       >
         <i className='bi bi-plus-lg'></i> Add new job
       </button>
+      {/* Pop up Modal for Delete Confirmation */}
+      {confirmationToggle && (
+        <DeletePopup
+          handleDelete={() => handleDelete(columnNumber, title)}
+          closePopUp={() => setConfirmationToggle(false)}
+          mainText={`Are you sure delete '${title}' list?`}
+          subText={'This action cannot be undone'}
+        />
+      )}
     </div>
   );
 }

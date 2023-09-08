@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   removeFromStatus,
   addToStatus,
@@ -80,10 +80,9 @@ export default function KanbanBoard({
       columnStatusToDelete: columnStatus,
       selectedBoard_userId: selectedBoard.user_id,
       token: await session.getToken(),
-      col10Status:
-        selectedBoard.column10 !== null ? selectedBoard.column10 : null,
-      col9Status: selectedBoard.column9 !== null ? selectedBoard.column9 : null,
-      col8Status: selectedBoard.column8 !== null ? selectedBoard.column8 : null
+      col10Status: selectedBoard.column10 ?? null,
+      col9Status: selectedBoard.column9 ?? null,
+      col8Status: selectedBoard.column8 ?? null
     };
 
     dispatch(deleteColumn(formD));

@@ -89,6 +89,9 @@ export default function BoardsPage() {
                     <p key={board.id} className={styles.textBoardTitle}>
                       {board.title}
                     </p>
+                    <p className={styles.textJobsCount}>
+                      {board.total_jobs_count} Jobs
+                    </p>
                   </div>
 
                   <p className={styles.textBoardDateCreated}>

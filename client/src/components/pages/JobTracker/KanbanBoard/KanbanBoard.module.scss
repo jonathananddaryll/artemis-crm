@@ -182,12 +182,20 @@
 .textJobTitle {
   text-transform: capitalize;
   font-size: 1.5rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   // font-weight: 700;
 }
 
 .textCompany {
   text-transform: capitalize;
   font-size: 1.4rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   > i {
     font-size: 1.3rem;

@@ -3,7 +3,6 @@ import { useSession } from '@clerk/clerk-react';
 import { useDispatch } from 'react-redux';
 import styles from './JobInfoTab.module.scss';
 import Button from '../../../../layout/Button/Button';
-import TextEditor from '../../../../layout/TextEditor/TextEditor';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -18,9 +17,8 @@ export default function JobInfoTab({
     company: selectedJob.company,
     job_title: selectedJob.job_title,
     location: selectedJob.location,
-    rate_of_pay:
-      selectedJob.rate_of_pay !== null ? selectedJob.rate_of_pay : '',
-    job_url: selectedJob.job_url !== null ? selectedJob.job_url : ''
+    rate_of_pay: selectedJob.rate_of_pay ?? '',
+    job_url: selectedJob.job_url ?? ''
   });
 
   const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
@@ -35,9 +33,7 @@ export default function JobInfoTab({
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const [noteDesc, setNoteDesc] = useState(
-    selectedJob.description !== null ? selectedJob.description : ''
-  );
+  const [noteDesc, setNoteDesc] = useState(selectedJob.description ?? '');
 
   async function onSubmitHandler(e) {
     e.preventDefault();
