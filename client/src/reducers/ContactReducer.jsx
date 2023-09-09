@@ -39,63 +39,21 @@ export const getUserContactsTable = createAsyncThunk(
   }
 );
 
-// DEPRECATING
-// TODO: rewrite the backend api to not require the parameters from this async thunk, and then
-// TODO: all you have to do is rewrite the new getUserContactsTable to say getContacts, and that's it.
-// Search within all contacts for a user
-// export const getContactsSearch = createAsyncThunk(
-//   'contacts/getContactsSearch',
-//   async ( searchQuery, thunkAPI ) => {
-//     try {
-//         // Send user_id from clerk, along with first, last in req.body
-//         const params = {
-//           user_id: searchQuery.user_id,
-//           type: searchQuery.type
-//         }
-//         if(params.type === 'name'){
-//           params.first = searchQuery.first;
-//           params.last = searchQuery.last;
-//         }else if(params.type === 'init'){
-
-//         }else{
-//           params.strValue = searchQuery.strValue;
-//         }
-//         const config = {
-//           method: 'GET',
-//           url: '/api/contacts/search',
-//           withCredentials: false,
-//           params: {
-//             ...params
-//           },
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${searchQuery.token}`
-//           }
-//         }
-//         const res = state.
-//         console.log(res)
-//         return res.data;
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   }
-// );
-
 // DELETE a users contact
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (deleteRequest, thunkAPI) => {
-    const config = {
-      data: {deleteRequest},
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${deleteRequest.token}`,
-      }
+    const headers = {
+      Authorization: `Bearer ${deleteRequest.token}`,
     }
     try {
-      const res = await axios.delete("/api/contacts/", config);
+      const res = await axios.delete("/api/contacts/", {
+        data: { deleteRequest },
+        headers
+      });
       // response object should include the row that was deleted, used to
       // confirm that the delete occurred in the backend.
+      console.log(res)
       return res.data;
     } catch (err) {
       return {
@@ -147,30 +105,40 @@ export const updateContact = createAsyncThunk(
 export const createContact = createAsyncThunk(
   "contacts/createContact",
   async (createRequest, thunkAPI) => {
-    const { user_id, contactRows, contactValues, token } = createRequest;
-    const config = {
-      withCredentials: false,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    }
-    const body = {
-      user_id: user_id,
-      contactRows: contactRows,
-      contactValues: contactValues,
+    const headers = {
+        Authorization: `Bearer ${createRequest.token}`,
     }
     try {
-      const res = await axios.post("/api/contacts/", body, config);
-      return res.data;
+      const res = await axios.post("/api/contacts/", {
+        headers,
+        ...createRequest
+      });
+      return res;
     } catch (err) {
-      return {
-        msg: "create failed",
-        saved_form: [contactRows, contactValues],
-      };
+      return err
     }
   }
 );
+
+export const getRecentContacts = createAsyncThunk(
+  "contacts/getRecentContacts",
+  // What do I need for all recent comms? user_id, current time, notes with type === communications
+  // that also have a connected contact in their organizer.
+  async ( historyRequest, thunkAPI ) => {
+    const headers = {
+      Authorization: `Bearer ${historyRequest.token}`,
+    }
+    try{
+      const res = await axios.post("api/contacts/recents", {
+        headers,
+        ...historyRequest
+      });
+      return res;
+    }catch(err){
+      return err
+    }
+  }
+)
 
 const contactSlice = createSlice({
   name: "contact",
@@ -251,13 +219,9 @@ const contactSlice = createSlice({
       // no user by that name, etc) and send to toastify
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
-      // since contactsCache is an array, I need the index of the contact,
-      // then I delete it using slice.
-      // i.e.
-      // action.payload is the
-      // state.contactInFocus = state.contactInFocus.splice(startingIndex, 1(for 1 element removing))
-      // toastify msg for successful DELETE
-      console.log(action.payload)
+      state.contactsCache = state.contactsCache.filter(element => element.id !== state.contactInFocus.id)
+      state.contactSelected = false
+      // toastify message for delete success
     });
     builder.addCase(deleteContact.pending, (state, action) => {
       // While it's pending deleted, load toastify message ("delete pending")
@@ -272,6 +236,11 @@ const contactSlice = createSlice({
       // If update fails, call getContacts and refresh the state with a clean start.
       // have redux wait for a successful response to:
       state.contactInFocus = action.payload;
+      for(let each = 0; each < state.contactsCache.length; each++){
+        if(state.contactsCache[each].id === state.contactInFocus.id){
+          state.contactsCache[each] = state.contactInFocus
+        }
+      }
     });
     builder.addCase(updateContact.pending, (state, action) => {
       // While updating, make sure components render with updated info.
@@ -279,21 +248,31 @@ const contactSlice = createSlice({
     builder.addCase(updateContact.rejected, (state, action) => {
       // display toastify (`update was unsuccessful, ${error}`)
       // do not reset the form or reload the component, just let the user
-      // do that if they want to. Keep the newContactStaging value in handy
+      // do that if they want to. Keep the newContactStaging value in hand.
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
       // add newContactStaging to contactsCache
       // display toastify msg (`creation successful`)
       // toggle 'edit mode' off
+      state.newContactStaging = false;
+      state.contactsCache.push(contactInFocus);
+      state.contactSelected = false;
+      state.getContactsSearch();
     });
     builder.addCase(createContact.pending, (state, action) => {
-      // display loading animation?
+      // display loading animation? toastify message
     });
     builder.addCase(createContact.rejected, (state, action) => {
       // display toastify msg (`creation unsuccessful`)
-      // let use reset or leave the page
+      // let user reset or leave the page
+      state.contactInFocus = {
+        first_name: "new one failed",
+        last_name: "here too",
+        id: 1,
+      }
+      console.log(action.payload)
     });
-  },
+  },  
 });
 
 export default contactSlice.reducer;

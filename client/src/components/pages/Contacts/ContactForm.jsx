@@ -1,80 +1,81 @@
 import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
+import { useAuth, useSession } from "@clerk/clerk-react";
 
 import {
   deleteContact,
   updateContact,
+  createContact,
   updateContactInFocus,
   updateContactSelected,
   setNewContactStaging,
 } from "../../../reducers/ContactReducer";
 
-import { useAuth } from "@clerk/clerk-react";
-
 import Dropdown from "./Dropdown";
 import styles from "./ContactForm.module.scss";
 
 export default function ContactForm() {
-  const { userId, getToken } = useAuth();
+
+  const { session } = useSession();
+  const { userId } = useAuth();
   const dispatch = useDispatch();
 
   const { newContactStaging, contactInFocus } = useSelector(
     (state) => state.contact
   );
 
-  // When disallowing edits on a form, I need to tell the difference between a new contact,
-  // and updating an already existing contact, as the form needs to be changed.
-  // There needs to be two versions of style for the inputs: one is with editing allowed, one without.
-  // toggling isEditing should determine whether the form is editable or not.
-  // However, what about what a new form is doing?
+  const formEditOnLoad = newContactStaging ? true : false;
 
-  const [isEditing, setIsEditing] = useState(newContactStaging ? true: false);
+  const [isEditing, setIsEditing] = useState(formEditOnLoad);
   const [updatedColumns, setUpdatedColumns] = useState([]);
   const [contactForm, setContactForm] = useState(contactInFocus);
 
   async function submitUpdate(e) {
+    e.preventDefault();
     let updatedValues = [];
     // only the fields that have been changed will be added to the query.
     // can't tell the difference between multiple edits resulting in the original
     // string, but it's an easy optimization.
     if (updatedColumns.length > 0) {
       updatedColumns.map((element) => updatedValues.push(contactForm[element]));
-      const updateForm = {
-        user_id: userId,
-        updateWhat: updatedColumns,
-        updateTo: updatedValues,
-        token: await getToken(),
-        id: contactForm.id,
-      };
-      dispatch(updateContact(updateForm));
-      // toggle the form visibility
+      if (newContactStaging) {
+        const createForm = {
+          user_id: userId,
+          names: updatedColumns,
+          values: updatedValues,
+          token: await session.getToken(),
+        };
+        dispatch(createContact(createForm));
+      } else {
+        const updateForm = {
+          user_id: userId,
+          updateWhat: updatedColumns,
+          updateTo: updatedValues,
+          token: await session.getToken(),
+          id: contactForm.id,
+        };
+        dispatch(updateContact(updateForm));
+      }
       setIsEditing(false);
-      // show an updating/in progress toastify msg
-    } else {
-      // show toastify msg that form has no updates to make? Do nothing?
     }
   }
 
   function onChangeHandler(e) {
-    const target = e.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    setContactForm({
-      ...contactForm,
-      [name]: value,
-    })
-    // track which inputs have had changes made to them to avoid unnecessary work
+    const { name, value, type, checked } = e.target;
+    setContactForm((prevForm) => ({
+      ...prevForm,
+      [name]: type === "checkbox" ? checked : value,
+    }));
     if (!updatedColumns.includes(name)) {
-      setUpdatedColumns((oldArray) => {
-        return [...oldArray, name];
-      });
+      setUpdatedColumns((prevColumns) => [...prevColumns, name]);
     }
   }
 
   function exitForm(event) {
-    if(event.target.className.includes("wrapper")){
+    if (event.target.className.includes("wrapper")) {
       if (!updatedColumns.length) {
         dispatch(updateContactInFocus({}));
         setIsEditing(false);
@@ -82,29 +83,32 @@ export default function ContactForm() {
       } else {
         // show the prompt, let the prompt send the same actions if user decides to
         // "You have unsaved changes, etc etc"
-        dispatch(updateContactInFocus({}))
-        setIsEditing(false)
-        dispatch(updateContactSelected())
+        dispatch(updateContactInFocus({}));
+        setIsEditing(false);
+        dispatch(updateContactSelected());
       }
     }
   }
 
-  async function deleteContact() {
-    // show user the prompt to confirm delete, then let it handle the calls to
-    // Toggle Confirm form visibility first, then call this function from there
-    const token = await getToken();
-    dispatch(deleteContact({
+  const deleteContactStart = async () => {
+    if (!contactForm.id) {
+      // it's a new contact, just clear the form
+      dispatch(updateContactInFocus({}));
+      setContactForm(contactInFocus);
+    } else {
+      // it's a real contact, delete it
+      const formData = {
         user_id: userId,
         id: contactForm.id,
-        token: token
-    }))
-  }
+        token: await session.getToken(),
+      };
+      dispatch(deleteContact(formData));
+    }
+  };
 
-  useEffect(() => {
-    console.log("rerender of form ")
-  }, [contactInFocus])
+  useEffect(() => {}, [contactInFocus, isEditing]);
   return (
-    <div className={styles.wrapper} onClick={e => exitForm(e)}>
+    <div className={styles.wrapper} onClick={(e) => exitForm(e)}>
       <form name="contactForm" className={styles.formContainer}>
         <section className={styles.title}>
           <label className={styles.formLabels}>
@@ -160,12 +164,12 @@ export default function ContactForm() {
             ></input>
           </label>
           <label className={styles.formLabels}>
-            location
+            city
             <input
               type="text"
-              name="location"
-              value={contactForm.location ?? ""}
-              placeholder="location"
+              name="city"
+              value={contactForm.city ?? ""}
+              placeholder="city"
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -289,7 +293,7 @@ export default function ContactForm() {
         </section>
         <section className={styles.manage}>
           <button
-            className={newContactStaging ? styles.notEditable : styles.editable}
+            className={isEditing ? styles.notEditable : styles.editable}
             type="button"
             onClick={() => setIsEditing(true)}
           >
@@ -298,7 +302,7 @@ export default function ContactForm() {
           <button
             className={isEditing ? styles.editsMade : styles.editsSaved}
             type="button"
-            onClick={() => submitUpdate()}
+            onClick={submitUpdate}
           >
             Save
           </button>
@@ -307,7 +311,7 @@ export default function ContactForm() {
               !contactForm.id ? styles.createInProgress : styles.deleteButton
             }
             type="button"
-            onClick={() => deleteContact()}
+            onClick={deleteContactStart}
           >
             Delete
           </button>

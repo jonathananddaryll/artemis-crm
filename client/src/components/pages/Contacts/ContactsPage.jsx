@@ -6,6 +6,7 @@ import {
   getContactsSearch,
   getUserContactsTable,
   getContactsPriority,
+  getRecentContacts,
   updateSearchQuery,
   updateContactInFocus,
   updateContactSelected,
@@ -23,7 +24,7 @@ export default function ContactsPage() {
   const { userId, getToken } = useAuth();
 
   const dispatch = useDispatch();
-  const { searchResults, contactSelected } = useSelector((state) => state.contact);
+  const { searchResults, contactSelected, contactsCache } = useSelector((state) => state.contact);
 
   const [searchType, setSearchType] = useState("name");
   const [searchParams, setSearchParams] = useState({
@@ -58,7 +59,7 @@ export default function ContactsPage() {
   function searchSubmit(e) {
     const validated = validateSearchParams(searchParams);
     if (!validated) {
-      console.log("please enter text to search with");
+      console.log("please enter valid text to search with");
     } else {
       dispatch(updateSearchQuery(validated));
       dispatch(getContactsSearch(validated));
@@ -74,7 +75,7 @@ export default function ContactsPage() {
         last_name: null,
         company: null,
         current_job_title: null,
-        location: null,
+        city: null,
         phone: null,
         email: null,
         linkedin: null,
@@ -101,8 +102,8 @@ export default function ContactsPage() {
     // an event type of '{tbd}', pull the contact for that linked job on the event
     const token = await getToken();
     // TODO: the query for getContactHistory has not been built yet.
-    // TODO: maybe also need custom html for <no results found> because an empty page looks bad.
-    dispatch(getContactHistory(userId, token));
+    // TODO: maybe also need custom html page for <no results found> because just empty results looks bad.
+    dispatch(getRecentContacts(userId, token));
   }
 
   useEffect(() => {
@@ -112,6 +113,9 @@ export default function ContactsPage() {
     };
     grabSessionToken().catch(console.error);
   }, [dispatch]);
+  useEffect(() => {
+
+  }, [contactsCache])
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
@@ -162,7 +166,7 @@ export default function ContactsPage() {
             ></i>
           </button>
           <Dropdown
-            items={["name", "company", "location"]}
+            items={["name", "company", "city"]}
             header={"options"}
             setSearchType={setSearchType}
           />
