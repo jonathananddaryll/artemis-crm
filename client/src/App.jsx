@@ -14,7 +14,11 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
+<<<<<<< Updated upstream
 import SideBar from './components/layout/SideBar/Sidebar';
+=======
+import SideBar from './components/layout/SideBar/SideBar';
+>>>>>>> Stashed changes
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
@@ -63,6 +67,7 @@ function App() {
                   </>
                 }
               ></Route>
+<<<<<<< Updated upstream
 
             <Route
               path='/boards/:board_id/jobs'
@@ -90,6 +95,31 @@ function App() {
                 </>
               }
               ></Route>
+=======
+              <Route
+                path='/boards/:board_id/jobs'
+                element={
+                  <>
+                    <SignedIn>
+                      <JobTrackerPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              ></Route>
+              <Route path='/contacts' element={<Contacts />}>
+              <>
+              <SignedIn>
+                < ContactsPage />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn></RedirectToSignIn>
+              </SignedOut>
+              </>
+            </Route>
+>>>>>>> Stashed changes
           </Routes>
           </div>
         </ClerkProvider>

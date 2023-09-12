@@ -6,11 +6,6 @@ import axios from "axios";
 
 // ASYNC thunks
 
-// TODO: Async thunks for the client side contacts db
-// Create, Read, Delete are easy,
-// Update is the same, only I need a function that passes the whole new contact
-// object. Immer will abstract this for me if I do it in redux.
-
 export const getUserContactsTable = createAsyncThunk(
   "contacts/getUserContactsTable",
   // received idAndToken object that has key:value pair user_id(clerk) and session token(clerk)
@@ -32,7 +27,6 @@ export const getUserContactsTable = createAsyncThunk(
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
     } catch (error) {
-      console.log(error);
       // If error, do I need different handling for refresh or initialization? no, this should be handled in redux.
       return { msg: "server error" };
     }
@@ -53,7 +47,6 @@ export const deleteContact = createAsyncThunk(
       });
       // response object should include the row that was deleted, used to
       // confirm that the delete occurred in the backend.
-      console.log(res)
       return res.data;
     } catch (err) {
       return {
@@ -106,6 +99,7 @@ export const createContact = createAsyncThunk(
   "contacts/createContact",
   async (createRequest, thunkAPI) => {
     const headers = {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${createRequest.token}`,
     }
     try {
@@ -126,6 +120,7 @@ export const getRecentContacts = createAsyncThunk(
   // that also have a connected contact in their organizer.
   async ( historyRequest, thunkAPI ) => {
     const headers = {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${historyRequest.token}`,
     }
     try{
@@ -265,12 +260,6 @@ const contactSlice = createSlice({
     builder.addCase(createContact.rejected, (state, action) => {
       // display toastify msg (`creation unsuccessful`)
       // let user reset or leave the page
-      state.contactInFocus = {
-        first_name: "new one failed",
-        last_name: "here too",
-        id: 1,
-      }
-      console.log(action.payload)
     });
   },  
 });
