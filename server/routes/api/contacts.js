@@ -1,7 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const { Client, config } = require("../../config/db");
+
 const format = require("pg-format");
+const { check, validationResult } = require('express-validator');
+
+const {
+  myRequestHeaders,
+  validateRequest
+} = require('../../middlewares/validators');
+
+const { decodeToken } = require('../../middlewares/decodeToken');
 
 // TODO:
 // 1) Integrate backend auth (grab user_id from clerk frontend token)
