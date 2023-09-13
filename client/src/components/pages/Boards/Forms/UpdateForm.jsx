@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { updateBoardName } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
-
-import styles from './UpdateForm.module.scss';
 import Button from '../../../layout/Button/Button';
+import styles from './UpdateForm.module.scss';
 
 export default function UpdateForm({ board, handleToggleUpdateForm }) {
   const [newTitle, setNewTitle] = useState(board.title);

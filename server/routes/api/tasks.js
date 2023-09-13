@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
 const format = require('pg-format');
 const { Client, config } = require('../../config/db');
-// const clerk = require('@clerk/clerk-sdk-node');
 const {
   myRequestHeaders,
   validateRequest,

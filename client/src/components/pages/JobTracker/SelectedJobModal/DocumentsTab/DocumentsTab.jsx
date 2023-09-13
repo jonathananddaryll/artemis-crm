@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './DocumentsTab.module.scss';
 import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noDocuments from '../../../../../assets/nofiles.svg';
+import styles from './DocumentsTab.module.scss';
 
 export default function DocumentsTab() {
   return (

@@ -1,9 +1,8 @@
 import React from 'react';
-import styles from './Timeline.module.scss';
-import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 import timeSince from '../../../../../helpers/convertDate';
-
+import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 import Loader from '../../../../layout/Loader/Loader';
+import styles from './Timeline.module.scss';
 
 export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
   return (

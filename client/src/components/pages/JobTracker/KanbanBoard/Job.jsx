@@ -1,13 +1,10 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { changeSelectedJob } from '../../../../reducers/BoardReducer';
 import timeSince from '../../../../helpers/convertDate';
 import styles from './KanbanBoard.module.scss';
-import { useDispatch } from 'react-redux';
-import {
-  handleToggleForm,
-  changeSelectedJob
-} from '../../../../reducers/BoardReducer';
 
 const Container = styled.div`
   border-radius: 10px;

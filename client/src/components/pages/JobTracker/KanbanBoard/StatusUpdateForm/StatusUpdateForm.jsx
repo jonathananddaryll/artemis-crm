@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
-
 import Button from '../../../../layout/Button/Button';
-
 import styles from './StatusUpdateForm.module.scss';
 
 export default function StatusUpdateForm({

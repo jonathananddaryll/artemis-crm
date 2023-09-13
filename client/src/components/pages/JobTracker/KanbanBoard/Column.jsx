@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import Job from './Job';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { handleToggleForm } from '../../../../reducers/BoardReducer';
-import { useDispatch } from 'react-redux';
+import Job from './Job';
 import StatusUpdateForm from './StatusUpdateForm/StatusUpdateForm';
 import DeletePopup from '../../../layout/DeletePopup/DeletePopup';
 import styles from './KanbanBoard.module.scss';

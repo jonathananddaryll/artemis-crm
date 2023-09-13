@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
-import ReactQuill, { Quill } from 'react-quill';
-import timeSince from '../../../../../helpers/convertDate';
-import Button from '../../../../layout/Button/Button';
-import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
-import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
+import timeSince from '../../../../../helpers/convertDate';
+import Button from '../../../../layout/Button/Button';
+import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noNotes from '../../../../../assets/nonotes.svg';
 import styles from './NotesTab.module.scss';
 

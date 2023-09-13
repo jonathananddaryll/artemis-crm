@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import {
   getjobswithBoardId,
   getBoard,
@@ -8,20 +10,14 @@ import {
   filterJob,
   deleteBoard
 } from '../../../reducers/BoardReducer';
-import { useNavigate } from 'react-router-dom';
-import styles from './JobTrackerPage.module.scss';
-
-import { useAuth } from '@clerk/clerk-react';
-
 import KanbanBoard from './KanbanBoard/KanbanBoard';
 import AddListForm from './AddListForm/AddListForm';
 import NewJobForm from './NewJobForm/NewJobForm';
 import SelectedJobModal from './SelectedJobModal/SelectedJobModal';
 import BoardHeader from './BoardHeader/BoardHeader';
-
 import Loader from '../../layout/Loader/Loader';
-
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
+import styles from './JobTrackerPage.module.scss';
 
 export default function JobTrackerPage() {
   const {

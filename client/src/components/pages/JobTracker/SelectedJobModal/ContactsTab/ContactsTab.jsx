@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styles from './ContactsTab.module.scss';
 import Button from '../../../../layout/Button/Button';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noContacts from '../../../../../assets/nocontacts.svg';
+import styles from './ContactsTab.module.scss';
 
 export default function ContactsTab() {
   return (

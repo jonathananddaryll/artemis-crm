@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './SideBar.module.scss';
+import { NavLink } from 'react-router-dom';
 import {
   useClerk,
   UserButton,
@@ -7,10 +7,8 @@ import {
   useUser,
   SignOutButton
 } from '@clerk/clerk-react';
-
 import DemoSignIn from './DemoSignIn';
-
-import { NavLink } from 'react-router-dom';
+import styles from './SideBar.module.scss';
 
 export default function SideBar() {
   const { isLoaded } = useAuth();
