@@ -70,16 +70,6 @@ const taskInputValidator = [
 // 3. Tasks: update
 // 4. Interview: Create and Update
 
-// export const myRequestHeaders1 = [
-//   header('authorization')
-//     .exists({ checkFalsy: true })
-//     .withMessage('Missing Authorization Header') // you can specify the message to show if a validation has failed
-//     .bail() // not necessary, but it stops execution if previous validation failed
-//     //you can chain different validation rules
-//     .contains('Bearer')
-//     .withMessage('Authorization Token is not Bearer')
-// ];
-
 function validateRequest(req, res, next) {
   const validationErrors = validationResult(req);
   const errorMessages = [];
