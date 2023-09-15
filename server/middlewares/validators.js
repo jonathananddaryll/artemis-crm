@@ -32,6 +32,61 @@ const myRequestHeaders = [
 //     .withMessage('Authorization Token is not Bearer')
 // ];
 
+
+const contactInputValidator = [
+  ...myRequestHeaders,
+  check('first_name', 'Please enter at least one letter for the first name')
+    .not()
+    .isEmpty()
+    .isLength({ min: 1 })
+    .escape(),
+  check('last_name', 'Please enter at least one letter for the last name')
+    .not()
+    .isEmpty()
+    .isLength({ min: 1 }),
+  check('company', 'Please use letters or numbers only')
+    .optional()
+    .isAlphanumeric()
+    .isLength({ min: 1 }),
+  check('current_job_title', 'Please use letters or numbers only')
+    .optional()
+    .isAlphanumeric()
+    .isLength({ min: 1 }),
+  check('city', 'Please use letters or numbers only')
+    .optional()
+    .isAlphanumeric()
+    .isLength({ min: 1 }),
+  check('is_priority', 'This is only designed for true/false values')
+    .optional()
+    .isBoolean(),
+  check('phone', 'Please use numbers and ( ) - + characters only')
+    .optional()
+    .escape()
+    .not()
+    .isAlpha(),
+  check('email', 'Please enter a valid email address')
+    .optional()
+    .isEmail(),
+  check('linkedin', 'Please enter a valid URL')
+    .optional()
+    .isURL(),
+  check('twitter', 'Please enter a valid URL')
+    .optional()
+    .isURL(),
+  check('instagram', 'Please enter a valid URL')
+    .optional()
+    .isURL(),
+  check('other_social', 'Please enter a valid URL')
+    .optional()
+    .isURL(),
+  check('personal_site', 'Please enter a valid URL')
+    .optional()
+    .isURL(),
+  check('linked_job_opening', 'Please provide a valid job ID number')
+    .optional()
+    .isNumeric(),
+];
+
 function validateRequest(req, res, next) {
   const validationErrors = validationResult(req);
   const errorMessages = [];

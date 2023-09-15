@@ -20,12 +20,15 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts table
 // @ACCESS Private
-router.get("/", async (req, res) => {
+router.get("/", myRequestHeaders, async (req, res) => {
+  const decodedToken = decodeToken(req.headers.authorization);
+  const user_id = decodedToken.userId;
+
+  let queryStarter = "SELECT * FROM %I WHERE user_id = %L";
+  const query = format(queryStarter, "contact", user_id);
+
+  const client = new Client(config);
   try {
-    const { user_id, token } = req.query;
-    let queryStarter = "SELECT * FROM %I WHERE user_id = %L";
-    const query = format(queryStarter, "contact", user_id);
-    const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
@@ -44,7 +47,12 @@ router.get("/", async (req, res) => {
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
 router.post("/", async (req, res) => {
-  const { user_id, token, names, values } = req.body;
+  console.log(req.headers.authorization, req)
+  // myRequestHeaders, validateRequest, 
+  const decodedToken = decodeToken(req.headers.authorization);
+  const user_id = decodedToken.userId;
+
+  const { names, values } = req.body;
   const query = format(
     `INSERT INTO %I(user_id, ${names.join(", ")}) VALUES('${user_id}', %L) RETURNING *;`,
     "contact",
@@ -74,10 +82,12 @@ router.post("/", async (req, res) => {
 // @ROUTE  PATCH /api/contacts/
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
-router.patch("/", async (req, res) => {
+router.patch("/", myRequestHeaders, validateRequest,  async (req, res) => {
   try {
+    const decodedToken = decodeToken(req.headers.authorization);
+    const user_id = decodedToken.userId;
 
-    const { updateWhat, updateTo, user_id, id } = req.body;
+    const { updateWhat, updateTo, id } = req.body;
     // merge two arrays strings, together throwing in the formatting for SQL updates for updating
     // a type STRING column to a new value.
     const setUpdate = updateWhat.map((element, index, array) => {
@@ -92,7 +102,7 @@ router.patch("/", async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         console.error(err);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: err });
       }
       res.status(200).json(response.rows);
       client.end();
@@ -106,8 +116,10 @@ router.patch("/", async (req, res) => {
 // @ROUTE  DELETE /api/contacts/
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
-router.delete("/", async (req, res) => {
-  const { user_id, id, token } = req.body.deleteRequest;
+router.delete("/", myRequestHeaders,  async (req, res) => {
+  const decodedToken = decodeToken(req.headers.authorization);
+  const user_id = decodedToken.userId;
+  const { id } = req.body.deleteRequest;
   const query = `DELETE FROM contact WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
   try {
     // Receives the typical user_id, the id of the contact. Verifies ownership,
