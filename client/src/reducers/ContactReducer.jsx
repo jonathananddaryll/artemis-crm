@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import SearchArray from "../helpers/searchArray";
+import { toast } from 'react-toastify';
 import axios from "axios";
+
+import SearchArray from "../helpers/searchArray";
 
 // State for contact organizer:
 
@@ -20,15 +22,16 @@ export const getUserContactsTable = createAsyncThunk(
       },
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${idAndToken.token}`,
+        "authorization": `Bearer ${idAndToken.token}`,
       },
     };
     try {
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
-    } catch (error) {
+    } catch (err) {
       // If error, do I need different handling for refresh or initialization? no, this should be handled in redux.
-      return { msg: "server error" };
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -38,7 +41,7 @@ export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (deleteRequest, thunkAPI) => {
     const headers = {
-      Authorization: `Bearer ${deleteRequest.token}`,
+      "authorization": `Bearer ${deleteRequest.token}`,
     }
     try {
       const res = await axios.delete("/api/contacts/", {
@@ -49,10 +52,8 @@ export const deleteContact = createAsyncThunk(
       // confirm that the delete occurred in the backend.
       return res.data;
     } catch (err) {
-      return {
-        msg: "delete failed",
-        id: id,
-      };
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -70,7 +71,7 @@ export const updateContact = createAsyncThunk(
         withCredentials: false,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "authorization": `Bearer ${token}`,
         },
 
       }
@@ -85,11 +86,8 @@ export const updateContact = createAsyncThunk(
       // to confirm contactsCache is synced.
       return res.data;
     } catch (err) {
-      return {
-        msg: "update failed",
-        id: updateWhat,
-        saved_form: updateTo,
-      };
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -98,30 +96,31 @@ export const updateContact = createAsyncThunk(
 export const createContact = createAsyncThunk(
   "contacts/createContact",
   async (createRequest, thunkAPI) => {
-    const headers = {
+    const config = {
+      headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${createRequest.token}`,
+        "authorization": `Bearer ${createRequest.token}`,
+      }
     }
     try {
-      const res = await axios.post("/api/contacts/", {
-        headers,
-        ...createRequest
-      });
+      const res = await axios.post("/api/contacts/", createRequest, config);
       return res;
     } catch (err) {
-      return err
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
 
 export const getRecentContacts = createAsyncThunk(
   "contacts/getRecentContacts",
-  // What do I need for all recent comms? user_id, current time, notes with type === communications
-  // that also have a connected contact in their organizer.
+  // user_id, current time, notes with type === communications
+  // filter out all notes by the associate job, removing any jobs that have no
+  // contact linked.
   async ( historyRequest, thunkAPI ) => {
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${historyRequest.token}`,
+      "authorization": `Bearer ${historyRequest.token}`,
     }
     try{
       const res = await axios.post("api/contacts/recents", {
@@ -130,7 +129,8 @@ export const getRecentContacts = createAsyncThunk(
       });
       return res;
     }catch(err){
-      return err
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 )
@@ -149,6 +149,8 @@ const contactSlice = createSlice({
       strValue: "",
     },
     searchFilters: [],
+    printout: {},
+    toastTransition: "",
   },
   reducers: {
     updateContactInFocus: (state, action) => {
@@ -199,32 +201,47 @@ const contactSlice = createSlice({
     builder.addCase(getUserContactsTable.fulfilled, (state, action) => {
       state.contactsCache = action.payload;
       state.searchResults = action.payload;
-      // if there is anything else to do for first load, do it
       state.contactsLoading = false;
+      toast.dismiss("getUserContactsTable");
     });
     builder.addCase(getUserContactsTable.pending, (state, action) => {
-      // loading or searching animation
       state.contactsLoading = true;
+      toast.loading("loading contacts...", {
+        toastId: "getUserContactsTable"
+      } )
     });
     builder.addCase(getUserContactsTable.rejected, (state, action) => {
-      // return payload is { msg: "error" }
-      // if state tracking setup cache says it was already set up once, return
-      // a msg that refresh was unsuccessful
-      // Otherwise return error based on backend response (no contacts,
-      // no user by that name, etc) and send to toastify
+      toast.update("getUserContactsTable", { 
+        render: "Your contacts are temporarily unavailable, please try again", 
+        type: toast.TYPE.ERROR, 
+        isLoading: false })
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
       state.contactsCache = state.contactsCache.filter(element => element.id !== state.contactInFocus.id)
       state.contactSelected = false
-      // toastify message for delete success
+      toast.update("deleteContact", { 
+        render: "delete successful", 
+        type: toast.TYPE.SUCCESS, 
+        isLoading: false,
+        autoClose: 4000
+       })
     });
     builder.addCase(deleteContact.pending, (state, action) => {
       // While it's pending deleted, load toastify message ("delete pending")
+      toast.loading("deleting...", { 
+        toastId: "deleteContact" 
+      })
     });
     builder.addCase(deleteContact.rejected, (state, action) => {
       // display toastify (`delete failed, ${error}`) etc etc
       // Delete failed, leave the state as is, but maybe log this somewhere
       // for us to notice.
+      toast.update("deleteContact", { 
+        render: "there was a problem deleting this contact", 
+        type: toast.TYPE.ERROR, 
+        isLoading: false })
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
       // Once confirmed updated, set state entry to updated entry.
@@ -236,30 +253,41 @@ const contactSlice = createSlice({
           state.contactsCache[each] = state.contactInFocus
         }
       }
+      toast.dismiss("updateContact")
     });
     builder.addCase(updateContact.pending, (state, action) => {
       // While updating, make sure components render with updated info.
+      toast.loading("updating contact...", { 
+        toastId: "updateContact" 
+      })
     });
     builder.addCase(updateContact.rejected, (state, action) => {
-      // display toastify (`update was unsuccessful, ${error}`)
-      // do not reset the form or reload the component, just let the user
-      // do that if they want to. Keep the newContactStaging value in hand.
+      toast.update("updateContact", { 
+        render: "update unsuccessful, please try again", 
+        isLoading: false 
+      })
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
-      // add newContactStaging to contactsCache
-      // display toastify msg (`creation successful`)
-      // toggle 'edit mode' off
       state.newContactStaging = false;
       state.contactsCache.push(contactInFocus);
       state.contactSelected = false;
+      state.printout = action
       state.getContactsSearch();
+      toast.dismiss("createContact")
     });
     builder.addCase(createContact.pending, (state, action) => {
-      // display loading animation? toastify message
+      toast.loading("adding to contacts...", { 
+        toastId: "createContact" 
+      })
     });
     builder.addCase(createContact.rejected, (state, action) => {
-      // display toastify msg (`creation unsuccessful`)
-      // let user reset or leave the page
+      console.log(action.payload)
+      toast.update("createContact", { 
+        render: "there was a problem adding to contacts, please try again", 
+        isLoading: false 
+      })
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
     });
   },  
 });

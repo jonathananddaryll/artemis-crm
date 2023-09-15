@@ -179,7 +179,7 @@ export default function ContactsPage() {
                 <ContactCard
                   image={""} // an open end here for profile pictures?
                   name={element.first_name + " " + element.last_name}
-                  contactInfo={...element}
+                  contactInfo={element}
                   key={element.id}
                 />
               );

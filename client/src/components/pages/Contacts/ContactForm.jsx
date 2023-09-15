@@ -48,7 +48,9 @@ export default function ContactForm() {
           values: updatedValues,
           token: await session.getToken(),
         };
+        console.log(createForm)
         dispatch(createContact(createForm));
+        dispatch(updateContactInFocus(createForm))
       } else {
         const updateForm = {
           user_id: userId,
