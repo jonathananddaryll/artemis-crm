@@ -20,11 +20,10 @@ import ContactForm from "./ContactForm";
 import styles from "./ContactsPage.module.scss";
 
 export default function ContactsPage() {
-
   const { userId, getToken } = useAuth();
 
   const dispatch = useDispatch();
-  const { searchResults, contactSelected, contactsCache } = useSelector((state) => state.contact);
+  const { searchResults, contactSelected, contactsCache, contactInFocus } = useSelector((state) => state.contact);
 
   const [searchType, setSearchType] = useState("name");
   const [searchParams, setSearchParams] = useState({
@@ -62,7 +61,7 @@ export default function ContactsPage() {
       console.log("please enter valid text to search with");
     } else {
       dispatch(updateSearchQuery(validated));
-      dispatch(getContactsSearch(validated));
+      dispatch(getContactsSearch());
     }
   }
 
@@ -114,8 +113,8 @@ export default function ContactsPage() {
     grabSessionToken().catch(console.error);
   }, [dispatch]);
   useEffect(() => {
-
-  }, [contactsCache])
+    
+  }, [contactsCache, searchResults, contactInFocus])
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>

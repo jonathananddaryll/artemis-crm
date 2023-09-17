@@ -21,7 +21,7 @@ export default function SearchArray( searchString, searchArray, searchType ) {
   }).join("")
   
   if(trimmed === ""){
-    return []
+    return [searchArray]
   }
   function includesTLC(bigString, littleString){
     return bigString.toLowerCase().includes(littleString.toLowerCase())

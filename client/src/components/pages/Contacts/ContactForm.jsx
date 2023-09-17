@@ -11,19 +11,18 @@ import {
   createContact,
   updateContactInFocus,
   updateContactSelected,
-  setNewContactStaging,
 } from "../../../reducers/ContactReducer";
 
 import Dropdown from "./Dropdown";
 import styles from "./ContactForm.module.scss";
 
 export default function ContactForm() {
-
+  console.log("contactForm rendered")
   const { session } = useSession();
   const { userId } = useAuth();
   const dispatch = useDispatch();
 
-  const { newContactStaging, contactInFocus } = useSelector(
+  const { newContactStaging, contactInFocus, searchResults } = useSelector(
     (state) => state.contact
   );
 
@@ -31,7 +30,21 @@ export default function ContactForm() {
 
   const [isEditing, setIsEditing] = useState(formEditOnLoad);
   const [updatedColumns, setUpdatedColumns] = useState([]);
-  const [contactForm, setContactForm] = useState(contactInFocus);
+  const [contactForm, setContactForm] = useState({
+    first_name: null,
+    last_name: null,
+    company: null,
+    current_job_title: null,
+    city: null,
+    phone: null,
+    email: null,
+    linkedin: null,
+    twitter: null,
+    instagram: null,
+    other_social: null,
+    personal_site: null,
+    linked_job_opening: null
+});
 
   async function submitUpdate(e) {
     e.preventDefault();
@@ -48,9 +61,8 @@ export default function ContactForm() {
           values: updatedValues,
           token: await session.getToken(),
         };
-        console.log(createForm)
         dispatch(createContact(createForm));
-        dispatch(updateContactInFocus(createForm))
+        dispatch(updateContactInFocus(contactForm))
       } else {
         const updateForm = {
           user_id: userId,
@@ -60,6 +72,8 @@ export default function ContactForm() {
           id: contactForm.id,
         };
         dispatch(updateContact(updateForm));
+        const newVersion = { ...contactInFocus, ...contactForm }
+        dispatch(updateContactInFocus(newVersion))
       }
       setIsEditing(false);
     }
@@ -108,7 +122,14 @@ export default function ContactForm() {
     }
   };
 
-  useEffect(() => {}, [contactInFocus, isEditing]);
+  useEffect(() => {
+
+  }, [contactInFocus, searchResults, isEditing]);
+  useEffect(() => {
+    if(!newContactStaging){
+      setContactForm(contactInFocus)
+    }
+  }, [newContactStaging, contactInFocus])
   return (
     <div className={styles.wrapper} onClick={(e) => exitForm(e)}>
       <form name="contactForm" className={styles.formContainer}>

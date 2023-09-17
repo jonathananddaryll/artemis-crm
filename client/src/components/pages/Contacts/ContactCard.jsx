@@ -12,16 +12,19 @@ import {
 import styles from "./ContactCard.module.scss";
 
 export default function ContactCard(props) {
-
+  console.log("contactCard rendered")
   const { image, name, contactInfo } = props;
   
   const dispatch = useDispatch();
-  const searchResults = useSelector((state) => state.contact.searchResults);
+  const { searchResults, contactsCache, contactInFocus } = useSelector((state) => state.contact.searchResults);
 
   function openCard() {
     dispatch(updateContactInFocus(contactInfo));
     dispatch(updateContactSelected());
   }
+  useEffect(() => {
+
+  }, [searchResults, contactInFocus])
   return (
     <section className={styles.ContactCard}>
       <div className={styles.contactFrame}>

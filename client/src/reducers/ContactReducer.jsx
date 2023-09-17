@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import axios from "axios";
 
 import SearchArray from "../helpers/searchArray";
@@ -22,7 +22,7 @@ export const getUserContactsTable = createAsyncThunk(
       },
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${idAndToken.token}`,
+        authorization: `Bearer ${idAndToken.token}`,
       },
     };
     try {
@@ -41,12 +41,12 @@ export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
   async (deleteRequest, thunkAPI) => {
     const headers = {
-      "authorization": `Bearer ${deleteRequest.token}`,
-    }
+      authorization: `Bearer ${deleteRequest.token}`,
+    };
     try {
       const res = await axios.delete("/api/contacts/", {
         data: { deleteRequest },
-        headers
+        headers,
       });
       // response object should include the row that was deleted, used to
       // confirm that the delete occurred in the backend.
@@ -66,21 +66,19 @@ export const updateContact = createAsyncThunk(
       // with user_id, send two stringified arrays, one of the column names (str) and one
       // of the column value to set it to (also str)
       const { user_id, updateWhat, updateTo, token, id } = updateRequest;
-      console.log(user_id, updateWhat, updateTo, token)
       const config = {
         withCredentials: false,
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
-
-      }
+      };
       const body = {
         user_id: user_id,
         updateWhat: updateWhat,
         updateTo: updateTo,
-        id: id
-      }
+        id: id,
+      };
       const res = await axios.patch("/api/contacts/", body, config);
       // Response object should include the row that was successfully updated, so
       // to confirm contactsCache is synced.
@@ -99,12 +97,12 @@ export const createContact = createAsyncThunk(
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${createRequest.token}`,
-      }
-    }
+        authorization: `Bearer ${createRequest.token}`,
+      },
+    };
     try {
       const res = await axios.post("/api/contacts/", createRequest, config);
-      return res;
+      return res.data;
     } catch (err) {
       const errors = err.response.data.errors;
       return thunkAPI.rejectWithValue(errors);
@@ -117,23 +115,23 @@ export const getRecentContacts = createAsyncThunk(
   // user_id, current time, notes with type === communications
   // filter out all notes by the associate job, removing any jobs that have no
   // contact linked.
-  async ( historyRequest, thunkAPI ) => {
+  async (historyRequest, thunkAPI) => {
     const headers = {
       "Content-Type": "application/json",
-      "authorization": `Bearer ${historyRequest.token}`,
-    }
-    try{
+      authorization: `Bearer ${historyRequest.token}`,
+    };
+    try {
       const res = await axios.post("api/contacts/recents", {
         headers,
-        ...historyRequest
+        ...historyRequest,
       });
-      return res;
-    }catch(err){
+      return res.data;
+    } catch (err) {
       const errors = err.response.data.errors;
       return thunkAPI.rejectWithValue(errors);
     }
   }
-)
+);
 
 const contactSlice = createSlice({
   name: "contact",
@@ -150,7 +148,6 @@ const contactSlice = createSlice({
     },
     searchFilters: [],
     printout: {},
-    toastTransition: "",
   },
   reducers: {
     updateContactInFocus: (state, action) => {
@@ -179,7 +176,8 @@ const contactSlice = createSlice({
       state.searchQuery = action.payload;
     },
     getContactsSearch: (state, action) => {
-      // action.payload is not needed, request is already in searchQuery
+      // action.payload is not needed if request is already in searchQuery
+      // action.payload if only for updating UI with CRUD actions
       let searchResults = SearchArray(
         state.searchQuery.strValue,
         state.contactsCache,
@@ -207,89 +205,104 @@ const contactSlice = createSlice({
     builder.addCase(getUserContactsTable.pending, (state, action) => {
       state.contactsLoading = true;
       toast.loading("loading contacts...", {
-        toastId: "getUserContactsTable"
-      } )
+        toastId: "getUserContactsTable",
+      });
     });
     builder.addCase(getUserContactsTable.rejected, (state, action) => {
-      toast.update("getUserContactsTable", { 
-        render: "Your contacts are temporarily unavailable, please try again", 
-        type: toast.TYPE.ERROR, 
-        isLoading: false })
-      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
+      toast.update("getUserContactsTable", {
+        render: "Your contacts are temporarily unavailable, please try again",
+        type: toast.TYPE.ERROR,
+        isLoading: false,
+      });
+      action.payload.forEach((error) =>
+        toast.error(error, { autoClose: 4000 })
+      );
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
-      state.contactsCache = state.contactsCache.filter(element => element.id !== state.contactInFocus.id)
-      state.contactSelected = false
-      toast.update("deleteContact", { 
-        render: "delete successful", 
-        type: toast.TYPE.SUCCESS, 
+      state.contactsCache = state.contactsCache.filter(
+        (element) => element.id !== state.contactInFocus.id
+      );
+      state.searchResults = state.searchResults.filter(
+        (element) => element.id !== state.contactInFocus.id
+      )
+      state.contactSelected = false;
+      toast.update("deleteContact", {
+        render: "delete successful",
+        type: toast.TYPE.SUCCESS,
         isLoading: false,
-        autoClose: 4000
-       })
+        autoClose: 4000,
+      });
     });
     builder.addCase(deleteContact.pending, (state, action) => {
       // While it's pending deleted, load toastify message ("delete pending")
-      toast.loading("deleting...", { 
-        toastId: "deleteContact" 
-      })
+      toast.loading("deleting...", {
+        toastId: "deleteContact",
+      });
     });
     builder.addCase(deleteContact.rejected, (state, action) => {
       // display toastify (`delete failed, ${error}`) etc etc
       // Delete failed, leave the state as is, but maybe log this somewhere
       // for us to notice.
-      toast.update("deleteContact", { 
-        render: "there was a problem deleting this contact", 
-        type: toast.TYPE.ERROR, 
-        isLoading: false })
-      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
+      toast.update("deleteContact", {
+        render: "there was a problem deleting this contact",
+        type: toast.TYPE.ERROR,
+        isLoading: false,
+      });
+      action.payload.forEach((error) =>
+        toast.error(error, { autoClose: 4000 })
+      );
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
-      // Once confirmed updated, set state entry to updated entry.
-      // If update fails, call getContacts and refresh the state with a clean start.
-      // have redux wait for a successful response to:
-      state.contactInFocus = action.payload;
-      for(let each = 0; each < state.contactsCache.length; each++){
-        if(state.contactsCache[each].id === state.contactInFocus.id){
-          state.contactsCache[each] = state.contactInFocus
+      state.contactInFocus = JSON.stringify(action.payload[0]);
+      const index = state.contactsCache.findIndex(contact => contact.id === state.contactInFocus.id);
+      state.printout = index
+      if (index !== -1) {
+        state.contactsCache[index] = state.contactInFocus;
+        const searchResultIndex = state.searchResults.findIndex((contact) => contact.id === state.contactInFocus.id);
+        if(searchResultIndex !== -1){
+          state.printout = "blah blah"
+          state.searchResults[searchResultIndex] = state.contactInFocus;
         }
       }
-      toast.dismiss("updateContact")
+      state.contactSelected = false;
+      toast.dismiss("updateContact");
     });
     builder.addCase(updateContact.pending, (state, action) => {
       // While updating, make sure components render with updated info.
-      toast.loading("updating contact...", { 
-        toastId: "updateContact" 
-      })
+      toast.loading("updating contact...", {
+        toastId: "updateContact",
+      });
     });
     builder.addCase(updateContact.rejected, (state, action) => {
-      toast.update("updateContact", { 
-        render: "update unsuccessful, please try again", 
-        isLoading: false 
-      })
-      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
+      toast.update("updateContact", {
+        render: "update unsuccessful, please try again",
+        isLoading: false,
+      });
+      action.payload.forEach((error) =>
+        toast.error(error, { autoClose: 4000 })
+      );
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
       state.newContactStaging = false;
       state.contactsCache.push(contactInFocus);
       state.contactSelected = false;
-      state.printout = action
-      state.getContactsSearch();
-      toast.dismiss("createContact")
+      toast.dismiss("createContact");
     });
     builder.addCase(createContact.pending, (state, action) => {
-      toast.loading("adding to contacts...", { 
-        toastId: "createContact" 
-      })
+      toast.loading("adding to contacts...", {
+        toastId: "createContact",
+      });
     });
     builder.addCase(createContact.rejected, (state, action) => {
-      console.log(action.payload)
-      toast.update("createContact", { 
-        render: "there was a problem adding to contacts, please try again", 
-        isLoading: false 
-      })
-      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }))
+      toast.update("createContact", {
+        render: "there was a problem adding to contacts, please try again",
+        isLoading: false,
+      });
+      action.payload.forEach((error) =>
+        toast.error(error, { autoClose: 4000 })
+      );
     });
-  },  
+  },
 });
 
 export default contactSlice.reducer;
