@@ -17,19 +17,24 @@ import Dropdown from "./Dropdown";
 import styles from "./ContactForm.module.scss";
 
 export default function ContactForm() {
-  console.log("contactForm rendered")
+  // All-purpose contact form, is used for create, update, delete and read for all fields except
+  // for the immutables (created timestamp, id, etc)
+
   const { session } = useSession();
   const { userId } = useAuth();
   const dispatch = useDispatch();
 
-  const { newContactStaging, contactInFocus, searchResults } = useSelector(
-    (state) => state.contact
-  );
-
+  // When this is being called for a new contact to be made, newContactStaging will be true
+  const newContactStaging = useSelector((state) => state.contact.newContactStaging);
+  // The contact the user is currently dealing with is the contactInFocus(new or existing)
+  const contactInFocus = useSelector((state) => state.contact.contactInFocus);
+  // If a new contact, automatically set to edit mode on initialization
   const formEditOnLoad = newContactStaging ? true : false;
-
+  // Edit mode is initialized to true or false based on newContactStaging
   const [isEditing, setIsEditing] = useState(formEditOnLoad);
+  // updatedColumns is a weak optimization for telling which fields have been changed.
   const [updatedColumns, setUpdatedColumns] = useState([]);
+  // The local copy of the contact information
   const [contactForm, setContactForm] = useState({
     first_name: null,
     last_name: null,
@@ -43,9 +48,12 @@ export default function ContactForm() {
     instagram: null,
     other_social: null,
     personal_site: null,
-    linked_job_opening: null
-});
+    linked_job_opening: null,
+  });
 
+  // This can be used for new contacts or for updating existing ones, so there are
+  // two logic branches. Different branch calls a different async thunk and uses
+  // different headers and parameters.
   async function submitUpdate(e) {
     e.preventDefault();
     let updatedValues = [];
@@ -62,7 +70,7 @@ export default function ContactForm() {
           token: await session.getToken(),
         };
         dispatch(createContact(createForm));
-        dispatch(updateContactInFocus(contactForm))
+        dispatch(updateContactInFocus(contactForm));
       } else {
         const updateForm = {
           user_id: userId,
@@ -72,13 +80,14 @@ export default function ContactForm() {
           id: contactForm.id,
         };
         dispatch(updateContact(updateForm));
-        const newVersion = { ...contactInFocus, ...contactForm }
-        dispatch(updateContactInFocus(newVersion))
+        const newVersion = { ...contactInFocus, ...contactForm };
+        dispatch(updateContactInFocus(newVersion));
       }
       setIsEditing(false);
     }
   }
 
+  // Keeps the form in the loop with redux state
   function onChangeHandler(e) {
     const { name, value, type, checked } = e.target;
     setContactForm((prevForm) => ({
@@ -90,6 +99,7 @@ export default function ContactForm() {
     }
   }
 
+  // If the user clicks out or intends to cancel the whole thing
   function exitForm(event) {
     if (event.target.className.includes("wrapper")) {
       if (!updatedColumns.length) {
@@ -106,6 +116,8 @@ export default function ContactForm() {
     }
   }
 
+  // Since it could be a new contact or an existing, again there are two logic branches
+  // for deleting the contact currently accessed in the form
   const deleteContactStart = async () => {
     if (!contactForm.id) {
       // it's a new contact, just clear the form
@@ -122,14 +134,13 @@ export default function ContactForm() {
     }
   };
 
+  // Depending on whether or not the contact is a new one or an existing one, make sure
+  // This is for when the user is looking at an existing contact.
   useEffect(() => {
-
-  }, [contactInFocus, searchResults, isEditing]);
-  useEffect(() => {
-    if(!newContactStaging){
-      setContactForm(contactInFocus)
+    if (!newContactStaging) {
+      setContactForm(contactInFocus);
     }
-  }, [newContactStaging, contactInFocus])
+  }, [newContactStaging, contactInFocus]);
   return (
     <div className={styles.wrapper} onClick={(e) => exitForm(e)}>
       <form name="contactForm" className={styles.formContainer}>

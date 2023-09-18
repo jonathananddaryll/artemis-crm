@@ -20,10 +20,14 @@ import ContactForm from "./ContactForm";
 import styles from "./ContactsPage.module.scss";
 
 export default function ContactsPage() {
+  
   const { userId, getToken } = useAuth();
 
   const dispatch = useDispatch();
-  const { searchResults, contactSelected, contactsCache, contactInFocus } = useSelector((state) => state.contact);
+  const searchResults = useSelector((state) => state.contact.searchResults);
+  const contactSelected = useSelector((state) => state.contact.contactSelected);
+  // const contactsCache = useSelector((state) => state.contact.contactsCache);
+  // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
   const [searchType, setSearchType] = useState("name");
   const [searchParams, setSearchParams] = useState({
@@ -112,9 +116,6 @@ export default function ContactsPage() {
     };
     grabSessionToken().catch(console.error);
   }, [dispatch]);
-  useEffect(() => {
-    
-  }, [contactsCache, searchResults, contactInFocus])
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
@@ -175,12 +176,7 @@ export default function ContactsPage() {
             searchResults.map((element) => {
               return (
                 // a business card.
-                <ContactCard
-                  image={""} // an open end here for profile pictures?
-                  name={element.first_name + " " + element.last_name}
-                  contactInfo={element}
-                  key={element.id}
-                />
+                <ContactCard contactInfo={element} key={element.id} />
               );
             })}
         </section>

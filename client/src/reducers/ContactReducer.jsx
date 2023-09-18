@@ -215,7 +215,7 @@ const contactSlice = createSlice({
         isLoading: false,
       });
       action.payload.forEach((error) =>
-        toast.error(error, { autoClose: 4000 })
+        toast.error(error, { autoClose: 2000 })
       );
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
@@ -230,7 +230,7 @@ const contactSlice = createSlice({
         render: "delete successful",
         type: toast.TYPE.SUCCESS,
         isLoading: false,
-        autoClose: 4000,
+        autoClose: 2000,
       });
     });
     builder.addCase(deleteContact.pending, (state, action) => {
@@ -249,20 +249,21 @@ const contactSlice = createSlice({
         isLoading: false,
       });
       action.payload.forEach((error) =>
-        toast.error(error, { autoClose: 4000 })
+        toast.error(error)
       );
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
-      state.contactInFocus = JSON.stringify(action.payload[0]);
-      const index = state.contactsCache.findIndex(contact => contact.id === state.contactInFocus.id);
-      state.printout = index
-      if (index !== -1) {
-        state.contactsCache[index] = state.contactInFocus;
-        const searchResultIndex = state.searchResults.findIndex((contact) => contact.id === state.contactInFocus.id);
-        if(searchResultIndex !== -1){
-          state.printout = "blah blah"
-          state.searchResults[searchResultIndex] = state.contactInFocus;
-        }
+      state.contactInFocus = action.payload[0];
+      const contactsCacheIndex = SearchArray(`${action.payload[0].id}`, state.contactsCache, "id")
+      const searchResultsIndex = SearchArray(`${action.payload[0].id}`, state.searchResults, "id")
+      console.log(contactsCacheIndex, searchResultsIndex)
+      if(contactsCacheIndex === -1){
+        // weird error?
+      }else if(searchResultsIndex === -1){
+          state.contactsCache[contactsCacheIndex] = action.payload[0]
+      }else{
+        state.contactsCache[contactsCacheIndex] = action.payload[0]
+        state.searchResults[searchResultsIndex] = action.payload[0]
       }
       state.contactSelected = false;
       toast.dismiss("updateContact");
@@ -279,12 +280,13 @@ const contactSlice = createSlice({
         isLoading: false,
       });
       action.payload.forEach((error) =>
-        toast.error(error, { autoClose: 4000 })
+        toast.error(error)
       );
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
       state.newContactStaging = false;
-      state.contactsCache.push(contactInFocus);
+      state.contactsCache.push(action.payload[0]);
+      state.searchResults.push(action.payload[0])
       state.contactSelected = false;
       toast.dismiss("createContact");
     });
@@ -299,7 +301,7 @@ const contactSlice = createSlice({
         isLoading: false,
       });
       action.payload.forEach((error) =>
-        toast.error(error, { autoClose: 4000 })
+        toast.error(error)
       );
     });
   },

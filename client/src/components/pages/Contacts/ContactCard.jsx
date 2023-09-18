@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useAuth } from "@clerk/clerk-react";
+import { useDispatch } from "react-redux";
 
 import {
   updateContactInFocus,
@@ -12,19 +10,25 @@ import {
 import styles from "./ContactCard.module.scss";
 
 export default function ContactCard(props) {
-  console.log("contactCard rendered")
-  const { image, name, contactInfo } = props;
+
+  // Each individual contactCard component is given it's unique contact data via props, not
+  // from redux calls. Each business card has 'quicklinks' on it users can click for easy 
+  // access, and expands to a full form by clicking on 'see more'. The form allows users
+  // to edit and delete contacts.
+
+  const { contactInfo } = props;
+  const name = contactInfo.first_name + " " + contactInfo.last_name
   
   const dispatch = useDispatch();
-  const { searchResults, contactsCache, contactInFocus } = useSelector((state) => state.contact.searchResults);
 
+  // When the user wants to see more, pass this contact info through dispatch to update redux
+  // state variable for the form that's about to open up, then toggle redux state to indicate
+  // a contact has been selected.
   function openCard() {
     dispatch(updateContactInFocus(contactInfo));
     dispatch(updateContactSelected());
   }
-  useEffect(() => {
 
-  }, [searchResults, contactInFocus])
   return (
     <section className={styles.ContactCard}>
       <div className={styles.contactFrame}>

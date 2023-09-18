@@ -72,6 +72,17 @@ export default function SearchArray( searchString, searchArray, searchType ) {
         }
       }
       return results
+    case "id":
+      let idNum = Number(searchString) !== NaN ? Number(searchString): false;
+      if(idNum){
+        for(let contact = 0; contact < searchArray.length; contact++){
+          if(searchArray[contact].id === Number(searchString)){
+            return contact
+          }
+        }
+      }else{
+        return -1
+      }
     default:
       return results
   }
