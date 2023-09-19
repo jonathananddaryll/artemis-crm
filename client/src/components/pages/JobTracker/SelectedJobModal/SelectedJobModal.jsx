@@ -6,9 +6,6 @@ import {
   deleteJob,
   updateJobInfo
 } from '../../../../reducers/BoardReducer';
-
-import Button from '../../../layout/Button/Button';
-
 import {
   getAllTimelines,
   resetSelectedJobItems,
@@ -22,6 +19,7 @@ import {
   deleteTask
 } from '../../../../reducers/SelectedJobReducer';
 
+import Button from '../../../layout/Button/Button';
 import InterviewsTab from './InterviewsTab/InterviewsTab';
 import ContactsTab from './ContactsTab/ContactsTab';
 import DocumentsTab from './DocumentsTab/DocumentsTab';
@@ -30,7 +28,6 @@ import NotesTab from './NotesTab/NotesTab';
 import TasksTab from './TasksTab/TasksTab';
 import DeletePopup from '../../../layout/DeletePopup/DeletePopup';
 import Timeline from './Timeline/Timeline';
-
 import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {

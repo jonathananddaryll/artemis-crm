@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '../Button/Button';
-
 import styles from './DeletePopup.module.scss';
 
 export default function DeletePopup({

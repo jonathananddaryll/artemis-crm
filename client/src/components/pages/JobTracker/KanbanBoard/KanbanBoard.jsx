@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useSession } from '@clerk/clerk-react';
 import {
   removeFromStatus,
   addToStatus,
@@ -9,9 +10,6 @@ import {
   deleteColumn,
   updateBoardColumn
 } from '../../../../reducers/BoardReducer';
-
-import { useSession } from '@clerk/clerk-react';
-
 import Column from './Column';
 import styles from './KanbanBoard.module.scss';
 

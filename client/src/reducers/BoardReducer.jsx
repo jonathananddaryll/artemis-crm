@@ -288,7 +288,7 @@ export const updateJobInfo = createAsyncThunk(
       const res = await axios.patch(
         `/api/jobs/${formData.job_id}/jobinfo`,
         formData,
-        config
+        { config }
       );
 
       return res.data;
@@ -561,6 +561,14 @@ const boardSlice = createSlice({
       ].findIndex(job => job.id === action.payload.id);
       state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
         action.payload.status;
+
+      // Find the index of the updated job in jobs
+      const jobIndexInJobs = state.jobs.findIndex(
+        job => job.id === action.payload.id
+      );
+
+      state.jobs[jobIndexInJobs].status = action.payload.status;
+
       toast.success('Successfully Updated Job Status');
     });
 

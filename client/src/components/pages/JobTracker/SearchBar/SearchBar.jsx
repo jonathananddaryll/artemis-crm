@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-
 import styles from './SearchBar.module.scss';
 
 export default function SearchBar({ filterJob }) {

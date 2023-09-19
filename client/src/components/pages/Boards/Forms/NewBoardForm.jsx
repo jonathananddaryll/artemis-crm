@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 import Button from '../../../layout/Button/Button';
@@ -21,8 +21,6 @@ export default function NewBoardForm({ toggleHandler, setFormToggle }) {
     };
 
     dispatch(createBoard(formData));
-
-    // console.log(formData);
 
     // Clears the form then close it
     setTitle('');

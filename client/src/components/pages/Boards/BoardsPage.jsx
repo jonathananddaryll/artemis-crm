@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
 import { Link } from 'react-router-dom';
-import styles from './Boards.module.scss';
-import NewBoardForm from './Forms/NewBoardForm';
 import { useAuth } from '@clerk/clerk-react';
+import { getBoards, changeBoard } from '../../../reducers/BoardReducer';
+import timeSince from '../../../helpers/convertDate';
+import NewBoardForm from './Forms/NewBoardForm';
 import UpdateForm from './Forms/UpdateForm';
 import loadingInfinity from '../../../assets/loadingInfinity.gif';
-import timeSince from '../../../helpers/convertDate';
-
 import Loader from '../../layout/Loader/Loader';
+import styles from './Boards.module.scss';
 
 export default function BoardsPage() {
   const { boards, boardsLoading } = useSelector(state => ({ ...state.board }));
@@ -79,7 +77,7 @@ export default function BoardsPage() {
               <Link
                 to={`/boards/${board.id}/jobs`}
                 key={idx}
-                style={{ textDecoration: 'none' }}
+                className={styles.linkStyle}
               >
                 <div
                   className={styles.boardBox}

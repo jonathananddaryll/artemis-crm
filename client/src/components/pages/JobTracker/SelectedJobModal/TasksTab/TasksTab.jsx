@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
-import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import { taskCategories } from '../../../../../data/taskCategories';
+import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noTasks from '../../../../../assets/notasks.svg';
-import 'react-datepicker/dist/react-datepicker.css';
 import styles from './TasksTab.module.scss';
 
 export default function TasksTab({

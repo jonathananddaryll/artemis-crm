@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { useSignIn } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function DemoSignIn() {
-  const [demoAccount, setDemoAccount] = useState({
+  // const [demoAccount, setDemoAccount] = useState({
+  //   emailAddress: 'artemisdemoacc@gmail.com',
+  //   password: '@ArtemisDemo'
+  // });
+
+  const demoAccount = {
     emailAddress: 'artemisdemoacc@gmail.com',
     password: '@ArtemisDemo'
-  });
-  const { emailAddress, password } = demoAccount;
+  };
 
+  const navigate = useNavigate();
+
+  const { emailAddress, password } = demoAccount;
   const { signIn, setActive } = useSignIn();
+
   const handleLogin = async e => {
     try {
       const result = await signIn.create({
@@ -18,6 +27,7 @@ export default function DemoSignIn() {
 
       if (result.status === 'complete') {
         await setActive({ session: result.createdSessionId });
+        navigate('/boards');
       }
     } catch (err) {
       console.error('error', err.errors[0].longMessage);

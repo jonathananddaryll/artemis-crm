@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import styles from './NewJobForm.module.scss';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
-
 import { handleToggleForm, addJob } from '../../../../reducers/BoardReducer';
-
 import Button from '../../../layout/Button/Button';
+import styles from './NewJobForm.module.scss';
 
 export default function NewJobForm() {
   const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import styles from './AddListForm.module.scss';
 import { useDispatch } from 'react-redux';
 import { addColumn } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 import Button from '../../../layout/Button/Button';
+import styles from './AddListForm.module.scss';
 
 export default function AddListForm({
   setAddListToggle,

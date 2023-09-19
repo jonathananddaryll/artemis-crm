@@ -1,23 +1,21 @@
 import React from 'react';
-import './styles/globals.scss';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {
   ClerkProvider,
   SignedIn,
   SignedOut,
   RedirectToSignIn,
   SignIn,
-  SignUp,
-  UserButton
+  SignUp
 } from '@clerk/clerk-react';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-
 import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
+import './styles/globals.scss';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 //   throw new Error('Missing Publishable Key');
@@ -41,15 +39,16 @@ function App() {
           <div className='flex'>
             <SideBar />
             <Routes>
-              <Route
+              {/* <Route
                 path='/sign-in/*'
                 element={<SignIn routing='path' path='/sign-in' />}
               />
               <Route
                 path='/sign-up/*'
                 element={<SignUp routing='path' path='/sign-up' />}
-              />
-              <Route path='/' element={<HomePage />}></Route>
+              /> */}
+
+              <Route path='/' element={<HomePage />} />
               <Route
                 path='/boards'
                 element={
@@ -62,7 +61,7 @@ function App() {
                     </SignedOut>
                   </>
                 }
-              ></Route>
+              />
 
               <Route
                 path='/boards/:board_id/jobs'
@@ -76,7 +75,7 @@ function App() {
                     </SignedOut>
                   </>
                 }
-              ></Route>
+              />
             </Routes>
           </div>
         </ClerkProvider>
