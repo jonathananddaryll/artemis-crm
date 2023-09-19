@@ -20,21 +20,33 @@ import ContactForm from "./ContactForm";
 import styles from "./ContactsPage.module.scss";
 
 export default function ContactsPage() {
+  // A Contacts organizer. Main features are:
   
+  // - the top menu for +adding a contact, priority contacts, and recent contacts
+  // - search bar with dropdown menu for options
+  // - clickable / expanding 'business card' search results.
+  // - Add/Edit/Remove functions
+  // - Search for a job to link to this contact
+  // - Quick jump to the board to add a task to the job after a phone call?
+
   const { userId, getToken } = useAuth();
 
   const dispatch = useDispatch();
+  // redux store updates when a user has asked to search with a string/filter
   const searchResults = useSelector((state) => state.contact.searchResults);
+  // redux store updates when a user is changing which contact they look at
   const contactSelected = useSelector((state) => state.contact.contactSelected);
   // const contactsCache = useSelector((state) => state.contact.contactsCache);
   // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
+  // name, company, city - Which are you searching for?
   const [searchType, setSearchType] = useState("name");
   const [searchParams, setSearchParams] = useState({
     type: "name",
     strValue: "",
   });
 
+  // Controlled component function for the search input element
   function updateSearchString(e) {
     setSearchParams((oldParams) => {
       return {
@@ -44,6 +56,7 @@ export default function ContactsPage() {
     });
   }
 
+  // Client side input validation/sanitizer
   const validateSearchParams = (searchObj) => {
     let validated = {
       type: searchObj.type,
@@ -59,6 +72,7 @@ export default function ContactsPage() {
     }
   };
 
+  // Initiate the contacts search for the string value in the search input box
   function searchSubmit(e) {
     const validated = validateSearchParams(searchParams);
     if (!validated) {
@@ -69,6 +83,7 @@ export default function ContactsPage() {
     }
   }
 
+  // Add a new contact using a form
   const addContact = () => {
     // first, set contactInFocus object values to ""
     dispatch(setNewContactStaging(true));
@@ -93,12 +108,14 @@ export default function ContactsPage() {
     dispatch(updateContactSelected());
   };
 
+  // Top menu button - Filter out any contacts that don't have is_priority === true
   const priorityContacts = () => {
     // place in search results only the contacts with priority === true
     dispatch(getContactsPriority());
     // TODO: custom html for <no results found>
   };
 
+  // Recents
   async function contactHistory() {
     // place in search results only the contacts with recent communications
     // this could be from events table where sort top 10 recent events with
@@ -109,6 +126,7 @@ export default function ContactsPage() {
     dispatch(getRecentContacts(userId, token));
   }
 
+  // On first load, grab all the users contacts at once and keep a copy locally(session)
   useEffect(() => {
     const grabSessionToken = async () => {
       const token = await getToken();

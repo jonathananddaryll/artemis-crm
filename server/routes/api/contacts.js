@@ -3,8 +3,8 @@ const router = express.Router();
 const { Client, config } = require("../../config/db");
 
 const format = require("pg-format");
-const { check, validationResult } = require('express-validator');
 
+// middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
   validateRequest
@@ -12,15 +12,14 @@ const {
 
 const { decodeToken } = require('../../middlewares/decodeToken');
 
-// TODO:
-// 1) Integrate backend auth (grab user_id from clerk frontend token)
-// 2) Input validation and sql injection check
-// 3) Error handling and response object formatting
-
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts table
 // @ACCESS Private
 router.get("/", myRequestHeaders, async (req, res) => {
+  // Pass in your headers an auth token, along with the user_id
+  // Response object in res.data an array of objects [{}, {}, {}]
+
+  // Use the token authenticated user_id, not the one in the request
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
 
@@ -47,8 +46,11 @@ router.get("/", myRequestHeaders, async (req, res) => {
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
 router.post("/", async (req, res) => {
-  console.log(req.headers.authorization, req)
   // myRequestHeaders, validateRequest, 
+
+  // req.body needs names and values of the postgres columns to fill in the new record
+
+  // using the user_id that was authenticated via token
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
 
@@ -59,10 +61,6 @@ router.post("/", async (req, res) => {
     values
   );
   try {
-    // Receives an array of column 'names', and an array of column 'values'
-    // to fill the row with. Will return an error if insufficient data to create a new
-    // row in the table.
-
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
@@ -84,9 +82,12 @@ router.post("/", async (req, res) => {
 // @ACCESS Private
 router.patch("/", myRequestHeaders, validateRequest,  async (req, res) => {
   try {
+
+    // use the token authenticated user_id
     const decodedToken = decodeToken(req.headers.authorization);
     const user_id = decodedToken.userId;
 
+    // req.body needs the id of the contact, the columns to update, and the values to replace with
     const { updateWhat, updateTo, id } = req.body;
     // merge two arrays strings, together throwing in the formatting for SQL updates for updating
     // a type STRING column to a new value.
@@ -117,17 +118,15 @@ router.patch("/", myRequestHeaders, validateRequest,  async (req, res) => {
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
 router.delete("/", myRequestHeaders,  async (req, res) => {
+
+  // use the token authenticated user_id
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
+
+  // Requires just the id of the contact to delete
   const { id } = req.body.deleteRequest;
   const query = `DELETE FROM contact WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
   try {
-    // Receives the typical user_id, the id of the contact. Verifies ownership,
-    // validates inputs for injections, and then deletes the contact.
-
-    // TODO:
-
-    // 1) Verify that the user_id is deleting a contact that it owns before deleting it.
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {

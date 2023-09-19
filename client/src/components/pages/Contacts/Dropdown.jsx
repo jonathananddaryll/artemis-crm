@@ -2,11 +2,20 @@ import styles from './Dropdown.module.scss';
 import React, { useState } from 'react';
 
 export default function Dropdown (props) {
+    // For reusability, pass in the number of list items,
+    // the label / header for the dropdown,
+    // and the callback function to update the search type
+    // elsewhere in your app.
 
+    // There is technically a footer, but I haven't come up with a need yet.
+    // Might add function for a button with a callback function prop.
+    
     const { items, header, setSearchType } = props;
 
+    // Styling state to determine if the items are visible
     const [ menuHiding, setMenuHiding ] = useState(true);
 
+    // Make the dropdown menu visible (dropped down)
     function setVisible () {
         if(!menuHiding){
         }else{
@@ -14,16 +23,13 @@ export default function Dropdown (props) {
         }
     }
 
+    // Make the menu hidden (hung up)
     function setHidden () {
         if(menuHiding){
         }else{
             setMenuHiding(true);
         }
     }
-
-    // function updateSearchType(type){
-    //     setSearchType(type);
-    // }
 
 return (
     <section 
