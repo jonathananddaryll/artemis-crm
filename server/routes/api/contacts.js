@@ -7,10 +7,10 @@ const format = require("pg-format");
 // middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
-  validateRequest
-} = require('../../middlewares/validators');
+  validateRequest,
+} = require("../../middlewares/validators");
 
-const { decodeToken } = require('../../middlewares/decodeToken');
+const { decodeToken } = require("../../middlewares/decodeToken");
 
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts table
@@ -46,7 +46,7 @@ router.get("/", myRequestHeaders, async (req, res) => {
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
 router.post("/", async (req, res) => {
-  // myRequestHeaders, validateRequest, 
+  // myRequestHeaders, validateRequest,
 
   // req.body needs names and values of the postgres columns to fill in the new record
 
@@ -56,7 +56,9 @@ router.post("/", async (req, res) => {
 
   const { names, values } = req.body;
   const query = format(
-    `INSERT INTO %I(user_id, ${names.join(", ")}) VALUES('${user_id}', %L) RETURNING *;`,
+    `INSERT INTO %I(user_id, ${names.join(
+      ", "
+    )}) VALUES('${user_id}', %L) RETURNING *;`,
     "contact",
     values
   );
@@ -80,9 +82,8 @@ router.post("/", async (req, res) => {
 // @ROUTE  PATCH /api/contacts/
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
-router.patch("/", myRequestHeaders, validateRequest,  async (req, res) => {
+router.patch("/", myRequestHeaders, validateRequest, async (req, res) => {
   try {
-
     // use the token authenticated user_id
     const decodedToken = decodeToken(req.headers.authorization);
     const user_id = decodedToken.userId;
@@ -117,8 +118,7 @@ router.patch("/", myRequestHeaders, validateRequest,  async (req, res) => {
 // @ROUTE  DELETE /api/contacts/
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
-router.delete("/", myRequestHeaders,  async (req, res) => {
-
+router.delete("/", myRequestHeaders, async (req, res) => {
   // use the token authenticated user_id
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;

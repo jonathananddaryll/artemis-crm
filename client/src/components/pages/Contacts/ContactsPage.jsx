@@ -21,7 +21,7 @@ import styles from "./ContactsPage.module.scss";
 
 export default function ContactsPage() {
   // A Contacts organizer. Main features are:
-  
+
   // - the top menu for +adding a contact, priority contacts, and recent contacts
   // - search bar with dropdown menu for options
   // - clickable / expanding 'business card' search results.

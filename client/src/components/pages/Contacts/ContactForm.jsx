@@ -25,7 +25,9 @@ export default function ContactForm() {
   const dispatch = useDispatch();
 
   // When this is being called for a new contact to be made, newContactStaging will be true
-  const newContactStaging = useSelector((state) => state.contact.newContactStaging);
+  const newContactStaging = useSelector(
+    (state) => state.contact.newContactStaging
+  );
   // The contact the user is currently dealing with is the contactInFocus(new or existing)
   const contactInFocus = useSelector((state) => state.contact.contactInFocus);
   // If a new contact, automatically set to edit mode on initialization

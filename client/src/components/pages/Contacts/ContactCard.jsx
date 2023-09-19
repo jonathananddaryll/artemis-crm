@@ -10,15 +10,14 @@ import {
 import styles from "./ContactCard.module.scss";
 
 export default function ContactCard(props) {
-
   // Each individual contactCard component is given it's unique contact data via props, not
-  // from redux calls. Each business card has 'quicklinks' on it users can click for easy 
+  // from redux calls. Each business card has 'quicklinks' on it users can click for easy
   // access, and expands to a full form by clicking on 'see more'. The form allows users
   // to edit and delete contacts.
 
   const { contactInfo } = props;
-  const name = contactInfo.first_name + " " + contactInfo.last_name
-  
+  const name = contactInfo.first_name + " " + contactInfo.last_name;
+
   const dispatch = useDispatch();
 
   // When the user wants to see more, pass this contact info through dispatch to update redux

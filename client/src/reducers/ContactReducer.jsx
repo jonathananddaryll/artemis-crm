@@ -8,10 +8,16 @@ import SearchArray from "../helpers/searchArray";
 
 // ASYNC thunks
 
+// Return values: All thunks that change the db get a return copy of the item
+// that was updated/created/deleted. This is returned to redux, to be used as confirmation
+// that the action was successful and that the local client copy of the users
+// contacts needs to be updated.
+
 export const getUserContactsTable = createAsyncThunk(
   "contacts/getUserContactsTable",
-  // received idAndToken object that has key:value pair user_id(clerk) and session token(clerk)
-  // Returns all contacts associated with the user. Only for initial logon and any sort of 'refresh' button.
+  // received idAndToken object that has key:value pair user_id(clerk) and session
+  // token(clerk) Returns all contacts associated with the user as [{}, {}]. Only for initial logon
+  // and any sort of 'refresh' button if that gets built.
   async (idAndToken, thunkAPI) => {
     const config = {
       method: "GET",
@@ -29,7 +35,6 @@ export const getUserContactsTable = createAsyncThunk(
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
     } catch (err) {
-      // If error, do I need different handling for refresh or initialization? no, this should be handled in redux.
       const errors = err.response.data.errors;
       return thunkAPI.rejectWithValue(errors);
     }
@@ -63,7 +68,7 @@ export const updateContact = createAsyncThunk(
   "contacts/updateContact",
   async (updateRequest, thunkAPI) => {
     try {
-      // with user_id, send two stringified arrays, one of the column names (str) and one
+      // with user_id, send two arrays, one of the column names (str) and one
       // of the column value to set it to (also str)
       const { user_id, updateWhat, updateTo, token, id } = updateRequest;
       const config = {
@@ -102,6 +107,7 @@ export const createContact = createAsyncThunk(
     };
     try {
       const res = await axios.post("/api/contacts/", createRequest, config);
+      // returns a copy of the new record (with timestamp! important!)
       return res.data;
     } catch (err) {
       const errors = err.response.data.errors;
@@ -136,6 +142,9 @@ export const getRecentContacts = createAsyncThunk(
 const contactSlice = createSlice({
   name: "contact",
   initialState: {
+    // Everything centers around the contactsCache and searchResults arrays
+    // Whether it's CRUD functionality, or forms, searching the db, or
+    // triggering toasts.
     contactsCache: [],
     searchResults: [],
     newContactStaging: false,
@@ -150,6 +159,7 @@ const contactSlice = createSlice({
     printout: {},
   },
   reducers: {
+    // pass in a new contact to look at
     updateContactInFocus: (state, action) => {
       if (action.payload === "clear") {
         state.contactInFocus = {};
@@ -159,25 +169,24 @@ const contactSlice = createSlice({
         state.contactsLoading = false;
       }
     },
+    // toggle a value that triggers making the expanded contact page visible or not
     updateContactSelected: (state, action) => {
       if (!state.contactSelected) {
         state.contactSelected = true;
       } else {
         state.contactSelected = false;
-        // anything to wrap up the contactForm? If canceling, should there be a message?
-        // if done, should there be a message?
-        // should contactInFocus be set to empty again?
       }
     },
+    // Only for when +add button is clicked, i.e. when creating a new contact
     setNewContactStaging: (state, action) => {
       state.newContactStaging = action.payload;
     },
+    // Change what you are searching *with* when clicking 'search', i.e. 'Tim Cook'
     updateSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
+    // Trigger a search on the contacts db using the current searchQuery in store
     getContactsSearch: (state, action) => {
-      // action.payload is not needed if request is already in searchQuery
-      // action.payload if only for updating UI with CRUD actions
       let searchResults = SearchArray(
         state.searchQuery.strValue,
         state.contactsCache,
@@ -189,6 +198,7 @@ const contactSlice = createSlice({
       }
       state.searchResults = [...results];
     },
+    // Filter out all the contacts that aren't is_priority === true
     getContactsPriority: (state, action) => {
       state.searchResults = state.contactsCache.filter(
         (element) => element.is_priority
@@ -197,6 +207,8 @@ const contactSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getUserContactsTable.fulfilled, (state, action) => {
+      // prime the organizer with the entire users collection of contacts
+      // with the return value from the async thunk
       state.contactsCache = action.payload;
       state.searchResults = action.payload;
       state.contactsLoading = false;
@@ -219,12 +231,16 @@ const contactSlice = createSlice({
       );
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
+      // Remove that specific object from the array of contacts locally
+      // matching it with the return value from the async thunk
       state.contactsCache = state.contactsCache.filter(
         (element) => element.id !== state.contactInFocus.id
       );
+      // Also, if the user was clicking in some search results,
+      // make sure the search results update, too.
       state.searchResults = state.searchResults.filter(
         (element) => element.id !== state.contactInFocus.id
-      )
+      );
       state.contactSelected = false;
       toast.update("deleteContact", {
         render: "delete successful",
@@ -248,22 +264,31 @@ const contactSlice = createSlice({
         type: toast.TYPE.ERROR,
         isLoading: false,
       });
-      action.payload.forEach((error) =>
-        toast.error(error)
-      );
+      action.payload.forEach((error) => toast.error(error));
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
+      // Find the contacts in the contactsCache and searchResults, then
+      // update the values if they exist with the return value from
+      // async thunk
       state.contactInFocus = action.payload[0];
-      const contactsCacheIndex = SearchArray(`${action.payload[0].id}`, state.contactsCache, "id")
-      const searchResultsIndex = SearchArray(`${action.payload[0].id}`, state.searchResults, "id")
-      console.log(contactsCacheIndex, searchResultsIndex)
-      if(contactsCacheIndex === -1){
+      const contactsCacheIndex = SearchArray(
+        `${action.payload[0].id}`,
+        state.contactsCache,
+        "id"
+      );
+      const searchResultsIndex = SearchArray(
+        `${action.payload[0].id}`,
+        state.searchResults,
+        "id"
+      );
+      console.log(contactsCacheIndex, searchResultsIndex);
+      if (contactsCacheIndex === -1) {
         // weird error?
-      }else if(searchResultsIndex === -1){
-          state.contactsCache[contactsCacheIndex] = action.payload[0]
-      }else{
-        state.contactsCache[contactsCacheIndex] = action.payload[0]
-        state.searchResults[searchResultsIndex] = action.payload[0]
+      } else if (searchResultsIndex === -1) {
+        state.contactsCache[contactsCacheIndex] = action.payload[0];
+      } else {
+        state.contactsCache[contactsCacheIndex] = action.payload[0];
+        state.searchResults[searchResultsIndex] = action.payload[0];
       }
       state.contactSelected = false;
       toast.dismiss("updateContact");
@@ -279,14 +304,14 @@ const contactSlice = createSlice({
         render: "update unsuccessful, please try again",
         isLoading: false,
       });
-      action.payload.forEach((error) =>
-        toast.error(error)
-      );
+      action.payload.forEach((error) => toast.error(error));
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
+      // Reset the variable that says the user is in process of creating a contact
+      // add the return value from async thunk to both arrays contactsCache/searchResults
       state.newContactStaging = false;
       state.contactsCache.push(action.payload[0]);
-      state.searchResults.push(action.payload[0])
+      state.searchResults.push(action.payload[0]);
       state.contactSelected = false;
       toast.dismiss("createContact");
     });
@@ -300,9 +325,7 @@ const contactSlice = createSlice({
         render: "there was a problem adding to contacts, please try again",
         isLoading: false,
       });
-      action.payload.forEach((error) =>
-        toast.error(error)
-      );
+      action.payload.forEach((error) => toast.error(error));
     });
   },
 });
@@ -311,7 +334,6 @@ export default contactSlice.reducer;
 export const {
   updateContactInFocus,
   setNewContactStaging,
-  clearContactInFocus,
   getContactsSearch,
   getContactsPriority,
   updateSearchQuery,
