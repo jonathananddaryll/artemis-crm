@@ -45,6 +45,12 @@
   }
 }
 
+// For <Link> inside Board
+.linkStyle {
+  text-decoration: none;
+  margin: 0;
+}
+
 .flexboxSpacer {
   flex: 0 0 19%;
   height: 20rem;

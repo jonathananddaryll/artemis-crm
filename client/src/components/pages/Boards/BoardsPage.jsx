@@ -77,7 +77,7 @@ export default function BoardsPage() {
               <Link
                 to={`/boards/${board.id}/jobs`}
                 key={idx}
-                style={{ textDecoration: 'none' }}
+                className={styles.linkStyle}
               >
                 <div
                   className={styles.boardBox}
