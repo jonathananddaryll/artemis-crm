@@ -35,11 +35,12 @@ function App() {
       <BrowserRouter>
         <ClerkProvider
           publishableKey={clerkPubKey}
-          navigate={to => navigate(to)}>
+          navigate={to => navigate(to)}
+        >
           <div className='flex'>
             <SideBar />
             <Routes>
-            <Route
+              <Route
                 path='/sign-in/*'
                 element={<SignIn routing='path' path='/sign-in' />}
               />
@@ -76,18 +77,18 @@ function App() {
                   </>
                 }
               ></Route>
-              <Route 
-              path='/contacts/' 
-              element={
-                <>
-                  <SignedIn>
-                    < ContactsPage />
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn></RedirectToSignIn>
-                  </SignedOut>
-                </>
-              }
+              <Route
+                path='/contacts/'
+                element={
+                  <>
+                    <SignedIn>
+                      <ContactsPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
               ></Route>
             </Routes>
           </div>
