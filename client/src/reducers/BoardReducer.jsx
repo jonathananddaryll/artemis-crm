@@ -288,7 +288,7 @@ export const updateJobInfo = createAsyncThunk(
       const res = await axios.patch(
         `/api/jobs/${formData.job_id}/jobinfo`,
         formData,
-        { config }
+        config
       );
 
       return res.data;
@@ -423,18 +423,32 @@ const boardSlice = createSlice({
       state.selectedBoardLoading = false;
     });
 
+    builder.addCase(createBoard.pending, () => {
+      toast.loading('Creating New Board', {
+        toastId: 'creatingBoard'
+      });
+    });
+
     builder.addCase(createBoard.fulfilled, (state, action) => {
       state.boards = [
         { ...action.payload, total_jobs_count: 0 },
         ...state.boards
       ];
 
-      toast.success('Successfully Created a New Board');
+      toast.dismiss('creatingBoard');
+      toast.success('Successfully Created New Board');
     });
 
     // Display errors in createBoard with toastify
     builder.addCase(createBoard.rejected, (state, action) => {
+      toast.dismiss('creatingBoard');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(addColumn.pending, () => {
+      toast.loading('Adding New Column', {
+        toastId: 'addingStatusColumn'
+      });
     });
 
     builder.addCase(addColumn.fulfilled, (state, action) => {
@@ -445,6 +459,8 @@ const boardSlice = createSlice({
       const newCol = 'column' + (state.selectedBoard.total_cols + 1);
       state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
       state.selectedBoard[newCol] = action.payload;
+
+      toast.dismiss('addingStatusColumn');
       toast.success(
         `Successfully Added a Column in ${state.selectedBoard.title}`
       );
@@ -455,6 +471,12 @@ const boardSlice = createSlice({
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
+    builder.addCase(deleteColumn.pending, () => {
+      toast.loading('Deleting Status Column', {
+        toastId: 'deletingStatusColumn'
+      });
+    });
+
     builder.addCase(deleteColumn.fulfilled, (state, action) => {
       delete state.selectedBoardStatusCols[action.payload[1]];
       state.selectedBoard = action.payload[0];
@@ -462,9 +484,16 @@ const boardSlice = createSlice({
       // const newCol = 'column' + (state.selectedBoard.total_cols + 1);
       // state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
       // state.selectedBoard[newCol] = action.payload;
+      toast.dismiss('deletingStatusColumn');
       toast.success(
         `Successfully Deleted a Column in ${state.selectedBoard.title}`
       );
+    });
+
+    builder.addCase(updateBoardColumn.pending, () => {
+      toast.loading('Updating Status Column', {
+        toastId: 'updatingStatusColumn'
+      });
     });
 
     builder.addCase(updateBoardColumn.fulfilled, (state, action) => {
@@ -481,7 +510,8 @@ const boardSlice = createSlice({
         state.selectedBoard[columnName] = newStatusName;
       }
 
-      toast.success('Successfully Renamed a List');
+      toast.dismiss('updatingStatusColumn');
+      toast.success('Successfully Renamed List');
     });
 
     // Display errors in updateBoardColumn with toastify
@@ -489,16 +519,25 @@ const boardSlice = createSlice({
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
+    builder.addCase(updateBoardName.pending, () => {
+      toast.loading('Updating Board Name', {
+        toastId: 'updatingBoardName'
+      });
+    });
+
     builder.addCase(updateBoardName.fulfilled, (state, action) => {
       const foundIndex = state.boards.findIndex(
         job => job.id === action.payload.id
       );
       state.boards[foundIndex].title = action.payload.title;
-      toast.success('Successfully Renamed a Board');
+
+      toast.dismiss('updatingBoardName');
+      toast.success('Successfully Renamed Board');
     });
 
     // Display errors in updateBoardName with toastify
     builder.addCase(updateBoardName.rejected, (state, action) => {
+      toast.dismiss('updatingBoardName');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
@@ -513,9 +552,15 @@ const boardSlice = createSlice({
         board => board.id !== action.payload.id
       );
 
-      toast.success('Successfully Deleted a Board');
+      toast.success('Successfully Deleted Board');
     });
     ////////////////////////////// JOBS EXTRA REDUCER ////////////////////////////
+    builder.addCase(addJob.pending, (state, action) => {
+      toast.loading('Adding New Job', {
+        toastId: 'addingJob'
+      });
+    });
+
     builder.addCase(addJob.fulfilled, (state, action) => {
       // Updates the Kanban Board
       state.selectedBoardStatusCols[action.payload.status] = [
@@ -536,11 +581,13 @@ const boardSlice = createSlice({
         state.boards[index].total_jobs_count++;
       }
 
-      toast.success('Successfully Added a New Job');
+      toast.dismiss('addingJob');
+      toast.success('Successfully Added New Job');
     });
 
     // Display errors in addJob with toastify
     builder.addCase(addJob.rejected, (state, action) => {
+      toast.dismiss('addingJob');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 
@@ -552,6 +599,12 @@ const boardSlice = createSlice({
       // const cols = state.selectedBoardStatusCols;
       jobs.forEach(job => state.selectedBoardStatusCols[job.status].push(job));
       state.jobs = jobs;
+    });
+
+    builder.addCase(updateJobStatus.pending, () => {
+      toast.loading('Updating Job Status', {
+        toastId: 'updatingJobStatus'
+      });
     });
 
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
@@ -569,7 +622,14 @@ const boardSlice = createSlice({
 
       state.jobs[jobIndexInJobs].status = action.payload.status;
 
+      toast.dismiss('updatingJobStatus');
       toast.success('Successfully Updated Job Status');
+    });
+
+    builder.addCase(updateJobInfo.pending, () => {
+      toast.loading('Updating Job Info', {
+        toastId: 'updatingJobInfo'
+      });
     });
 
     builder.addCase(updateJobInfo.fulfilled, (state, action) => {
@@ -601,12 +661,20 @@ const boardSlice = createSlice({
       state.selectedBoardStatusCols[action.payload.status][foundIndex] =
         tempSelectedJob;
 
+      toast.dismiss('updatingJobInfo');
       toast.success('Successfully Updated Job Info');
     });
 
     // Display errors in updateJobInfo with toastify
     builder.addCase(updateJobInfo.rejected, (state, action) => {
+      toast.dismiss('updatingJobInfo');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(deleteJob.pending, () => {
+      toast.loading('Deleting Job', {
+        toastId: 'deletingJob'
+      });
     });
 
     builder.addCase(deleteJob.fulfilled, (state, action) => {
@@ -629,7 +697,14 @@ const boardSlice = createSlice({
         state.boards[index].total_jobs_count--;
       }
 
-      toast.success('Successfully Deleted a Job');
+      toast.dismiss('deletingJob');
+      toast.success('Successfully Deleted Job');
+    });
+
+    // @TODO: CREATE A BETTER REJECTED MESSAGE
+    builder.addCase(deleteJob.rejected, () => {
+      toast.dismiss('deletingJob');
+      toast.error('Delete Failed');
     });
 
     ////////////////////// UPDATE HERE FROM FULLFILLING ACTIONS FROM ANOTHER REDUCER///////////////////////////////////
