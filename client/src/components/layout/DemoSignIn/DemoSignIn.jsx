@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSignIn } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
+import styles from './DemoSignIn.module.scss';
 
 export default function DemoSignIn() {
   // const [demoAccount, setDemoAccount] = useState({
@@ -33,5 +34,9 @@ export default function DemoSignIn() {
       console.error('error', err.errors[0].longMessage);
     }
   };
-  return <button onClick={() => handleLogin()}>Demo Account Sign In</button>;
+  return (
+    <button className={styles.demoButton} onClick={() => handleLogin()}>
+      View Demo Account
+    </button>
+  );
 }

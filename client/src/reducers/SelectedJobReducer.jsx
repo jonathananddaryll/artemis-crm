@@ -219,7 +219,8 @@ const selectedJobSlice = createSlice({
     tasks: [],
     completedTasks: [],
     interviews: [],
-    completedInterviews: []
+    completedInterviews: [],
+    linkedContacts: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
@@ -232,6 +233,7 @@ const selectedJobSlice = createSlice({
       state.interviews = [];
       state.completedInterviews = [];
       state.completedTasks = [];
+      state.linkedContacts = [];
     }
   },
   extraReducers: builder => {
