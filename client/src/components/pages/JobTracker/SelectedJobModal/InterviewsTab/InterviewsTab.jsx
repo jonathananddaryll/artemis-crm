@@ -37,7 +37,7 @@ export default function InteviewTab({
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   // Submit handler
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formD = {
@@ -54,9 +54,10 @@ export default function InteviewTab({
 
     dispatch(createTask(formD));
 
-    // hide the form after creating a new interview
+    // Hides the form after creating a new interview
     setFormToggle(false);
 
+    // Resets formData
     const resetFormData = {
       title: '',
       category: '',
@@ -66,7 +67,7 @@ export default function InteviewTab({
     };
 
     setFormData(resetFormData);
-  }
+  };
 
   return (
     <div className={styles.interviewsTabContainer}>

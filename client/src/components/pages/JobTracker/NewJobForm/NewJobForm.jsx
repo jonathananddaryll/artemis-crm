@@ -11,16 +11,6 @@ export default function NewJobForm() {
       ...state.board
     }));
 
-  // const [formData, setFormData] = useState({
-  //   company: '',
-  //   job_title: '',
-  //   status: selectedStatusToAdd,
-  //   job_url: '',
-  //   board_id: selectedBoard.id,
-  //   location: '',
-  //   selectedboard_user_id: selectedBoard.user_id
-  // });
-
   const [formData, setFormData] = useState({
     company: '',
     job_title: '',
@@ -31,6 +21,7 @@ export default function NewJobForm() {
     selectedboard_user_id: selectedBoard.user_id
   });
 
+  // Destructure formData
   const {
     company,
     job_title,
@@ -42,16 +33,13 @@ export default function NewJobForm() {
   } = formData;
 
   const { session } = useSession();
+  const dispatch = useDispatch();
 
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
-
-    // dispatch(createBoard(title));
-
-    // const token = await session.getToken();
 
     const formD = {
       company: company,
@@ -75,14 +63,10 @@ export default function NewJobForm() {
     };
 
     dispatch(addJob(formD));
-    // console.log(foformDrmData);
-    // console.log(token);
-
     setFormData(clearedForm);
     dispatch(handleToggleForm([false, null]));
-  }
+  };
 
-  const dispatch = useDispatch();
   return (
     <div className={styles.wrapper}>
       <div

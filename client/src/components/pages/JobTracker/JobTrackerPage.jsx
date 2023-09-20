@@ -30,17 +30,23 @@ export default function JobTrackerPage() {
     ...state.board
   }));
 
-  const { userId } = useAuth();
-
   // toggle for the Add List form
   const [addListToggle, setAddListToggle] = useState(false);
 
   // @TODO: RENAME THESE TWO TO A BETTER NAME LATER ON.. NAME IT SOMETHING THAT MAKE SENSE
   const [loadStart, setLoadStart] = useState(true); // for  board
   const [loadStart1, setLoadStart1] = useState(true); // for jobs
-
+  const { userId } = useAuth();
   const { board_id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirects the user when they try to go to board page that they do not own
+    if (selectedBoard !== null && selectedBoard.user_id !== userId) {
+      navigate('/boards');
+    }
+  }, [selectedBoard]);
 
   // get all the jobs
   // useEffect(() => {
@@ -85,15 +91,6 @@ export default function JobTrackerPage() {
     dispatch(getjobswithBoardId(board_id));
     setLoadStart1(false);
   }
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirects the user when they try to go to board page that they do not own
-    if (selectedBoard !== null && selectedBoard.user_id !== userId) {
-      navigate('/boards');
-    }
-  }, [selectedBoard]);
 
   // Redirects after board deletion
   if (selectedBoard === null && selectedBoardStatusCols === null) {

@@ -14,7 +14,7 @@ export default function StatusUpdateForm({
   const dispatch = useDispatch();
   const { session } = useSession();
 
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
     const formData = {
       id: selectedBoard.id,
@@ -32,7 +32,7 @@ export default function StatusUpdateForm({
     setStatusFormToggle({ ind: null, state: false, column: null });
     // console.log(newTitle);
     // console.log(statusFormToggle.column);
-  }
+  };
 
   return (
     <div className={styles.updateForm}>

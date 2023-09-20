@@ -23,13 +23,12 @@ export default function TasksTab({
 }) {
   const [formToggle, setFormToggle] = useState(false);
   const [confirmationToggle, setConfirmationToggle] = useState(false);
-
   const [selectedTask, setSelectedTask] = useState({
     isActive: false,
     taskId: null,
     taskTitle: null
   });
-
+  const [isUpdate, setIsUpdate] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -43,8 +42,6 @@ export default function TasksTab({
 
   const dispatch = useDispatch();
   const { session } = useSession();
-
-  const [isUpdate, setIsUpdate] = useState(false);
 
   // Open Create Form Handler for the 'Create Task' button
   const openCreateForm = () => {
@@ -93,7 +90,7 @@ export default function TasksTab({
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   // Submit handler
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formD = {
@@ -131,10 +128,10 @@ export default function TasksTab({
 
     setFormData(resetFormData);
     setIsUpdate(false);
-  }
+  };
 
   // Submit handler for updating status of the task
-  async function onUpdateStatusHandler(task) {
+  const onUpdateStatusHandler = async task => {
     const formD = {
       status: !task.is_done,
       taskId: task.id,
@@ -150,10 +147,10 @@ export default function TasksTab({
     };
 
     dispatch(updateTaskStatus(formD));
-  }
+  };
 
   // Delete Task
-  async function handleDeleteTask(taskId, taskTitle) {
+  const handleDeleteTask = async (taskId, taskTitle) => {
     const formData = {
       jobId: jobId,
       selectedboard_user_id: selectedBoard_userId,
@@ -167,7 +164,7 @@ export default function TasksTab({
     // Resets the setSelectedTask and toggles off the confirmation pop up
     setSelectedTask({ isActive: false, taskId: null });
     setConfirmationToggle(false);
-  }
+  };
 
   return (
     <div className={styles.tasksTabContainer}>

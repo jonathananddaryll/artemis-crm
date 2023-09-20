@@ -9,22 +9,20 @@ export default function AddListForm({
   setAddListToggle,
   selectedBoard: { id, total_cols, user_id }
 }) {
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     id: id,
     totalCols: total_cols,
     columnStatus: '',
     userId: user_id
   });
-
+  const dispatch = useDispatch();
   const { session } = useSession();
-
   const { columnStatus } = formData;
 
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  async function onSubmit(e) {
+  const onSubmit = async e => {
     e.preventDefault();
 
     // IMPORTANT..... MAKE SURE THIS PART OF ADDING TOKEN TO THE FORMDATA IS UNIFORM ACROSS EVERY FORMDATA. FIX THIS LATER, MAKE SURE IT'S CODED BETTER AND CLEANER
@@ -34,7 +32,7 @@ export default function AddListForm({
 
     dispatch(addColumn(formD));
     setAddListToggle(false);
-  }
+  };
 
   return (
     <div className={styles.form_wrapper}>

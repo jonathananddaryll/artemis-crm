@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './DemoSignIn.module.scss';
 
 export default function DemoSignIn() {
-  // const [demoAccount, setDemoAccount] = useState({
-  //   emailAddress: 'artemisdemoacc@gmail.com',
-  //   password: '@ArtemisDemo'
-  // });
-
+  // Demo Account -> maybe add this to ENV
   const demoAccount = {
     emailAddress: 'artemisdemoacc@gmail.com',
     password: '@ArtemisDemo'

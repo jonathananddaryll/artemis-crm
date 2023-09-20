@@ -7,7 +7,7 @@ const format = require('pg-format');
 // middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
-  validateRequest,
+  validateRequest
 } = require('../../middlewares/validators');
 
 const { decodeToken } = require('../../middlewares/decodeToken');

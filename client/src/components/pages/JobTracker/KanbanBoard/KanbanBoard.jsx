@@ -29,7 +29,7 @@ export default function KanbanBoard({
   const { session } = useSession();
 
   // Handles the dropping of the job
-  async function handleDragEnd(result) {
+  const handleDragEnd = async result => {
     const { destination, source, draggableId } = result;
     if (source.droppableId == destination.droppableId) return;
 
@@ -67,9 +67,9 @@ export default function KanbanBoard({
     // THIS IS WHERE THE API CALL IS HAPPENING.. THINK OF A WAY TO MERGE THE addToStatus with this later on
     // ADD TOKEN HERE
     dispatch(updateJobStatus(formData));
-  }
+  };
 
-  async function handleColumnDelete(columnNum, columnStatus) {
+  const handleColumnDelete = async (columnNum, columnStatus) => {
     const formD = {
       id: selectedBoard.id,
       userId: selectedBoard.user_id,
@@ -84,7 +84,7 @@ export default function KanbanBoard({
     };
 
     dispatch(deleteColumn(formD));
-  }
+  };
 
   // // Find item by ID
   // function findItemById(id, array) {

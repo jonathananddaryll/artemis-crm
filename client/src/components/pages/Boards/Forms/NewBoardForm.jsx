@@ -12,7 +12,7 @@ export default function NewBoardForm({ toggleHandler, setFormToggle }) {
 
   const { session } = useSession();
 
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formData = {
@@ -27,7 +27,7 @@ export default function NewBoardForm({ toggleHandler, setFormToggle }) {
 
     // Close the Form
     setFormToggle(false);
-  }
+  };
 
   return (
     <div className={styles.updateFormContainer}>
