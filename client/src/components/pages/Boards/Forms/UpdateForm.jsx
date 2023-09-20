@@ -11,7 +11,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
 
   const { session } = useSession();
 
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formData = {
@@ -23,8 +23,7 @@ export default function UpdateForm({ board, handleToggleUpdateForm }) {
 
     dispatch(updateBoardName(formData));
     handleToggleUpdateForm({ ind: null, state: false });
-    console.log(formData);
-  }
+  };
 
   return (
     <div className={styles.updateFormContainer}>

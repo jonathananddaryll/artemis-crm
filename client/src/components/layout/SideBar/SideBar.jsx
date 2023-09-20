@@ -30,6 +30,7 @@ export default function SideBar() {
   ];
 
   const navigate = useNavigate();
+
   const signOutHandler = () => {
     signOut();
     navigate('/');

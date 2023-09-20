@@ -12,11 +12,10 @@ export default function BoardHeader({
   selectedBoard: { id, user_id, title, total_jobs_count }
 }) {
   const [confirmationToggle, setConfirmationToggle] = useState(false);
-
   const dispatch = useDispatch();
   const { session } = useSession();
 
-  async function handleDeleteBoard() {
+  const handleDeleteBoard = async () => {
     const formData = {
       boardId: id,
       selectedBoard_userId: user_id,
@@ -27,7 +26,7 @@ export default function BoardHeader({
 
     // change selectedJob to null and modal off
     // dispatch(changeSelectedJob([false, null]));
-  }
+  };
 
   return (
     <div className={styles.boardContainer}>

@@ -20,11 +20,11 @@ export default function JobInfoTab({
     job_url: selectedJob.job_url ?? ''
   });
 
-  const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
-
   // Deconstruct formData
   const { company, job_title, location, rate_of_pay, job_url } = formData;
 
+  const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
+  const [noteDesc, setNoteDesc] = useState(selectedJob.description ?? '');
   const { session } = useSession();
   const dispatch = useDispatch();
 
@@ -32,9 +32,7 @@ export default function JobInfoTab({
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const [noteDesc, setNoteDesc] = useState(selectedJob.description ?? '');
-
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formD = {
@@ -49,7 +47,6 @@ export default function JobInfoTab({
       token: await session.getToken()
     };
 
-    console.log(formD);
     // dispatch the updateCall
     dispatch(updateJobInfo(formD));
 
@@ -57,8 +54,9 @@ export default function JobInfoTab({
     if (formD.job_url !== '') setShowUrl(true);
 
     // Dont clear the form
-  }
+  };
 
+  // For the Description Box
   const toolbarOption = [
     [{ size: ['small', false, 'large', 'huge'] }],
     [{ header: 1 }, { header: 2 }],
@@ -69,6 +67,7 @@ export default function JobInfoTab({
   const module = {
     toolbar: toolbarOption
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.jobInfoForm}>

@@ -17,23 +17,22 @@ export default function BoardsPage() {
     ind: null,
     state: false
   });
-
   const { userId } = useAuth();
 
-  const toggleHandler = () => {
-    setFormToggle(!formToggle);
-  };
-
-  // this is how to use the action in the extrareducer.
-  const dispatch = useDispatch();
-
-  // // get all the jobs
+  // get all the jobs
   useEffect(() => {
     // this will be loaded with the current loggedIn user's user_id
     if (boardsLoading) {
       dispatch(getBoards(userId));
     }
   }, []);
+
+  // this is how to use the action in the extrareducer.
+  const dispatch = useDispatch();
+
+  const toggleHandler = () => {
+    setFormToggle(!formToggle);
+  };
 
   const handleBoardClick = board => {
     dispatch(changeBoard(board));

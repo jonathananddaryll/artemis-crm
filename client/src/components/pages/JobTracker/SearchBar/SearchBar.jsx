@@ -5,7 +5,6 @@ import styles from './SearchBar.module.scss';
 export default function SearchBar({ filterJob }) {
   const [searchFilter, setSearchFilter] = useState('');
   const dispatch = useDispatch();
-
   const firstUpdate = useRef(true);
 
   useEffect(() => {

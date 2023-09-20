@@ -32,8 +32,10 @@ import Timeline from './Timeline/Timeline';
 import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {
+  const [confirmationToggle, setConfirmationToggle] = useState(false);
+  const [activeItem, setActiveItem] = useState(0);
+  const { session } = useSession();
   const dispatch = useDispatch();
-
   const { selectedJob, selectedBoard } = useSelector(state => ({
     ...state.board
   }));
@@ -63,11 +65,6 @@ export default function SelectedJobModal() {
     dispatch(getAllTasks(selectedJob.id));
   };
 
-  const [confirmationToggle, setConfirmationToggle] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
-
-  const { session } = useSession();
-
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
     { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
@@ -81,7 +78,7 @@ export default function SelectedJobModal() {
     }
   ];
 
-  async function handleDeleteJob() {
+  const handleDeleteJob = async () => {
     const formData = {
       jobId: selectedJob.id,
       selectedBoard_id: selectedBoard.id,
@@ -93,8 +90,9 @@ export default function SelectedJobModal() {
 
     // change selectedJob to null and modal off
     dispatch(changeSelectedJob([false, null]));
-  }
+  };
 
+  // Handles closing the modal
   const handleClosingModal = () => {
     dispatch(resetSelectedJobItems());
     dispatch(changeSelectedJob([false, null]));

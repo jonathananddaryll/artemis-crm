@@ -21,13 +21,12 @@ export default function NotesTab({
   updateNote
 }) {
   const [noteFormToggle, setNoteFormToggle] = useState(false);
-
   const [selectedNote, setSelectedNote] = useState({
     isActive: false,
     noteId: null
   });
-
   const [noteText, setNoteText] = useState('');
+
   // This is just to keeptrack of the selected noteId for Updating purposes
   const [noteId, setNoteId] = useState(0);
 
@@ -38,7 +37,7 @@ export default function NotesTab({
   const { session } = useSession();
 
   // Submit handler
-  async function onSubmitHandler(e) {
+  const onSubmitHandler = async e => {
     e.preventDefault();
 
     const formData = {
@@ -66,7 +65,7 @@ export default function NotesTab({
 
     // hide the form after creating a note
     setNoteFormToggle(false);
-  }
+  };
 
   // Fills the textarea with the text from note that's being updated
   const onEditHandler = note => {
@@ -84,7 +83,7 @@ export default function NotesTab({
   };
 
   // Deletes Note
-  async function handleDeleteNote(noteId) {
+  const handleDeleteNote = async noteId => {
     const formData = {
       jobId: jobId,
       selectedboard_user_id: selectedBoard_userId,
@@ -96,8 +95,9 @@ export default function NotesTab({
 
     // Resets the selectedNoteId and toggles off the confirmation pop up
     setSelectedNote({ isActive: false, noteId: null });
-  }
+  };
 
+  // For Quill TextArea box
   const toolbarOption = [
     [{ size: ['small', false, 'large', 'huge'] }],
     [{ header: 1 }, { header: 2 }],
