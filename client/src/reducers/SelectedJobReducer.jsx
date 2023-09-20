@@ -137,9 +137,33 @@ export const createTask = createAsyncThunk(
   }
 );
 
+export const updateTask = createAsyncThunk(
+  'task/updateTask',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.patch(
+        `/api/tasks/${formData.taskId}/info`,
+        formData,
+        config
+      );
+      return res.data;
+    } catch (err) {
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
 // Updates a task status
 export const updateTaskStatus = createAsyncThunk(
-  'note/updateTaskStatus',
+  'task/updateTaskStatus',
   async (formData, thunkAPI) => {
     const config = {
       headers: {
@@ -156,7 +180,8 @@ export const updateTaskStatus = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      console.log(err);
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
     }
   }
 );
@@ -298,8 +323,58 @@ const selectedJobSlice = createSlice({
       toast.success('Successfully Created a New Task');
     });
 
+    builder.addCase(updateTask.fulfilled, (state, action) => {
+      const updatedTask = action.payload[0].rows[0];
+
+      // Delete Old Task from state.tasks and state.completedTasks
+      state.tasks = state.tasks.filter(task => task.id !== updatedTask.id);
+      state.completedTasks = state.completedTasks.filter(
+        task => task.id !== updatedTask.id
+      );
+
+      // Add updated task to tasks/completedTasks.
+      // Did it this way instead of updating the current value in index
+      // because user might change the status of the task.
+      updatedTask.is_done === false
+        ? (state.tasks = [updatedTask, ...state.tasks])
+        : (state.completedTasks = [updatedTask, ...state.completedTasks]);
+
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+
+      // Check if the new added task is interview or screen type
+      if (
+        updatedTask.category.includes('e Interview') ||
+        updatedTask.category.includes('Screen')
+      ) {
+        // Deletes old task/interview
+        state.interviews = state.interviews.filter(
+          task => task.id !== updatedTask.id
+        );
+        state.completedInterviews = state.completedInterviews.filter(
+          task => task.id !== updatedTask.id
+        );
+
+        // Add the updated task
+        if (updatedTask.is_done === false) {
+          state.interviews = [updatedTask, ...state.interviews];
+        } else {
+          state.completedInterviews = [
+            updatedTask,
+            ...state.completedInterviews
+          ];
+        }
+      }
+
+      toast.success('Successfully Updated a Task');
+    });
+
     // Display errors in createTask with toastify
     builder.addCase(createTask.rejected, (state, action) => {
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    // Display errors in updateTask with toastify
+    builder.addCase(updateTask.rejected, (state, action) => {
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
     });
 

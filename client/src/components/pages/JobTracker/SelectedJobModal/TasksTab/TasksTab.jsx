@@ -18,7 +18,8 @@ export default function TasksTab({
   selectedBoard_userId,
   jobId,
   updateTaskStatus,
-  deleteTask
+  deleteTask,
+  updateTask
 }) {
   const [formToggle, setFormToggle] = useState(false);
   const [confirmationToggle, setConfirmationToggle] = useState(false);
@@ -43,6 +44,50 @@ export default function TasksTab({
   const dispatch = useDispatch();
   const { session } = useSession();
 
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  // Open Create Form Handler for the 'Create Task' button
+  const openCreateForm = () => {
+    setFormToggle(true);
+    setSelectedTask({
+      isActive: false,
+      taskId: null,
+      taskTitle: null
+    });
+  };
+
+  // Fills the form with the info from task being updated
+  const onEditHandler = task => {
+    const updateFormData = {
+      title: task.title,
+      category: task.category,
+      start_date: new Date(task.start_date),
+      note: task.note,
+      is_done: task.is_done
+    };
+
+    // Update Form Data
+    setFormData(updateFormData);
+
+    setIsUpdate(true);
+    setFormToggle(true);
+  };
+
+  // Cancels the edit/create form
+  const onCancelFormHandler = () => {
+    const resetFormData = {
+      title: '',
+      category: '',
+      note: '',
+      start_date: new Date(),
+      is_done: false
+    };
+
+    setFormData(resetFormData);
+    setIsUpdate(false);
+    setFormToggle(false);
+  };
+
   // onChange Hander
   const onChangeHandler = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -60,14 +105,22 @@ export default function TasksTab({
       selectedboard_user_id: selectedBoard_userId,
       jobId: jobId,
       date_completed: is_done === true ? start_date.toLocaleString() : null,
-      token: await session.getToken()
+      token: await session.getToken(),
+      taskId: selectedTask.taskId
     };
 
-    dispatch(createTask(formD));
+    if (!isUpdate) {
+      dispatch(createTask(formD));
+    } else {
+      //add dispatch here for update
+      dispatch(updateTask(formD));
+      console.log('THIS IS AN UPDATE!!!!!!!!!!!!!!!!');
+    }
 
     // hide the form after creating a new task
     setFormToggle(false);
 
+    // Resets formData
     const resetFormData = {
       title: '',
       category: '',
@@ -77,6 +130,7 @@ export default function TasksTab({
     };
 
     setFormData(resetFormData);
+    setIsUpdate(false);
   }
 
   // Submit handler for updating status of the task
@@ -123,7 +177,8 @@ export default function TasksTab({
             type={'button'}
             value={'Create Task'}
             color={'blue'}
-            onClick={() => setFormToggle(true)}
+            // onClick={() => setFormToggle(true)}
+            onClick={() => openCreateForm()}
             size={'small'}
           />
         </div>
@@ -204,12 +259,12 @@ export default function TasksTab({
                 type={'button'}
                 value={'Cancel'}
                 color={'white'}
-                onClick={() => setFormToggle(false)}
+                onClick={() => onCancelFormHandler()}
                 size={'small'}
               />
               <Button
                 type={'submit'}
-                value={'Create Task'}
+                value={isUpdate ? 'Update Task' : 'Create Task'}
                 color={'blue'}
                 size={'small'}
                 disabled={title === '' || category === '' || note === ''}
@@ -278,6 +333,13 @@ export default function TasksTab({
                             />
                             <Button
                               type={'button'}
+                              value={'Edit Task'}
+                              color={'green'}
+                              size={'xsmall'}
+                              onClick={() => onEditHandler(task)}
+                            />
+                            <Button
+                              type={'button'}
                               value={'Delete Task'}
                               color={'red'}
                               size={'xsmall'}
@@ -338,6 +400,13 @@ export default function TasksTab({
                                   taskTitle: null
                                 })
                               }
+                            />
+                            <Button
+                              type={'button'}
+                              value={'Edit Task'}
+                              color={'green'}
+                              size={'xsmall'}
+                              onClick={() => onEditHandler(task)}
                             />
                             <Button
                               type={'button'}

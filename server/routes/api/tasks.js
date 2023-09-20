@@ -90,8 +90,6 @@ router.post('/', taskInputValidator, validateRequest, async (req, res) => {
       title
     );
 
-    console.log(query);
-
     try {
       client.query(query, (err, response) => {
         if (err) {
@@ -113,6 +111,78 @@ router.post('/', taskInputValidator, validateRequest, async (req, res) => {
     }
   }
 });
+
+// @route     PATCH api/tasks/:id/info
+// @desc      Updates a task
+// @access    Private
+router.patch(
+  '/:id/info',
+  taskInputValidator,
+  validateRequest,
+  async (req, res) => {
+    // const errors = validationResult(req);
+    const client = new Client(config);
+    client.connect();
+    const {
+      title,
+      category,
+      start_date,
+      note,
+      is_done,
+      date_completed,
+      jobId,
+      selectedboard_user_id
+    } = req.body;
+
+    const taskId = req.params.id;
+
+    // Decode the token
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+
+    // if the user doesnt own the board throw error
+    if (selectedboard_user_id !== userId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the board/job' });
+    } else {
+      const query = format(
+        `UPDATE task SET title = %L, category = %L, note = %L, is_done = %L, date_completed = %L, start_date = %L WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+        title,
+        category,
+        note,
+        is_done,
+        date_completed,
+        start_date,
+        taskId,
+        jobId,
+        jobId,
+        'Updated a task',
+        title
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          // For Note
+          // response[0].rows[0];
+          // For Timeline
+          // response[1].rows[0];
+          // return both response for note and timeline
+          res.status(200).json(response);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    }
+  }
+);
 
 // @route     PATCH api/tasks/:id/status
 // @desc      updates a task
