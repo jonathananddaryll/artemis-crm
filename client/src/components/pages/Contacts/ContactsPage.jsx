@@ -10,7 +10,7 @@ import {
   updateSearchQuery,
   updateContactInFocus,
   updateContactSelected,
-  setNewContactStaging,
+  setNewContactStaging
 } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
@@ -33,9 +33,9 @@ export default function ContactsPage() {
 
   const dispatch = useDispatch();
   // redux store updates when a user has asked to search with a string/filter
-  const searchResults = useSelector((state) => state.contact.searchResults);
+  const searchResults = useSelector(state => state.contact.searchResults);
   // redux store updates when a user is changing which contact they look at
-  const contactSelected = useSelector((state) => state.contact.contactSelected);
+  const contactSelected = useSelector(state => state.contact.contactSelected);
   // const contactsCache = useSelector((state) => state.contact.contactsCache);
   // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
@@ -43,24 +43,24 @@ export default function ContactsPage() {
   const [searchType, setSearchType] = useState('name');
   const [searchParams, setSearchParams] = useState({
     type: 'name',
-    strValue: '',
+    strValue: ''
   });
 
   // Controlled component function for the search input element
   function updateSearchString(e) {
-    setSearchParams((oldParams) => {
+    setSearchParams(oldParams => {
       return {
         ...oldParams,
-        strValue: e.target.value,
+        strValue: e.target.value
       };
     });
   }
 
   // Client side input validation/sanitizer
-  const validateSearchParams = (searchObj) => {
+  const validateSearchParams = searchObj => {
     let validated = {
       type: searchObj.type,
-      strValue: '',
+      strValue: ''
     };
     if (searchObj.strValue === '') {
       console.log('you didnt type anything valid');
@@ -101,7 +101,7 @@ export default function ContactsPage() {
         instagram: null,
         other_social: null,
         personal_site: null,
-        linked_job_opening: null,
+        linked_job_opening: null
       })
     );
     // then toggle the form visibility
@@ -170,7 +170,7 @@ export default function ContactsPage() {
         </nav>
         <section className={styles.searchBar}>
           <input
-            onChange={(e) => updateSearchString(e)}
+            onChange={e => updateSearchString(e)}
             type='text'
             inputMode='search'
             name='searchBar'
@@ -178,10 +178,7 @@ export default function ContactsPage() {
             value={searchParams.strValue}
             placeholder={searchType}
           />
-          <button
-            className={styles.searchButton}
-            onClick={searchSubmit}
-          >
+          <button className={styles.searchButton} onClick={searchSubmit}>
             <i
               className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
             ></i>
@@ -194,13 +191,10 @@ export default function ContactsPage() {
         </section>
         <section className={styles.searchResultsContainer}>
           {!!searchResults &&
-            searchResults.map((element) => {
+            searchResults.map(element => {
               return (
                 // a business card.
-                <ContactCard
-                  contactInfo={element}
-                  key={element.id}
-                />
+                <ContactCard contactInfo={element} key={element.id} />
               );
             })}
         </section>

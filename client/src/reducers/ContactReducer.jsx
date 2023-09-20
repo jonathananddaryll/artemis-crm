@@ -24,12 +24,12 @@ export const getUserContactsTable = createAsyncThunk(
       url: '/api/contacts',
       withCredentials: false,
       params: {
-        user_id: idAndToken.user_id,
+        user_id: idAndToken.user_id
       },
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${idAndToken.token}`,
-      },
+        authorization: `Bearer ${idAndToken.token}`
+      }
     };
     try {
       const res = await axios.get(`/api/contacts/`, config);
@@ -46,12 +46,12 @@ export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (deleteRequest, thunkAPI) => {
     const headers = {
-      authorization: `Bearer ${deleteRequest.token}`,
+      authorization: `Bearer ${deleteRequest.token}`
     };
     try {
       const res = await axios.delete('/api/contacts/', {
         data: { deleteRequest },
-        headers,
+        headers
       });
       // response object should include the row that was deleted, used to
       // confirm that the delete occurred in the backend.
@@ -75,14 +75,14 @@ export const updateContact = createAsyncThunk(
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`,
-        },
+          authorization: `Bearer ${token}`
+        }
       };
       const body = {
         user_id: user_id,
         updateWhat: updateWhat,
         updateTo: updateTo,
-        id: id,
+        id: id
       };
       const res = await axios.patch('/api/contacts/', body, config);
       // Response object should include the row that was successfully updated, so
@@ -102,8 +102,8 @@ export const createContact = createAsyncThunk(
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${createRequest.token}`,
-      },
+        authorization: `Bearer ${createRequest.token}`
+      }
     };
     try {
       const res = await axios.post('/api/contacts/', createRequest, config);
@@ -124,12 +124,12 @@ export const getRecentContacts = createAsyncThunk(
   async (historyRequest, thunkAPI) => {
     const headers = {
       'Content-Type': 'application/json',
-      authorization: `Bearer ${historyRequest.token}`,
+      authorization: `Bearer ${historyRequest.token}`
     };
     try {
       const res = await axios.post('api/contacts/recents', {
         headers,
-        ...historyRequest,
+        ...historyRequest
       });
       return res.data;
     } catch (err) {
@@ -153,10 +153,10 @@ const contactSlice = createSlice({
     contactsLoading: true,
     searchQuery: {
       type: 'name',
-      strValue: '',
+      strValue: ''
     },
     searchFilters: [],
-    printout: {},
+    printout: {}
   },
   reducers: {
     // pass in a new contact to look at
@@ -201,11 +201,11 @@ const contactSlice = createSlice({
     // Filter out all the contacts that aren't is_priority === true
     getContactsPriority: (state, action) => {
       state.searchResults = state.contactsCache.filter(
-        (element) => element.is_priority
+        element => element.is_priority
       );
-    },
+    }
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addCase(getUserContactsTable.fulfilled, (state, action) => {
       // prime the organizer with the entire users collection of contacts
       // with the return value from the async thunk
@@ -217,7 +217,7 @@ const contactSlice = createSlice({
     builder.addCase(getUserContactsTable.pending, (state, action) => {
       state.contactsLoading = true;
       toast.loading('loading contacts...', {
-        toastId: 'getUserContactsTable',
+        toastId: 'getUserContactsTable'
       });
     });
     builder.addCase(getUserContactsTable.rejected, (state, action) => {
@@ -225,34 +225,33 @@ const contactSlice = createSlice({
         render: 'Your contacts are temporarily unavailable, please try again',
         type: toast.TYPE.ERROR,
         isLoading: false,
+        autoClose: 2000
       });
-      action.payload.forEach((error) =>
-        toast.error(error, { autoClose: 2000 })
-      );
+      action.payload.forEach(error => toast.error(error, { autoClose: 2000 }));
     });
     builder.addCase(deleteContact.fulfilled, (state, action) => {
       // Remove that specific object from the array of contacts locally
       // matching it with the return value from the async thunk
       state.contactsCache = state.contactsCache.filter(
-        (element) => element.id !== state.contactInFocus.id
+        element => element.id !== state.contactInFocus.id
       );
       // Also, if the user was clicking in some search results,
       // make sure the search results update, too.
       state.searchResults = state.searchResults.filter(
-        (element) => element.id !== state.contactInFocus.id
+        element => element.id !== state.contactInFocus.id
       );
       state.contactSelected = false;
       toast.update('deleteContact', {
         render: 'delete successful',
         type: toast.TYPE.SUCCESS,
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 2000
       });
     });
     builder.addCase(deleteContact.pending, (state, action) => {
       // While it's pending deleted, load toastify message ("delete pending")
       toast.loading('deleting...', {
-        toastId: 'deleteContact',
+        toastId: 'deleteContact'
       });
     });
     builder.addCase(deleteContact.rejected, (state, action) => {
@@ -262,9 +261,9 @@ const contactSlice = createSlice({
       toast.update('deleteContact', {
         render: 'there was a problem deleting this contact',
         type: toast.TYPE.ERROR,
-        isLoading: false,
+        isLoading: false
       });
-      action.payload.forEach((error) => toast.error(error));
+      action.payload.forEach(error => toast.error(error));
     });
     builder.addCase(updateContact.fulfilled, (state, action) => {
       // Find the contacts in the contactsCache and searchResults, then
@@ -296,15 +295,15 @@ const contactSlice = createSlice({
     builder.addCase(updateContact.pending, (state, action) => {
       // While updating, make sure components render with updated info.
       toast.loading('updating contact...', {
-        toastId: 'updateContact',
+        toastId: 'updateContact'
       });
     });
     builder.addCase(updateContact.rejected, (state, action) => {
       toast.update('updateContact', {
         render: 'update unsuccessful, please try again',
-        isLoading: false,
+        isLoading: false
       });
-      action.payload.forEach((error) => toast.error(error));
+      action.payload.forEach(error => toast.error(error));
     });
     builder.addCase(createContact.fulfilled, (state, action) => {
       // Reset the variable that says the user is in process of creating a contact
@@ -317,17 +316,17 @@ const contactSlice = createSlice({
     });
     builder.addCase(createContact.pending, (state, action) => {
       toast.loading('adding to contacts...', {
-        toastId: 'createContact',
+        toastId: 'createContact'
       });
     });
     builder.addCase(createContact.rejected, (state, action) => {
       toast.update('createContact', {
         render: 'there was a problem adding to contacts, please try again',
-        isLoading: false,
+        isLoading: false
       });
-      action.payload.forEach((error) => toast.error(error));
+      action.payload.forEach(error => toast.error(error));
     });
-  },
+  }
 });
 
 export default contactSlice.reducer;
@@ -337,5 +336,5 @@ export const {
   getContactsSearch,
   getContactsPriority,
   updateSearchQuery,
-  updateContactSelected,
+  updateContactSelected
 } = contactSlice.actions;

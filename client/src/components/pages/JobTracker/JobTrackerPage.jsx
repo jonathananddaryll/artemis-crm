@@ -87,6 +87,7 @@ export default function JobTrackerPage() {
   }
 
   const navigate = useNavigate();
+
   useEffect(() => {
     // Redirects the user when they try to go to board page that they do not own
     if (selectedBoard !== null && selectedBoard.user_id !== userId) {
