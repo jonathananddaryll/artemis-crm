@@ -65,11 +65,6 @@ const taskInputValidator = [
     .isEmpty()
     .isLength({ min: 5 })
 ];
-// @TODO:
-// 1. Validate JobInfo (job update) in SelectedJobModal.JobInfo
-// 3. Tasks: update
-// 4. Interview: Create and Update
-
 
 const contactInputValidator = [
   ...myRequestHeaders,
@@ -102,27 +97,15 @@ const contactInputValidator = [
     .escape()
     .not()
     .isAlpha(),
-  check('email', 'Please enter a valid email address')
-    .optional()
-    .isEmail(),
-  check('linkedin', 'Please enter a valid URL')
-    .optional()
-    .isURL(),
-  check('twitter', 'Please enter a valid URL')
-    .optional()
-    .isURL(),
-  check('instagram', 'Please enter a valid URL')
-    .optional()
-    .isURL(),
-  check('other_social', 'Please enter a valid URL')
-    .optional()
-    .isURL(),
-  check('personal_site', 'Please enter a valid URL')
-    .optional()
-    .isURL(),
+  check('email', 'Please enter a valid email address').optional().isEmail(),
+  check('linkedin', 'Please enter a valid URL').optional().isURL(),
+  check('twitter', 'Please enter a valid URL').optional().isURL(),
+  check('instagram', 'Please enter a valid URL').optional().isURL(),
+  check('other_social', 'Please enter a valid URL').optional().isURL(),
+  check('personal_site', 'Please enter a valid URL').optional().isURL(),
   check('linked_job_opening', 'Please provide a valid job ID number')
     .optional()
-    .isNumeric(),
+    .isNumeric()
 ];
 
 function validateRequest(req, res, next) {

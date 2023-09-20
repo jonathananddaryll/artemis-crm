@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import {
   updateContactInFocus,
-  updateContactSelected,
+  updateContactSelected
 } from '../../../reducers/ContactReducer';
 
 import styles from './ContactCard.module.scss';
