@@ -15,6 +15,7 @@ import SideBar from './components/layout/SideBar/SideBar';
 import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
+import ContactsPage from './components/pages/Contacts/ContactsPage';
 import './styles/globals.scss';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -34,19 +35,18 @@ function App() {
       <BrowserRouter>
         <ClerkProvider
           publishableKey={clerkPubKey}
-          navigate={to => navigate(to)}
-        >
+          navigate={to => navigate(to)}>
           <div className='flex'>
             <SideBar />
             <Routes>
-              {/* <Route
+            <Route
                 path='/sign-in/*'
                 element={<SignIn routing='path' path='/sign-in' />}
               />
               <Route
                 path='/sign-up/*'
                 element={<SignUp routing='path' path='/sign-up' />}
-              /> */}
+              />
 
               <Route path='/' element={<HomePage />} />
               <Route
@@ -75,7 +75,20 @@ function App() {
                     </SignedOut>
                   </>
                 }
-              />
+              ></Route>
+              <Route 
+              path='/contacts/' 
+              element={
+                <>
+                  <SignedIn>
+                    < ContactsPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn></RedirectToSignIn>
+                  </SignedOut>
+                </>
+              }
+              ></Route>
             </Routes>
           </div>
         </ClerkProvider>

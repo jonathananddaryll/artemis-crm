@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   useClerk,
@@ -7,7 +8,6 @@ import {
   useUser,
   SignOutButton
 } from '@clerk/clerk-react';
-
 import DemoSignIn from '../DemoSignIn/DemoSignIn';
 import styles from './SideBar.module.scss';
 
@@ -30,7 +30,6 @@ export default function SideBar() {
   ];
 
   const navigate = useNavigate();
-
   const signOutHandler = () => {
     signOut();
     navigate('/');
