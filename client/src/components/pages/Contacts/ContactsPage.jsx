@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   getContactsSearch,
   getUserContactsTable,
@@ -11,13 +11,13 @@ import {
   updateContactInFocus,
   updateContactSelected,
   setNewContactStaging,
-} from "../../../reducers/ContactReducer";
-import { useAuth } from "@clerk/clerk-react";
+} from '../../../reducers/ContactReducer';
+import { useAuth } from '@clerk/clerk-react';
 
-import Dropdown from "./Dropdown";
-import ContactCard from "./ContactCard";
-import ContactForm from "./ContactForm";
-import styles from "./ContactsPage.module.scss";
+import Dropdown from './Dropdown';
+import ContactCard from './ContactCard';
+import ContactForm from './ContactForm';
+import styles from './ContactsPage.module.scss';
 
 export default function ContactsPage() {
   // A Contacts organizer. Main features are:
@@ -40,10 +40,10 @@ export default function ContactsPage() {
   // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
   // name, company, city - Which are you searching for?
-  const [searchType, setSearchType] = useState("name");
+  const [searchType, setSearchType] = useState('name');
   const [searchParams, setSearchParams] = useState({
-    type: "name",
-    strValue: "",
+    type: 'name',
+    strValue: '',
   });
 
   // Controlled component function for the search input element
@@ -60,10 +60,10 @@ export default function ContactsPage() {
   const validateSearchParams = (searchObj) => {
     let validated = {
       type: searchObj.type,
-      strValue: "",
+      strValue: '',
     };
-    if (searchObj.strValue === "") {
-      console.log("you didnt type anything valid");
+    if (searchObj.strValue === '') {
+      console.log('you didnt type anything valid');
       return false;
     } else {
       let stringTrimmed = searchObj.strValue.trim();
@@ -76,7 +76,7 @@ export default function ContactsPage() {
   function searchSubmit(e) {
     const validated = validateSearchParams(searchParams);
     if (!validated) {
-      console.log("please enter valid text to search with");
+      console.log('please enter valid text to search with');
     } else {
       dispatch(updateSearchQuery(validated));
       dispatch(getContactsSearch());
@@ -171,21 +171,24 @@ export default function ContactsPage() {
         <section className={styles.searchBar}>
           <input
             onChange={(e) => updateSearchString(e)}
-            type="text"
-            inputMode="search"
-            name="searchBar"
+            type='text'
+            inputMode='search'
+            name='searchBar'
             className={styles.contactSearchInput}
             value={searchParams.strValue}
             placeholder={searchType}
           />
-          <button className={styles.searchButton} onClick={searchSubmit}>
+          <button
+            className={styles.searchButton}
+            onClick={searchSubmit}
+          >
             <i
-              className={"fa-solid fa-magnifying-glass " + styles.searchIcon}
+              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
             ></i>
           </button>
           <Dropdown
-            items={["name", "company", "city"]}
-            header={"options"}
+            items={['name', 'company', 'city']}
+            header={'options'}
             setSearchType={setSearchType}
           />
         </section>
@@ -194,7 +197,10 @@ export default function ContactsPage() {
             searchResults.map((element) => {
               return (
                 // a business card.
-                <ContactCard contactInfo={element} key={element.id} />
+                <ContactCard
+                  contactInfo={element}
+                  key={element.id}
+                />
               );
             })}
         </section>

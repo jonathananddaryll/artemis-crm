@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux';
 
 import {
   updateContactInFocus,
   updateContactSelected,
-} from "../../../reducers/ContactReducer";
+} from '../../../reducers/ContactReducer';
 
-import styles from "./ContactCard.module.scss";
+import styles from './ContactCard.module.scss';
 
 export default function ContactCard(props) {
   // Each individual contactCard component is given it's unique contact data via props, not
@@ -16,7 +16,7 @@ export default function ContactCard(props) {
   // to edit and delete contacts.
 
   const { contactInfo } = props;
-  const name = contactInfo.first_name + " " + contactInfo.last_name;
+  const name = contactInfo.first_name + ' ' + contactInfo.last_name;
 
   const dispatch = useDispatch();
 
@@ -32,54 +32,54 @@ export default function ContactCard(props) {
     <section className={styles.ContactCard}>
       <div className={styles.contactFrame}>
         <h2 className={styles.contactInit}>
-          {name[0].toUpperCase() + name.split(" ")[1][0].toUpperCase()}
+          {name[0].toUpperCase() + name.split(' ')[1][0].toUpperCase()}
         </h2>
         <section className={styles.cardHero}>
           <p className={styles.contactName}>{name}</p>
-          {contactInfo.title !== null || "" ? (
+          {contactInfo.title !== null || '' ? (
             <p className={styles.contactTitle}>{contactInfo.title}</p>
           ) : (
-            ""
+            ''
           )}
-          {contactInfo.location !== null || "" ? (
+          {contactInfo.location !== null || '' ? (
             <p className={styles.contactLocation}>{contactInfo.location}</p>
           ) : (
-            ""
+            ''
           )}
         </section>
         <div className={styles.cardDetails}>
           <div className={styles.contactInfo}>
-            {contactInfo.phone !== null || "" ? (
+            {contactInfo.phone !== null || '' ? (
               <p className={styles.contactPhone}>{contactInfo.phone}</p>
             ) : (
-              ""
+              ''
             )}
-            {contactInfo.email !== null || "" ? (
+            {contactInfo.email !== null || '' ? (
               <p className={styles.contactEmail}>{contactInfo.email}</p>
             ) : (
-              ""
+              ''
             )}
-            {contactInfo.linkedin !== null || "" ? (
+            {contactInfo.linkedin !== null || '' ? (
               <button
-                type="button"
+                type='button'
                 onClick={() => window.open(contactInfo.linkedin)}
                 className={styles.contactLinkedin}
               >
-                <i className="fa-brands fa-linkedin"></i>
+                <i className='fa-brands fa-linkedin'></i>
               </button>
             ) : (
-              ""
+              ''
             )}
-            {contactInfo.other_social !== null || "" ? (
+            {contactInfo.other_social !== null || '' ? (
               <button
-                type="button"
+                type='button'
                 onClick={() => window.open(contactInfo.other_social)}
                 className={styles.contactSocial}
               >
-                <i className="fa-solid fa-link"></i>
+                <i className='fa-solid fa-link'></i>
               </button>
             ) : (
-              ""
+              ''
             )}
           </div>
         </div>

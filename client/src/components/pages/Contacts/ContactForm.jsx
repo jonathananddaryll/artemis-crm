@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { useSelector, useDispatch } from "react-redux";
-import { useAuth, useSession } from "@clerk/clerk-react";
+import { useSelector, useDispatch } from 'react-redux';
+import { useAuth, useSession } from '@clerk/clerk-react';
 
 import {
   deleteContact,
@@ -11,10 +11,10 @@ import {
   createContact,
   updateContactInFocus,
   updateContactSelected,
-} from "../../../reducers/ContactReducer";
+} from '../../../reducers/ContactReducer';
 
-import Dropdown from "./Dropdown";
-import styles from "./ContactForm.module.scss";
+import Dropdown from './Dropdown';
+import styles from './ContactForm.module.scss';
 
 export default function ContactForm() {
   // All-purpose contact form, is used for create, update, delete and read for all fields except
@@ -94,7 +94,7 @@ export default function ContactForm() {
     const { name, value, type, checked } = e.target;
     setContactForm((prevForm) => ({
       ...prevForm,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
     if (!updatedColumns.includes(name)) {
       setUpdatedColumns((prevColumns) => [...prevColumns, name]);
@@ -103,7 +103,7 @@ export default function ContactForm() {
 
   // If the user clicks out or intends to cancel the whole thing
   function exitForm(event) {
-    if (event.target.className.includes("wrapper")) {
+    if (event.target.className.includes('wrapper')) {
       if (!updatedColumns.length) {
         dispatch(updateContactInFocus({}));
         setIsEditing(false);
@@ -144,16 +144,22 @@ export default function ContactForm() {
     }
   }, [newContactStaging, contactInFocus]);
   return (
-    <div className={styles.wrapper} onClick={(e) => exitForm(e)}>
-      <form name="contactForm" className={styles.formContainer}>
+    <div
+      className={styles.wrapper}
+      onClick={(e) => exitForm(e)}
+    >
+      <form
+        name='contactForm'
+        className={styles.formContainer}
+      >
         <section className={styles.title}>
           <label className={styles.formLabels}>
             first name
             <input
-              type="text"
-              name="first_name"
-              value={contactForm.first_name ?? ""}
-              placeholder="first name"
+              type='text'
+              name='first_name'
+              value={contactForm.first_name ?? ''}
+              placeholder='first name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               required
@@ -163,10 +169,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             last name
             <input
-              type="text"
-              name="last_name"
-              value={contactForm.last_name ?? ""}
-              placeholder="last name"
+              type='text'
+              name='last_name'
+              value={contactForm.last_name ?? ''}
+              placeholder='last name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               required
@@ -178,10 +184,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             company
             <input
-              type="text"
-              name="company"
-              value={contactForm.company ?? ""}
-              placeholder="company"
+              type='text'
+              name='company'
+              value={contactForm.company ?? ''}
+              placeholder='company'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -190,10 +196,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             current job title
             <input
-              type="text"
-              name="current_job_title"
-              value={contactForm.current_job_title ?? ""}
-              placeholder="title"
+              type='text'
+              name='current_job_title'
+              value={contactForm.current_job_title ?? ''}
+              placeholder='title'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -202,10 +208,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             city
             <input
-              type="text"
-              name="city"
-              value={contactForm.city ?? ""}
-              placeholder="city"
+              type='text'
+              name='city'
+              value={contactForm.city ?? ''}
+              placeholder='city'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -214,9 +220,9 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             priority
             <input
-              type="checkbox"
-              name="is_priority"
-              ischecked={contactForm.linked_job_opening ?? ""}
+              type='checkbox'
+              name='is_priority'
+              ischecked={contactForm.linked_job_opening ?? ''}
               onChange={(e) => onChangeHandler(e)}
               className={styles.checksInput}
               readOnly={!isEditing}
@@ -228,10 +234,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             phone
             <input
-              type="text"
-              name="phone"
-              value={contactForm.phone ?? ""}
-              placeholder="Add contact phone"
+              type='text'
+              name='phone'
+              value={contactForm.phone ?? ''}
+              placeholder='Add contact phone'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -240,10 +246,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             email
             <input
-              type="text"
-              name="email"
-              value={contactForm.email ?? ""}
-              placeholder="Add contact email"
+              type='text'
+              name='email'
+              value={contactForm.email ?? ''}
+              placeholder='Add contact email'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -254,10 +260,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             linkedin
             <input
-              type="text"
-              name="linkedin"
-              value={contactForm.linkedin ?? ""}
-              placeholder="Add contact linkedin"
+              type='text'
+              name='linkedin'
+              value={contactForm.linkedin ?? ''}
+              placeholder='Add contact linkedin'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -266,10 +272,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             twitter
             <input
-              type="text"
-              name="twitter"
-              value={contactForm.twitter ?? ""}
-              placeholder="Add contact name"
+              type='text'
+              name='twitter'
+              value={contactForm.twitter ?? ''}
+              placeholder='Add contact name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -278,10 +284,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             instagram
             <input
-              type="text"
-              name="instagram"
-              value={contactForm.instagram ?? ""}
-              placeholder="Add contact name"
+              type='text'
+              name='instagram'
+              value={contactForm.instagram ?? ''}
+              placeholder='Add contact name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -290,10 +296,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             other social
             <input
-              type="text"
-              name="other_social"
-              value={contactForm.other_social ?? ""}
-              placeholder="Add contact name"
+              type='text'
+              name='other_social'
+              value={contactForm.other_social ?? ''}
+              placeholder='Add contact name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -302,10 +308,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             personal site
             <input
-              type="text"
-              name="personal_site"
-              value={contactForm.personal_site ?? ""}
-              placeholder="Add contact name"
+              type='text'
+              name='personal_site'
+              value={contactForm.personal_site ?? ''}
+              placeholder='Add contact name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -316,10 +322,10 @@ export default function ContactForm() {
           <label className={styles.formLabels}>
             related job
             <input
-              type="text"
-              name="linked_job_opening"
-              value={contactForm.linked_job_opening ?? ""}
-              placeholder="Add contact name"
+              type='text'
+              name='linked_job_opening'
+              value={contactForm.linked_job_opening ?? ''}
+              placeholder='Add contact name'
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
@@ -330,14 +336,14 @@ export default function ContactForm() {
         <section className={styles.manage}>
           <button
             className={isEditing ? styles.notEditable : styles.editable}
-            type="button"
+            type='button'
             onClick={() => setIsEditing(true)}
           >
             Edit
           </button>
           <button
             className={isEditing ? styles.editsMade : styles.editsSaved}
-            type="button"
+            type='button'
             onClick={submitUpdate}
           >
             Save
@@ -346,7 +352,7 @@ export default function ContactForm() {
             className={
               !contactForm.id ? styles.createInProgress : styles.deleteButton
             }
-            type="button"
+            type='button'
             onClick={deleteContactStart}
           >
             Delete

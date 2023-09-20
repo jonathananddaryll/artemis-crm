@@ -1,5 +1,5 @@
-import styles from "./Dropdown.module.scss";
-import React, { useState } from "react";
+import styles from './Dropdown.module.scss';
+import React, { useState } from 'react';
 
 export default function Dropdown(props) {
   // For reusability, pass in the number of list items,

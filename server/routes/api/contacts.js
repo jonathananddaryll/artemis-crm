@@ -1,21 +1,21 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { Client, config } = require("../../config/db");
+const { Client, config } = require('../../config/db');
 
-const format = require("pg-format");
+const format = require('pg-format');
 
 // middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
   validateRequest,
-} = require("../../middlewares/validators");
+} = require('../../middlewares/validators');
 
-const { decodeToken } = require("../../middlewares/decodeToken");
+const { decodeToken } = require('../../middlewares/decodeToken');
 
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts table
 // @ACCESS Private
-router.get("/", myRequestHeaders, async (req, res) => {
+router.get('/', myRequestHeaders, async (req, res) => {
   // Pass in your headers an auth token, along with the user_id
   // Response object in res.data an array of objects [{}, {}, {}]
 
@@ -23,8 +23,8 @@ router.get("/", myRequestHeaders, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
 
-  let queryStarter = "SELECT * FROM %I WHERE user_id = %L";
-  const query = format(queryStarter, "contact", user_id);
+  let queryStarter = 'SELECT * FROM %I WHERE user_id = %L';
+  const query = format(queryStarter, 'contact', user_id);
 
   const client = new Client(config);
   try {
@@ -32,20 +32,20 @@ router.get("/", myRequestHeaders, async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         console.error(err);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.status(200).json(response.rows);
       client.end();
     });
   } catch (err) {
-    res.status(500).json({ msg: "server error" });
+    res.status(500).json({ msg: 'server error' });
   }
 });
 
 // @ROUTE  POST /api/contacts/
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   // myRequestHeaders, validateRequest,
 
   // req.body needs names and values of the postgres columns to fill in the new record
@@ -57,9 +57,9 @@ router.post("/", async (req, res) => {
   const { names, values } = req.body;
   const query = format(
     `INSERT INTO %I(user_id, ${names.join(
-      ", "
+      ', '
     )}) VALUES('${user_id}', %L) RETURNING *;`,
-    "contact",
+    'contact',
     values
   );
   try {
@@ -68,21 +68,21 @@ router.post("/", async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         console.error(err);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.json(response.rows);
       client.end();
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "server error" });
+    res.status(500).json({ msg: 'server error' });
   }
 });
 
 // @ROUTE  PATCH /api/contacts/
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
-router.patch("/", myRequestHeaders, validateRequest, async (req, res) => {
+router.patch('/', myRequestHeaders, validateRequest, async (req, res) => {
   try {
     // use the token authenticated user_id
     const decodedToken = decodeToken(req.headers.authorization);
@@ -97,7 +97,7 @@ router.patch("/", myRequestHeaders, validateRequest, async (req, res) => {
       return `${element} = '${updateTo[index]}'`;
     });
     const query = `UPDATE contact SET ${setUpdate.join(
-      ", "
+      ', '
     )} WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
     const client = new Client(config);
     client.connect();
@@ -111,14 +111,14 @@ router.patch("/", myRequestHeaders, validateRequest, async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "server error" });
+    res.status(500).json({ msg: 'server error' });
   }
 });
 
 // @ROUTE  DELETE /api/contacts/
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
-router.delete("/", myRequestHeaders, async (req, res) => {
+router.delete('/', myRequestHeaders, async (req, res) => {
   // use the token authenticated user_id
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
@@ -132,14 +132,14 @@ router.delete("/", myRequestHeaders, async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         console.error(err);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.status(200).json(response.rows);
       client.end();
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "server error" });
+    res.status(500).json({ msg: 'server error' });
   }
 });
 

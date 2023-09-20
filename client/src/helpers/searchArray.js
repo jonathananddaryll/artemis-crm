@@ -7,11 +7,11 @@
 export default function SearchArray(searchString, searchArray, searchType) {
   // validate and modify the input for easier searching algo
   let trimmed = searchString
-    .split("")
+    .split('')
     .filter((element, index, array) => {
       if (index < array.length - 1) {
-        if (element === " ") {
-          if (array[index + 1] !== " ") {
+        if (element === ' ') {
+          if (array[index + 1] !== ' ') {
             return element;
           }
         } else {
@@ -21,9 +21,9 @@ export default function SearchArray(searchString, searchArray, searchType) {
         return element;
       }
     })
-    .join("");
+    .join('');
 
-  if (trimmed === "") {
+  if (trimmed === '') {
     return [searchArray];
   }
   function includesTLC(bigString, littleString) {
@@ -32,7 +32,7 @@ export default function SearchArray(searchString, searchArray, searchType) {
   let results = [];
   // Now that the string has been trimmed, a switch case based on the searchType
   switch (searchType) {
-    case "name":
+    case 'name':
       const searchWords = (contactsArray, arrayOfWords) => {
         for (let contact = 0; contact < contactsArray.length; contact++) {
           for (let name = 0; name < arrayOfWords.length; name++) {
@@ -59,32 +59,32 @@ export default function SearchArray(searchString, searchArray, searchType) {
         }
         return results;
       };
-      if (trimmed.split(" ")[1] !== "") {
-        let namesArray = trimmed.split(" ");
+      if (trimmed.split(' ')[1] !== '') {
+        let namesArray = trimmed.split(' ');
         return searchWords(searchArray, namesArray);
       } else {
         let namesArray = [trimmed];
         return searchWords(searchArray, namesArray);
       }
-    case "company":
+    case 'company':
       for (let contact = 0; contact < searchArray.length; contact++) {
-        for (let search = 0; search < trimmed.split(" ").length; search++) {
+        for (let search = 0; search < trimmed.split(' ').length; search++) {
           if (includesTLC(searchArray[contact].company, trimmed[search])) {
             results.push(contact);
           }
         }
       }
       return results;
-    case "location":
+    case 'location':
       for (let contact = 0; contact < searchArray.length; contact++) {
-        for (let search = 0; search < trimmed.split(" ").length; search++) {
+        for (let search = 0; search < trimmed.split(' ').length; search++) {
           if (includesTLC(searchArray[contact].location, trimmed[search])) {
             results.push(contact);
           }
         }
       }
       return results;
-    case "id":
+    case 'id':
       let idNum = Number(searchString) !== NaN ? Number(searchString) : false;
       if (idNum) {
         for (let contact = 0; contact < searchArray.length; contact++) {

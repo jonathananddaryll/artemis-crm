@@ -1,19 +1,19 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const format = require("pg-format");
-const { Client, config } = require("../../config/db");
+const format = require('pg-format');
+const { Client, config } = require('../../config/db');
 
 const {
   myRequestHeaders,
   validateRequest,
-} = require("../../middlewares/validators");
+} = require('../../middlewares/validators');
 
 // returns { sessionId, userId }
-const { decodeToken } = require("../../middlewares/decodeToken");
+const { decodeToken } = require('../../middlewares/decodeToken');
 
 // MANY TO MANY jobs-contacts table
 
-router.post("/", myRequestHeaders, validateRequest, async (req, res) => {
+router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
 
@@ -28,17 +28,17 @@ router.post("/", myRequestHeaders, validateRequest, async (req, res) => {
     client.query(query, (error, response) => {
       if (error) {
         console.error(error);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.json(response);
       client.end();
     });
   } catch (error) {
-    res.status(500).json({ msg: "POST server error", error });
+    res.status(500).json({ msg: 'POST server error', error });
   }
 });
 
-router.get("/", myRequestHeaders, validateRequest, async (req, res) => {
+router.get('/', myRequestHeaders, validateRequest, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
 
@@ -51,17 +51,17 @@ router.get("/", myRequestHeaders, validateRequest, async (req, res) => {
     client.query(query, (error, response) => {
       if (error) {
         console.error(error);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.json(response);
       client.end();
     });
   } catch (error) {
-    res.status(500).json({ msg: "GET server error", error });
+    res.status(500).json({ msg: 'GET server error', error });
   }
 });
 
-router.delete("/", myRequestHeaders, validateRequest, async (req, res) => {
+router.delete('/', myRequestHeaders, validateRequest, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
   const { jobId, contactId } = req.query;
@@ -73,12 +73,12 @@ router.delete("/", myRequestHeaders, validateRequest, async (req, res) => {
     client.query(query, (error, response) => {
       if (error) {
         console.error(error);
-        res.status(500).json({ msg: "query error" });
+        res.status(500).json({ msg: 'query error' });
       }
       res.json(response);
       client.end();
     });
   } catch (error) {
-    res.status(500).json({ msg: "DELETE server error", error });
+    res.status(500).json({ msg: 'DELETE server error', error });
   }
 });
