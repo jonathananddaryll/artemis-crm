@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   useClerk,
   UserButton,
@@ -7,7 +7,8 @@ import {
   useUser,
   SignOutButton
 } from '@clerk/clerk-react';
-import DemoSignIn from './DemoSignIn';
+
+import DemoSignIn from '../DemoSignIn/DemoSignIn';
 import styles from './SideBar.module.scss';
 
 export default function SideBar() {
@@ -27,6 +28,13 @@ export default function SideBar() {
     },
     { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
   ];
+
+  const navigate = useNavigate();
+
+  const signOutHandler = () => {
+    signOut();
+    navigate('/');
+  };
 
   return (
     <>
@@ -65,7 +73,7 @@ export default function SideBar() {
               <div className={styles.footerButton}>
                 <button
                   className={styles.signoutButton}
-                  onClick={() => signOut()}
+                  onClick={() => signOutHandler()}
                 >
                   <i className='bi bi-box-arrow-right'></i>
                 </button>
