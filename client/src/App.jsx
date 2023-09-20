@@ -39,14 +39,14 @@ function App() {
           <div className='flex'>
             <SideBar />
             <Routes>
-              {/* <Route
+            <Route
                 path='/sign-in/*'
                 element={<SignIn routing='path' path='/sign-in' />}
               />
               <Route
                 path='/sign-up/*'
                 element={<SignUp routing='path' path='/sign-up' />}
-              /> */}
+              />
 
               <Route path='/' element={<HomePage />} />
               <Route
@@ -75,6 +75,19 @@ function App() {
                     </SignedOut>
                   </>
                 }
+              ></Route>
+              <Route 
+              path='/contacts/' 
+              element={
+                <>
+                  <SignedIn>
+                    < ContactsPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn></RedirectToSignIn>
+                  </SignedOut>
+                </>
+              }
               ></Route>
             </Routes>
           </div>
