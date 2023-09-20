@@ -236,6 +236,43 @@ router.patch(
   }
 );
 
+// Need to query: All tasks with type () with date older than today, sorted by most recent
+// filtered by whichever tasks are completed
+router.get('/job/:job_id', async (req, res) => {
+  const jobId = req.params.job_id;
+  // const query = format(
+  //   `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM task WHERE job_id = %s ORDER BY date_created DESC`,
+  //   jobId
+  // );
+  // const query = format(
+  //   `SELECT * FROM task WHERE job_id = %s AND (category = 'Phone Screen' OR category = 'Technical Screen' OR category = 'Phone Interview' OR category ='On Site Interview') ORDER BY date_created DESC`,
+  //   jobId,
+  //   '%Interview%'
+  // );
+  const query = format(
+    `SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC`,
+    jobId
+  );
+
+  const client = new Client(config);
+  client.connect();
+
+  try {
+    client.query(query, (err, response) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'query error' });
+      }
+
+      res.status(200).json(response.rows);
+      client.end();
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route     DELETE /api/tasks/:id
 // @desc      delete a task
 // @access    Private
