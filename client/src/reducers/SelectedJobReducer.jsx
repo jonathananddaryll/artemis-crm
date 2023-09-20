@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import findIndex from '../helpers/findIndex';
 
 // Get All Timeline with jobId
 export const getAllTimelines = createAsyncThunk(
@@ -275,9 +276,7 @@ const selectedJobSlice = createSlice({
 
     builder.addCase(updateNote.fulfilled, (state, action) => {
       // Find the index of the updated note then change it to the updated note
-      const index = state.notes.findIndex(
-        note => note.id === action.payload.id
-      );
+      const index = findIndex(state.notes, action.payload.id);
       state.notes[index] = action.payload;
 
       toast.dismiss('updatingNote');

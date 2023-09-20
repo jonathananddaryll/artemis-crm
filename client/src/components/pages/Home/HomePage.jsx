@@ -19,12 +19,12 @@ const HomePage = () => {
             </div>
           </div>
           <div className={styles.actionItems}>
-            <button
+            <a
               className={styles.loginButton}
-              onClick={() => navigate('/boards')}
+              href='https://adapting-osprey-11.accounts.dev/sign-in'
             >
               Log In
-            </button>
+            </a>
 
             <a
               className={styles.registerButton}
@@ -49,11 +49,6 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        {/* {user === null && <DemoSignIn />} */}
-        {/* <button onClick={() => navigate('/boards')}>Sign In</button> */}
-        {/* <a href='https://adapting-osprey-11.accounts.dev/sign-up'>
-          Create Account
-        </a> */}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import findIndex from '../helpers/findIndex';
 
 import {
   updateTaskStatus,
@@ -364,12 +365,12 @@ const boardSlice = createSlice({
       state.selectedBoardLoading = false;
     },
     removeFromStatus: (state, action) => {
-      state.selectedBoardStatusCols[action.payload[1]].splice(
-        state.selectedBoardStatusCols[action.payload[1]].findIndex(
-          job => job.id === parseInt(action.payload[2])
-        ),
-        1
+      const index = findIndex(
+        state.selectedBoardStatusCols[action.payload[1]],
+        parseInt(action.payload[2])
       );
+
+      state.selectedBoardStatusCols[action.payload[1]].splice(index, 1);
     },
     // Add the job dragged into the new status
     addToStatus: (state, action) => {
@@ -526,10 +527,8 @@ const boardSlice = createSlice({
     });
 
     builder.addCase(updateBoardName.fulfilled, (state, action) => {
-      const foundIndex = state.boards.findIndex(
-        job => job.id === action.payload.id
-      );
-      state.boards[foundIndex].title = action.payload.title;
+      const index = findIndex(state.boards, action.payload.id);
+      state.boards[index].title = action.payload.title;
 
       toast.dismiss('updatingBoardName');
       toast.success('Successfully Renamed Board');
@@ -564,20 +563,31 @@ const boardSlice = createSlice({
     builder.addCase(addJob.fulfilled, (state, action) => {
       // Updates the Kanban Board
       state.selectedBoardStatusCols[action.payload.status] = [
-        action.payload,
+        {
+          ...action.payload,
+          incomplete_task_count: 0,
+          total_note_count: 0,
+          pending_interview_count: 0
+        },
         ...state.selectedBoardStatusCols[action.payload.status]
       ];
 
       // Updates the jobs state
-      state.jobs = [action.payload, ...state.jobs];
+      state.jobs = [
+        {
+          ...action.payload,
+          incomplete_task_count: 0,
+          total_note_count: 0,
+          pending_interview_count: 0
+        },
+        ...state.jobs
+      ];
 
       // Updates total_jobs_count
       state.selectedBoard.total_jobs_count++;
 
       if (state.boards.length !== 0) {
-        const index = state.boards.findIndex(
-          board => board.id === action.payload.board_id
-        );
+        const index = findIndex(state.boards, action.payload.board_id);
         state.boards[index].total_jobs_count++;
       }
 
@@ -609,18 +619,17 @@ const boardSlice = createSlice({
 
     builder.addCase(updateJobStatus.fulfilled, (state, action) => {
       // job status is already updating in the reducer when user drop a job to a different status it
-      const foundIndex = state.selectedBoardStatusCols[
-        action.payload.status
-      ].findIndex(job => job.id === action.payload.id);
-      state.selectedBoardStatusCols[action.payload.status][foundIndex].status =
-        action.payload.status;
+      const statusColsIndex = findIndex(
+        state.selectedBoardStatusCols[action.payload.status],
+        action.payload.id
+      );
+      state.selectedBoardStatusCols[action.payload.status][
+        statusColsIndex
+      ].status = action.payload.status;
 
       // Find the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === action.payload.id
-      );
-
-      state.jobs[jobIndexInJobs].status = action.payload.status;
+      const jobIndex = findIndex(state.jobs, action.payload.id);
+      state.jobs[jobIndex].status = action.payload.status;
 
       toast.dismiss('updatingJobStatus');
       toast.success('Successfully Updated Job Status');
@@ -634,14 +643,13 @@ const boardSlice = createSlice({
 
     builder.addCase(updateJobInfo.fulfilled, (state, action) => {
       // Find the index of the updated job in the selectedBoardStatusCols
-      const foundIndex = state.selectedBoardStatusCols[
-        action.payload.status
-      ].findIndex(job => job.id === action.payload.id);
+      const statusColsIndex = findIndex(
+        state.selectedBoardStatusCols[action.payload.status],
+        action.payload.id
+      );
 
       // Find the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === action.payload.id
-      );
+      const jobIndex = findIndex(state.jobs, action.payload.id);
 
       // Temporary SelectedJob with the updated Info and the counts
       const tempSelectedJob = action.payload;
@@ -655,10 +663,10 @@ const boardSlice = createSlice({
       state.selectedJob = tempSelectedJob;
 
       // Updates the updated job in the jobs state
-      state.jobs[jobIndexInJobs] = tempSelectedJob;
+      state.jobs[jobIndex] = tempSelectedJob;
 
       // Updates the job in the selectedBoardStatusCols to display the update in the kanban board
-      state.selectedBoardStatusCols[action.payload.status][foundIndex] =
+      state.selectedBoardStatusCols[action.payload.status][statusColsIndex] =
         tempSelectedJob;
 
       toast.dismiss('updatingJobInfo');
@@ -691,9 +699,7 @@ const boardSlice = createSlice({
       state.selectedBoard.total_jobs_count--;
 
       if (state.boards.length !== 0) {
-        const index = state.boards.findIndex(
-          board => board.id === action.payload.board_id
-        );
+        const index = findIndex(state.boards, action.payload.board_id);
         state.boards[index].total_jobs_count--;
       }
 
@@ -711,14 +717,13 @@ const boardSlice = createSlice({
     // Updates the incomplete_task_count and pending_interview_count in selectedJob, selectedBoardStatusCols, and jobs on successful task update
     builder.addMatcher(isAnyOf(updateTaskStatus.fulfilled), (state, action) => {
       // Finds the index of the updated job in selectedBoardStatusCols
-      const selectedJobIndex = state.selectedBoardStatusCols[
-        state.selectedJob.status
-      ].findIndex(job => job.id === action.payload.job_id);
+      const selectedJobIndex = findIndex(
+        state.selectedBoardStatusCols[state.selectedJob.status],
+        action.payload.job_id
+      );
 
       // Finds the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === action.payload.job_id
-      );
+      const jobIndexInJobs = findIndex(state.jobs, action.payload.job_id);
 
       if (action.payload.is_done === false) {
         // Updates incomplete_task_count in selectedJob
@@ -762,14 +767,13 @@ const boardSlice = createSlice({
       const newAddedTask = action.payload[0].rows[0];
 
       // Finds the index
-      const selectedJobIndex = state.selectedBoardStatusCols[
-        state.selectedJob.status
-      ].findIndex(job => job.id === newAddedTask.job_id);
+      const selectedJobIndex = findIndex(
+        state.selectedBoardStatusCols[state.selectedJob.status],
+        newAddedTask.job_id
+      );
 
       // Finds the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === newAddedTask.job_id
-      );
+      const jobIndexInJobs = findIndex(state.jobs, newAddedTask.job_id);
 
       if (newAddedTask.is_done === false) {
         state.selectedJob.incomplete_task_count++;
@@ -797,14 +801,13 @@ const boardSlice = createSlice({
       const newAddedNote = action.payload[0].rows[0];
 
       // Finds the index
-      const selectedJobIndex = state.selectedBoardStatusCols[
-        state.selectedJob.status
-      ].findIndex(job => job.id === newAddedNote.job_id);
+      const selectedJobIndex = findIndex(
+        state.selectedBoardStatusCols[state.selectedJob.status],
+        newAddedNote.job_id
+      );
 
       // Finds the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === newAddedNote.job_id
-      );
+      const jobIndexInJobs = findIndex(state.jobs, newAddedNote.job_id);
 
       state.selectedJob.total_note_count++;
       state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
@@ -817,14 +820,13 @@ const boardSlice = createSlice({
       const deletedNote = action.payload[0].rows[0];
 
       // Finds the index
-      const selectedJobIndex = state.selectedBoardStatusCols[
-        state.selectedJob.status
-      ].findIndex(job => job.id === deletedNote.job_id);
+      const selectedJobIndex = findIndex(
+        state.selectedBoardStatusCols[state.selectedJob.status],
+        deletedNote.job_id
+      );
 
       // Finds the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === deletedNote.job_id
-      );
+      const jobIndexInJobs = findIndex(state.jobs, deletedNote.job_id);
 
       state.selectedJob.total_note_count--;
       state.selectedBoardStatusCols[state.selectedJob.status][selectedJobIndex]
@@ -838,14 +840,13 @@ const boardSlice = createSlice({
       const deletedTask = action.payload[0].rows[0];
 
       // Finds the index
-      const selectedJobIndex = state.selectedBoardStatusCols[
-        state.selectedJob.status
-      ].findIndex(job => job.id === deletedTask.job_id);
+      const selectedJobIndex = findIndex(
+        state.selectedBoardStatusCols[state.selectedJob.status],
+        deletedTask.job_id
+      );
 
       // Finds the index of the updated job in jobs
-      const jobIndexInJobs = state.jobs.findIndex(
-        job => job.id === deletedTask.job_id
-      );
+      const jobIndexInJobs = findIndex(state.jobs, deletedTask.job_id);
 
       if (deletedTask.is_done === false) {
         state.selectedJob.incomplete_task_count--;
