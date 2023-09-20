@@ -247,18 +247,30 @@ const selectedJobSlice = createSlice({
       state.notesLoading = false;
     });
 
+    builder.addCase(createNote.pending, () => {
+      toast.loading('Creating New Note', {
+        toastId: 'creatingNote'
+      });
+    });
+
     builder.addCase(createNote.fulfilled, (state, action) => {
       state.notes = [action.payload[0].rows[0], ...state.notes];
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
-      // FIGURE THIS OUT LATER
-      // state.notes = [action.payload[0].rows[0], ...state.notes];
-      // state.timeline = [action.payload[1].rows[0], ...state.timelines];
-      toast.success('Successfully Created a New Note');
+
+      toast.dismiss('creatingNote');
+      toast.success('Successfully Created New Note');
     });
 
     // Display errors in createNote with toastify
     builder.addCase(createNote.rejected, (state, action) => {
+      toast.dismiss('creatingNote');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(updateNote.pending, () => {
+      toast.loading('Updating Note', {
+        toastId: 'updatingNote'
+      });
     });
 
     builder.addCase(updateNote.fulfilled, (state, action) => {
@@ -267,12 +279,21 @@ const selectedJobSlice = createSlice({
         note => note.id === action.payload.id
       );
       state.notes[index] = action.payload;
-      toast.success('Successfully Updated a Note');
+
+      toast.dismiss('updatingNote');
+      toast.success('Successfully Updated Note');
     });
 
     // Display errors in updateNote with toastify
     builder.addCase(updateNote.rejected, (state, action) => {
+      toast.dismiss('updatingNote');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(deleteNote.pending, () => {
+      toast.loading('Deleting Note', {
+        toastId: 'deletingNote'
+      });
     });
 
     builder.addCase(deleteNote.fulfilled, (state, action) => {
@@ -281,7 +302,15 @@ const selectedJobSlice = createSlice({
         note => note.id !== action.payload[0].rows[0].id
       );
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
-      toast.success('Successfully Deleted a Note');
+
+      toast.dismiss('deletingNote');
+      toast.success('Successfully Deleted Note');
+    });
+
+    // @TODO: CREATE A BETTER REJECTED MESSAGE
+    builder.addCase(deleteNote.rejected, () => {
+      toast.dismiss('deletingNote');
+      toast.error('Delete Failed');
     });
 
     builder.addCase(getAllTasks.fulfilled, (state, action) => {
@@ -307,6 +336,12 @@ const selectedJobSlice = createSlice({
       );
     });
 
+    builder.addCase(createTask.pending, () => {
+      toast.loading('Creating New Task', {
+        toastId: 'creatingTask'
+      });
+    });
+
     builder.addCase(createTask.fulfilled, (state, action) => {
       const newAddedTask = action.payload[0].rows[0];
       newAddedTask.is_done === false
@@ -322,7 +357,20 @@ const selectedJobSlice = createSlice({
         state.interviews = [newAddedTask, ...state.interviews];
       }
 
-      toast.success('Successfully Created a New Task');
+      toast.dismiss('creatingTask');
+      toast.success('Successfully Created New Task');
+    });
+
+    // Display errors in createTask with toastify
+    builder.addCase(createTask.rejected, (state, action) => {
+      toast.dismiss('creatingTask');
+      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(updateTask.pending, () => {
+      toast.loading('Updating Task', {
+        toastId: 'updatingTask'
+      });
     });
 
     builder.addCase(updateTask.fulfilled, (state, action) => {
@@ -367,17 +415,20 @@ const selectedJobSlice = createSlice({
         }
       }
 
-      toast.success('Successfully Updated a Task');
-    });
-
-    // Display errors in createTask with toastify
-    builder.addCase(createTask.rejected, (state, action) => {
-      action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+      toast.dismiss('updatingTask');
+      toast.success('Successfully Updated Task');
     });
 
     // Display errors in updateTask with toastify
     builder.addCase(updateTask.rejected, (state, action) => {
+      toast.dismiss('updatingTask');
       action.payload.forEach(error => toast.error(error, { autoClose: 4000 }));
+    });
+
+    builder.addCase(updateTaskStatus.pending, () => {
+      toast.loading('Updating Task Status', {
+        toastId: 'updatingTaskStatus'
+      });
     });
 
     builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
@@ -412,6 +463,7 @@ const selectedJobSlice = createSlice({
           ];
         }
 
+        toast.dismiss('updatingTaskStatus');
         toast.success('Good Job Completing a Task');
       } else {
         // const filteredTasks = state.completedTasks.filter(
@@ -439,8 +491,21 @@ const selectedJobSlice = createSlice({
           state.interviews = [...state.interviews, updatedTask];
         }
 
+        toast.dismiss('updatingTaskStatus');
         toast.success('Dont Forget to Finish That Task');
       }
+    });
+
+    // @TODO: CREATE A BETTER REJECTED MESSAGE
+    builder.addCase(updateTaskStatus.rejected, () => {
+      toast.dismiss('updatingTaskStatus');
+      toast.error('Update Failed');
+    });
+
+    builder.addCase(deleteTask.pending, () => {
+      toast.loading('Deleting Task', {
+        toastId: 'deletingTask'
+      });
     });
 
     builder.addCase(deleteTask.fulfilled, (state, action) => {
@@ -476,7 +541,15 @@ const selectedJobSlice = createSlice({
       }
 
       state.timelines = [action.payload[1].rows[0], ...state.timelines];
-      toast.success('Successfully Deleted a Task');
+
+      toast.dismiss('deletingTask');
+      toast.success('Successfully Deleted Task');
+    });
+
+    // @TODO: CREATE A BETTER REJECTED MESSAGE
+    builder.addCase(deleteTask.rejected, () => {
+      toast.dismiss('deletingTask');
+      toast.error('Delete Failed');
     });
   }
 });
