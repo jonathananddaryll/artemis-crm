@@ -16,7 +16,8 @@ import {
   getAllTasks,
   createTask,
   updateTaskStatus,
-  deleteTask
+  deleteTask,
+  updateTask
 } from '../../../../reducers/SelectedJobReducer';
 
 import Button from '../../../layout/Button/Button';
@@ -202,6 +203,7 @@ export default function SelectedJobModal() {
               jobId={selectedJob.id}
               updateTaskStatus={updateTaskStatus}
               deleteTask={deleteTask}
+              updateTask={updateTask}
             />
           )}
           {activeItem === 5 && (
