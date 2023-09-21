@@ -125,7 +125,9 @@ export default function SelectedJobModal() {
             />
           </div>
           <div className={styles.header}>
-            <div className={styles.headerLogo}></div>
+            <div className={styles.headerLogoContainer}>
+              <div className={styles.headerLogo}></div>
+            </div>
             <div className={styles.headerInfo}>
               <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
               <div className={styles.headerSub}>
