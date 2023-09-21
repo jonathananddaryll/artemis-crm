@@ -20,6 +20,8 @@ import {
   updateTask
 } from '../../../../reducers/SelectedJobReducer';
 
+import { getUserContactsTable } from '../../../../reducers/ContactReducer';
+
 import Button from '../../../layout/Button/Button';
 import InterviewsTab from './InterviewsTab/InterviewsTab';
 import ContactsTab from './ContactsTab/ContactsTab';
@@ -52,6 +54,10 @@ export default function SelectedJobModal() {
     completedInterviews
   } = useSelector(state => ({
     ...state.selectedJob
+  }));
+
+  const { contactsCache, contactsLoading } = useSelector(state => ({
+    ...state.contact
   }));
 
   useEffect(() => {
@@ -191,7 +197,13 @@ export default function SelectedJobModal() {
               updateNote={updateNote}
             />
           )}
-          {activeItem === 2 && <ContactsTab />}
+          {activeItem === 2 && (
+            <ContactsTab
+              contactsCache={contactsCache}
+              contactsLoading={contactsLoading}
+              getUserContactsTable={getUserContactsTable}
+            />
+          )}
           {activeItem === 3 && <DocumentsTab />}
           {activeItem === 4 && (
             <TasksTab

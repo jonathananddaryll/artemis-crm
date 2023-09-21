@@ -19,12 +19,18 @@ const HomePage = () => {
             </div>
           </div>
           <div className={styles.actionItems}>
-            <a
-              className={styles.loginButton}
-              href='https://adapting-osprey-11.accounts.dev/sign-in'
-            >
-              Log In
-            </a>
+            {user === null ? (
+              <a
+                className={styles.loginButton}
+                href='https://adapting-osprey-11.accounts.dev/sign-in'
+              >
+                Log In
+              </a>
+            ) : (
+              <a className={styles.loginButton} href='/boards'>
+                Use CRM
+              </a>
+            )}
 
             <a
               className={styles.registerButton}

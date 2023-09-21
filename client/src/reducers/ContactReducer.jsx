@@ -31,6 +31,7 @@ export const getUserContactsTable = createAsyncThunk(
         authorization: `Bearer ${idAndToken.token}`
       }
     };
+
     try {
       const res = await axios.get(`/api/contacts/`, config);
       return res.data;
