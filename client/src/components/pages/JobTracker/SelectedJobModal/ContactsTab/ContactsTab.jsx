@@ -18,17 +18,17 @@ export default function ContactsTab({
   const [isLinking, setIsLinking] = useState(false);
 
   // in contactspage, have a conditional so it doesnt re renders every time a user visit that page even if the contacts are previously loaded
-  // useEffect(() => {
-  //   const getContacts = async () => {
-  //     const token = await session.getToken();
-  //     getUserContactsTable;
-  //     dispatch(getUserContactsTable({ user_id: userId, token: token }));
-  //   };
+  useEffect(() => {
+    const getContacts = async () => {
+      const token = await session.getToken();
+      getUserContactsTable;
+      dispatch(getUserContactsTable({ user_id: userId, token: token }));
+    };
 
-  //   if (contactsLoading) {
-  //     getContacts();
-  //   }
-  // }, []);
+    // if (contactsLoading) {
+    getContacts();
+    // }
+  }, []);
 
   // Gets contacts
   const showUserContacts = async () => {
