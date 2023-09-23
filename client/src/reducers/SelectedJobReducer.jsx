@@ -246,6 +246,28 @@ export const getAllLinkedContactsWithJobId = createAsyncThunk(
   }
 );
 
+export const getContactsToLink = createAsyncThunk(
+  'contacts/getContactsToLink',
+  async (idAndToken, thunkAPI) => {
+    const config = {
+      params: {
+        user_id: idAndToken.user_id
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${idAndToken.token}`
+      }
+    };
+    try {
+      const res = await axios.get(`/api/contacts/`, config);
+      return res.data;
+    } catch (err) {
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
@@ -253,13 +275,15 @@ const selectedJobSlice = createSlice({
     notesLoading: true,
     tasksLoading: true,
     linkedContactsLoading: true,
+    availableContactsLoading: true,
     timelines: [],
     notes: [],
     tasks: [],
     completedTasks: [],
     interviews: [],
     completedInterviews: [],
-    linkedContacts: []
+    linkedContacts: [],
+    availableContacts: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
@@ -267,6 +291,7 @@ const selectedJobSlice = createSlice({
       state.notesLoading = true;
       state.tasksLoading = true;
       state.linkedContactsLoading = true;
+      state.availableContactsLoading = true;
       state.timelines = [];
       state.notes = [];
       state.tasks = [];
@@ -274,6 +299,7 @@ const selectedJobSlice = createSlice({
       state.completedInterviews = [];
       state.completedTasks = [];
       state.linkedContacts = [];
+      state.availableContacts = [];
     }
   },
   extraReducers: builder => {
@@ -597,6 +623,20 @@ const selectedJobSlice = createSlice({
         state.linkedContactsLoading = false;
       }
     );
+
+    builder.addCase(getContactsToLink.fulfilled, (state, action) => {
+      // const filteredContacts = action.payload.filter(a => state.linkedContacts.some(f => )
+
+      //   // el => !state.linkedContacts.includes(el)
+      // );
+
+      const filteredContacts = action.payload.filter(
+        el => !state.linkedContacts.some(f => f.id === el.id)
+      );
+
+      state.availableContacts = filteredContacts;
+      state.availableContactsLoading = false;
+    });
   }
 });
 

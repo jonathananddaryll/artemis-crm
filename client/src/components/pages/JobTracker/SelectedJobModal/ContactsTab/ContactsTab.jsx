@@ -8,14 +8,14 @@ import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
 
 export default function ContactsTab({
-  contactsCache,
-  contactsLoading,
-  getUserContactsTable,
+  getContactsToLink,
   linkContact,
   jobId,
   getAllLinkedContactsWithJobId,
   linkedContacts,
-  linkedContactsLoading
+  linkedContactsLoading,
+  availableContacts,
+  availableContactsLoading
 }) {
   const dispatch = useDispatch();
   const { session } = useSession();
@@ -26,8 +26,8 @@ export default function ContactsTab({
   // useEffect(() => {
   //   const getContacts = async () => {
   //     const token = await session.getToken();
-  //     getUserContactsTable;
-  //     dispatch(getUserContactsTable({ user_id: userId, token: token }));
+  //     getContactsToLink;
+  //     dispatch(getContactsToLink({ user_id: userId, token: token }));
   //   };
 
   //   // if (contactsLoading) {
@@ -43,11 +43,10 @@ export default function ContactsTab({
   // Gets contacts
   const showUserContacts = async () => {
     setIsLinking(true);
-    if (contactsLoading) {
-      const token = await session.getToken();
-      getUserContactsTable;
-      dispatch(getUserContactsTable({ user_id: userId, token: token }));
-    }
+
+    const token = await session.getToken();
+    getContactsToLink;
+    dispatch(getContactsToLink({ user_id: userId, token: token }));
   };
 
   const linkContactHandler = async (contactId, contactUserId) => {
@@ -84,10 +83,10 @@ export default function ContactsTab({
       <div className={styles.contactsContentContainer}>
         {isLinking && (
           <div>
-            {!contactsLoading && contactsCache.length > 0 ? (
+            {!availableContactsLoading && availableContacts.length > 0 ? (
               <div>
-                <p>theres contacts</p>
-                {contactsCache.map(contact => (
+                {/* <p>theres contacts</p> */}
+                {availableContacts.map(contact => (
                   <div>
                     <p>
                       {contact.first_name} {contact.last_name}
