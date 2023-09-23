@@ -93,6 +93,7 @@ export default function TasksTab({
   const onSubmitHandler = async e => {
     e.preventDefault();
 
+    // Need to change this naming (every formData needs to be uniformed)
     const formD = {
       title: title,
       category: category,
@@ -111,13 +112,14 @@ export default function TasksTab({
     } else {
       //add dispatch here for update
       dispatch(updateTask(formD));
-      console.log('THIS IS AN UPDATE!!!!!!!!!!!!!!!!');
     }
 
     // hide the form after creating a new task
     setFormToggle(false);
 
-    // Resets formData
+    // Resets formData ----> maybe create a object that I can import to set the
+    // resetFormData or create the resetFormData on top so I can just reuse it,
+    // since I've reset formData twice(for successful create/update and for canceling the form)
     const resetFormData = {
       title: '',
       category: '',

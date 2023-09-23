@@ -209,12 +209,50 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
+// Create new contact link
+export const linkContact = createAsyncThunk(
+  'note/linkContact',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/jobcontact', formData, config);
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// Get All LinkedContact with jobId
+export const getAllLinkedContactsWithJobId = createAsyncThunk(
+  'task/getAllLinkedContactsWithJobId',
+  async (job_id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/jobcontact/job/${job_id}`);
+
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
     timelinesLoading: true,
     notesLoading: true,
     tasksLoading: true,
+    linkedContactsLoading: true,
     timelines: [],
     notes: [],
     tasks: [],
@@ -228,6 +266,7 @@ const selectedJobSlice = createSlice({
       state.timelinesLoading = true;
       state.notesLoading = true;
       state.tasksLoading = true;
+      state.linkedContactsLoading = true;
       state.timelines = [];
       state.notes = [];
       state.tasks = [];
@@ -550,6 +589,14 @@ const selectedJobSlice = createSlice({
       toast.dismiss('deletingTask');
       toast.error('Delete Failed');
     });
+
+    builder.addCase(
+      getAllLinkedContactsWithJobId.fulfilled,
+      (state, action) => {
+        state.linkedContacts = action.payload;
+        state.linkedContactsLoading = false;
+      }
+    );
   }
 });
 

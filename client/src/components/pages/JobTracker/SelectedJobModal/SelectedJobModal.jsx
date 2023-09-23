@@ -17,7 +17,9 @@ import {
   createTask,
   updateTaskStatus,
   deleteTask,
-  updateTask
+  updateTask,
+  linkContact,
+  getAllLinkedContactsWithJobId
 } from '../../../../reducers/SelectedJobReducer';
 
 import { getUserContactsTable } from '../../../../reducers/ContactReducer';
@@ -51,7 +53,9 @@ export default function SelectedJobModal() {
     completedTasks,
     tasksLoading,
     interviews,
-    completedInterviews
+    completedInterviews,
+    linkedContacts,
+    linkedContactsLoading
   } = useSelector(state => ({
     ...state.selectedJob
   }));
@@ -202,6 +206,11 @@ export default function SelectedJobModal() {
               contactsCache={contactsCache}
               contactsLoading={contactsLoading}
               getUserContactsTable={getUserContactsTable}
+              linkContact={linkContact}
+              jobId={selectedJob.id}
+              getAllLinkedContactsWithJobId={getAllLinkedContactsWithJobId}
+              linkedContacts={linkedContacts}
+              linkedContactsLoading={linkedContactsLoading}
             />
           )}
           {activeItem === 3 && <DocumentsTab />}
