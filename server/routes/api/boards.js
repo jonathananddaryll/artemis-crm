@@ -155,7 +155,7 @@ router.patch(
       }
 
       const query = format(
-        `UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *`,
+        'UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *',
         columnToAdd,
         columnStatus.toLowerCase(),
         'total_cols',
@@ -205,8 +205,6 @@ router.patch(
       col8Status
     } = req.body;
 
-    console.log('it got here in the beginning');
-
     const boardId = req.params.board_id;
     const newTotalCol = totalCols - 1;
     // const newTotalCol = parseInt(totalCols) - 1;
@@ -234,7 +232,7 @@ router.patch(
 
       if (columnToDelete === 10) {
         query = format(
-          `UPDATE BOARD SET column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          'UPDATE BOARD SET column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *',
           newTotalCol,
           boardId,
           decodedUserId
@@ -243,7 +241,7 @@ router.patch(
 
       if (columnToDelete === 9) {
         query = format(
-          `UPDATE BOARD SET column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          'UPDATE BOARD SET column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *',
           col10Status,
           newTotalCol,
           boardId,
@@ -253,7 +251,7 @@ router.patch(
 
       if (columnToDelete === 8) {
         query = format(
-          `UPDATE BOARD SET column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          'UPDATE BOARD SET column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *',
           col9Status,
           col10Status,
           newTotalCol,
@@ -264,7 +262,7 @@ router.patch(
 
       if (columnToDelete === 7) {
         query = format(
-          `UPDATE BOARD SET column7 = %L, column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *`,
+          'UPDATE BOARD SET column7 = %L, column8 = %L, column9 = %L, column10 = NULL, total_cols = %s WHERE id = %s and user_id = %L RETURNING *',
           col8Status,
           col9Status,
           col10Status,
@@ -325,7 +323,7 @@ router.patch(
       }
 
       const query = format(
-        `UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING %I; UPDATE JOB SET status = %L WHERE board_id = %s AND status = %L RETURNING *`,
+        'UPDATE BOARD SET %I = %L WHERE id = %s and user_id = %L RETURNING %I; UPDATE JOB SET status = %L WHERE board_id = %s AND status = %L RETURNING *',
         columnToUpdate,
         columnStatus.toLowerCase(),
         boardId,
@@ -382,7 +380,7 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board' });
     } else {
       const query = format(
-        `UPDATE BOARD SET title = %L WHERE id = %s and user_id = %L RETURNING *`,
+        'UPDATE BOARD SET title = %L WHERE id = %s and user_id = %L RETURNING *',
         title,
         boardId,
         userId
@@ -427,7 +425,7 @@ router.delete(
         .json({ msg: 'Error: The user does not own the board' });
     } else {
       const query = format(
-        `DELETE FROM board WHERE id = %s and NOT EXISTS (SELECT * FROM job WHERE board.id = job.board_id) RETURNING *`,
+        'DELETE FROM board WHERE id = %s and NOT EXISTS (SELECT * FROM job WHERE board.id = job.board_id) RETURNING *',
         id
       );
 

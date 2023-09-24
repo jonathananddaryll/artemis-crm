@@ -59,13 +59,9 @@ router.get('/job/:job_id', async (req, res) => {
 
   // Gets all the contacts that is related to the job
   const query = format(
-    `SELECT * FROM job_contact jc JOIN contact c on jc.contact_id = c.id WHERE jc.job_id = %s`,
+    'SELECT * FROM job_contact jc JOIN contact c on jc.contact_id = c.id WHERE jc.job_id = %s',
     jobId
   );
-
-  // const query = format(`SELECT * FROM job_contact WHERE job_id = %s`, jobId);
-
-  console.log(query);
 
   const client = new Client(config);
   client.connect();
