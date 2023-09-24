@@ -1,0 +1,56 @@
+.container {
+  flex: 0 0 33%;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.initialsBox {
+  flex: 0 0 25%;
+}
+
+.infoBox {
+  flex: 0 0 75%;
+  text-align: left;
+  padding-left: 1.5rem;
+  color: #898e99;
+}
+
+.initials {
+  height: 6rem;
+  width: 6rem;
+  border-radius: 50%;
+  background-color: grey;
+  text-align: center;
+  position: relative;
+}
+
+.initialsText {
+  font-size: 2rem;
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.nameText {
+  font-size: 2rem;
+}
+
+.companyText {
+  font-size: 1.6rem;
+  text-transform: capitalize;
+}
+
+.contactText {
+  font-size: 1.5rem;
+}
+
+.socialsBox {
+  display: flex;
+  gap: 1rem;
+  font-size: 2rem;
+}

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useSession, useAuth } from '@clerk/clerk-react';
 
 import Button from '../../../../layout/Button/Button';
+import ContactCard from './ContactCard/ContactCard';
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
@@ -87,7 +88,7 @@ export default function ContactsTab({
               <div>
                 {/* <p>theres contacts</p> */}
                 {availableContacts.map(contact => (
-                  <div>
+                  <div key={contact.id}>
                     <p>
                       {contact.first_name} {contact.last_name}
                     </p>
@@ -113,15 +114,18 @@ export default function ContactsTab({
           <>
             {linkedContacts.length > 0 ? (
               // If there are Linked Contacts
-              <div>
+              <div className={styles.linkedContactsContainer}>
                 <h4>LINKED CONTACTS</h4>
-                {linkedContacts.map(contact => (
-                  <div>
-                    <p>
-                      {contact.first_name} {contact.last_name}
-                    </p>
-                  </div>
-                ))}
+                <div className={styles.contactsFlex}>
+                  {linkedContacts.map(contact => (
+                    <ContactCard key={contact.id} contactInfo={contact} />
+                    // <div key={contact.id}>
+                    //   <p>
+                    //     {contact.first_name} {contact.last_name}
+                    //   </p>
+                    // </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <>
