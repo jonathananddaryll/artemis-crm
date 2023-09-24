@@ -2,17 +2,15 @@ const express = require('express');
 const router = express.Router();
 const format = require('pg-format');
 const { Client, config } = require('../../config/db');
-
 const {
   myRequestHeaders,
   validateRequest
 } = require('../../middlewares/validators');
-
-// returns { sessionId, userId }
 const { decodeToken } = require('../../middlewares/decodeToken');
 
-// MANY TO MANY jobs-contacts table
-
+// @route     POST api/jobcontact
+// @desc      Creates a new job_contact to create a many-to-many relationship between jobs and contacts
+// @access    Private
 router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
@@ -21,7 +19,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   // pass contact.user_id to compare to userId
 
   // Checks if the loggedIn user owns the board
-  if (contactUserId !== userId) {
+  if (userId === undefined || contactUserId !== userId) {
     return res
       .status(405)
       .json({ msg: 'Error: The user does not own the contact' });
@@ -50,7 +48,9 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   }
 });
 
-// GET
+// @route     GET api/jobcontact/jobs/:job_id
+// @desc      Gets all the contact related to job with job id
+// @access    Private -- it will be
 router.get('/job/:job_id', async (req, res) => {
   // const decodedToken = decodeToken(req.headers.authorization);
   // const userId = decodedToken.userId;
@@ -83,26 +83,53 @@ router.get('/job/:job_id', async (req, res) => {
   }
 });
 
-router.delete('/', myRequestHeaders, validateRequest, async (req, res) => {
-  const decodedToken = decodeToken(req.headers.authorization);
-  const userId = decodedToken.userId;
-  const { jobId, contactId } = req.query;
-  const query = format(
-    `DELETE FROM job_contact WHERE job_id = ${jobId} AND contact_id = ${contactId} RETURNING *`
-  );
-  const client = new Client(config);
-  try {
-    client.query(query, (error, response) => {
-      if (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'query error' });
+// @route     DELETE /:id/job/:job_id/contact/:contact_id
+// @desc      Deletes a job contact link
+// @access    Private
+router.delete(
+  '/:id/job/:job_id/contact/:contact_id',
+  myRequestHeaders,
+  validateRequest,
+  async (req, res) => {
+    const client = new Client(config);
+    client.connect();
+
+    const { contactUserId } = req.body;
+    const id = req.params.id;
+    const contactId = req.params.contact_id;
+    const jobId = req.params.job_id;
+    const decodedToken = decodeToken(req.headers.authorization);
+    const userId = decodedToken.userId;
+
+    // Checks if the loggedIn user owns the board
+    if (userId === undefined || contactUserId !== userId) {
+      return res
+        .status(405)
+        .json({ msg: 'Error: The user does not own the contact' });
+    } else {
+      const query = format(
+        'DELETE FROM job_contact WHERE id = %s and contact_id = %s and job_id = %s RETURNING *',
+        id,
+        contactId,
+        jobId
+      );
+
+      try {
+        client.query(query, (err, response) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'query error' });
+          }
+
+          res.status(200).json(response.rows[0]);
+          client.end();
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
       }
-      res.json(response);
-      client.end();
-    });
-  } catch (error) {
-    res.status(500).json({ msg: 'DELETE server error', error });
+    }
   }
-});
+);
 
 module.exports = router;

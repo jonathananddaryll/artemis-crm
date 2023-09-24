@@ -12,7 +12,8 @@ export default function LinkedContacts({ linkedContacts }) {
           <ContactCard
             key={contact.id}
             contactInfo={contact}
-            showButton={false}
+            showLinkButton={false}
+            showUnlinkButton={true}
           />
         ))}
       </div>

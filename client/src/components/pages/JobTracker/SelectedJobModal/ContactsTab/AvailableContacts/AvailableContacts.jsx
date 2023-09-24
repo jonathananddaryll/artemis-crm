@@ -11,26 +11,16 @@ export default function AvailableContacts({
   return (
     <div className={styles.container}>
       {!availableContactsLoading && availableContacts.length > 0 ? (
-        <div>
+        <div className={styles.contactsFlex}>
           {availableContacts.map(contact => (
             <ContactCard
               key={contact.id}
               contactInfo={contact}
-              showButton={true}
+              showLinkButton={true}
+              showUnlinkButton={false}
               linkContactHandler={linkContactHandler}
             />
           ))}
-          {/* <div key={contact.id}>
-              <p>
-                {contact.first_name} {contact.last_name}
-              </p>
-              <button
-                onClick={() => linkContactHandler(contact.id, contact.user_id)}
-              >
-                Link contact
-              </button>
-            </div> */}
-          {/* ))} */}
         </div>
       ) : (
         <div>

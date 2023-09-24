@@ -3,7 +3,8 @@ import styles from './ContactCard.module.scss/';
 
 export default function ContactCard({
   contactInfo,
-  showButton,
+  showLinkButton,
+  showUnlinkButton,
   linkContactHandler
 }) {
   const {
@@ -57,8 +58,12 @@ export default function ContactCard({
           </div>
         </div>
       </div>
-      {showButton && (
+      {showLinkButton && (
         <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
+      )}
+      {showUnlinkButton && (
+        // unlinkContactHandler(id, user_id, job_id)
+        <button onClick={() => console.log('unlink triggered')}>Unlink</button>
       )}
     </div>
   );

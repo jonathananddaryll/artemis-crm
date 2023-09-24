@@ -268,6 +268,33 @@ export const getContactsToLink = createAsyncThunk(
   }
 );
 
+// Create new contact link
+export const unlinkContact = createAsyncThunk(
+  'note/linkContact',
+  async (formData, thunkAPI) => {
+    const { id, job_id, contact_id, token } = formData;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    try {
+      const res = await axios.post(
+        `/${id}/job/${job_id}/contact/${contact_id}`,
+        formData,
+        config
+      );
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
