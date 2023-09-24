@@ -624,6 +624,18 @@ const selectedJobSlice = createSlice({
       }
     );
 
+    builder.addCase(linkContact.fulfilled, (state, action) => {
+      const index = findIndex(
+        state.availableContacts,
+        action.payload.contact_id
+      );
+      const newLinkedContact = state.availableContacts[index];
+      state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
+      state.availableContacts = state.availableContacts.filter(
+        contact => contact.id !== action.payload.contact_id
+      );
+    });
+
     builder.addCase(getContactsToLink.fulfilled, (state, action) => {
       // const filteredContacts = action.payload.filter(a => state.linkedContacts.some(f => )
 

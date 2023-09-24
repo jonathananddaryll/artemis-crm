@@ -40,7 +40,7 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
           console.error(error);
           res.status(500).json({ msg: 'query error' });
         }
-        res.json(response);
+        res.json(response.rows[0]);
         client.end();
       });
     } catch (err) {

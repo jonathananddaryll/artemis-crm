@@ -11,7 +11,6 @@ export default function ContactsTab({
   getContactsToLink,
   linkContact,
   jobId,
-  getAllLinkedContactsWithJobId,
   linkedContacts,
   linkedContactsLoading,
   availableContacts,
@@ -35,12 +34,12 @@ export default function ContactsTab({
   //   // }
   // }, []);
 
-  useEffect(() => {
-    console.log('useeffect triggered');
-    dispatch(getAllLinkedContactsWithJobId(jobId));
-  }, []);
+  // useEffect(() => {
+  //   console.log('useeffect triggered');
+  //   dispatch(getAllLinkedContactsWithJobId(jobId));
+  // }, []);
 
-  // Gets contacts
+  // Gets contacts available to link
   const showUserContacts = async () => {
     setIsLinking(true);
 
@@ -49,6 +48,7 @@ export default function ContactsTab({
     dispatch(getContactsToLink({ user_id: userId, token: token }));
   };
 
+  // Handles the link contact action
   const linkContactHandler = async (contactId, contactUserId) => {
     const formData = {
       contactId: contactId,

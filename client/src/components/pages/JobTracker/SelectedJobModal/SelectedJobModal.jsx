@@ -63,10 +63,6 @@ export default function SelectedJobModal() {
     ...state.selectedJob
   }));
 
-  const { contactsCache, contactsLoading } = useSelector(state => ({
-    ...state.contact
-  }));
-
   useEffect(() => {
     // dispatch(getAllTimelines(selectedJob.id));
     handleEveryGetAll();
@@ -76,12 +72,13 @@ export default function SelectedJobModal() {
     dispatch(getAllTimelines(selectedJob.id));
     dispatch(getAllNotes(selectedJob.id));
     dispatch(getAllTasks(selectedJob.id));
+    dispatch(getAllLinkedContactsWithJobId(selectedJob.id));
   };
 
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
     { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
-    { name: 'contacts', icon: 'bi bi-people' },
+    { name: 'contacts', icon: 'bi bi-people', itemL: linkedContacts.length },
     { name: 'documents', icon: 'bi bi-file-earmark-text' },
     { name: 'tasks', icon: 'bi bi-list-task', itemL: tasks.length },
     {
@@ -208,7 +205,6 @@ export default function SelectedJobModal() {
             <ContactsTab
               linkContact={linkContact}
               jobId={selectedJob.id}
-              getAllLinkedContactsWithJobId={getAllLinkedContactsWithJobId}
               linkedContacts={linkedContacts}
               linkedContactsLoading={linkedContactsLoading}
               getContactsToLink={getContactsToLink}
