@@ -1,8 +1,14 @@
 import React from 'react';
 import styles from './ContactCard.module.scss/';
 
-export default function ContactCard({ contactInfo }) {
+export default function ContactCard({
+  contactInfo,
+  showButton,
+  linkContactHandler
+}) {
   const {
+    id,
+    user_id,
     first_name,
     last_name,
     company,
@@ -30,9 +36,8 @@ export default function ContactCard({ contactInfo }) {
           <p className={styles.nameText}>
             {first_name} {last_name}
           </p>
-          <p className={styles.companyText}>
-            {company} - {current_job_title}
-          </p>
+          <p className={styles.companyText}>{current_job_title}</p>
+          <p className={styles.companyText}>{company}</p>
           {phone !== null && (
             <p className={styles.contactText}>
               <i className='bi bi-telephone'></i> {phone}
@@ -52,6 +57,9 @@ export default function ContactCard({ contactInfo }) {
           </div>
         </div>
       </div>
+      {showButton && (
+        <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
+      )}
     </div>
   );
 }

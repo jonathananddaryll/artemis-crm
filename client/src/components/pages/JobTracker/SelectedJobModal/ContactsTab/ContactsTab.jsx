@@ -3,7 +3,9 @@ import { useDispatch } from 'react-redux';
 import { useSession, useAuth } from '@clerk/clerk-react';
 
 import Button from '../../../../layout/Button/Button';
-import ContactCard from './ContactCard/ContactCard';
+import AvailableContacts from './AvailableContacts/AvailableContacts';
+import LinkedContacts from './LinkedContacts/LinkedContacts';
+
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
@@ -13,7 +15,6 @@ export default function ContactsTab({
   linkContact,
   jobId,
   linkedContacts,
-  linkedContactsLoading,
   availableContacts,
   availableContactsLoading
 }) {
@@ -22,19 +23,7 @@ export default function ContactsTab({
   const { userId } = useAuth();
   const [isLinking, setIsLinking] = useState(false);
 
-  // // in contactspage, have a conditional so it doesnt re renders every time a user visit that page even if the contacts are previously loaded
-  // useEffect(() => {
-  //   const getContacts = async () => {
-  //     const token = await session.getToken();
-  //     getContactsToLink;
-  //     dispatch(getContactsToLink({ user_id: userId, token: token }));
-  //   };
-
-  //   // if (contactsLoading) {
-  //   getContacts();
-  //   // }
-  // }, []);
-
+  // Maybe have a backup like this runs if the initial run from SelectedJobModal useEffect doesnt load all the contacts
   // useEffect(() => {
   //   console.log('useeffect triggered');
   //   dispatch(getAllLinkedContactsWithJobId(jobId));
@@ -59,7 +48,9 @@ export default function ContactsTab({
     };
 
     dispatch(linkContact(formData));
-    console.log('ayooooooooo contact linked');
+
+    // reset isLinking
+    setIsLinking(false);
   };
 
   return (
@@ -83,66 +74,24 @@ export default function ContactsTab({
       </div>
       <div className={styles.contactsContentContainer}>
         {isLinking && (
-          <div>
-            {!availableContactsLoading && availableContacts.length > 0 ? (
-              <div>
-                {/* <p>theres contacts</p> */}
-                {availableContacts.map(contact => (
-                  <div key={contact.id}>
-                    <p>
-                      {contact.first_name} {contact.last_name}
-                    </p>
-                    <button
-                      onClick={() =>
-                        linkContactHandler(contact.id, contact.user_id)
-                      }
-                    >
-                      Link contact
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div>
-                <p>no contacts</p>
-              </div>
-            )}
-            <button onClick={() => setIsLinking(false)}>Cancel</button>
-          </div>
+          <AvailableContacts
+            availableContactsLoading={availableContactsLoading}
+            availableContacts={availableContacts}
+            setIsLinking={setIsLinking}
+            linkContactHandler={linkContactHandler}
+          />
         )}
-        {!linkedContactsLoading ? (
-          <>
-            {linkedContacts.length > 0 ? (
-              // If there are Linked Contacts
-              <div className={styles.linkedContactsContainer}>
-                <h4>LINKED CONTACTS</h4>
-                <div className={styles.contactsFlex}>
-                  {linkedContacts.map(contact => (
-                    <ContactCard key={contact.id} contactInfo={contact} />
-                    // <div key={contact.id}>
-                    //   <p>
-                    //     {contact.first_name} {contact.last_name}
-                    //   </p>
-                    // </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                {/* No Linked Contacts and not linking */}
-                {!isLinking && (
-                  <NoDataPlaceholder
-                    image={noContacts}
-                    header={'NO LINKED CONTACTS'}
-                    subHeader={'Here you can create and link contacts'}
-                  />
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          // Change this to a loader later
-          <p>LINKED CONTACTS LOADING</p>
+
+        {linkedContacts.length > 0 && (
+          <LinkedContacts linkedContacts={linkedContacts} />
+        )}
+
+        {!isLinking && linkedContacts.length === 0 && (
+          <NoDataPlaceholder
+            image={noContacts}
+            header={'NO LINKED CONTACTS'}
+            subHeader={'Here you can create and link contacts'}
+          />
         )}
       </div>
     </div>

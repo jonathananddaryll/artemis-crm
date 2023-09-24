@@ -274,7 +274,6 @@ const selectedJobSlice = createSlice({
     timelinesLoading: true,
     notesLoading: true,
     tasksLoading: true,
-    linkedContactsLoading: true,
     availableContactsLoading: true,
     timelines: [],
     notes: [],
@@ -290,7 +289,6 @@ const selectedJobSlice = createSlice({
       state.timelinesLoading = true;
       state.notesLoading = true;
       state.tasksLoading = true;
-      state.linkedContactsLoading = true;
       state.availableContactsLoading = true;
       state.timelines = [];
       state.notes = [];
@@ -620,7 +618,6 @@ const selectedJobSlice = createSlice({
       getAllLinkedContactsWithJobId.fulfilled,
       (state, action) => {
         state.linkedContacts = action.payload;
-        state.linkedContactsLoading = false;
       }
     );
 
@@ -631,6 +628,7 @@ const selectedJobSlice = createSlice({
       );
       const newLinkedContact = state.availableContacts[index];
       state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
+
       state.availableContacts = state.availableContacts.filter(
         contact => contact.id !== action.payload.contact_id
       );

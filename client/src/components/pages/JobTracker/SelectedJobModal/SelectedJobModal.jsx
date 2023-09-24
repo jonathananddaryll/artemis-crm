@@ -56,7 +56,6 @@ export default function SelectedJobModal() {
     interviews,
     completedInterviews,
     linkedContacts,
-    linkedContactsLoading,
     availableContacts,
     availableContactsLoading
   } = useSelector(state => ({
@@ -206,7 +205,6 @@ export default function SelectedJobModal() {
               linkContact={linkContact}
               jobId={selectedJob.id}
               linkedContacts={linkedContacts}
-              linkedContactsLoading={linkedContactsLoading}
               getContactsToLink={getContactsToLink}
               availableContacts={availableContacts}
               availableContactsLoading={availableContactsLoading}
