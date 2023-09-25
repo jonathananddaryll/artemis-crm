@@ -38,6 +38,12 @@
 
 .mainContainer {
   width: 100%;
+
+  @include mixin.tabLandscape {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+  }
 }
 
 /* BUTTONS IN HEADER SECTION */

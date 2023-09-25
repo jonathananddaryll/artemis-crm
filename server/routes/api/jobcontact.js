@@ -58,8 +58,12 @@ router.get('/job/:job_id', async (req, res) => {
   const jobId = req.params.job_id;
 
   // Gets all the contacts that is related to the job
+  // const query = format(
+  //   'SELECT * FROM job_contact jc JOIN contact c on jc.contact_id = c.id WHERE jc.job_id = %s',
+  //   jobId
+  // );
   const query = format(
-    'SELECT * FROM job_contact jc JOIN contact c on jc.contact_id = c.id WHERE jc.job_id = %s',
+    'SELECT jc.id, jc.contact_id, jc.job_id, c.first_name, c.last_name, c.company, c.city, c.current_job_title, c.phone, c.email, c.linkedin, c.twitter, c.instagram, c.other_social, c.personal_site, c.date_created, c.is_priority, c.user_id FROM job_contact jc JOIN contact c on jc.contact_id = c.id WHERE jc.job_id = %s',
     jobId
   );
 
@@ -96,8 +100,8 @@ router.delete(
 
     const { contactUserId } = req.body;
     const id = req.params.id;
-    const contactId = req.params.contact_id;
-    const jobId = req.params.job_id;
+    const contactId = req.params.contactId;
+    const jobId = req.params.jobId;
     const decodedToken = decodeToken(req.headers.authorization);
     const userId = decodedToken.userId;
 

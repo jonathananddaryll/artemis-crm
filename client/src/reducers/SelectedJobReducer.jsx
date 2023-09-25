@@ -209,28 +209,6 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
-// Create new contact link
-export const linkContact = createAsyncThunk(
-  'note/linkContact',
-  async (formData, thunkAPI) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${formData.token}`
-      }
-    };
-
-    try {
-      const res = await axios.post('/api/jobcontact', formData, config);
-      return res.data;
-    } catch (err) {
-      // If there's errors
-      const errors = err.response.data.errors;
-      return thunkAPI.rejectWithValue(errors);
-    }
-  }
-);
-
 // Get All LinkedContact with jobId
 export const getAllLinkedContactsWithJobId = createAsyncThunk(
   'task/getAllLinkedContactsWithJobId',
@@ -269,10 +247,32 @@ export const getContactsToLink = createAsyncThunk(
 );
 
 // Create new contact link
-export const unlinkContact = createAsyncThunk(
+export const linkContact = createAsyncThunk(
   'note/linkContact',
   async (formData, thunkAPI) => {
-    const { id, job_id, contact_id, token } = formData;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/jobcontact', formData, config);
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// (Delete) Unlink contacts
+export const unlinkContact = createAsyncThunk(
+  'note/unlinkContact',
+  async (formData, thunkAPI) => {
+    const { id, jobId, contactId, token } = formData;
     const config = {
       headers: {
         'Content-Type': 'application/json',
