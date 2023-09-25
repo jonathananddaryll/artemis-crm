@@ -282,7 +282,7 @@ export const unlinkContact = createAsyncThunk(
 
     try {
       const res = await axios.post(
-        `/${id}/job/${job_id}/contact/${contact_id}`,
+        `/${id}/job/${jobId}/contact/${contactId}`,
         formData,
         config
       );
@@ -662,13 +662,8 @@ const selectedJobSlice = createSlice({
     });
 
     builder.addCase(getContactsToLink.fulfilled, (state, action) => {
-      // const filteredContacts = action.payload.filter(a => state.linkedContacts.some(f => )
-
-      //   // el => !state.linkedContacts.includes(el)
-      // );
-
       const filteredContacts = action.payload.filter(
-        el => !state.linkedContacts.some(f => f.id === el.id)
+        el => !state.linkedContacts.some(f => f.contact_id === el.id)
       );
 
       state.availableContacts = filteredContacts;

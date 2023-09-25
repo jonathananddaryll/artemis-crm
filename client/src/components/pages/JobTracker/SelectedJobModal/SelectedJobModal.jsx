@@ -19,6 +19,7 @@ import {
   deleteTask,
   updateTask,
   linkContact,
+  unlinkContact,
   getAllLinkedContactsWithJobId,
   getContactsToLink
 } from '../../../../reducers/SelectedJobReducer';
@@ -203,6 +204,7 @@ export default function SelectedJobModal() {
           {activeItem === 2 && (
             <ContactsTab
               linkContact={linkContact}
+              unlinkContact={unlinkContact}
               jobId={selectedJob.id}
               linkedContacts={linkedContacts}
               getContactsToLink={getContactsToLink}

@@ -5,10 +5,12 @@ export default function ContactCard({
   contactInfo,
   showLinkButton,
   showUnlinkButton,
-  linkContactHandler
+  linkContactHandler,
+  unlinkContactHandler
 }) {
   const {
     id,
+    contact_id,
     user_id,
     first_name,
     last_name,
@@ -63,7 +65,9 @@ export default function ContactCard({
       )}
       {showUnlinkButton && (
         // unlinkContactHandler(id, user_id, job_id)
-        <button onClick={() => console.log('unlink triggered')}>Unlink</button>
+        <button onClick={() => unlinkContactHandler((id, contact_id, user_id))}>
+          Unlink
+        </button>
       )}
     </div>
   );

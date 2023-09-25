@@ -13,6 +13,7 @@ import styles from './ContactsTab.module.scss';
 export default function ContactsTab({
   getContactsToLink,
   linkContact,
+  unlinkContact,
   jobId,
   linkedContacts,
   availableContacts,
@@ -53,6 +54,20 @@ export default function ContactsTab({
     setIsLinking(false);
   };
 
+  // Handles the unlink contact action
+  const unlinkContactHandler = async (jcId, contactId, contactUserId) => {
+    const formData = {
+      id: jcId,
+      contactId: contactId,
+      jobId: jobId,
+      contactUserId: contactUserId,
+      token: await session.getToken()
+    };
+
+    console.log('unlink safafs');
+    dispatch(unlinkContact(formData));
+  };
+
   return (
     <div className={styles.contactsTabContainer}>
       <div className={styles.buttonsContainer}>
@@ -83,7 +98,10 @@ export default function ContactsTab({
         )}
 
         {linkedContacts.length > 0 && (
-          <LinkedContacts linkedContacts={linkedContacts} />
+          <LinkedContacts
+            linkedContacts={linkedContacts}
+            unlinkContactHandler={unlinkContactHandler}
+          />
         )}
 
         {!isLinking && linkedContacts.length === 0 && (
