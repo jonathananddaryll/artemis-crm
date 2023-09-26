@@ -16,7 +16,7 @@ import {
 import Dropdown from './Dropdown';
 import styles from './ContactForm.module.scss';
 
-export default function ContactForm() {
+export default function ContactForm({ newContactStaging }) {
   // All-purpose contact form, is used for create, update, delete and read for all fields except
   // for the immutables (created timestamp, id, etc)
 
@@ -24,10 +24,6 @@ export default function ContactForm() {
   const { userId } = useAuth();
   const dispatch = useDispatch();
 
-  // When this is being called for a new contact to be made, newContactStaging will be true
-  const newContactStaging = useSelector(
-    (state) => state.contact.newContactStaging
-  );
   // The contact the user is currently dealing with is the contactInFocus(new or existing)
   const contactInFocus = useSelector((state) => state.contact.contactInFocus);
   // If a new contact, automatically set to edit mode on initialization
@@ -58,7 +54,7 @@ export default function ContactForm() {
   // different headers and parameters.
   async function submitUpdate(e) {
     e.preventDefault();
-    let updatedValues = [];
+    const updatedValues = [];
     // only the fields that have been changed will be added to the query.
     // can't tell the difference between multiple edits resulting in the original
     // string, but it's an easy optimization.
@@ -128,7 +124,6 @@ export default function ContactForm() {
     } else {
       // it's a real contact, delete it
       const formData = {
-        user_id: userId,
         id: contactForm.id,
         token: await session.getToken(),
       };
@@ -152,7 +147,7 @@ export default function ContactForm() {
         name='contactForm'
         className={styles.formContainer}
       >
-        <section className={styles.title}>
+        <div className={styles.title}>
           <label className={styles.formLabels}>
             first name
             <input
@@ -164,7 +159,7 @@ export default function ContactForm() {
               className={styles.formInput}
               required
               readOnly={!isEditing}
-            ></input>
+            />
           </label>
           <label className={styles.formLabels}>
             last name
@@ -177,10 +172,10 @@ export default function ContactForm() {
               className={styles.formInput}
               required
               readOnly={!isEditing}
-            ></input>
+            />
           </label>
-        </section>
-        <section className={styles.about}>
+        </div>
+        <div className={styles.about}>
           <label className={styles.formLabels}>
             company
             <input
@@ -191,7 +186,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+            />
           </label>
           <label className={styles.formLabels}>
             current job title
@@ -203,7 +198,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+            />
           </label>
           <label className={styles.formLabels}>
             city
@@ -215,7 +210,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             priority
@@ -226,11 +221,11 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.checksInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <p>Added on {contactForm.date_created}</p>
-        </section>
-        <section className={styles.directContact}>
+        </div>
+        <div className={styles.directContact}>
           <label className={styles.formLabels}>
             phone
             <input
@@ -241,7 +236,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             email
@@ -253,10 +248,10 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
-        </section>
-        <section className={styles.social}>
+        </div>
+        <div className={styles.social}>
           <label className={styles.formLabels}>
             linkedin
             <input
@@ -267,7 +262,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             twitter
@@ -279,7 +274,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             instagram
@@ -291,7 +286,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             other social
@@ -303,7 +298,7 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <label className={styles.formLabels}>
             personal site
@@ -315,10 +310,10 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
-        </section>
-        <section className={styles.connectedJob}>
+        </div>
+        <div className={styles.connectedJob}>
           <label className={styles.formLabels}>
             related job
             <input
@@ -329,11 +324,11 @@ export default function ContactForm() {
               onChange={(e) => onChangeHandler(e)}
               className={styles.formInput}
               readOnly={!isEditing}
-            ></input>
+              />
           </label>
           <Link />
-        </section>
-        <section className={styles.manage}>
+        </div>
+        <div className={styles.manage}>
           <button
             className={isEditing ? styles.notEditable : styles.editable}
             type='button'
@@ -357,7 +352,7 @@ export default function ContactForm() {
           >
             Delete
           </button>
-        </section>
+        </div>
       </form>
     </div>
   );

@@ -10,7 +10,7 @@ import {
   updateSearchQuery,
   updateContactInFocus,
   updateContactSelected,
-  setNewContactStaging
+  // setNewContactStaging
 } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
 
@@ -18,6 +18,14 @@ import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
 import styles from './ContactsPage.module.scss';
+
+// TODO: update .map(element => {
+//   return <></> etc etc
+// })
+// to .map(contact)
+
+// TODO: move searchQuery out of redux into contactsPage
+// TODO: fix search type company
 
 export default function ContactsPage() {
   // A Contacts organizer. Main features are:
@@ -36,7 +44,7 @@ export default function ContactsPage() {
   const searchResults = useSelector(state => state.contact.searchResults);
   // redux store updates when a user is changing which contact they look at
   const contactSelected = useSelector(state => state.contact.contactSelected);
-  // const contactsCache = useSelector((state) => state.contact.contactsCache);
+  const contactsLoaded = useSelector((state) => state.contact.contactsLoaded);
   // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
   // name, company, city - Which are you searching for?
@@ -45,6 +53,8 @@ export default function ContactsPage() {
     type: 'name',
     strValue: ''
   });
+
+  const [newContactStaging, setNewContactStaging] = useState(false)
 
   // Controlled component function for the search input element
   function updateSearchString(e) {
@@ -58,7 +68,7 @@ export default function ContactsPage() {
 
   // Client side input validation/sanitizer
   const validateSearchParams = searchObj => {
-    let validated = {
+    const validated = {
       type: searchObj.type,
       strValue: ''
     };
@@ -66,7 +76,7 @@ export default function ContactsPage() {
       console.log('you didnt type anything valid');
       return false;
     } else {
-      let stringTrimmed = searchObj.strValue.trim();
+      const stringTrimmed = searchObj.strValue.trim();
       validated.strValue = stringTrimmed;
       return validated;
     }
@@ -86,7 +96,7 @@ export default function ContactsPage() {
   // Add a new contact using a form
   const addContact = () => {
     // first, set contactInFocus object values to ""
-    dispatch(setNewContactStaging(true));
+    setNewContactStaging(true);
     dispatch(
       updateContactInFocus({
         first_name: null,
@@ -128,16 +138,39 @@ export default function ContactsPage() {
 
   // On first load, grab all the users contacts at once and keep a copy locally(session)
   useEffect(() => {
-    const grabSessionToken = async () => {
-      const token = await getToken();
-      dispatch(getUserContactsTable({ user_id: userId, token: token }));
-    };
-    grabSessionToken().catch(console.error);
+    if(!contactsLoaded){
+      const grabSessionToken = async () => {
+        const token = await getToken();
+        dispatch(getUserContactsTable({ user_id: userId, token: token }));
+      };
+      grabSessionToken();
+    }
   }, [dispatch]);
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
         <nav className={styles.menuContainer}>
+        <section className={styles.searchBar}>
+          <input
+            onChange={e => updateSearchString(e)}
+            type='text'
+            inputMode='search'
+            name='searchBar'
+            className={styles.contactSearchInput}
+            value={searchParams.strValue}
+            placeholder={searchType}
+          />
+          <button className={styles.searchButton} onClick={searchSubmit}>
+            <i
+              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
+            ></i>
+          </button>
+          <Dropdown
+            items={['name', 'company', 'city']}
+            header={'options'}
+            setSearchType={setSearchType}
+          />
+        </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>
               <a
@@ -168,37 +201,21 @@ export default function ContactsPage() {
             </li>
           </ul>
         </nav>
-        <section className={styles.searchBar}>
-          <input
-            onChange={e => updateSearchString(e)}
-            type='text'
-            inputMode='search'
-            name='searchBar'
-            className={styles.contactSearchInput}
-            value={searchParams.strValue}
-            placeholder={searchType}
-          />
-          <button className={styles.searchButton} onClick={searchSubmit}>
-            <i
-              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
-            ></i>
-          </button>
-          <Dropdown
-            items={['name', 'company', 'city']}
-            header={'options'}
-            setSearchType={setSearchType}
-          />
-        </section>
         <section className={styles.searchResultsContainer}>
           {!!searchResults &&
-            searchResults.map(element => {
+            searchResults.map(contact => {
               return (
                 // a business card.
-                <ContactCard contactInfo={element} key={element.id} />
+                <ContactCard 
+                  contactInfo={contact}
+                  key={contact.id} 
+                  />
               );
             })}
         </section>
-        {!!contactSelected && <ContactForm />}
+        {!!contactSelected && <ContactForm 
+          newContactStaging={newContactStaging}
+        />}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import SearchArray from '../helpers/searchArray';
 // Return values: All thunks that change the db get a return copy of the item
 // that was updated/created/deleted. This is returned to redux, to be used as confirmation
 // that the action was successful and that the local client copy of the users
-// contacts needs to be updated.
+// contacts needs to be updated with the return value.
 
 export const getUserContactsTable = createAsyncThunk(
   'contacts/getUserContactsTable',
@@ -46,11 +46,11 @@ export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (deleteRequest, thunkAPI) => {
     const headers = {
+      'Content-Type': 'application/json',
       authorization: `Bearer ${deleteRequest.token}`
     };
     try {
-      const res = await axios.delete('/api/contacts/', {
-        data: { deleteRequest },
+      const res = await axios.delete(`/api/contacts/${deleteRequest.id}`, {
         headers
       });
       // response object should include the row that was deleted, used to
@@ -70,21 +70,18 @@ export const updateContact = createAsyncThunk(
     try {
       // with user_id, send two arrays, one of the column names (str) and one
       // of the column value to set it to (also str)
-      const { user_id, updateWhat, updateTo, token, id } = updateRequest;
+      const { updateWhat, updateTo, token, id } = updateRequest;
       const config = {
-        withCredentials: false,
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${token}`
         }
       };
       const body = {
-        user_id: user_id,
         updateWhat: updateWhat,
-        updateTo: updateTo,
-        id: id
+        updateTo: updateTo
       };
-      const res = await axios.patch('/api/contacts/', body, config);
+      const res = await axios.patch(`/api/contacts/${id}`, body, config);
       // Response object should include the row that was successfully updated, so
       // to confirm contactsCache is synced.
       return res.data;
@@ -127,9 +124,8 @@ export const getRecentContacts = createAsyncThunk(
       authorization: `Bearer ${historyRequest.token}`
     };
     try {
-      const res = await axios.post('api/contacts/recents', {
+      const res = await axios.post('api/contacts/recents/', {
         headers,
-        ...historyRequest
       });
       return res.data;
     } catch (err) {
@@ -147,14 +143,9 @@ const contactSlice = createSlice({
     // triggering toasts.
     contactsCache: [],
     searchResults: [],
-    newContactStaging: false,
     contactInFocus: {},
     contactSelected: false,
-    contactsLoading: true,
-    searchQuery: {
-      type: 'name',
-      strValue: ''
-    },
+    contactsLoaded: false,
     searchFilters: [],
     printout: {}
   },
@@ -163,10 +154,8 @@ const contactSlice = createSlice({
     updateContactInFocus: (state, action) => {
       if (action.payload === 'clear') {
         state.contactInFocus = {};
-        state.contactsLoading = false;
       } else {
         state.contactInFocus = action.payload;
-        state.contactsLoading = false;
       }
     },
     // toggle a value that triggers making the expanded contact page visible or not
@@ -177,20 +166,12 @@ const contactSlice = createSlice({
         state.contactSelected = false;
       }
     },
-    // Only for when +add button is clicked, i.e. when creating a new contact
-    setNewContactStaging: (state, action) => {
-      state.newContactStaging = action.payload;
-    },
-    // Change what you are searching *with* when clicking 'search', i.e. 'Tim Cook'
-    updateSearchQuery: (state, action) => {
-      state.searchQuery = action.payload;
-    },
     // Trigger a search on the contacts db using the current searchQuery in store
     getContactsSearch: (state, action) => {
       let searchResults = SearchArray(
-        state.searchQuery.strValue,
+        action.payload.strValue,
         state.contactsCache,
-        state.searchQuery.type
+        action.payload.type
       );
       let results = [];
       for (let result = 0; result < searchResults.length; result++) {
@@ -201,7 +182,7 @@ const contactSlice = createSlice({
     // Filter out all the contacts that aren't is_priority === true
     getContactsPriority: (state, action) => {
       state.searchResults = state.contactsCache.filter(
-        element => element.is_priority
+        contact => contact.is_priority
       );
     }
   },
@@ -211,11 +192,10 @@ const contactSlice = createSlice({
       // with the return value from the async thunk
       state.contactsCache = action.payload;
       state.searchResults = action.payload;
-      state.contactsLoading = false;
+      state.contactsLoaded = true;
       toast.dismiss('getUserContactsTable');
     });
     builder.addCase(getUserContactsTable.pending, (state, action) => {
-      state.contactsLoading = true;
       toast.loading('loading contacts...', {
         toastId: 'getUserContactsTable'
       });
@@ -233,12 +213,12 @@ const contactSlice = createSlice({
       // Remove that specific object from the array of contacts locally
       // matching it with the return value from the async thunk
       state.contactsCache = state.contactsCache.filter(
-        element => element.id !== state.contactInFocus.id
+        contact => contact.id !== state.contactInFocus.id
       );
       // Also, if the user was clicking in some search results,
       // make sure the search results update, too.
       state.searchResults = state.searchResults.filter(
-        element => element.id !== state.contactInFocus.id
+        contact => contact.id !== state.contactInFocus.id
       );
       state.contactSelected = false;
       toast.update('deleteContact', {
@@ -280,9 +260,9 @@ const contactSlice = createSlice({
         state.searchResults,
         'id'
       );
-      console.log(contactsCacheIndex, searchResultsIndex);
       if (contactsCacheIndex === -1) {
         // weird error?
+        toast('contact not found on client side copy')
       } else if (searchResultsIndex === -1) {
         state.contactsCache[contactsCacheIndex] = action.payload[0];
       } else {

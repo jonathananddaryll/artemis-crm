@@ -2,12 +2,11 @@
   height: 20rem;
   width: 35rem;
   font-size: 1.6rem;
-  font-family: 'Cormorant';
+  font-family: 'Alata';
   position: relative;
   background-color: white;
   border-bottom: solid transparent 1px;
   border-top: solid transparent 1px;
-  border: solid red 1px;
 }
 .ContactCard:hover {
   border-bottom: solid rgba(0, 0, 0, 1) 1px;
@@ -21,88 +20,74 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: solid purple 1px;
 }
 .cardHero {
-  border: solid blue 1px;
-  width: 85%;
-  margin-left: 15%;
-  height: 8rem;
+  max-width: 100%;
+  min-height: 60%;
 }
 .cardDetails {
-  border: solid pink 1px;
-  width: 85%;
-  margin-left: 15%;
-  min-height: 30%;
-  margin-bottom: 0;
-  padding-bottom: 0;
-  font-family: 'Cabin';
-  font-weight: 300;
+  width: 100%;
+  min-height: 20%;
+  display: flex;
+  justify-content: center;
 }
-.cardOpen {
-  border: solid yellow 1px;
-  margin-top: 0;
-}
-.contactInit {
-  border: solid black 1px;
-  margin: 2rem 1rem 2.5rem 1rem;
-  font-size: 2.4rem;
-  background-color: rgba(192, 192, 192, 0.356);
-  border-radius: 50%;
-  height: 5rem;
-  width: 25%;
-  line-height: 5rem;
+.contactInitialsLink {
+  color: rgba(0, 0, 0, 0.055);
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 100%;
+  line-height: 100%;
+  font-size: 20rem;
   position: absolute;
+  top: 0;
+  pointer-events: none;
 }
 .contactName {
-  border: solid green 1px;
-  font-size: 1.6em;
+  font-size: 3rem;
+  max-width: 100%;
   margin: 0.5em 0 0 0;
+  max-height: 4.2rem;
 }
 .contactTitle {
-  border: solid blue 1px;
   margin: 0 auto;
-  font-family: 'Cormorant';
-  font-weight: 300;
+  font-size: 2rem;
+  height: 2rem;
+  max-width: 100%;
+  line-height: 2rem;
+  font-family: 'Aileron';
+  font-weight: 500;
 }
 .contactLocation {
-  border: solid purple 1px;
   margin: 0 auto;
-  font-size: 0.8rem;
+  font-size: 1.4rem;
+  max-width: 100%;
+  font-family: 'Alata';
 }
 .contactInfo {
-  border: solid blue 1px;
-  height: 5rem;
-  display: flex-column;
-  align-content: center;
+  min-height: 5rem;
+  width: max-content;
 }
-.contactInfo > * {
+.infoText{
   margin: 0 auto;
-  font-size: 0.8em;
-  background-color: inherit;
+  max-width: 100%;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
 }
 .contactInfo > button {
+  font-size: 2rem;
+  background: transparent;
   border: none;
   border-bottom: transparent solid 1px;
 }
 .contactInfo > button:hover {
   border-bottom: black solid 1px;
 }
-.contactPhone {
+.contactPhone{
+  color: black;
 }
-.contactEmail {
-}
-.contactLinkedin {
-  display: inline-block;
-}
-.contactSocial {
-}
-.cardOpen > button {
-  font-family: 'Cormorant';
-  border: none;
-  border-bottom: transparent solid 1px;
-  background-color: inherit;
-}
-.cardOpen > button:hover {
-  border-bottom: black solid 1px;
+.contactEmail{
+  font-family: 'Poppins';
+  font-size: 1.3rem;
+  color: black;
 }

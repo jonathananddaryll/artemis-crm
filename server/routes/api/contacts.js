@@ -7,6 +7,8 @@ const format = require('pg-format');
 // middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
+  contactInputValidator,
+  contactUpdateValidator,
   validateRequest
 } = require('../../middlewares/validators');
 
@@ -31,22 +33,21 @@ router.get('/', myRequestHeaders, async (req, res) => {
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+        res.status(500).json(err);
       }
       res.status(200).json(response.rows);
       client.end();
     });
   } catch (err) {
-    res.status(500).json({ msg: 'server error' });
+    res.status(500).json(err);
   }
 });
 
 // @ROUTE  POST /api/contacts/
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
-router.post('/', async (req, res) => {
-  // myRequestHeaders, validateRequest,
+router.post('/', myRequestHeaders, async (req, res) => {
+  // contactInputValidator, validateRequest, 
 
   // req.body needs names and values of the postgres columns to fill in the new record
 
@@ -67,29 +68,30 @@ router.post('/', async (req, res) => {
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+        res.status(500).json(err);
       }
-      res.json(response.rows);
+      res.json(response. rows);
       client.end();
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'server error' });
+    res.status(500).json(err);
   }
 });
 
-// @ROUTE  PATCH /api/contacts/
+// @ROUTE  PATCH /api/contacts/:id
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
-router.patch('/', myRequestHeaders, validateRequest, async (req, res) => {
+router.patch('/:id', myRequestHeaders, async (req, res) => {
+  // contactUpdateValidator,  validateRequest,
   try {
     // use the token authenticated user_id
     const decodedToken = decodeToken(req.headers.authorization);
     const user_id = decodedToken.userId;
 
-    // req.body needs the id of the contact, the columns to update, and the values to replace with
-    const { updateWhat, updateTo, id } = req.body;
+    // req.params needs the id of the contact
+    // req.body the columns to update, and the values to replace with
+    const id = req.params.id;
+    const { updateWhat, updateTo } = req.body;
     // merge two arrays strings, together throwing in the formatting for SQL updates for updating
     // a type STRING column to a new value.
     const setUpdate = updateWhat.map((element, index, array) => {
@@ -103,43 +105,39 @@ router.patch('/', myRequestHeaders, validateRequest, async (req, res) => {
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
-        console.error(err);
-        res.status(500).json({ msg: err });
+        res.status(500).json(err);
       }
       res.status(200).json(response.rows);
       client.end();
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'server error' });
+    res.status(500).json(err);
   }
 });
 
-// @ROUTE  DELETE /api/contacts/
+// @ROUTE  DELETE /api/contacts/:id
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
-router.delete('/', myRequestHeaders, async (req, res) => {
+router.delete('/:id', myRequestHeaders, async (req, res) => {
   // use the token authenticated user_id
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
 
   // Requires just the id of the contact to delete
-  const { id } = req.body.deleteRequest;
+  const id = req.params.id;
   const query = `DELETE FROM contact WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
   try {
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'query error' });
+        res.status(500).json(err);
       }
       res.status(200).json(response.rows);
       client.end();
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'server error' });
+    res.status(500).json(err);
   }
 });
 
