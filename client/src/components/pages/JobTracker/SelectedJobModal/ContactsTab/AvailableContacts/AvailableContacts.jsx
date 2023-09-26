@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './AvailableContacts.module.scss';
 import ContactCard from '../ContactCard/ContactCard';
+import Loader from '../../../../../layout/Loader/Loader';
+import loadingInfinity from '../../../../../../assets/loadingInfinity.gif';
 
 export default function AvailableContacts({
   availableContactsLoading,
@@ -9,23 +11,38 @@ export default function AvailableContacts({
 }) {
   return (
     <div className={styles.container}>
-      {!availableContactsLoading && availableContacts.length > 0 ? (
-        <div className={styles.contactsFlex}>
-          {availableContacts.map(contact => (
-            <ContactCard
-              key={contact.id}
-              contactInfo={contact}
-              isLinkingContact={true}
-              setIsLinking={setIsLinking}
-            />
-          ))}
-        </div>
+      {availableContactsLoading ? (
+        // <p>available contacts are loading</p>
+        <Loader
+          text={'Available Contacts are loading'}
+          img={loadingInfinity}
+          altText={'loading_available_contacts'}
+          imageStyle={1}
+          textStyle={1}
+        />
       ) : (
-        <div>
-          <p>No Available Contacts to Link</p>
-        </div>
+        <>
+          {availableContacts.length > 0 ? (
+            <div className={styles.contactsFlex}>
+              {availableContacts.map(contact => (
+                <ContactCard
+                  key={contact.id}
+                  contactInfo={contact}
+                  isLinkingContact={true}
+                  setIsLinking={setIsLinking}
+                />
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p>No Available Contacts to Link</p>
+            </div>
+          )}
+          <div className={styles.buttonContainer}>
+            <button onClick={() => setIsLinking(false)}>Cancel</button>
+          </div>
+        </>
       )}
-      <button onClick={() => setIsLinking(false)}>Cancel</button>
     </div>
   );
 }

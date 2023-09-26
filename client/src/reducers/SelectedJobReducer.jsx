@@ -315,6 +315,7 @@ const selectedJobSlice = createSlice({
       state.timelinesLoading = true;
       state.notesLoading = true;
       state.tasksLoading = true;
+      state.linkedContactsLoading = true;
       state.availableContactsLoading = true;
       state.timelines = [];
       state.notes = [];
@@ -644,8 +645,15 @@ const selectedJobSlice = createSlice({
       getAllLinkedContactsWithJobId.fulfilled,
       (state, action) => {
         state.linkedContacts = action.payload;
+        state.linkedContactsLoading = false;
       }
     );
+
+    builder.addCase(linkContact.pending, (state, action) => {
+      toast.loading('Linking Contact', {
+        toastId: 'linkingContact'
+      });
+    });
 
     builder.addCase(linkContact.fulfilled, (state, action) => {
       const index = findIndex(
@@ -657,6 +665,8 @@ const selectedJobSlice = createSlice({
       // and change id and contact_id and then filter the availableContacts
       // without the newly linked contact
       let newLinkedContact = state.availableContacts.splice(index, 1)[0];
+      console.log(state.availableContacts.splice(index, 1));
+      console.log(state.availableContacts.splice(index, 1)[0]);
 
       newLinkedContact.id = action.payload.id;
       newLinkedContact.contact_id = action.payload.contact_id;
@@ -665,6 +675,9 @@ const selectedJobSlice = createSlice({
       state.availableContacts = state.availableContacts.filter(
         contact => contact.id !== action.payload.contact_id
       );
+
+      toast.dismiss('linkingContact');
+      toast.success('Successfully Linked Contact to Job');
     });
 
     builder.addCase(getContactsToLink.fulfilled, (state, action) => {
@@ -672,7 +685,7 @@ const selectedJobSlice = createSlice({
         el => !state.linkedContacts.some(f => f.contact_id === el.id)
       );
 
-      console.log(filteredContacts);
+      // console.log(filteredContacts);
 
       state.availableContacts = filteredContacts;
       state.availableContactsLoading = false;

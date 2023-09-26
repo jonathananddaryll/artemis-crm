@@ -13,10 +13,14 @@ import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
 
 export default function ContactsTab({ jobId }) {
-  const { linkedContacts, availableContacts, availableContactsLoading } =
-    useSelector(state => ({
-      ...state.selectedJob
-    }));
+  const {
+    linkedContacts,
+    availableContacts,
+    availableContactsLoading,
+    linkedContactsLoading
+  } = useSelector(state => ({
+    ...state.selectedJob
+  }));
   const dispatch = useDispatch();
   const { session } = useSession();
   const { userId } = useAuth();
@@ -65,17 +69,29 @@ export default function ContactsTab({ jobId }) {
           />
         )}
 
-        {linkedContacts.length > 0 && (
+        {!linkedContactsLoading && linkedContacts.length > 0 ? (
           <LinkedContacts linkedContacts={linkedContacts} />
+        ) : (
+          <>
+            {!isLinking && (
+              <NoDataPlaceholder
+                image={noContacts}
+                header={'NO LINKED CONTACTS'}
+                subHeader={'Here you can create and link contacts'}
+              />
+            )}
+          </>
         )}
 
-        {!isLinking && linkedContacts.length === 0 && (
-          <NoDataPlaceholder
-            image={noContacts}
-            header={'NO LINKED CONTACTS'}
-            subHeader={'Here you can create and link contacts'}
-          />
-        )}
+        {/* {!isLinking &&
+          linkedContacts.length === 0 &&
+          !linkedContactsLoading && (
+            <NoDataPlaceholder
+              image={noContacts}
+              header={'NO LINKED CONTACTS'}
+              subHeader={'Here you can create and link contacts'}
+            />
+          )} */}
       </div>
     </div>
   );
