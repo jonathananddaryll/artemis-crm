@@ -716,30 +716,6 @@ const selectedJobSlice = createSlice({
     });
 
     builder.addCase(unlinkContact.fulfilled, (state, action) => {
-      // copy the one getting deleted and change it to where it fits the availableContacts format.
-      // remove the one getting unlinked
-
-      console.log(action.payload);
-      // const index = findIndex(
-      //   state.availableContacts,
-      //   action.payload.contact_id
-      // );
-
-      // // Get the contact that just successfully linked from availableContacts
-      // // and change id and contact_id and then filter the availableContacts
-      // // without the newly linked contact
-      // let newLinkedContact = state.availableContacts.splice(index, 1)[0];
-      // console.log(state.availableContacts.splice(index, 1));
-      // console.log(state.availableContacts.splice(index, 1)[0]);
-
-      // newLinkedContact.id = action.payload.id;
-      // newLinkedContact.contact_id = action.payload.contact_id;
-      // state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
-
-      // state.availableContacts = state.availableContacts.filter(
-      //   contact => contact.id !== action.payload.contact_id
-      // );
-
       state.linkedContacts = state.linkedContacts.filter(
         contact => contact.contact_id !== action.payload.contact_id
       );
