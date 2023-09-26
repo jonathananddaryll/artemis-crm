@@ -114,7 +114,6 @@ export const deleteColumn = createAsyncThunk(
 
       const resData = [res.data, formData.columnStatusToDelete];
 
-      // console.log(res.data);
       return resData;
 
       // return formData.columnStatus;
@@ -228,8 +227,6 @@ export const getjobswithBoardId = createAsyncThunk(
 export const addJob = createAsyncThunk(
   'job/addJob',
   async (formData, thunkAPI) => {
-    // console.log('addJob triggered in redux reducer: ' + formData.token);
-
     const config = {
       headers: {
         'Content-Type': 'application/json',

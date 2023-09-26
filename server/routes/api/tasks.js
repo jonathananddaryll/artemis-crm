@@ -216,8 +216,6 @@ router.patch(
         jobId
       );
 
-      console.log(query);
-
       try {
         client.query(query, (err, response) => {
           if (err) {

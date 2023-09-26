@@ -77,7 +77,6 @@ router.get('/job/:job_id', async (req, res) => {
       }
 
       res.status(200).json(response.rows);
-      console.log(response.rows);
       client.end();
     });
   } catch (err) {

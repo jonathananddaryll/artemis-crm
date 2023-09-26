@@ -119,7 +119,6 @@ export const getAllTasks = createAsyncThunk(
 export const createTask = createAsyncThunk(
   'task/createTask',
   async (formData, thunkAPI) => {
-    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',

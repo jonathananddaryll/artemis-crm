@@ -122,7 +122,6 @@ router.patch('/:id', noteInputValidator, validateRequest, async (req, res) => {
           res.status(500).json({ msg: 'query error' });
         }
 
-        console.log(response.rows[0]);
         res.status(200).json(response.rows[0]);
         client.end();
       });
