@@ -272,18 +272,19 @@ export const unlinkContact = createAsyncThunk(
   'contact/unlinkContact',
   async (formData, thunkAPI) => {
     const { id, jobId, contactId, token } = formData;
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+    const headers = {
+      Authorization: `Bearer ${token}`
     };
 
+    console.log(formData);
+
     try {
-      const res = await axios.post(
+      const res = await axios.delete(
         `/api/jobcontact/${id}/job/${jobId}/contact/${contactId}`,
-        formData,
-        config
+        {
+          data: formData,
+          headers
+        }
       );
       return res.data;
     } catch (err) {
@@ -294,6 +295,23 @@ export const unlinkContact = createAsyncThunk(
   }
 );
 
+async (formData, thunkAPI) => {
+  const headers = {
+    Authorization: `Bearer ${formData.token}`
+  };
+
+  try {
+    const res = await axios.delete(`/api/notes/${formData.noteId}`, {
+      data: { formData },
+      headers
+    });
+
+    return res.data;
+  } catch (err) {
+    // have a better error catch later
+    console.log(err);
+  }
+};
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {

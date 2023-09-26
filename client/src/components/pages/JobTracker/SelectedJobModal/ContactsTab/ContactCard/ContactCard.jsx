@@ -60,7 +60,6 @@ export default function ContactCard({
       token: await session.getToken()
     };
 
-    console.log('unlink safafs');
     dispatch(unlinkContact(formData));
   };
 
@@ -102,7 +101,7 @@ export default function ContactCard({
       {isLinkingContact ? (
         <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
       ) : (
-        <button onClick={() => unlinkContactHandler((id, contact_id, user_id))}>
+        <button onClick={() => unlinkContactHandler(id, contact_id, user_id)}>
           Unlink
         </button>
       )}

@@ -101,8 +101,8 @@ router.delete(
 
     const { contactUserId } = req.body;
     const id = req.params.id;
-    const contactId = req.params.contactId;
-    const jobId = req.params.jobId;
+    const contactId = req.params.contact_id;
+    const jobId = req.params.job_id;
     const decodedToken = decodeToken(req.headers.authorization);
     const userId = decodedToken.userId;
 
@@ -113,7 +113,7 @@ router.delete(
         .json({ msg: 'Error: The user does not own the contact' });
     } else {
       const query = format(
-        'DELETE FROM job_contact WHERE id = %s and contact_id = %s and job_id = %s RETURNING *',
+        'DELETE FROM job_contact WHERE id = %s AND contact_id = %s AND job_id = %s RETURNING *',
         id,
         contactId,
         jobId
