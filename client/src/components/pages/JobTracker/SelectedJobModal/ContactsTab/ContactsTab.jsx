@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession, useAuth } from '@clerk/clerk-react';
+
+import {
+  linkContact,
+  unlinkContact,
+  getContactsToLink
+} from '../../../../../reducers/SelectedJobReducer';
 
 import Button from '../../../../layout/Button/Button';
 import AvailableContacts from './AvailableContacts/AvailableContacts';
@@ -10,19 +16,16 @@ import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceh
 import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
 
-export default function ContactsTab({
-  getContactsToLink,
-  linkContact,
-  unlinkContact,
-  jobId,
-  linkedContacts,
-  availableContacts,
-  availableContactsLoading
-}) {
+export default function ContactsTab({ jobId }) {
   const dispatch = useDispatch();
   const { session } = useSession();
   const { userId } = useAuth();
   const [isLinking, setIsLinking] = useState(false);
+
+  const { linkedContacts, availableContacts, availableContactsLoading } =
+    useSelector(state => ({
+      ...state.selectedJob
+    }));
 
   // Maybe have a backup like this runs if the initial run from SelectedJobModal useEffect doesnt load all the contacts
   // useEffect(() => {

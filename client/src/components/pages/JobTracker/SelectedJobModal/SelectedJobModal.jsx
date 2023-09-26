@@ -3,28 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import {
   changeSelectedJob,
-  deleteJob,
-  updateJobInfo
+  deleteJob
 } from '../../../../reducers/BoardReducer';
 import {
   getAllTimelines,
   resetSelectedJobItems,
-  createNote,
   getAllNotes,
-  deleteNote,
-  updateNote,
   getAllTasks,
-  createTask,
-  updateTaskStatus,
-  deleteTask,
-  updateTask,
-  linkContact,
-  unlinkContact,
-  getAllLinkedContactsWithJobId,
-  getContactsToLink
+  getAllLinkedContactsWithJobId
 } from '../../../../reducers/SelectedJobReducer';
-
-import { getUserContactsTable } from '../../../../reducers/ContactReducer';
 
 import Button from '../../../layout/Button/Button';
 import InterviewsTab from './InterviewsTab/InterviewsTab';
@@ -46,20 +33,7 @@ export default function SelectedJobModal() {
     ...state.board
   }));
 
-  const {
-    timelines,
-    timelinesLoading,
-    notes,
-    notesLoading,
-    tasks,
-    completedTasks,
-    tasksLoading,
-    interviews,
-    completedInterviews,
-    linkedContacts,
-    availableContacts,
-    availableContactsLoading
-  } = useSelector(state => ({
+  const { tasks, notes, interviews, linkedContacts } = useSelector(state => ({
     ...state.selectedJob
   }));
 
@@ -186,62 +160,31 @@ export default function SelectedJobModal() {
             <JobInfoTab
               selectedJob={selectedJob}
               selectedBoard_userId={selectedBoard.user_id}
-              updateJobInfo={updateJobInfo}
-              jobId={selectedJob.id}
             />
           )}
           {activeItem === 1 && (
             <NotesTab
-              createNote={createNote}
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
-              notes={notes}
-              notesLoading={notesLoading}
-              deleteNote={deleteNote}
-              updateNote={updateNote}
             />
           )}
-          {activeItem === 2 && (
-            <ContactsTab
-              linkContact={linkContact}
-              unlinkContact={unlinkContact}
-              jobId={selectedJob.id}
-              linkedContacts={linkedContacts}
-              getContactsToLink={getContactsToLink}
-              availableContacts={availableContacts}
-              availableContactsLoading={availableContactsLoading}
-            />
-          )}
+          {activeItem === 2 && <ContactsTab jobId={selectedJob.id} />}
           {activeItem === 3 && <DocumentsTab />}
           {activeItem === 4 && (
             <TasksTab
-              tasks={tasks}
-              completedTasks={completedTasks}
-              tasksLoading={tasksLoading}
-              createTask={createTask}
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
-              updateTaskStatus={updateTaskStatus}
-              deleteTask={deleteTask}
-              updateTask={updateTask}
             />
           )}
           {activeItem === 5 && (
             <InterviewsTab
-              interviews={interviews}
-              completedInterviews={completedInterviews}
-              createTask={createTask}
               jobId={selectedJob.id}
               selectedBoard_userId={selectedBoard.user_id}
             />
           )}
         </div>
         <div className={styles.timelineContainer}>
-          <Timeline
-            timelines={timelines}
-            timelinesLoading={timelinesLoading}
-            dateCreated={selectedJob.date_created}
-          />
+          <Timeline dateCreated={selectedJob.date_created} />
         </div>
         {confirmationToggle && (
           <DeletePopup
