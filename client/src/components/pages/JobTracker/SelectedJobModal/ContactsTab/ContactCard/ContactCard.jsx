@@ -64,7 +64,6 @@ export default function ContactCard({
         <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
       )}
       {showUnlinkButton && (
-        // unlinkContactHandler(id, user_id, job_id)
         <button onClick={() => unlinkContactHandler((id, contact_id, user_id))}>
           Unlink
         </button>

@@ -282,7 +282,7 @@ export const unlinkContact = createAsyncThunk(
 
     try {
       const res = await axios.post(
-        `/${id}/job/${jobId}/contact/${contactId}`,
+        `/api/jobcontact/${id}/job/${jobId}/contact/${contactId}`,
         formData,
         config
       );
