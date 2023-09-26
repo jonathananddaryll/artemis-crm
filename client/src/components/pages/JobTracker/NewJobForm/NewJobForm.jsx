@@ -6,10 +6,9 @@ import Button from '../../../layout/Button/Button';
 import styles from './NewJobForm.module.scss';
 
 export default function NewJobForm() {
-  const { selectedBoardStatusCols, selectedStatusToAdd, selectedBoard } =
-    useSelector(state => ({
-      ...state.board
-    }));
+  const { selectedStatusToAdd, selectedBoard } = useSelector(state => ({
+    ...state.board
+  }));
 
   const [formData, setFormData] = useState({
     company: '',

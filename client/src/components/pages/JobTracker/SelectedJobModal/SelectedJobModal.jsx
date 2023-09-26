@@ -25,17 +25,16 @@ import Timeline from './Timeline/Timeline';
 import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {
+  const { tasks, notes, interviews, linkedContacts } = useSelector(state => ({
+    ...state.selectedJob
+  }));
+  const { selectedJob, selectedBoard } = useSelector(state => ({
+    ...state.board
+  }));
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const { session } = useSession();
   const dispatch = useDispatch();
-  const { selectedJob, selectedBoard } = useSelector(state => ({
-    ...state.board
-  }));
-
-  const { tasks, notes, interviews, linkedContacts } = useSelector(state => ({
-    ...state.selectedJob
-  }));
 
   useEffect(() => {
     // dispatch(getAllTimelines(selectedJob.id));
@@ -49,6 +48,7 @@ export default function SelectedJobModal() {
     dispatch(getAllLinkedContactsWithJobId(selectedJob.id));
   };
 
+  // Navigation Items for the subNav inside Selected Job Modal
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
     { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
@@ -168,7 +168,7 @@ export default function SelectedJobModal() {
               jobId={selectedJob.id}
             />
           )}
-          {activeItem === 2 && <ContactsTab jobId={selectedJob.id} />}
+          {activeItem === 2 && <ContactsTab />}
           {activeItem === 3 && <DocumentsTab />}
           {activeItem === 4 && (
             <TasksTab

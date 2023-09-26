@@ -67,7 +67,7 @@ export const updateNote = createAsyncThunk(
 
 // Get All Notes with jobId
 export const getAllNotes = createAsyncThunk(
-  'notes/getAllNotesWithJobId',
+  'note/getAllNotesWithJobId',
   async (job_id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/notes/job/${job_id}`);
@@ -81,7 +81,7 @@ export const getAllNotes = createAsyncThunk(
 
 // Deletes a note
 export const deleteNote = createAsyncThunk(
-  'job/deleteNote',
+  'note/deleteNote',
   async (formData, thunkAPI) => {
     const headers = {
       Authorization: `Bearer ${formData.token}`
@@ -188,7 +188,7 @@ export const updateTaskStatus = createAsyncThunk(
 
 // Deletes a task
 export const deleteTask = createAsyncThunk(
-  'job/deleteTask',
+  'task/deleteTask',
   async (formData, thunkAPI) => {
     const headers = {
       Authorization: `Bearer ${formData.token}`
@@ -210,7 +210,7 @@ export const deleteTask = createAsyncThunk(
 
 // Get All LinkedContact with jobId
 export const getAllLinkedContactsWithJobId = createAsyncThunk(
-  'task/getAllLinkedContactsWithJobId',
+  'contact/getAllLinkedContactsWithJobId',
   async (job_id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/jobcontact/job/${job_id}`);
@@ -224,7 +224,7 @@ export const getAllLinkedContactsWithJobId = createAsyncThunk(
 );
 
 export const getContactsToLink = createAsyncThunk(
-  'contacts/getContactsToLink',
+  'contact/getContactsToLink',
   async (idAndToken, thunkAPI) => {
     const config = {
       params: {
@@ -247,7 +247,7 @@ export const getContactsToLink = createAsyncThunk(
 
 // Create new contact link
 export const linkContact = createAsyncThunk(
-  'note/linkContact',
+  'contact/linkContact',
   async (formData, thunkAPI) => {
     const config = {
       headers: {
@@ -269,7 +269,7 @@ export const linkContact = createAsyncThunk(
 
 // (Delete) Unlink contacts
 export const unlinkContact = createAsyncThunk(
-  'note/unlinkContact',
+  'contact/unlinkContact',
   async (formData, thunkAPI) => {
     const { id, jobId, contactId, token } = formData;
     const config = {
@@ -652,7 +652,14 @@ const selectedJobSlice = createSlice({
         state.availableContacts,
         action.payload.contact_id
       );
-      const newLinkedContact = state.availableContacts[index];
+
+      // Get the contact that just successfully linked from availableContacts
+      // and change id and contact_id and then filter the availableContacts
+      // without the newly linked contact
+      let newLinkedContact = state.availableContacts.splice(index, 1)[0];
+
+      newLinkedContact.id = action.payload.id;
+      newLinkedContact.contact_id = action.payload.contact_id;
       state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
 
       state.availableContacts = state.availableContacts.filter(
@@ -664,6 +671,8 @@ const selectedJobSlice = createSlice({
       const filteredContacts = action.payload.filter(
         el => !state.linkedContacts.some(f => f.contact_id === el.id)
       );
+
+      console.log(filteredContacts);
 
       state.availableContacts = filteredContacts;
       state.availableContactsLoading = false;

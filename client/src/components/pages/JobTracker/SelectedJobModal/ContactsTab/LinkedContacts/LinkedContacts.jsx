@@ -2,10 +2,7 @@ import React from 'react';
 import ContactCard from '../ContactCard/ContactCard';
 import styles from './LinkedContacts.module.scss';
 
-export default function LinkedContacts({
-  linkedContacts,
-  unlinkContactHandler
-}) {
+export default function LinkedContacts({ linkedContacts }) {
   return (
     // If there are Linked Contacts
     <div className={styles.linkedContactsContainer}>
@@ -15,9 +12,7 @@ export default function LinkedContacts({
           <ContactCard
             key={contact.id}
             contactInfo={contact}
-            showLinkButton={false}
-            showUnlinkButton={true}
-            unlinkContactHandler={unlinkContactHandler}
+            isLinkingContact={false}
           />
         ))}
       </div>

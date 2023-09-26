@@ -5,8 +5,7 @@ import ContactCard from '../ContactCard/ContactCard';
 export default function AvailableContacts({
   availableContactsLoading,
   availableContacts,
-  setIsLinking,
-  linkContactHandler
+  setIsLinking
 }) {
   return (
     <div className={styles.container}>
@@ -16,9 +15,8 @@ export default function AvailableContacts({
             <ContactCard
               key={contact.id}
               contactInfo={contact}
-              showLinkButton={true}
-              showUnlinkButton={false}
-              linkContactHandler={linkContactHandler}
+              isLinkingContact={true}
+              setIsLinking={setIsLinking}
             />
           ))}
         </div>

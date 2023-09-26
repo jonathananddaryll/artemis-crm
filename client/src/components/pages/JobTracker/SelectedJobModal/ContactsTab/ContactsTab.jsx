@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession, useAuth } from '@clerk/clerk-react';
 
-import {
-  linkContact,
-  unlinkContact,
-  getContactsToLink
-} from '../../../../../reducers/SelectedJobReducer';
+import { getContactsToLink } from '../../../../../reducers/SelectedJobReducer';
 
 import Button from '../../../../layout/Button/Button';
 import AvailableContacts from './AvailableContacts/AvailableContacts';
@@ -17,15 +13,14 @@ import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
 
 export default function ContactsTab({ jobId }) {
-  const dispatch = useDispatch();
-  const { session } = useSession();
-  const { userId } = useAuth();
-  const [isLinking, setIsLinking] = useState(false);
-
   const { linkedContacts, availableContacts, availableContactsLoading } =
     useSelector(state => ({
       ...state.selectedJob
     }));
+  const dispatch = useDispatch();
+  const { session } = useSession();
+  const { userId } = useAuth();
+  const [isLinking, setIsLinking] = useState(false);
 
   // Maybe have a backup like this runs if the initial run from SelectedJobModal useEffect doesnt load all the contacts
   // useEffect(() => {
@@ -40,35 +35,6 @@ export default function ContactsTab({ jobId }) {
     const token = await session.getToken();
     getContactsToLink;
     dispatch(getContactsToLink({ user_id: userId, token: token }));
-  };
-
-  // Handles the link contact action
-  const linkContactHandler = async (contactId, contactUserId) => {
-    const formData = {
-      contactId: contactId,
-      jobId: jobId,
-      contactUserId: contactUserId,
-      token: await session.getToken()
-    };
-
-    dispatch(linkContact(formData));
-
-    // reset isLinking
-    setIsLinking(false);
-  };
-
-  // Handles the unlink contact action
-  const unlinkContactHandler = async (jcId, contactId, contactUserId) => {
-    const formData = {
-      id: jcId,
-      contactId: contactId,
-      jobId: jobId,
-      contactUserId: contactUserId,
-      token: await session.getToken()
-    };
-
-    console.log('unlink safafs');
-    dispatch(unlinkContact(formData));
   };
 
   return (
@@ -96,15 +62,11 @@ export default function ContactsTab({ jobId }) {
             availableContactsLoading={availableContactsLoading}
             availableContacts={availableContacts}
             setIsLinking={setIsLinking}
-            linkContactHandler={linkContactHandler}
           />
         )}
 
         {linkedContacts.length > 0 && (
-          <LinkedContacts
-            linkedContacts={linkedContacts}
-            unlinkContactHandler={unlinkContactHandler}
-          />
+          <LinkedContacts linkedContacts={linkedContacts} />
         )}
 
         {!isLinking && linkedContacts.length === 0 && (
