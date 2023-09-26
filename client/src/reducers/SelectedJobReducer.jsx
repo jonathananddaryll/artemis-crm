@@ -667,6 +667,17 @@ const selectedJobSlice = createSlice({
       }
     );
 
+    builder.addCase(getContactsToLink.fulfilled, (state, action) => {
+      const filteredContacts = action.payload.filter(
+        el => !state.linkedContacts.some(f => f.contact_id === el.id)
+      );
+
+      // console.log(filteredContacts);
+
+      state.availableContacts = filteredContacts;
+      state.availableContactsLoading = false;
+    });
+
     builder.addCase(linkContact.pending, (state, action) => {
       toast.loading('Linking Contact', {
         toastId: 'linkingContact'
@@ -698,15 +709,43 @@ const selectedJobSlice = createSlice({
       toast.success('Successfully Linked Contact to Job');
     });
 
-    builder.addCase(getContactsToLink.fulfilled, (state, action) => {
-      const filteredContacts = action.payload.filter(
-        el => !state.linkedContacts.some(f => f.contact_id === el.id)
+    builder.addCase(unlinkContact.pending, (state, action) => {
+      toast.loading('Unlinking Contact', {
+        toastId: 'unlinkingContact'
+      });
+    });
+
+    builder.addCase(unlinkContact.fulfilled, (state, action) => {
+      // copy the one getting deleted and change it to where it fits the availableContacts format.
+      // remove the one getting unlinked
+
+      console.log(action.payload);
+      // const index = findIndex(
+      //   state.availableContacts,
+      //   action.payload.contact_id
+      // );
+
+      // // Get the contact that just successfully linked from availableContacts
+      // // and change id and contact_id and then filter the availableContacts
+      // // without the newly linked contact
+      // let newLinkedContact = state.availableContacts.splice(index, 1)[0];
+      // console.log(state.availableContacts.splice(index, 1));
+      // console.log(state.availableContacts.splice(index, 1)[0]);
+
+      // newLinkedContact.id = action.payload.id;
+      // newLinkedContact.contact_id = action.payload.contact_id;
+      // state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
+
+      // state.availableContacts = state.availableContacts.filter(
+      //   contact => contact.id !== action.payload.contact_id
+      // );
+
+      state.linkedContacts = state.linkedContacts.filter(
+        contact => contact.contact_id !== action.payload.contact_id
       );
 
-      // console.log(filteredContacts);
-
-      state.availableContacts = filteredContacts;
-      state.availableContactsLoading = false;
+      toast.dismiss('unlinkingContact');
+      toast.success('Successfully Unlinked Contact From Job');
     });
   }
 });
