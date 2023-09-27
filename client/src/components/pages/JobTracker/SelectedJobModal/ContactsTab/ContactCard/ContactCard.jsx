@@ -110,7 +110,7 @@ export default function ContactCard({
                 </a>
               )}
             </div>
-            <div className={styles.socialmedias}>
+            <div className={styles.socialMedias}>
               {(linkedin !== null || '') && (
                 <a
                   className={styles.socialsIcon}
@@ -120,27 +120,24 @@ export default function ContactCard({
                   <i className='fa-brands fa-linkedin'></i>
                 </a>
               )}
-
               {(instagram !== null || '') && (
                 <a
                   className={styles.socialsIcon}
                   href={instagram}
                   target='_blank'
                 >
-                  <i className='fa-brands fa-x-twitter'></i>
+                  <i className='fa-brands fa-instagram'></i>
                 </a>
               )}
-
               {(twitter !== null || '') && (
                 <a
                   className={styles.socialsIcon}
                   href={twitter}
                   target='_blank'
                 >
-                  <i className='fa-brands fa-instagram'></i>
+                  <i className='fa-brands fa-x-twitter'></i>
                 </a>
               )}
-
               {(personal_site !== null || '') && (
                 <a
                   className={styles.socialsIcon}
@@ -150,7 +147,6 @@ export default function ContactCard({
                   <i className='fa-regular fa-window-maximize'></i>
                 </a>
               )}
-
               {(other_social !== null || '') && (
                 <a
                   className={styles.socialsIcon}
@@ -199,87 +195,6 @@ export default function ContactCard({
         {last_name[0]}
       </p>
     </div>
-
-    // <div className={styles.container}>
-    //   <div className={styles.flex}>
-    //     <div className={styles.initialsBox}>
-    //       <div className={styles.initials}>
-    //         <p className={styles.initialsText}>
-    //           {first_name[0]} {last_name[0]}
-    //         </p>
-    //       </div>
-    //     </div>
-    //     <div className={styles.infoBox}>
-    //       <div className={styles.infoMain}>
-    //         <p className={styles.nameText}>
-    //           {first_name} {last_name}
-    //         </p>
-    //         <p className={styles.companyText}>{current_job_title}</p>
-    //         <p className={styles.companyText}>{company}</p>
-    //       </div>
-    //       <div className={styles.infoContacts}>
-    //         {phone !== null && (
-    //           <p className={styles.contactText}>
-    //             <i className='bi bi-telephone'></i> {phone}
-    //           </p>
-    //         )}
-    //         {email !== null && (
-    //           <p className={styles.contactText}>
-    //             <i className='bi bi-envelope'></i> {email}
-    //           </p>
-    //         )}
-    //       </div>
-
-    //       <div className={styles.infoSocials}>
-    //         {linkedin !== null && (
-    //           <a href={linkedin} target='_blank'>
-    //             <i className='bi bi-linkedin'></i>
-    //           </a>
-    //         )}
-    //         {twitter !== null && (
-    //           <a href={twitter} target='_blank'>
-    //             <i className='bi bi-twitter'></i>
-    //           </a>
-    //         )}
-    //         {instagram !== null && (
-    //           <a href={instagram} target='_blank'>
-    //             <i className='bi bi-instagram'></i>
-    //           </a>
-    //         )}
-    //         {other_social !== null && (
-    //           <a href={other_social} target='_blank'>
-    //             <i className='bi bi-browser-chrome'></i>
-    //           </a>
-    //         )}
-    //         {personal_site !== null && (
-    //           <a href={personal_site} target='_blank'>
-    //             <i className='bi bi-code-square'></i>
-    //           </a>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div className={styles.buttonContainer}>
-    //     {isLinkingContact ? (
-    //       <Button
-    //         type={'button'}
-    //         size={'small'}
-    //         value={'Link Contact'}
-    //         color={'green'}
-    //         onClick={() => linkContactHandler(id, user_id)}
-    //       />
-    //     ) : (
-    //       <Button
-    //         type={'button'}
-    //         size={'small'}
-    //         value={'Unlink Contact'}
-    //         color={'red'}
-    //         disabled={showAvailableContacts === true}
-    //         onClick={() => unlinkContactHandler(id, contact_id, user_id)}
-    //       />
-    //     )}
-    //   </div>
-    // </div>
   );
 }
 
