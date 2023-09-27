@@ -11,7 +11,8 @@ import styles from './ContactCard.module.scss/';
 export default function ContactCard({
   contactInfo,
   isLinkingContact,
-  setIsLinking
+  setShowAvailableContacts,
+  showAvailableContacts
 }) {
   const { selectedJob } = useSelector(state => ({
     ...state.board
@@ -48,7 +49,7 @@ export default function ContactCard({
     dispatch(linkContact(formData));
 
     // reset isLinking
-    setIsLinking(false);
+    setShowAvailableContacts(false);
   };
 
   // Handles the unlink contact action
@@ -139,6 +140,7 @@ export default function ContactCard({
             size={'small'}
             value={'Unlink Contact'}
             color={'red'}
+            disabled={showAvailableContacts === true}
             onClick={() => unlinkContactHandler(id, contact_id, user_id)}
           />
         )}

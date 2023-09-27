@@ -8,7 +8,7 @@ import loadingInfinity from '../../../../../../assets/loadingInfinity.gif';
 export default function AvailableContacts({
   availableContactsLoading,
   availableContacts,
-  setIsLinking
+  setShowAvailableContacts
 }) {
   return (
     <div className={styles.container}>
@@ -32,14 +32,14 @@ export default function AvailableContacts({
                     key={contact.id}
                     contactInfo={contact}
                     isLinkingContact={true}
-                    setIsLinking={setIsLinking}
+                    setShowAvailableContacts={setShowAvailableContacts}
                   />
                 ))}
               </div>
             </div>
           ) : (
             <div>
-              <p>No Available Contacts to Link</p>
+              <p className={styles.headerText}>No Available Contacts to Link</p>
             </div>
           )}
           <div className={styles.buttonContainer}>
@@ -48,10 +48,10 @@ export default function AvailableContacts({
               size={'large'}
               value={'Cancel'}
               color={'white'}
-              onClick={() => setIsLinking(false)}
+              onClick={() => setShowAvailableContacts(false)}
             />
 
-            {/* <button onClick={() => setIsLinking(false)}>Cancel</button> */}
+            {/* <button onClick={() => setShowAvailableContacts(false)}>Cancel</button> */}
           </div>
         </>
       )}

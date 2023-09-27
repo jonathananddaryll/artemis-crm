@@ -2,7 +2,10 @@ import React from 'react';
 import ContactCard from '../ContactCard/ContactCard';
 import styles from './LinkedContacts.module.scss';
 
-export default function LinkedContacts({ linkedContacts }) {
+export default function LinkedContacts({
+  linkedContacts,
+  showAvailableContacts
+}) {
   return (
     // If there are Linked Contacts
     <div className={styles.linkedContactsContainer}>
@@ -13,6 +16,7 @@ export default function LinkedContacts({ linkedContacts }) {
             key={contact.id}
             contactInfo={contact}
             isLinkingContact={false}
+            showAvailableContacts={showAvailableContacts}
           />
         ))}
       </div>

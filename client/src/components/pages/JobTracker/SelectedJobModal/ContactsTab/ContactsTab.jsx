@@ -24,7 +24,7 @@ export default function ContactsTab({ jobId }) {
   const dispatch = useDispatch();
   const { session } = useSession();
   const { userId } = useAuth();
-  const [isLinking, setIsLinking] = useState(false);
+  const [showAvailableContacts, setShowAvailableContacts] = useState(false);
 
   // Maybe have a backup like this runs if the initial run from SelectedJobModal useEffect doesnt load all the contacts
   // useEffect(() => {
@@ -34,7 +34,7 @@ export default function ContactsTab({ jobId }) {
 
   // Gets contacts available to link
   const showUserContacts = async () => {
-    setIsLinking(true);
+    setShowAvailableContacts(true);
 
     const token = await session.getToken();
     getContactsToLink;
@@ -44,7 +44,7 @@ export default function ContactsTab({ jobId }) {
   return (
     <div className={styles.contactsTabContainer}>
       <div className={styles.buttonsContainer}>
-        {!isLinking && (
+        {!showAvailableContacts && (
           <Button
             type={'button'}
             value={'Link Contact'}
@@ -61,19 +61,22 @@ export default function ContactsTab({ jobId }) {
         /> */}
       </div>
       <div className={styles.contactsContentContainer}>
-        {isLinking && (
+        {showAvailableContacts && (
           <AvailableContacts
             availableContactsLoading={availableContactsLoading}
             availableContacts={availableContacts}
-            setIsLinking={setIsLinking}
+            setShowAvailableContacts={setShowAvailableContacts}
           />
         )}
 
         {!linkedContactsLoading && linkedContacts.length > 0 ? (
-          <LinkedContacts linkedContacts={linkedContacts} />
+          <LinkedContacts
+            linkedContacts={linkedContacts}
+            showAvailableContacts={showAvailableContacts}
+          />
         ) : (
           <>
-            {!isLinking && (
+            {!showAvailableContacts && (
               <NoDataPlaceholder
                 image={noContacts}
                 header={'NO LINKED CONTACTS'}
@@ -83,7 +86,7 @@ export default function ContactsTab({ jobId }) {
           </>
         )}
 
-        {/* {!isLinking &&
+        {/* {!showAvailableContacts &&
           linkedContacts.length === 0 &&
           !linkedContactsLoading && (
             <NoDataPlaceholder
