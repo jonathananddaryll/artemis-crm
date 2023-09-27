@@ -1,13 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import {
-  useClerk,
-  UserButton,
-  useAuth,
-  useUser,
-  SignOutButton
-} from '@clerk/clerk-react';
+import { useClerk, UserButton, useAuth, useUser } from '@clerk/clerk-react';
 import DemoSignIn from '../DemoSignIn/DemoSignIn';
 import styles from './SideBar.module.scss';
 
@@ -15,6 +9,8 @@ export default function SideBar() {
   const { isLoaded } = useAuth();
   const { user } = useUser();
   const { signOut } = useClerk();
+
+  const [activeItem, setActiveItem] = useState(0);
 
   const location = useLocation();
 
@@ -26,7 +22,8 @@ export default function SideBar() {
       icon: '/icons/file.svg',
       link: '/documents'
     },
-    { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' }
+    { index: 3, text: 'Boards', icon: '/icons/table.svg', link: '/boards' },
+    { index: 4, text: 'Settings', icon: '/icons/settings.svg', link: '/boards' }
   ];
 
   const navigate = useNavigate();
@@ -49,9 +46,22 @@ export default function SideBar() {
             </div>
             <div className={styles.navMenu}>
               {menuItems.map(({ index, text, icon, link }) => (
-                <NavLink key={index} to={link} className={styles.navMenuLink}>
-                  <div className={styles.menuItem}>
-                    <img src={icon} alt='' srcSet='' />
+                <NavLink
+                  className={`${styles.navMenuLink} ${
+                    activeItem === index ? styles.activee : styles.notactivee
+                  }`}
+                  key={index}
+                  to={link}
+                  onClick={() => setActiveItem(index)}
+                >
+                  <div
+                    className={`${styles.menuItem} ${
+                      activeItem === index
+                        ? styles.menuActive
+                        : styles.menuNotActive
+                    }`}
+                  >
+                    <img src={icon} alt={text} srcSet='' />
                     <p>{text}</p>
                   </div>
                 </NavLink>
@@ -69,7 +79,6 @@ export default function SideBar() {
                   {user.emailAddresses[0].emailAddress}
                 </p>
               </div>
-              {/* <SignOutButton /> */}
               <div className={styles.footerButton}>
                 <button
                   className={styles.signoutButton}

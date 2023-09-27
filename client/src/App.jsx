@@ -16,8 +16,6 @@ import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
 import ContactsPage from './components/pages/Contacts/ContactsPage';
-
-import TapBar from './components/layout/TapBar/TapBar';
 import './styles/globals.scss';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -94,7 +92,6 @@ function App() {
               ></Route>
             </Routes>
           </div>
-          <TapBar />
         </ClerkProvider>
       </BrowserRouter>
       <ToastContainer
