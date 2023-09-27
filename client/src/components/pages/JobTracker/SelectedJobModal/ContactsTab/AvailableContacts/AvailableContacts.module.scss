@@ -1,15 +1,16 @@
 .availableContactsContainer {
+  margin-top: 2rem;
 }
 .contactsFlex {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-top: 2rem;
+  margin-top: 1rem;
   row-gap: 5rem;
 }
 
 .buttonContainer {
-  margin: 2rem 0;
+  margin: 6rem 0 0 0;
   border-bottom: 1px solid rgb(214, 205, 205);
   padding-bottom: 3rem;
 }
@@ -18,4 +19,8 @@
   font-size: 2rem;
   color: black;
   font-weight: 500;
+}
+
+.flexFiller {
+  flex: 1;
 }

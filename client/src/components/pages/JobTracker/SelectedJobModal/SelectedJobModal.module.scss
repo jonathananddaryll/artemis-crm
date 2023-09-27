@@ -42,7 +42,6 @@
   @include mixin.tabLandscape {
     width: 100%;
     height: 100%;
-    overflow: scroll;
   }
 }
 
@@ -162,6 +161,7 @@
   /* padding: 0 35px; */
   /* border-bottom: 1px solid black; */
   background-color: #ccccdb;
+  overflow: hidden;
 
   @include mixin.tabPortrait {
     overflow-x: auto;

@@ -720,6 +720,8 @@ const selectedJobSlice = createSlice({
         contact => contact.contact_id !== action.payload.contact_id
       );
 
+      state.availableContactsLoading = true;
+
       toast.dismiss('unlinkingContact');
       toast.success('Successfully Unlinked Contact From Job');
     });
