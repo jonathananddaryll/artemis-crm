@@ -127,7 +127,7 @@ export default function ContactCard({
                   href={instagram}
                   target='_blank'
                 >
-                  <i class='fa-brands fa-x-twitter'></i>
+                  <i className='fa-brands fa-x-twitter'></i>
                 </a>
               )}
 
@@ -137,7 +137,7 @@ export default function ContactCard({
                   href={twitter}
                   target='_blank'
                 >
-                  <i class='fa-brands fa-instagram'></i>
+                  <i className='fa-brands fa-instagram'></i>
                 </a>
               )}
 
@@ -147,7 +147,7 @@ export default function ContactCard({
                   href={personal_site}
                   target='_blank'
                 >
-                  <i class='fa-regular fa-window-maximize'></i>
+                  <i className='fa-regular fa-window-maximize'></i>
                 </a>
               )}
 
@@ -157,7 +157,7 @@ export default function ContactCard({
                   href={other_social}
                   target='_blank'
                 >
-                  <i class='fa-solid fa-hashtag'></i>
+                  <i className='fa-solid fa-hashtag'></i>
                 </a>
               )}
             </div>

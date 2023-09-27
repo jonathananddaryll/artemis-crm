@@ -1,0 +1,40 @@
+@use '../../../styles/mixins.scss' as mixin;
+
+.tabBarContainer {
+  display: none;
+}
+
+@include mixin.tabPortrait {
+  .tabBarContainer {
+    display: block;
+    height: 60px;
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    background-color: rgb(183, 183, 233);
+  }
+
+  .navItems {
+    display: flex;
+    flex: 0 0 25%;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .navItem {
+    text-align: center;
+    // background-color: yellow;
+    width: 100%;
+    position: relative;
+
+    & i {
+      font-size: 4rem;
+      // margin: 0 auto;
+      /* center */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
