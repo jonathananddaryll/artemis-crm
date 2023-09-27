@@ -19,6 +19,7 @@ export default function LinkedContacts({
             showAvailableContacts={showAvailableContacts}
           />
         ))}
+        <div className={styles.flexFiller}></div>
       </div>
     </div>
   );

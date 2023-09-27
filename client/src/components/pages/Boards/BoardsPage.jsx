@@ -116,39 +116,40 @@ export default function BoardsPage() {
               )}
             </div>
           ))}
-          {/* if there's 4 gap */}
-          {(boards.length + 1) % 5 === 1 && (
-            <>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-            </>
-          )}
-
-          {/* if there's 3 gaps */}
-          {(boards.length + 1) % 5 === 2 && (
-            <>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-            </>
-          )}
-
-          {/* if there's 2 gaps */}
-          {(boards.length + 1) % 5 === 3 && (
-            <>
-              <div className={styles.flexboxSpacer}></div>
-              <div className={styles.flexboxSpacer}></div>
-            </>
-          )}
-
-          {/* if there's 1 gaps */}
-          {(boards.length + 1) % 5 === 4 && (
-            <div className={styles.flexboxSpacer}></div>
-          )}
+          <div className={styles.flexFiller}></div>
         </div>
       )}
     </div>
   );
 }
+
+// {(boards.length + 1) % 5 === 1 && (
+//   <>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//   </>
+// )}
+
+// {/* if there's 3 gaps */}
+// {(boards.length + 1) % 5 === 2 && (
+//   <>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//   </>
+// )}
+
+// {/* if there's 2 gaps */}
+// {(boards.length + 1) % 5 === 3 && (
+//   <>
+//     <div className={styles.flexboxSpacer}></div>
+//     <div className={styles.flexboxSpacer}></div>
+//   </>
+// )}
+
+// {/* if there's 1 gaps */}
+// {(boards.length + 1) % 5 === 4 && (
+//   <div className={styles.flexboxSpacer}></div>
+// )}

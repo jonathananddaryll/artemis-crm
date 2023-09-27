@@ -67,7 +67,7 @@
   min-height: 5rem;
   width: max-content;
 }
-.infoText{
+.infoText {
   margin: 0 auto;
   max-width: 100%;
   width: max-content;
@@ -83,11 +83,14 @@
 .contactInfo > button:hover {
   border-bottom: black solid 1px;
 }
-.contactPhone{
+.contactPhone {
   color: black;
+
+  &:visited {
+    color: black;
+  }
 }
-.contactEmail{
+.contactEmail {
   font-family: 'Poppins';
-  font-size: 1.3rem;
-  color: black;
+  // color: black;
 }

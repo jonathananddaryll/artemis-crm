@@ -35,6 +35,8 @@ export default function AvailableContacts({
                     setShowAvailableContacts={setShowAvailableContacts}
                   />
                 ))}
+
+                <div className={styles.flexFiller}></div>
               </div>
             </div>
           ) : (
@@ -46,7 +48,7 @@ export default function AvailableContacts({
             <Button
               type={'button'}
               size={'large'}
-              value={'Cancel'}
+              value={'Close Available Contacts'}
               color={'white'}
               onClick={() => setShowAvailableContacts(false)}
             />
