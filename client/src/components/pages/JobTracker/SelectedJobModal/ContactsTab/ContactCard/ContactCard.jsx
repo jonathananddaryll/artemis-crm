@@ -38,12 +38,20 @@ export default function ContactCard({
   } = contactInfo;
 
   // Handles the link contact action
-  const linkContactHandler = async (contactId, contactUserId) => {
+  const linkContactHandler = async (
+    contactId,
+    contactUserId,
+    firstName,
+    lastName
+  ) => {
     const formData = {
       contactId: contactId,
       jobId: selectedJob.id,
       contactUserId: contactUserId,
-      token: await session.getToken()
+      token: await session.getToken(),
+      timelineDescription: `Linked ${
+        firstName.charAt(0).toUpperCase() + firstName.slice(1)
+      } ${lastName.charAt(0).toUpperCase() + lastName.slice(1)} to this job`
     };
 
     dispatch(linkContact(formData));
@@ -53,13 +61,22 @@ export default function ContactCard({
   };
 
   // Handles the unlink contact action
-  const unlinkContactHandler = async (jcId, contactId, contactUserId) => {
+  const unlinkContactHandler = async (
+    jcId,
+    contactId,
+    contactUserId,
+    firstName,
+    lastName
+  ) => {
     const formData = {
       id: jcId,
       contactId: contactId,
       jobId: selectedJob.id,
       contactUserId: contactUserId,
-      token: await session.getToken()
+      token: await session.getToken(),
+      timelineDescription: `Unlinked ${
+        firstName.charAt(0).toUpperCase() + firstName.slice(1)
+      } ${lastName.charAt(0).toUpperCase() + lastName.slice(1)} to this job`
     };
 
     dispatch(unlinkContact(formData));
@@ -153,7 +170,9 @@ export default function ContactCard({
               size={'xsmall'}
               value={'Link Contact'}
               color={'green'}
-              onClick={() => linkContactHandler(id, user_id)}
+              onClick={() =>
+                linkContactHandler(id, user_id, first_name, last_name)
+              }
             />
           ) : (
             <Button
@@ -162,7 +181,15 @@ export default function ContactCard({
               value={'Unlink Contact'}
               color={'red'}
               disabled={showAvailableContacts === true}
-              onClick={() => unlinkContactHandler(id, contact_id, user_id)}
+              onClick={() =>
+                unlinkContactHandler(
+                  id,
+                  contact_id,
+                  user_id,
+                  first_name,
+                  last_name
+                )
+              }
             />
           )}
         </div>

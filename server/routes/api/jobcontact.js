@@ -14,7 +14,7 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
   const decodedToken = decodeToken(req.headers.authorization);
   const userId = decodedToken.userId;
-  const { jobId, contactId, contactUserId } = req.body;
+  const { jobId, contactId, contactUserId, timelineDescription } = req.body;
 
   // pass contact.user_id to compare to userId
 
@@ -25,9 +25,12 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the contact' });
   } else {
     const query = format(
-      `INSERT INTO job_contact(job_id, contact_id) VALUES(%s, %s) RETURNING *`,
+      `INSERT INTO job_contact(job_id, contact_id) VALUES(%s, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
       jobId,
-      contactId
+      contactId,
+      jobId,
+      'Linked a Contact',
+      timelineDescription
     );
     const client = new Client(config);
 
@@ -39,8 +42,12 @@ router.post('/', myRequestHeaders, validateRequest, async (req, res) => {
           res.status(500).json({ msg: 'query error' });
         }
 
-        console.log(response.rows[0]);
-        res.json(response.rows[0]);
+        // For Linked Contact
+        // response.rows[0];
+        // Timeline
+        // response.rows[1];
+        console.log(response);
+        res.json(response);
         client.end();
       });
     } catch (err) {
@@ -99,7 +106,7 @@ router.delete(
     const client = new Client(config);
     client.connect();
 
-    const { contactUserId } = req.body;
+    const { contactUserId, timelineDescription } = req.body;
     const id = req.params.id;
     const contactId = req.params.contact_id;
     const jobId = req.params.job_id;
@@ -113,10 +120,13 @@ router.delete(
         .json({ msg: 'Error: The user does not own the contact' });
     } else {
       const query = format(
-        'DELETE FROM job_contact WHERE id = %s AND contact_id = %s AND job_id = %s RETURNING *',
+        'DELETE FROM job_contact WHERE id = %s AND contact_id = %s AND job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *',
         id,
         contactId,
-        jobId
+        jobId,
+        jobId,
+        'Unlinked a Contact',
+        timelineDescription
       );
 
       try {
@@ -126,7 +136,12 @@ router.delete(
             res.status(500).json({ msg: 'query error' });
           }
 
-          res.status(200).json(response.rows[0]);
+          // For Unlinked Contact
+          // response.rows[0];
+          // Timeline
+          // response.rows[1];
+          res.status(200).json(response);
+
           client.end();
         });
       } catch (err) {
