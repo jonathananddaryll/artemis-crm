@@ -6,7 +6,7 @@ export default function LinkedContacts({ linkedContacts }) {
   return (
     // If there are Linked Contacts
     <div className={styles.linkedContactsContainer}>
-      <h4>LINKED CONTACTS</h4>
+      <p className={styles.headerText}>Linked Contacts</p>
       <div className={styles.contactsFlex}>
         {linkedContacts.map(contact => (
           <ContactCard

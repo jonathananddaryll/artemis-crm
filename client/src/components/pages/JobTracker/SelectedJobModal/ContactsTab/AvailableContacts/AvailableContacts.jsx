@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './AvailableContacts.module.scss';
 import ContactCard from '../ContactCard/ContactCard';
 import Loader from '../../../../../layout/Loader/Loader';
+import Button from '../../../../../layout/Button/Button';
 import loadingInfinity from '../../../../../../assets/loadingInfinity.gif';
 
 export default function AvailableContacts({
@@ -23,15 +24,18 @@ export default function AvailableContacts({
       ) : (
         <>
           {availableContacts.length > 0 ? (
-            <div className={styles.contactsFlex}>
-              {availableContacts.map(contact => (
-                <ContactCard
-                  key={contact.id}
-                  contactInfo={contact}
-                  isLinkingContact={true}
-                  setIsLinking={setIsLinking}
-                />
-              ))}
+            <div className={styles.availableContactsContainer}>
+              <p className={styles.headerText}>Available Contacts To Link</p>
+              <div className={styles.contactsFlex}>
+                {availableContacts.map(contact => (
+                  <ContactCard
+                    key={contact.id}
+                    contactInfo={contact}
+                    isLinkingContact={true}
+                    setIsLinking={setIsLinking}
+                  />
+                ))}
+              </div>
             </div>
           ) : (
             <div>
@@ -39,7 +43,15 @@ export default function AvailableContacts({
             </div>
           )}
           <div className={styles.buttonContainer}>
-            <button onClick={() => setIsLinking(false)}>Cancel</button>
+            <Button
+              type={'button'}
+              size={'large'}
+              value={'Cancel'}
+              color={'white'}
+              onClick={() => setIsLinking(false)}
+            />
+
+            {/* <button onClick={() => setIsLinking(false)}>Cancel</button> */}
           </div>
         </>
       )}

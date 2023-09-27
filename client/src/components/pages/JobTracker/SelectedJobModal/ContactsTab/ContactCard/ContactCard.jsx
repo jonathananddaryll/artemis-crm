@@ -5,6 +5,7 @@ import {
   linkContact,
   unlinkContact
 } from '../../../../../../reducers/SelectedJobReducer';
+import Button from '../../../../../layout/Button/Button';
 import styles from './ContactCard.module.scss/';
 
 export default function ContactCard({
@@ -123,13 +124,33 @@ export default function ContactCard({
           </div>
         </div>
       </div>
-      {isLinkingContact ? (
-        <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
-      ) : (
-        <button onClick={() => unlinkContactHandler(id, contact_id, user_id)}>
-          Unlink
-        </button>
-      )}
+      <div className={styles.buttonContainer}>
+        {isLinkingContact ? (
+          <Button
+            type={'button'}
+            size={'small'}
+            value={'Link Contact'}
+            color={'green'}
+            onClick={() => linkContactHandler(id, user_id)}
+          />
+        ) : (
+          <Button
+            type={'button'}
+            size={'small'}
+            value={'Unlink Contact'}
+            color={'red'}
+            onClick={() => unlinkContactHandler(id, contact_id, user_id)}
+          />
+        )}
+      </div>
     </div>
   );
 }
+
+// {isLinkingContact ? (
+//   <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
+// ) : (
+//   <button onClick={() => unlinkContactHandler(id, contact_id, user_id)}>
+//     Unlink
+//   </button>
+// )}
