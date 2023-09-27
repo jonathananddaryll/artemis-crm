@@ -74,27 +74,52 @@ export default function ContactCard({
           </div>
         </div>
         <div className={styles.infoBox}>
-          <p className={styles.nameText}>
-            {first_name} {last_name}
-          </p>
-          <p className={styles.companyText}>{current_job_title}</p>
-          <p className={styles.companyText}>{company}</p>
-          {phone !== null && (
-            <p className={styles.contactText}>
-              <i className='bi bi-telephone'></i> {phone}
+          <div className={styles.infoMain}>
+            <p className={styles.nameText}>
+              {first_name} {last_name}
             </p>
-          )}
-          {email !== null && (
-            <p className={styles.contactText}>
-              <i className='bi bi-envelope'></i> {email}
-            </p>
-          )}
-          <div className={styles.socialsBox}>
-            {linkedin !== null && <i className='bi bi-linkedin'></i>}
-            {twitter !== null && <i className='bi bi-twitter-x'></i>}
-            {instagram !== null && <i className='bi bi-instagram'></i>}
-            {other_social !== null && <i className='bi bi-browser-chrome'></i>}
-            {personal_site !== null && <i className='bi bi-code-square'></i>}
+            <p className={styles.companyText}>{current_job_title}</p>
+            <p className={styles.companyText}>{company}</p>
+          </div>
+          <div className={styles.infoContacts}>
+            {phone !== null && (
+              <p className={styles.contactText}>
+                <i className='bi bi-telephone'></i> {phone}
+              </p>
+            )}
+            {email !== null && (
+              <p className={styles.contactText}>
+                <i className='bi bi-envelope'></i> {email}
+              </p>
+            )}
+          </div>
+
+          <div className={styles.infoSocials}>
+            {linkedin !== null && (
+              <a href={linkedin} target='_blank'>
+                <i className='bi bi-linkedin'></i>
+              </a>
+            )}
+            {twitter !== null && (
+              <a href={twitter} target='_blank'>
+                <i className='bi bi-twitter'></i>
+              </a>
+            )}
+            {instagram !== null && (
+              <a href={instagram} target='_blank'>
+                <i className='bi bi-instagram'></i>
+              </a>
+            )}
+            {other_social !== null && (
+              <a href={other_social} target='_blank'>
+                <i className='bi bi-browser-chrome'></i>
+              </a>
+            )}
+            {personal_site !== null && (
+              <a href={personal_site} target='_blank'>
+                <i className='bi bi-code-square'></i>
+              </a>
+            )}
           </div>
         </div>
       </div>

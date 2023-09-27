@@ -18,7 +18,7 @@ export default function AvailableContacts({
           img={loadingInfinity}
           altText={'loading_available_contacts'}
           imageStyle={1}
-          textStyle={1}
+          textStyle={2}
         />
       ) : (
         <>
