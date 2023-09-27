@@ -4,6 +4,9 @@
 // Numbers are unsorted and do not represent any order
 // Match is considered positive when the string inside the contact property includes
 // one of the words inside the search input string. "" => [].
+
+// TODO: finish out the search results sorting thing
+
 export default function SearchArray(searchString, searchArray, searchType) {
   // validate and modify the input for easier searching algo
   let trimmed = searchString

@@ -4,8 +4,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;700&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Spectral:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,700;1,400&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alata&family=Cabin:ital,wght@0,400;0,700;1,400&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300&family=Poppins:wght@500&display=swap');
+@import url('https://fonts.cdnfonts.com/css/aileron');
+@import url('https://fonts.cdnfonts.com/css/kollektif');
 /*
+
   1. Use a more-intuitive box-sizing model.
 */
 html {
@@ -95,10 +98,10 @@ h6 {
 button {
   cursor: pointer;
 }
-
+//////////////////////////////////////
 p {
   // font-family: 'Barlow Condensed', sans-serif;
-  font-family: 'Spectral', serif;
+  // font-family: 'Spectral', serif;
 }
 
 h1,
@@ -108,18 +111,18 @@ h4,
 h5,
 h6 {
   // font-family: 'Montserrat', sans-serif;
-  font-family: 'Karla', sans-serif;
+  // font-family: 'Karla', sans-serif;
 }
 
 // Input - Change to better font later
 input {
   // font-family: 'Montserrat', sans-serif;
-  font-family: 'Spectral', serif;
+  // font-family: 'Spectral', serif;
 }
 
 // Label - Change to better font later
 label {
-  font-family: 'Montserrat', sans-serif;
+  // font-family: 'Montserrat', sans-serif;
 }
 
 /* font-family: 'Barlow Condensed', sans-serif; */
