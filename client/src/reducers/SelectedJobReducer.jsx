@@ -685,24 +685,30 @@ const selectedJobSlice = createSlice({
     });
 
     builder.addCase(linkContact.fulfilled, (state, action) => {
-      const index = findIndex(
-        state.availableContacts,
-        action.payload.contact_id
-      );
-
       // Get the contact that just successfully linked from availableContacts
       // and change id and contact_id and then filter the availableContacts
       // without the newly linked contact
+
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+
+      // Returned Linked Contact
+      const newReturnedContact = action.payload[0].rows[0];
+
+      const index = findIndex(
+        state.availableContacts,
+        newReturnedContact.contact_id
+      );
+
       let newLinkedContact = state.availableContacts.splice(index, 1)[0];
       console.log(state.availableContacts.splice(index, 1));
       console.log(state.availableContacts.splice(index, 1)[0]);
 
-      newLinkedContact.id = action.payload.id;
-      newLinkedContact.contact_id = action.payload.contact_id;
+      newLinkedContact.id = newReturnedContact.id;
+      newLinkedContact.contact_id = newReturnedContact.contact_id;
       state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
 
       state.availableContacts = state.availableContacts.filter(
-        contact => contact.id !== action.payload.contact_id
+        contact => contact.id !== newReturnedContact.contact_id
       );
 
       toast.dismiss('linkingContact');
@@ -716,8 +722,13 @@ const selectedJobSlice = createSlice({
     });
 
     builder.addCase(unlinkContact.fulfilled, (state, action) => {
+      state.timelines = [action.payload[1].rows[0], ...state.timelines];
+
+      // Returned Unlinked Contact
+      const newReturnedContact = action.payload[0].rows[0];
+
       state.linkedContacts = state.linkedContacts.filter(
-        contact => contact.contact_id !== action.payload.contact_id
+        contact => contact.contact_id !== newReturnedContact.contact_id
       );
 
       state.availableContactsLoading = true;
