@@ -30,8 +30,6 @@ export default function StatusUpdateForm({
 
     dispatch(updateBoardColumn(formData));
     setStatusFormToggle({ ind: null, state: false, column: null });
-    // console.log(newTitle);
-    // console.log(statusFormToggle.column);
   };
 
   return (

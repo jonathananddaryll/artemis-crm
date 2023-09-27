@@ -19,12 +19,18 @@ const HomePage = () => {
             </div>
           </div>
           <div className={styles.actionItems}>
-            <button
-              className={styles.loginButton}
-              onClick={() => navigate('/boards')}
-            >
-              Log In
-            </button>
+            {user === null ? (
+              <a
+                className={styles.loginButton}
+                href='https://adapting-osprey-11.accounts.dev/sign-in'
+              >
+                Log In
+              </a>
+            ) : (
+              <a className={styles.loginButton} href='/boards'>
+                Use CRM
+              </a>
+            )}
 
             <a
               className={styles.registerButton}
@@ -49,11 +55,6 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        {/* {user === null && <DemoSignIn />} */}
-        {/* <button onClick={() => navigate('/boards')}>Sign In</button> */}
-        {/* <a href='https://adapting-osprey-11.accounts.dev/sign-up'>
-          Create Account
-        </a> */}
       </div>
     </div>
   );

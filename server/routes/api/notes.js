@@ -58,7 +58,7 @@ router.post('/', noteInputValidator, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `INSERT INTO note (text, job_id) VALUES(%L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+      'INSERT INTO note (text, job_id) VALUES(%L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *',
       text,
       jobId,
       jobId,
@@ -109,7 +109,7 @@ router.patch('/:id', noteInputValidator, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `UPDATE note SET text = %L WHERE id = %s and job_id = %s RETURNING *`,
+      'UPDATE note SET text = %L WHERE id = %s and job_id = %s RETURNING *',
       text,
       noteId,
       jobId
@@ -122,7 +122,6 @@ router.patch('/:id', noteInputValidator, validateRequest, async (req, res) => {
           res.status(500).json({ msg: 'query error' });
         }
 
-        console.log(response.rows[0]);
         res.status(200).json(response.rows[0]);
         client.end();
       });
@@ -154,7 +153,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   } else {
     // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
     const query = format(
-      `DELETE FROM note WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * `,
+      'DELETE FROM note WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * ',
       id,
       jobId,
       jobId,

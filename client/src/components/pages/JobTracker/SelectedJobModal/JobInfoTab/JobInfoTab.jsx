@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { useSession } from '@clerk/clerk-react';
 import { useDispatch } from 'react-redux';
+import { updateJobInfo } from '../../../../../reducers/BoardReducer';
+
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../../../../layout/Button/Button';
 import styles from './JobInfoTab.module.scss';
 
-export default function JobInfoTab({
-  selectedJob,
-  selectedBoard_userId,
-  jobId,
-  updateJobInfo
-}) {
+export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
   const [formData, setFormData] = useState({
+    id: selectedJob.id,
     company: selectedJob.company,
     job_title: selectedJob.job_title,
     location: selectedJob.location,
@@ -21,7 +19,7 @@ export default function JobInfoTab({
   });
 
   // Deconstruct formData
-  const { company, job_title, location, rate_of_pay, job_url } = formData;
+  const { id, company, job_title, location, rate_of_pay, job_url } = formData;
 
   const [showUrl, setShowUrl] = useState(selectedJob.job_url !== '');
   const [noteDesc, setNoteDesc] = useState(selectedJob.description ?? '');
@@ -42,7 +40,7 @@ export default function JobInfoTab({
       rate_of_pay: rate_of_pay !== '' ? rate_of_pay : null,
       job_url: job_url,
       description: noteDesc,
-      job_id: jobId,
+      job_id: id,
       selectedBoard_userId: selectedBoard_userId,
       token: await session.getToken()
     };

@@ -17,14 +17,17 @@ const jobInputValidator = [
   check('company', 'Please enter a Company with atleast 2 characters')
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 2 }),
   check('job_title', 'Please enter a Job Title with atleast 5 characters')
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 5 }),
   check('location', 'Please enter a Location with atleast 5 characters')
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 5 })
 ];
 
@@ -33,6 +36,7 @@ const boardInputValidator = [
   check('title', 'Please enter a Board Title with atleast 4 characters')
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 4 })
 ];
 
@@ -44,6 +48,7 @@ const addColumnInputValidator = [
   )
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 3 })
 ];
 
@@ -63,6 +68,7 @@ const taskInputValidator = [
   check('title', 'Please enter atleast 5 characters for note')
     .not()
     .isEmpty()
+    .trim()
     .isLength({ min: 5 })
 ];
 
