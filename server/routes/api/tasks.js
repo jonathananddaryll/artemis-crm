@@ -25,7 +25,7 @@ router.get('/job/:job_id', async (req, res) => {
   //   '%Interview%'
   // );
   const query = format(
-    `SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC`,
+    'SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC',
     jobId
   );
 
@@ -77,7 +77,7 @@ router.post('/', taskInputValidator, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board/job' });
   } else {
     const query = format(
-      `INSERT INTO task (title, category, note, is_done, date_completed, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+      'INSERT INTO task (title, category, note, is_done, date_completed, start_date, job_id) VALUES(%L, %L, %L, %L, %L, %L, %s) RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *',
       title,
       category,
       note,
@@ -147,7 +147,7 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board/job' });
     } else {
       const query = format(
-        `UPDATE task SET title = %L, category = %L, note = %L, is_done = %L, date_completed = %L, start_date = %L WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *`,
+        'UPDATE task SET title = %L, category = %L, note = %L, is_done = %L, date_completed = %L, start_date = %L WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING *',
         title,
         category,
         note,
@@ -209,14 +209,12 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board/job' });
     } else {
       const query = format(
-        `UPDATE task SET is_done = %L, date_completed = %L WHERE id = %s and job_id = %s RETURNING *`,
+        'UPDATE task SET is_done = %L, date_completed = %L WHERE id = %s and job_id = %s RETURNING *',
         status,
         date_completed,
         taskId,
         jobId
       );
-
-      console.log(query);
 
       try {
         client.query(query, (err, response) => {
@@ -250,7 +248,7 @@ router.get('/job/:job_id', async (req, res) => {
   //   '%Interview%'
   // );
   const query = format(
-    `SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC`,
+    'SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC',
     jobId
   );
 
@@ -295,7 +293,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
     // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
     // @TODO: CHANGE 'You deleted a task' to 'You deleted TASK CATEGORY'
     const query = format(
-      `DELETE FROM task WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * `,
+      'DELETE FROM task WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * ',
       id,
       jobId,
       jobId,

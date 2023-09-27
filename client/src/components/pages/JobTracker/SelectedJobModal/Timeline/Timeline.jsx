@@ -1,10 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import timeSince from '../../../../../helpers/convertDate';
 import loadingSpinner from '../../../../../assets/loadingSpinner.gif';
 import Loader from '../../../../layout/Loader/Loader';
 import styles from './Timeline.module.scss';
 
-export default function Timeline({ timelines, timelinesLoading, dateCreated }) {
+export default function Timeline({ dateCreated }) {
+  const { timelines, timelinesLoading } = useSelector(state => ({
+    ...state.selectedJob
+  }));
+
   return (
     <div className={styles.timelineContainer}>
       <h4 className={styles.textHeader}>Timeline</h4>

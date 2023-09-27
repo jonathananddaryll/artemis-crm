@@ -1,0 +1,13 @@
+.contactsFlex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 5rem;
+  margin-top: 2rem;
+}
+
+.headerText {
+  font-size: 2rem;
+  color: black;
+  font-weight: 500;
+}

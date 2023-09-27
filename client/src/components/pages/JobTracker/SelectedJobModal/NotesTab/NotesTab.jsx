@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
+import {
+  createNote,
+  deleteNote,
+  updateNote
+} from '../../../../../reducers/SelectedJobReducer';
+
 import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
@@ -11,20 +17,17 @@ import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceh
 import noNotes from '../../../../../assets/nonotes.svg';
 import styles from './NotesTab.module.scss';
 
-export default function NotesTab({
-  createNote,
-  selectedBoard_userId,
-  jobId,
-  notes,
-  notesLoading,
-  deleteNote,
-  updateNote
-}) {
+export default function NotesTab({ selectedBoard_userId, jobId }) {
+  const { notes, notesLoading } = useSelector(state => ({
+    ...state.selectedJob
+  }));
+
   const [noteFormToggle, setNoteFormToggle] = useState(false);
   const [selectedNote, setSelectedNote] = useState({
     isActive: false,
     noteId: null
   });
+
   const [noteText, setNoteText] = useState('');
 
   // This is just to keeptrack of the selected noteId for Updating purposes

@@ -67,7 +67,7 @@ export const updateNote = createAsyncThunk(
 
 // Get All Notes with jobId
 export const getAllNotes = createAsyncThunk(
-  'notes/getAllNotesWithJobId',
+  'note/getAllNotesWithJobId',
   async (job_id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/notes/job/${job_id}`);
@@ -81,7 +81,7 @@ export const getAllNotes = createAsyncThunk(
 
 // Deletes a note
 export const deleteNote = createAsyncThunk(
-  'job/deleteNote',
+  'note/deleteNote',
   async (formData, thunkAPI) => {
     const headers = {
       Authorization: `Bearer ${formData.token}`
@@ -119,7 +119,6 @@ export const getAllTasks = createAsyncThunk(
 export const createTask = createAsyncThunk(
   'task/createTask',
   async (formData, thunkAPI) => {
-    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -189,7 +188,7 @@ export const updateTaskStatus = createAsyncThunk(
 
 // Deletes a task
 export const deleteTask = createAsyncThunk(
-  'job/deleteTask',
+  'task/deleteTask',
   async (formData, thunkAPI) => {
     const headers = {
       Authorization: `Bearer ${formData.token}`
@@ -209,25 +208,133 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
+// Get All LinkedContact with jobId
+export const getAllLinkedContactsWithJobId = createAsyncThunk(
+  'contact/getAllLinkedContactsWithJobId',
+  async (job_id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/jobcontact/job/${job_id}`);
+
+      return res.data;
+    } catch (err) {
+      // have a better error catch later
+      console.log(err);
+    }
+  }
+);
+
+export const getContactsToLink = createAsyncThunk(
+  'contact/getContactsToLink',
+  async (idAndToken, thunkAPI) => {
+    const config = {
+      params: {
+        user_id: idAndToken.user_id
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${idAndToken.token}`
+      }
+    };
+    try {
+      const res = await axios.get(`/api/contacts/`, config);
+      return res.data;
+    } catch (err) {
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// Create new contact link
+export const linkContact = createAsyncThunk(
+  'contact/linkContact',
+  async (formData, thunkAPI) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${formData.token}`
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/jobcontact', formData, config);
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+// (Delete) Unlink contacts
+export const unlinkContact = createAsyncThunk(
+  'contact/unlinkContact',
+  async (formData, thunkAPI) => {
+    const { id, jobId, contactId, token } = formData;
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    console.log(formData);
+
+    try {
+      const res = await axios.delete(
+        `/api/jobcontact/${id}/job/${jobId}/contact/${contactId}`,
+        {
+          data: formData,
+          headers
+        }
+      );
+      return res.data;
+    } catch (err) {
+      // If there's errors
+      const errors = err.response.data.errors;
+      return thunkAPI.rejectWithValue(errors);
+    }
+  }
+);
+
+async (formData, thunkAPI) => {
+  const headers = {
+    Authorization: `Bearer ${formData.token}`
+  };
+
+  try {
+    const res = await axios.delete(`/api/notes/${formData.noteId}`, {
+      data: { formData },
+      headers
+    });
+
+    return res.data;
+  } catch (err) {
+    // have a better error catch later
+    console.log(err);
+  }
+};
 const selectedJobSlice = createSlice({
   name: 'selectedJob',
   initialState: {
     timelinesLoading: true,
     notesLoading: true,
     tasksLoading: true,
+    availableContactsLoading: true,
     timelines: [],
     notes: [],
     tasks: [],
     completedTasks: [],
     interviews: [],
     completedInterviews: [],
-    linkedContacts: []
+    linkedContacts: [],
+    availableContacts: []
   },
   reducers: {
     resetSelectedJobItems: (state, action) => {
       state.timelinesLoading = true;
       state.notesLoading = true;
       state.tasksLoading = true;
+      state.linkedContactsLoading = true;
+      state.availableContactsLoading = true;
       state.timelines = [];
       state.notes = [];
       state.tasks = [];
@@ -235,6 +342,7 @@ const selectedJobSlice = createSlice({
       state.completedInterviews = [];
       state.completedTasks = [];
       state.linkedContacts = [];
+      state.availableContacts = [];
     }
   },
   extraReducers: builder => {
@@ -549,6 +657,71 @@ const selectedJobSlice = createSlice({
     builder.addCase(deleteTask.rejected, () => {
       toast.dismiss('deletingTask');
       toast.error('Delete Failed');
+    });
+
+    builder.addCase(
+      getAllLinkedContactsWithJobId.fulfilled,
+      (state, action) => {
+        state.linkedContacts = action.payload;
+        state.linkedContactsLoading = false;
+      }
+    );
+
+    builder.addCase(getContactsToLink.fulfilled, (state, action) => {
+      const filteredContacts = action.payload.filter(
+        el => !state.linkedContacts.some(f => f.contact_id === el.id)
+      );
+
+      // console.log(filteredContacts);
+
+      state.availableContacts = filteredContacts;
+      state.availableContactsLoading = false;
+    });
+
+    builder.addCase(linkContact.pending, (state, action) => {
+      toast.loading('Linking Contact', {
+        toastId: 'linkingContact'
+      });
+    });
+
+    builder.addCase(linkContact.fulfilled, (state, action) => {
+      const index = findIndex(
+        state.availableContacts,
+        action.payload.contact_id
+      );
+
+      // Get the contact that just successfully linked from availableContacts
+      // and change id and contact_id and then filter the availableContacts
+      // without the newly linked contact
+      let newLinkedContact = state.availableContacts.splice(index, 1)[0];
+      console.log(state.availableContacts.splice(index, 1));
+      console.log(state.availableContacts.splice(index, 1)[0]);
+
+      newLinkedContact.id = action.payload.id;
+      newLinkedContact.contact_id = action.payload.contact_id;
+      state.linkedContacts = [newLinkedContact, ...state.linkedContacts];
+
+      state.availableContacts = state.availableContacts.filter(
+        contact => contact.id !== action.payload.contact_id
+      );
+
+      toast.dismiss('linkingContact');
+      toast.success('Successfully Linked Contact to Job');
+    });
+
+    builder.addCase(unlinkContact.pending, (state, action) => {
+      toast.loading('Unlinking Contact', {
+        toastId: 'unlinkingContact'
+      });
+    });
+
+    builder.addCase(unlinkContact.fulfilled, (state, action) => {
+      state.linkedContacts = state.linkedContacts.filter(
+        contact => contact.contact_id !== action.payload.contact_id
+      );
+
+      toast.dismiss('unlinkingContact');
+      toast.success('Successfully Unlinked Contact From Job');
     });
   }
 });

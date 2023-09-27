@@ -1,15 +1,7 @@
 export default function timeSince(date) {
   var newDate = new Date(date);
-
-  // console.log('date from postgres: ' + date);
-  // console.log('date in js: ' + newDate);
-
   var seconds = Math.floor((new Date() - newDate) / 1000);
-  // console.log('seconds: ' + seconds);
-
   var interval = seconds / 31536000;
-
-  // console.log(seconds);
 
   // if it's positive
   if (seconds > 0) {
@@ -55,7 +47,6 @@ export default function timeSince(date) {
 
     return Math.floor(seconds) + ' seconds ago';
   } else {
-    // console.log(seconds);
     var positiveSeconds = Math.abs(seconds);
     var intervalPos = positiveSeconds / 31536000;
 
