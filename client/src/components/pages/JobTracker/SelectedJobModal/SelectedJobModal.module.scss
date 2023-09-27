@@ -16,7 +16,7 @@
 }
 
 .modalContainer {
-  height: 85vh;
+  height: 85dvh;
   max-width: 110rem;
   width: 90%;
   background-color: #ffffff;
@@ -33,6 +33,10 @@
     // height: 100%;
     top: 50%;
     overflow: scroll;
+  }
+
+  @include mixin.phone {
+    //fix this later
   }
 }
 

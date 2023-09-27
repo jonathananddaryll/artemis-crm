@@ -9,7 +9,7 @@ import {
   getRecentContacts,
   updateSearchQuery,
   updateContactInFocus,
-  updateContactSelected,
+  updateContactSelected
   // setNewContactStaging
 } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
@@ -44,7 +44,7 @@ export default function ContactsPage() {
   const searchResults = useSelector(state => state.contact.searchResults);
   // redux store updates when a user is changing which contact they look at
   const contactSelected = useSelector(state => state.contact.contactSelected);
-  const contactsLoaded = useSelector((state) => state.contact.contactsLoaded);
+  const contactsLoaded = useSelector(state => state.contact.contactsLoaded);
   // const contactInFocus = useSelector((state) => state.contact.contactInFocus);
 
   // name, company, city - Which are you searching for?
@@ -54,7 +54,7 @@ export default function ContactsPage() {
     strValue: ''
   });
 
-  const [newContactStaging, setNewContactStaging] = useState(false)
+  const [newContactStaging, setNewContactStaging] = useState(false);
 
   // Controlled component function for the search input element
   function updateSearchString(e) {
@@ -138,7 +138,7 @@ export default function ContactsPage() {
 
   // On first load, grab all the users contacts at once and keep a copy locally(session)
   useEffect(() => {
-    if(!contactsLoaded){
+    if (!contactsLoaded) {
       const grabSessionToken = async () => {
         const token = await getToken();
         dispatch(getUserContactsTable({ user_id: userId, token: token }));
@@ -150,72 +150,70 @@ export default function ContactsPage() {
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
         <nav className={styles.menuContainer}>
-        <section className={styles.searchBar}>
-          <input
-            onChange={e => updateSearchString(e)}
-            type='text'
-            inputMode='search'
-            name='searchBar'
-            className={styles.contactSearchInput}
-            value={searchParams.strValue}
-            placeholder={searchType}
-          />
-          <button className={styles.searchButton} onClick={searchSubmit}>
-            <i
-              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
-            ></i>
-          </button>
-          <Dropdown
-            items={['name', 'company', 'city']}
-            header={'options'}
-            setSearchType={setSearchType}
-          />
-        </section>
+          <section className={styles.searchBar}>
+            <input
+              onChange={e => updateSearchString(e)}
+              type='text'
+              inputMode='search'
+              name='searchBar'
+              className={styles.contactSearchInput}
+              value={searchParams.strValue}
+              placeholder={searchType}
+            />
+            <button className={styles.searchButton} onClick={searchSubmit}>
+              <i
+                className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
+              ></i>
+            </button>
+            <Dropdown
+              items={['name', 'company', 'city']}
+              header={'options'}
+              setSearchType={setSearchType}
+            />
+          </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>
-              <a
+              <button
                 onClick={() => {
                   addContact();
                 }}
               >
                 add+
-              </a>
+              </button>
             </li>
             <li className={styles.menuLinks}>
-              <a
+              <button
                 onClick={() => {
                   priorityContacts();
                 }}
               >
                 priority
-              </a>
+              </button>
             </li>
             <li className={styles.menuLinks}>
-              <a
+              <button
                 onClick={() => {
                   contactHistory();
                 }}
               >
                 history
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
         <section className={styles.searchResultsContainer}>
-          {!!searchResults &&
-            searchResults.map(contact => {
-              return (
-                // a business card.
-                <ContactCard 
-                  contactInfo={contact}
-                  key={contact.id} 
-                  />
-              );
-            })}
+          {!!searchResults && (
+            <div className={styles.flexContainer}>
+              {searchResults.map(contact => (
+                <ContactCard contactInfo={contact} key={contact.id} />
+              ))}
+              <div className={styles.flexFiller}></div>
+            </div>
+          )}
         </section>
-        {!!contactSelected && <ContactForm 
-          newContactStaging={newContactStaging}
-        />}
+        {!!contactSelected && (
+          <ContactForm newContactStaging={newContactStaging} />
+        )}
       </div>
     </div>
   );

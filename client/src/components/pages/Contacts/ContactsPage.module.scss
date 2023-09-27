@@ -1,20 +1,32 @@
+@use '../../../styles/mixins.scss' as mixin;
 .pageWrapper {
   /* margin-left: 305px; */
-  padding: 5px 30px;
+  // padding: 5px 30px;
   width: 100%;
-  max-height: 100vh;
+  // max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  // overflow-x: hidden;
   overflow: hidden;
   font-family: 'Alata';
+
+  @include mixin.phone {
+    padding-bottom: 6rem;
+  }
 }
+
 .contactsContainer {
-  overflow: scroll;
+  width: 100%;
+  height: 100%;
 }
+
 .menuContainer {
   margin: auto;
   height: 3rem;
   display: flex;
   flex-direction: row;
 }
+
 .menu {
   display: flex;
   flex-direction: row;
@@ -24,6 +36,7 @@
   padding: 0 2rem;
   position: relative;
 }
+
 .menuLinks {
   height: 3rem;
   width: 8rem;
@@ -36,18 +49,22 @@
   border-bottom: solid 2px transparent;
   cursor: pointer;
 }
+
 .menuLinks:hover {
   border-bottom: solid 2px black;
   border-radius: 5px 5px 0 0;
 }
+
 .searchBar {
-  padding: 0em 0.5em 0 1em;
-  height: 3em;
+  // padding: 0em 0.5em 0 1em;
+  padding: 5px 30px;
+  height: 4rem;
   max-width: 40%;
   display: flex;
   position: relative;
   z-index: 2;
 }
+
 .contactSearchInput {
   display: block;
   font-size: 16px;
@@ -61,40 +78,69 @@
   border-bottom: 2px solid black;
   cursor: pointer;
 }
+
 .contactSearchInput:hover {
   background-color: rgb(236, 236, 236);
 }
+
 .contactSearchInput:focus {
   background-color: rgb(236, 236, 236);
 }
+
 .searchButton {
   border: none;
   border-radius: 0 5px 0 0;
   background-color: white;
 }
+
 .searchButton:hover {
   background-color: black;
   color: white;
 }
+
 .searchButton:active {
   background-color: white;
   color: black;
   border: solid black 1px;
 }
+
 .searchIcon {
   margin-left: 0.5rem;
   font-size: 2rem;
   height: 2rem;
   cursor: pointer;
 }
+
 .searchResultsContainer {
-  position: relative;
-  z-index: 0;
-  margin-top: 5em;
-  height: 78vh;
+  // position: relative;
+
+  // z-index: 0;
+  // margin-top: 5rem;
+  // padding: 5rem 0;
+  height: 100%;
   border: solid 2px transparent;
   transition: border 0.3s ease-in-out;
+  margin-top: 5rem;
+  overflow-y: auto;
+  // overflow: hidden;
+  // background-color: red;
+
+  @include mixin.phone {
+    margin-top: 2rem;
+  }
+}
+
+.flexFiller {
+  flex: 1;
+}
+
+.flexContainer {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 5rem;
+
+  @include mixin.phone {
+    padding: 0 1rem;
+  }
 }
