@@ -3,6 +3,8 @@
 .container {
   padding: 2rem;
   position: relative;
+  overflow-y: auto;
+  height: 75%;
 }
 
 .jobInfoForm {
