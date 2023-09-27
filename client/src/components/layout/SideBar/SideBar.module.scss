@@ -49,7 +49,7 @@
   height: 5rem;
   display: flex;
   color: white;
-  text-decoration: none;
+  // text-decoration: none;
   margin: auto 0.7rem;
   padding: 0 2rem;
   border-radius: 1rem;
@@ -132,7 +132,7 @@
 // PHONE NAVIGATION ----------------------------------------------//////////////////////////
 @include mixin.phone {
   .navContainer {
-    flex: 0 0 23rem;
+    flex: 1;
     background-color: #20293a;
     height: 60px;
 
@@ -141,6 +141,7 @@
     bottom: 0;
     width: 100%;
     z-index: 999;
+    padding: 0 2rem;
   }
 
   .navHeading {
@@ -148,14 +149,17 @@
   }
 
   .navMenu {
-    margin-top: 1.2rem;
+    margin-top: 0.8rem;
     display: flex;
   }
 
   /* NavLink to remove underline on visited links */
   .navMenuLink {
     text-decoration: none;
-    flex: 0 0 25%;
+    // flex: 1;
+    // flex: 0 0 25%;
+    // // width: 100%;
+    justify-content: space-between;
   }
 
   .activee {
@@ -163,31 +167,35 @@
   }
 
   .notactivee {
-    flex: 0 0 22%;
+    flex: 0 0 19.5%;
   }
 
   .menuItem {
     // height: 5rem;
+
     display: flex;
     color: white;
     text-decoration: none;
-    margin: 0;
     padding: 0;
     border-radius: 20px;
     position: relative;
     align-items: center;
+    min-width: fit-content;
+    width: 90%;
+    padding: 0 2rem;
   }
 
   // Active Menu
   .menuActive {
-    padding: 0 2rem;
-    text-align: center;
+    // min-width: 19rem;
+    // margin: 0 auto;
 
     p {
       display: block !important ;
       // width: 100%;
-      text-align: left;
-      margin-left: 1rem;
+      // text-align: center;
+      margin: 0 0 0 1rem;
+      // margin-left: 1rem;
     }
 
     img {
@@ -201,9 +209,9 @@
   .menuItem img {
     width: 2.2rem;
     height: 2.2rem;
-    margin-right: 0;
+    // margin-right: 0;
     /* padding: 0 20px; */
-    margin: 0 auto;
+    // margin: 0 auto;
   }
 
   .menuItem p {
