@@ -42,11 +42,12 @@
   padding: 0 1rem;
   display: flex;
   flex-direction: column;
+  row-gap: 0.5rem;
 }
 
 //li
 .menuItem {
-  height: 5rem;
+  // height: 5rem;
   color: white;
   padding: 0 1.5rem;
   list-style: none;
@@ -55,6 +56,7 @@
   position: relative;
   transition: all 0.2s ease;
   font-size: 2rem;
+  line-height: 5rem;
 
   // &:hover {
   //   background-color: rgb(110, 70, 219);
@@ -91,6 +93,7 @@
 .menuText {
   // line-height: 2.2rem;
   // font-size: 2.2rem;
+  line-height: 5rem;
 }
 
 // Active Menu

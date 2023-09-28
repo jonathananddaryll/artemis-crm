@@ -49,15 +49,29 @@ export default function SideBar() {
       index: 4,
       text: 'Reminders',
       icon: 'notifications-outline',
-      link: '/documents'
+      link: '/reminders'
     },
     {
       index: 5,
       text: 'Settings',
       icon: 'settings-outline',
-      link: '/boards'
+      link: '/settings'
     }
   ];
+
+  useEffect(() => {
+    const curr = location.pathname.split('/')[1];
+
+    const setActiveLink = () => {
+      if (curr === 'boards') setActiveItem(1);
+      if (curr === 'contacts') setActiveItem(2);
+      if (curr === 'documents') setActiveItem(3);
+      if (curr === 'reminders') setActiveItem(4);
+      if (curr === 'settings') setActiveItem(5);
+    };
+
+    setActiveLink();
+  }, []);
 
   const navigate = useNavigate();
 
