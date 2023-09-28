@@ -7,9 +7,9 @@ import {
   getUserContactsTable,
   getContactsPriority,
   getRecentContacts,
-  updateSearchQuery,
   updateContactInFocus,
-  updateContactSelected
+  updateContactSelected,
+  resetFilter
   // setNewContactStaging
 } from '../../../reducers/ContactReducer';
 import { useAuth } from '@clerk/clerk-react';
@@ -82,16 +82,23 @@ export default function ContactsPage() {
     }
   };
 
-  // Initiate the contacts search for the string value in the search input box
-  function searchSubmit(e) {
-    const validated = validateSearchParams(searchParams);
-    if (!validated) {
-      console.log('please enter valid text to search with');
-    } else {
-      dispatch(updateSearchQuery(validated));
-      dispatch(getContactsSearch());
-    }
-  }
+  // // Initiate the contacts search for the string value in the search input box
+  // function searchSubmit(e) {
+  //   const validated = validateSearchParams(searchParams);
+  //   if (!validated) {
+  //     console.log('please enter valid text to search with');
+  //   } else {
+  //     dispatch(updateSearchQuery(validated));
+  //     dispatch(getContactsSearch());
+  //   }
+  // }
+
+  // Filter for V1
+  const searchSubmit = () => {
+    dispatch(
+      getContactsSearch({ type: searchType, keyword: searchParams.strValue })
+    );
+  };
 
   // Add a new contact using a form
   const addContact = () => {
@@ -146,6 +153,19 @@ export default function ContactsPage() {
       grabSessionToken();
     }
   }, [dispatch]);
+
+  // RESET FILTER
+  const resetFilterHandler = () => {
+    // Resets the searchResult to the contactsCache
+    dispatch(resetFilter());
+
+    // Resets the form
+    setSearchType('name');
+    setSearchParams({
+      type: 'name',
+      strValue: ''
+    });
+  };
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
@@ -166,7 +186,7 @@ export default function ContactsPage() {
               ></i>
             </button>
             <Dropdown
-              items={['name', 'company', 'city']}
+              items={['name', 'company', 'city', 'current_job_title']}
               header={'options'}
               setSearchType={setSearchType}
             />
@@ -197,6 +217,15 @@ export default function ContactsPage() {
                 }}
               >
                 history
+              </button>
+            </li>
+            <li className={styles.menuLinks}>
+              <button
+                onClick={() => {
+                  dispatch(resetFilterHandler());
+                }}
+              >
+                reset filter
               </button>
             </li>
           </ul>

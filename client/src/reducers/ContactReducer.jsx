@@ -125,7 +125,7 @@ export const getRecentContacts = createAsyncThunk(
     };
     try {
       const res = await axios.post('api/contacts/recents/', {
-        headers,
+        headers
       });
       return res.data;
     } catch (err) {
@@ -167,29 +167,35 @@ const contactSlice = createSlice({
       }
     },
     // Trigger a search on the contacts db using the current searchQuery in store
+    // getContactsSearch: (state, action) => {
+    //   let searchResults = SearchArray(
+    //     action.payload.strValue,
+    //     state.contactsCache,
+    //     action.payload.type
+    //   );
+    //   let results = [];
+    //   for (let result = 0; result < searchResults.length; result++) {
+    //     results.push(state.contactsCache[searchResults[result]]);
+    //   }
+    //   state.searchResults = [...results];
+    // },
+
+    // SIMPLIFIED WAY of searching -> for name, it's for
+    // firstName || lastName. Didn't have a chance to build for full name
     getContactsSearch: (state, action) => {
-      let searchResults = SearchArray(
-        action.payload.strValue,
+      const filteredContacts = filterContacts(
+        action.payload.type,
         state.contactsCache,
-        action.payload.type
+        action.payload.keyword
       );
-      let results = [];
-      for (let result = 0; result < searchResults.length; result++) {
-        results.push(state.contactsCache[searchResults[result]]);
-      }
-      state.searchResults = [...results];
+
+      state.searchResults = filteredContacts;
     },
 
-    // SIMPLIFIED WAY just gotta change the way the parameters/arguments are passed. instead of using redux to save the search queries and the whole shabang, use local state (useState)
-    // getContactsSearch: (state, action) => {
-    //   const filteredContacts = filterContacts(
-    //     state.searchQuery.type,
-    //     state.contactsCache,
-    //     state.searchQuery.strValue
-    //   );
-
-    //   state.searchResults = filteredContacts;
-    // },
+    // reset the search filter and show all the cache contacts
+    resetFilter: (state, action) => {
+      state.searchResults = state.contactsCache;
+    },
 
     // Filter out all the contacts that aren't is_priority === true
     getContactsPriority: (state, action) => {
@@ -274,7 +280,7 @@ const contactSlice = createSlice({
       );
       if (contactsCacheIndex === -1) {
         // weird error?
-        toast('contact not found on client side copy')
+        toast('contact not found on client side copy');
       } else if (searchResultsIndex === -1) {
         state.contactsCache[contactsCacheIndex] = action.payload[0];
       } else {
@@ -327,6 +333,6 @@ export const {
   setNewContactStaging,
   getContactsSearch,
   getContactsPriority,
-  updateSearchQuery,
-  updateContactSelected
+  updateContactSelected,
+  resetFilter
 } = contactSlice.actions;
