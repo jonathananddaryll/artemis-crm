@@ -25,9 +25,6 @@ export default function StatusUpdateForm({
       token: await session.getToken()
     };
 
-    // Dispatch action here
-    // setStatusFormToggle({ ind: null, state: false });
-
     dispatch(updateBoardColumn(formData));
     setStatusFormToggle({ ind: null, state: false, column: null });
   };
@@ -54,13 +51,6 @@ export default function StatusUpdateForm({
                 setStatusFormToggle({ ind: null, state: false, column: null })
               }
             />
-            {/* <Button
-            type={'submit'}
-            value={'Update'}
-            color={'blue'}
-            size={'small'}
-            disabled={newTitle === ''}
-          /> */}
           </div>
         </div>
       </form>

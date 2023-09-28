@@ -4,9 +4,7 @@
 }
 
 .buttonsContainer {
-  // height: 5rem;
   text-align: right;
-  /* background-color: red; */
 }
 
 .newTaskForm {
@@ -132,16 +130,9 @@
 }
 
 .createTaskButton {
-  /* float: right; */
-  // height: 4rem;
   padding: 0 2rem;
   margin-left: 1rem;
 }
-
-/* .tasksContentContainer {
-  display: flex;
-  justify-content: space-between;
-} */
 
 .tasksBox {
   /* flex: 0 0 45%; */
@@ -156,12 +147,10 @@
 }
 
 .completedTasksBox {
-  /* flex: 0 0 45%; */
   text-align: left;
 }
 
 .taskCard {
-  /* background: red; */
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border: 2px solid rgba(213, 238, 250, 0.692);
@@ -170,8 +159,6 @@
   cursor: pointer;
   align-items: center;
   flex-wrap: wrap;
-
-  // transition: all 0.5s;
 
   > i {
     cursor: pointer;

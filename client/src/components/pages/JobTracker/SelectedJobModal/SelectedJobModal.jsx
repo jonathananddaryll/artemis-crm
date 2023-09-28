@@ -121,8 +121,6 @@ export default function SelectedJobModal() {
         >
           <div className={styles.mainContainer}>
             <div className={styles.actionButtonsContainer}>
-              {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
-              {/* <button onClick={() => handleClosingModal()}>Close</button> */}
               <Button
                 type={'button'}
                 value={'Delete'}

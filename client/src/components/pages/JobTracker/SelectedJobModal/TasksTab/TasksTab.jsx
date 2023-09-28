@@ -251,9 +251,6 @@ export default function TasksTab({ selectedBoard_userId, jobId }) {
                 <label>Mark as completed</label>
               </div>
             </div>
-
-            {/* <input type='submit' value='save' /> */}
-            {/* <button onClick={() => setFormToggle(false)}>Cancel</button> */}
             <div className={styles.formButtonsContainer}>
               <Button
                 type={'button'}

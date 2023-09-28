@@ -276,8 +276,6 @@ export const unlinkContact = createAsyncThunk(
       Authorization: `Bearer ${token}`
     };
 
-    console.log(formData);
-
     try {
       const res = await axios.delete(
         `/api/jobcontact/${id}/job/${jobId}/contact/${contactId}`,
@@ -544,9 +542,6 @@ const selectedJobSlice = createSlice({
 
       ///////////////// HAVE A REDUCER FROM BOARDERDUCER THAT ADDS 1 TO THE INCOMPLETE_TASK_COUNT WHEN A USER IS ADDING A TASK. DEDUCT 1 IF THE USER COMPLETED A TASK
       if (updatedTask.is_done === true) {
-        // const filteredTasks = state.tasks.filter(
-        //   task => task.id !== updatedTask.id
-        // );
         state.tasks = state.tasks.filter(task => task.id !== updatedTask.id);
         state.completedTasks = [...state.completedTasks, updatedTask];
 
@@ -556,9 +551,6 @@ const selectedJobSlice = createSlice({
           updatedTask.category.includes('Screen')
         ) {
           // Take out the updated task
-          // const filteredInterviews = state.interviews.filter(
-          //   task => task.id !== updatedTask.id
-          // );
           state.interviews = state.interviews.filter(
             task => task.id !== updatedTask.id
           );
@@ -573,9 +565,6 @@ const selectedJobSlice = createSlice({
         toast.dismiss('updatingTaskStatus');
         toast.success('Good Job Completing a Task');
       } else {
-        // const filteredTasks = state.completedTasks.filter(
-        //   task => task.id !== updatedTask.id
-        // );
         state.completedTasks = state.completedTasks.filter(
           task => task.id !== updatedTask.id
         );
@@ -587,9 +576,6 @@ const selectedJobSlice = createSlice({
           updatedTask.category.includes('Screen')
         ) {
           // Take out the updated task
-          // const filteredInterviews = state.completedInterviews.filter(
-          //   task => task.id !== updatedTask.id
-          // );
           state.completedInterviews = state.completedInterviews.filter(
             task => task.id !== updatedTask.id
           );
@@ -672,8 +658,6 @@ const selectedJobSlice = createSlice({
         el => !state.linkedContacts.some(f => f.contact_id === el.id)
       );
 
-      // console.log(filteredContacts);
-
       state.availableContacts = filteredContacts;
       state.availableContactsLoading = false;
     });
@@ -700,8 +684,6 @@ const selectedJobSlice = createSlice({
       );
 
       let newLinkedContact = state.availableContacts.splice(index, 1)[0];
-      console.log(state.availableContacts.splice(index, 1));
-      console.log(state.availableContacts.splice(index, 1)[0]);
 
       newLinkedContact.id = newReturnedContact.id;
       newLinkedContact.contact_id = newReturnedContact.contact_id;

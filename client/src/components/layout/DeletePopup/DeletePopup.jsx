@@ -49,7 +49,6 @@ export default function DeletePopup({
           <p className={styles.popupSubText}>{subText}</p>
 
           <div className={styles.popupButtons}>
-            {/* <button onClick={() => setConfirmationToggle(false)}>Cancel</button> */}
             <Button
               type={'button'}
               // size={'small'}

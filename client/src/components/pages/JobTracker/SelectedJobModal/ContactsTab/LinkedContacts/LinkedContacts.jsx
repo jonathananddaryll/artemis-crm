@@ -7,7 +7,6 @@ export default function LinkedContacts({
   showAvailableContacts
 }) {
   return (
-    // If there are Linked Contacts
     <div className={styles.linkedContactsContainer}>
       <p className={styles.headerText}>Linked Contacts</p>
       <div className={styles.contactsFlex}>

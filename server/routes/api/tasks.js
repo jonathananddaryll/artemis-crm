@@ -15,15 +15,6 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @access    public ----> GOTTA MAKE THIS PRIVATE LATER
 router.get('/job/:job_id', async (req, res) => {
   const jobId = req.params.job_id;
-  // const query = format(
-  //   `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM task WHERE job_id = %s ORDER BY date_created DESC`,
-  //   jobId
-  // );
-  // const query = format(
-  //   `SELECT * FROM task WHERE job_id = %s AND (category = 'Phone Screen' OR category = 'Technical Screen' OR category = 'Phone Interview' OR category ='On Site Interview') ORDER BY date_created DESC`,
-  //   jobId,
-  //   '%Interview%'
-  // );
   const query = format(
     'SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC',
     jobId
@@ -238,15 +229,6 @@ router.patch(
 // filtered by whichever tasks are completed
 router.get('/job/:job_id', async (req, res) => {
   const jobId = req.params.job_id;
-  // const query = format(
-  //   `SELECT *, TO_CHAR(date_created, 'HH12:MIPM MM/DD/YYYY') datecreated FROM task WHERE job_id = %s ORDER BY date_created DESC`,
-  //   jobId
-  // );
-  // const query = format(
-  //   `SELECT * FROM task WHERE job_id = %s AND (category = 'Phone Screen' OR category = 'Technical Screen' OR category = 'Phone Interview' OR category ='On Site Interview') ORDER BY date_created DESC`,
-  //   jobId,
-  //   '%Interview%'
-  // );
   const query = format(
     'SELECT * FROM task WHERE job_id = %s ORDER BY date_created DESC',
     jobId
@@ -290,8 +272,6 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
       .status(405)
       .json({ msg: 'Error: The user does not own the board and the job' });
   } else {
-    // Add a user authentication later authenticate that the boardid belongs to the authenticated logged in user. maybe do a join?? so I can check if the userId is the same as the authenticated userId
-    // @TODO: CHANGE 'You deleted a task' to 'You deleted TASK CATEGORY'
     const query = format(
       'DELETE FROM task WHERE id = %s and job_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L) RETURNING * ',
       id,

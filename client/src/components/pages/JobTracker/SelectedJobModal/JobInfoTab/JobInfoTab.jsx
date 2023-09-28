@@ -135,14 +135,6 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
               </div>
             )}
           </div>
-          {/* <div className={styles.formGroup}>
-            <label>Description</label>
-            <textarea
-              name='description'
-              value={description}
-              onChange={e => onChangeHandler(e)}
-            />
-          </div> */}
           <div className={styles.formGroup}>
             <label>Description</label>
             <ReactQuill

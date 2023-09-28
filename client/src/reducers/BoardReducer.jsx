@@ -11,8 +11,6 @@ import {
   deleteNote
 } from './SelectedJobReducer';
 
-// Create action
-
 ////////////////////////////////// BOARDS ////////////////////////////
 
 // Get All Boards with userID
@@ -320,8 +318,6 @@ export const deleteJob = createAsyncThunk(
   }
 );
 
-// @TODO:
-// 1. create a getSelectedBoard with Id that calls the in api with the id. usually dont do this unless the page is refreshed
 const boardSlice = createSlice({
   name: 'board',
   initialState: {
@@ -412,8 +408,6 @@ const boardSlice = createSlice({
   },
 
   extraReducers: builder => {
-    // call the action here and then action.payload is whatever the returned value from the action (res.data).
-    // .fulfilled is if the action is successful, basically
     /////////////// BOARDS EXTRA REDUCER //////////////////////////////////////
     builder.addCase(getBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
@@ -483,9 +477,6 @@ const boardSlice = createSlice({
       delete state.selectedBoardStatusCols[action.payload[1]];
       state.selectedBoard = action.payload[0];
 
-      // const newCol = 'column' + (state.selectedBoard.total_cols + 1);
-      // state.selectedBoard.total_cols = state.selectedBoard.total_cols + 1;
-      // state.selectedBoard[newCol] = action.payload;
       toast.dismiss('deletingStatusColumn');
       toast.success(
         `Successfully Deleted a Column in ${state.selectedBoard.title}`
@@ -835,7 +826,6 @@ const boardSlice = createSlice({
       state.jobs[jobIndexInJobs].total_note_count--;
     });
 
-    // @TODO : update on deleteTask
     // Updates the incomplete_task_count in selectedJob, selectedBoardStatusCols, and jobs on successful task creation
     builder.addMatcher(isAnyOf(deleteTask.fulfilled), (state, action) => {
       const deletedTask = action.payload[0].rows[0];

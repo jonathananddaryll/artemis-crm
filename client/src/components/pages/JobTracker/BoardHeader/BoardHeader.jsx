@@ -23,9 +23,6 @@ export default function BoardHeader({
     };
 
     dispatch(deleteBoard(formData));
-
-    // change selectedJob to null and modal off
-    // dispatch(changeSelectedJob([false, null]));
   };
 
   return (

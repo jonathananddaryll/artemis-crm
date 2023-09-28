@@ -2,7 +2,6 @@
 
 .container {
   flex: 0 0 30%;
-  /* background-color: red; */
   text-align: left;
 
   @include mixin.phone {
