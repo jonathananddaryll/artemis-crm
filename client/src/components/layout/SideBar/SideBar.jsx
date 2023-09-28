@@ -4,6 +4,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useClerk, UserButton, useAuth, useUser } from '@clerk/clerk-react';
 import DemoSignIn from '../DemoSignIn/DemoSignIn';
 import styles from './SideBar.module.scss';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SideBar() {
   const { isLoaded } = useAuth();
@@ -11,6 +12,7 @@ export default function SideBar() {
   const { signOut } = useClerk();
 
   const [activeItem, setActiveItem] = useState(0);
+  const [initialX, setInitialX] = useState(activeItem);
 
   const location = useLocation();
 
@@ -83,58 +85,67 @@ export default function SideBar() {
   return (
     <>
       {location.pathname !== '/' && (
-        <div className={styles.navContainer}>
-          <div className={styles.navHeading}>
-            <div className={styles.navBrand}>
-              <img src='/icons/deer.png' className={styles.logoImage} />
-              <h2 className={styles.logoText}>Artemis</h2>
+        <AnimatePresence mode='wait'>
+          <div className={styles.navContainer}>
+            <div className={styles.navHeading}>
+              <div className={styles.navBrand}>
+                <img src='/icons/deer.png' className={styles.logoImage} />
+                <h2 className={styles.logoText}>Artemis</h2>
+              </div>
             </div>
-          </div>
-          <ul className={styles.navMenu}>
-            {menuItems.map(({ index, text, icon, link }) => (
-              <li
-                className={`${styles.menuItem} ${styles.menuItemDesktop} ${
-                  activeItem === index && styles.activeDesktop
-                } ${activeItem === index && styles.active}`}
-              >
-                <NavLink
-                  className={styles.navMenuLink}
-                  key={index}
-                  to={link}
-                  onClick={() => setActiveItem(index)}
+            <ul className={styles.navMenu}>
+              {menuItems.map(({ index, text, icon, link }) => (
+                <li
+                  className={`${styles.menuItem} ${styles.menuItemDesktop} ${
+                    activeItem === index && styles.activeDesktop
+                  } ${activeItem === index && styles.active}`}
                 >
-                  <span className={styles.menuIcon}>
-                    <ion-icon name={icon}></ion-icon>
-                  </span>
-                  <span className={styles.menuText}>{text}</span>
-                </NavLink>
-              </li>
-            ))}
-            <div className={styles.indicator}></div>
-          </ul>
-          {/* // Demo Sign in Button put this in landing page later */}
-          {user === null && <DemoSignIn />}
+                  <NavLink
+                    className={styles.navMenuLink}
+                    key={index}
+                    to={link}
+                    onClick={() => setActiveItem(index)}
+                  >
+                    <span className={styles.menuIcon}>
+                      <ion-icon name={icon}></ion-icon>
+                    </span>
+                    <span className={styles.menuText}>{text}</span>
+                  </NavLink>
+                  {/* <div className={styles.indicatora}></div> */}
 
-          {isLoaded && user !== null && (
-            <div className={styles.footer}>
-              <UserButton />
-              <div className={styles.footerUserInfo}>
-                <p className={styles.fullNameText}>{user.fullName}</p>
-                <p className={styles.emailText}>
-                  {user.emailAddresses[0].emailAddress}
-                </p>
+                  {activeItem === index ? (
+                    <motion.div
+                      className={styles.indicatora}
+                      layoutId='indicators'
+                    ></motion.div>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+            {/* // Demo Sign in Button put this in landing page later */}
+            {user === null && <DemoSignIn />}
+
+            {isLoaded && user !== null && (
+              <div className={styles.footer}>
+                <UserButton />
+                <div className={styles.footerUserInfo}>
+                  <p className={styles.fullNameText}>{user.fullName}</p>
+                  <p className={styles.emailText}>
+                    {user.emailAddresses[0].emailAddress}
+                  </p>
+                </div>
+                <div className={styles.footerButton}>
+                  <button
+                    className={styles.signoutButton}
+                    onClick={() => signOutHandler()}
+                  >
+                    <i className='bi bi-box-arrow-right'></i>
+                  </button>
+                </div>
               </div>
-              <div className={styles.footerButton}>
-                <button
-                  className={styles.signoutButton}
-                  onClick={() => signOutHandler()}
-                >
-                  <i className='bi bi-box-arrow-right'></i>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </AnimatePresence>
       )}
     </>
   );

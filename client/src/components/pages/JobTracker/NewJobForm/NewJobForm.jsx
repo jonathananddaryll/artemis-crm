@@ -76,16 +76,25 @@ export default function NewJobForm({ toggleJobForm }) {
 
   const modal = {
     hidden: {
-      y: '-110vh',
       opacity: 0
     },
     visible: {
-      y: '25%',
-      // x: '50%',
       opacity: 1,
-      transition: { delay: 0.5 }
+      transition: { delay: 0.1 }
     }
   };
+
+  // const modal = {
+  //   hidden: {
+  //     // y: '-110vh',
+  //     opacity: 0
+  //   },
+  //   visible: {
+  //     opacity: 1,
+  //     // y: '100vh',
+  //     transition: { delay: 0.1 }
+  //   }
+  // };
 
   return (
     <AnimatePresence mode='wait'>
@@ -99,7 +108,12 @@ export default function NewJobForm({ toggleJobForm }) {
           className={styles.outerModal}
           onClick={() => dispatch(handleToggleForm([false, null]))}
         ></div>
-        <motion.div className={styles.modal} variants={modal}>
+        <motion.div
+          className={styles.modal}
+          variants={modal}
+          initial='hidden'
+          animate='visible'
+        >
           <div className={styles.formHeader}>
             <p className={styles.headerText}>Add New Job</p>
             <button onClick={() => dispatch(handleToggleForm([false, null]))}>

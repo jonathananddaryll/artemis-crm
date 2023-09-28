@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 import Button from '../../../layout/Button/Button';
@@ -29,37 +30,50 @@ export default function NewBoardForm({ toggleHandler, setFormToggle }) {
     setFormToggle(false);
   };
 
-  return (
-    <div className={styles.updateFormContainer}>
-      <div className={styles.updateForm}>
-        <form onSubmit={e => onSubmitHandler(e)}>
-          <input
-            type='text'
-            value={title}
-            name='title'
-            placeholder='New Board Name'
-            onChange={e => setTitle(e.target.value)}
-            required
-          />
-          <div className={styles.formButtons}>
-            <Button
-              type={'button'}
-              value={'Cancel'}
-              color={'white'}
-              size={'small'}
-              onClick={() => toggleHandler()}
-            />
+  // for newformn opacity motionframer
+  const opacity = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 }
+  };
 
-            <Button
-              type={'submit'}
-              value={'Create'}
-              color={'blue'}
-              size={'small'}
-              disabled={title === ''}
+  return (
+    <AnimatePresence>
+      <motion.div
+        className={styles.updateFormContainer}
+        variants={opacity}
+        initial='hidden'
+        animate='visible'
+      >
+        <div className={styles.updateForm}>
+          <form onSubmit={e => onSubmitHandler(e)}>
+            <input
+              type='text'
+              value={title}
+              name='title'
+              placeholder='New Board Name'
+              onChange={e => setTitle(e.target.value)}
+              required
             />
-          </div>
-        </form>
-      </div>
-    </div>
+            <div className={styles.formButtons}>
+              <Button
+                type={'button'}
+                value={'Cancel'}
+                color={'white'}
+                size={'small'}
+                onClick={() => toggleHandler()}
+              />
+
+              <Button
+                type={'submit'}
+                value={'Create'}
+                color={'blue'}
+                size={'small'}
+                disabled={title === ''}
+              />
+            </div>
+          </form>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

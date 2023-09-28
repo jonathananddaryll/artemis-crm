@@ -29,12 +29,11 @@
   text-align: right;
 
   @include mixin.phone {
-    flex: 0 0 100%;
+    flex: 0 0 25%;
     order: 3;
-    text-align: center;
 
     // CHANGE THIS LATER ON WHEN FILTER IS READY AND DONE
-    display: none;
+    // display: none;
   }
 }
 

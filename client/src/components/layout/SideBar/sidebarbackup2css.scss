@@ -148,10 +148,6 @@
   color: #8f99ac;
 }
 
-.indicatora {
-  display: none;
-}
-
 // PHONE NAVIGATION ----------------------------------------------//////////////////////////
 @include mixin.phone {
   .navContainer {
@@ -212,42 +208,6 @@
   .menuItemDesktop:hover {
     background-color: #20293a;
     padding-left: 0;
-  }
-
-  .indicatora {
-    display: block;
-    position: absolute;
-    top: -50%;
-    height: 70px;
-    width: 70px;
-    background-color: rgb(83, 83, 236);
-    border-radius: 50%;
-    border: 6px solid white;
-    transition: 0.5s;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: -22px;
-      width: 20px;
-      height: 20px;
-      background-color: transparent;
-      border-top-right-radius: 20px;
-      box-shadow: 0px -10px 0 0 white;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: -22px;
-      width: 20px;
-      height: 20px;
-      background-color: transparent;
-      border-top-left-radius: 20px;
-      box-shadow: 0px -10px 0 0 white;
-    }
   }
 
   .indicator {

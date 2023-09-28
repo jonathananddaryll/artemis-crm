@@ -65,7 +65,7 @@ export default function ({
 
         {columnNumber > 6 && (
           <div className={styles.buttonsContainer}>
-            {jobs.length === 0 && (
+            {jobs.length === 0 && statusFormToggle.ind !== id && (
               <button
                 className={styles.statusButton}
                 onClick={() => setConfirmationToggle(true)}
@@ -90,7 +90,6 @@ export default function ({
         )}
       </div>
       {statusFormToggle.state && statusFormToggle.ind === id && (
-        // <p>AYOOOOOOOOO</p>
         <StatusUpdateForm
           setStatusFormToggle={setStatusFormToggle}
           selectedBoard={selectedBoard}
