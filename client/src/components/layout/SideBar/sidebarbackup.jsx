@@ -29,32 +29,26 @@ export default function SideBar() {
   const menuItems = [
     {
       index: 1,
-      text: 'Boards',
-      icon: 'clipboard-outline',
-      link: '/boards'
-    },
-    {
-      index: 2,
       text: 'Contacts',
-      icon: 'call-outline',
+      icon: '<ion-icon name="settings"></ion-icon>',
       link: '/contacts'
     },
     {
-      index: 3,
+      index: 2,
       text: 'Documents',
-      icon: 'document-outline',
+      icon: '<ion-icon name="settings"></ion-icon>',
       link: '/documents'
+    },
+    {
+      index: 3,
+      text: 'Boards',
+      icon: '<ion-icon name="settings"></ion-icon>',
+      link: '/boards'
     },
     {
       index: 4,
-      text: 'Reminders',
-      icon: 'notifications-outline',
-      link: '/documents'
-    },
-    {
-      index: 5,
       text: 'Settings',
-      icon: 'settings-outline',
+      icon: '<ion-icon name="settings"></ion-icon>',
       link: '/boards'
     }
   ];
@@ -76,28 +70,29 @@ export default function SideBar() {
               <h2 className={styles.logoText}>Artemis</h2>
             </div>
           </div>
-          <ul className={styles.navMenu}>
+          <div className={styles.navMenu}>
             {menuItems.map(({ index, text, icon, link }) => (
-              <li
-                className={`${styles.menuItem} ${styles.menuItemDesktop} ${
-                  activeItem === index && styles.activeDesktop
-                } ${activeItem === index && styles.active}`}
+              <NavLink
+                className={`${styles.navMenuLink} ${
+                  activeItem === index ? styles.activee : styles.notactivee
+                }`}
+                key={index}
+                to={link}
+                onClick={() => setActiveItem(index)}
               >
-                <NavLink
-                  className={styles.navMenuLink}
-                  key={index}
-                  to={link}
-                  onClick={() => setActiveItem(index)}
+                <div
+                  className={`${styles.menuItem} ${
+                    activeItem === index
+                      ? styles.menuActive
+                      : styles.menuNotActive
+                  }`}
                 >
-                  <span className={styles.menuIcon}>
-                    <ion-icon name={icon}></ion-icon>
-                  </span>
-                  <span className={styles.menuText}>{text}</span>
-                </NavLink>
-              </li>
+                  <img src={icon} alt={text} srcSet='' />
+                  <p>{text}</p>
+                </div>
+              </NavLink>
             ))}
-            <div className={styles.indicator}></div>
-          </ul>
+          </div>
           {/* // Demo Sign in Button put this in landing page later */}
           {user === null && <DemoSignIn />}
 

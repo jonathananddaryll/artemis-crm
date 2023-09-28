@@ -38,48 +38,64 @@
 
 .navMenu {
   margin-top: 2rem;
+  // width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
-/* NavLink to remove underline on visited links */
-.navMenuLink {
-  text-decoration: none;
-}
-
+//li
 .menuItem {
   height: 5rem;
-  display: flex;
   color: white;
-  // text-decoration: none;
-  margin: auto 0.7rem;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
+  list-style: none;
+  width: 100%;
   border-radius: 1rem;
   position: relative;
-  align-items: center;
   transition: all 0.2s ease;
+  font-size: 2rem;
 
   // &:hover {
+  //   background-color: rgb(110, 70, 219);
   //   padding-left: 2.6rem;
   // }
 }
 
-.menuItem img {
-  width: 1.8rem;
-  height: 1.8rem;
-  margin-right: 1rem;
+.menuItemDesktop:hover {
+  background-color: rgb(110, 70, 219);
+  padding-left: 2.6rem;
+}
+
+.activeDesktop {
+  background-color: rgb(110, 70, 219);
+}
+
+// a
+.navMenuLink {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+// icon
+.menuIcon {
+  color: white;
+  margin: 0.5rem 1rem 0 0;
   /* padding: 0 20px; */
+  // font-size: 2.2rem;
+}
+
+// a span text
+.menuText {
+  // line-height: 2.2rem;
+  // font-size: 2.2rem;
 }
 
 // Active Menu
 .menuActive {
-  background-color: rgb(110, 70, 219);
-}
-
-.menuItem p {
-  /* margin: 0; */
-  // text-transform: uppercase;
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  font-family: 'Montserrat', sans-serif;
+  // background-color: rgb(110, 70, 219);
 }
 
 /************** FOOTER ****************/
@@ -110,7 +126,7 @@
   text-align: right;
   flex: 1;
 
-  > button {
+  & button {
     font-size: 2rem;
     background-color: transparent;
     color: #8f99ac;
@@ -134,14 +150,15 @@
   .navContainer {
     flex: 1;
     background-color: #20293a;
-    height: 60px;
+    height: 70px;
+    position: relative;
 
     color: #ffff;
     position: fixed;
     bottom: 0;
     width: 100%;
     z-index: 999;
-    padding: 0 2rem;
+    // padding: 0 2rem;
   }
 
   .navHeading {
@@ -149,80 +166,134 @@
   }
 
   .navMenu {
-    margin-top: 0.8rem;
+    margin-top: 0;
+    // width: 100%;
+    padding: 0 3rem;
     display: flex;
+    flex-direction: row;
   }
 
-  /* NavLink to remove underline on visited links */
-  .navMenuLink {
-    text-decoration: none;
-    // flex: 1;
-    // flex: 0 0 25%;
-    // // width: 100%;
-    justify-content: space-between;
-  }
-
-  .activee {
-    flex: 1;
-  }
-
-  .notactivee {
-    flex: 0 0 19.5%;
-  }
-
+  //li
   .menuItem {
-    // height: 5rem;
-
-    display: flex;
-    color: white;
-    text-decoration: none;
-    padding: 0;
-    border-radius: 20px;
     position: relative;
+    height: 70px;
+    // width: 20%;
+    padding: 0;
+
+    // border-radius: 1rem;
+    font-size: 2rem;
+  }
+
+  .active {
+    & .navMenuLink {
+      & .menuIcon {
+        transform: translateY(-32px);
+      }
+
+      & .menuText {
+        opacity: 1;
+        transform: translateY(14px);
+      }
+    }
+  }
+
+  // To cancel out the desktop one
+  .activeDesktop {
+    background-color: #20293a;
+  }
+
+  .menuItemDesktop:hover {
+    background-color: #20293a;
+    padding-left: 0;
+  }
+
+  .indicator {
+    position: absolute;
+    top: -50%;
+    height: 70px;
+    width: 70px;
+    background-color: rgb(83, 83, 236);
+    border-radius: 50%;
+    border: 6px solid white;
+    transition: 0.5s;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -22px;
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+      border-top-right-radius: 20px;
+      box-shadow: 0px -10px 0 0 white;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -22px;
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+      border-top-left-radius: 20px;
+      box-shadow: 0px -10px 0 0 white;
+    }
+  }
+
+  .navMenu .menuItem:nth-child(1).active ~ .indicator {
+    transform: translateX(calc(67px * 0));
+  }
+
+  .navMenu .menuItem:nth-child(2).active ~ .indicator {
+    transform: translateX(calc(67px * 1));
+  }
+
+  .navMenu .menuItem:nth-child(3).active ~ .indicator {
+    transform: translateX(calc(67px * 2));
+  }
+
+  .navMenu .menuItem:nth-child(4).active ~ .indicator {
+    transform: translateX(calc(67px * 3));
+  }
+
+  .navMenu .menuItem:nth-child(5).active ~ .indicator {
+    transform: translateX(calc(67.5px * 4));
+  }
+  // a
+  .navMenuLink {
+    position: relative;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    min-width: fit-content;
-    width: 90%;
-    padding: 0 2rem;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
   }
 
-  // Active Menu
-  .menuActive {
-    // min-width: 19rem;
-    // margin: 0 auto;
-
-    p {
-      display: block !important ;
-      // width: 100%;
-      // text-align: center;
-      margin: 0 0 0 1rem;
-      // margin-left: 1rem;
-    }
-
-    img {
-      // display: none;
-      margin: 0 !important;
-    }
-
-    //disable
+  // icon
+  .menuIcon {
+    position: relative;
+    display: block;
+    line-height: 70px;
+    font-size: 3rem;
+    text-align: center;
+    transition: 0.5s;
+    color: white;
+    z-index: 2;
+    margin: 0;
   }
 
-  .menuItem img {
-    width: 2.2rem;
-    height: 2.2rem;
-    // margin-right: 0;
-    /* padding: 0 20px; */
-    // margin: 0 auto;
-  }
-
-  .menuItem p {
-    /* margin: 0; */
-    // text-transform: uppercase;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-    font-family: 'Montserrat', sans-serif;
-
-    // this will come to play with HOVER "SELECTED LATER"
-    display: none;
+  // a span text
+  .menuText {
+    position: absolute;
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    transition: 0.5s;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .footer {

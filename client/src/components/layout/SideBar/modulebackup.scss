@@ -1,0 +1,232 @@
+@use '../../../styles/mixins.scss' as mixin;
+
+.navContainer {
+  flex: 0 0 23rem;
+  background-color: #20293a;
+  height: 100vh;
+
+  color: #ffff;
+  position: relative;
+
+  // DELETE THIS LATER. this is just to style mobile size without the sidebar
+  // @include mixin.phone {
+  //   display: none;
+  // }
+}
+
+.navHeading {
+  height: 7.5rem;
+  padding: 2rem 0.5rem;
+}
+
+.navBrand {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.logoText {
+  font-size: 2.3rem;
+  letter-spacing: 2px;
+}
+
+.logoImage {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-right: 1rem;
+}
+
+.navMenu {
+  margin-top: 2rem;
+}
+
+/* NavLink to remove underline on visited links */
+.navMenuLink {
+  text-decoration: none;
+}
+
+.menuItem {
+  height: 5rem;
+  display: flex;
+  color: white;
+  // text-decoration: none;
+  margin: auto 0.7rem;
+  padding: 0 2rem;
+  border-radius: 1rem;
+  position: relative;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  // &:hover {
+  //   padding-left: 2.6rem;
+  // }
+}
+
+.menuItem img {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 1rem;
+  /* padding: 0 20px; */
+}
+
+// Active Menu
+.menuActive {
+  background-color: rgb(110, 70, 219);
+}
+
+.menuItem p {
+  /* margin: 0; */
+  // text-transform: uppercase;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/************** FOOTER ****************/
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  border-top: 1px solid #40495a;
+  padding: 2rem 1rem;
+  align-items: center;
+}
+
+.footerUserInfo {
+  /* flex: 0 0 40%; */
+  width: 65%;
+  text-align: left;
+  padding: 0 0.5rem 0 1rem;
+
+  > p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.footerButton {
+  text-align: right;
+  flex: 1;
+
+  > button {
+    font-size: 2rem;
+    background-color: transparent;
+    color: #8f99ac;
+    border: none;
+  }
+}
+
+.fullNameText {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.emailText {
+  font-size: 1.5rem;
+  color: #8f99ac;
+}
+
+// PHONE NAVIGATION ----------------------------------------------//////////////////////////
+@include mixin.phone {
+  .navContainer {
+    flex: 1;
+    background-color: #20293a;
+    height: 70px;
+    position: relative;
+
+    color: #ffff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 0 2rem;
+  }
+
+  .navHeading {
+    display: none;
+  }
+
+  .navMenu {
+    margin-top: 0.8rem;
+    display: flex;
+  }
+
+  /* NavLink to remove underline on visited links */
+  .navMenuLink {
+    text-decoration: none;
+    // flex: 1;
+    // flex: 0 0 25%;
+    // // width: 100%;
+    justify-content: space-between;
+  }
+
+  .activee {
+    flex: 1;
+  }
+
+  .notactivee {
+    flex: 0 0 19.5%;
+  }
+
+  .menuItem {
+    // height: 5rem;
+
+    display: flex;
+    color: white;
+    text-decoration: none;
+    padding: 0;
+    border-radius: 20px;
+    position: relative;
+    align-items: center;
+    min-width: fit-content;
+    width: 90%;
+    padding: 0 2rem;
+  }
+
+  // Active Menu
+  .menuActive {
+    // min-width: 19rem;
+    // margin: 0 auto;
+
+    p {
+      display: block !important ;
+      // width: 100%;
+      // text-align: center;
+      margin: 0 0 0 1rem;
+      // margin-left: 1rem;
+    }
+
+    img {
+      // display: none;
+      margin: 0 !important;
+    }
+
+    //disable
+  }
+
+  .menuItem img {
+    width: 2.2rem;
+    height: 2.2rem;
+    // margin-right: 0;
+    /* padding: 0 20px; */
+    // margin: 0 auto;
+  }
+
+  .menuItem p {
+    /* margin: 0; */
+    // text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    font-family: 'Montserrat', sans-serif;
+
+    // this will come to play with HOVER "SELECTED LATER"
+    display: none;
+  }
+
+  .footer {
+    display: none;
+  }
+}
