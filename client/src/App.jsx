@@ -16,6 +16,10 @@ import HomePage from './components/pages/Home/HomePage';
 import JobTrackerPage from './components/pages/JobTracker/JobTrackerPage';
 import BoardsPage from './components/pages/Boards/BoardsPage';
 import ContactsPage from './components/pages/Contacts/ContactsPage';
+import DocumentsPage from './components/pages/Documents/DocumentsPage';
+import SettingsPage from './components/pages/Settings/SettingsPage';
+import RemindersPage from './components/pages/Reminders/RemindersPage';
+
 import './styles/globals.scss';
 
 // if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -76,9 +80,10 @@ function App() {
                     </SignedOut>
                   </>
                 }
-              ></Route>
+              />
+
               <Route
-                path='/contacts/'
+                path='/contacts'
                 element={
                   <>
                     <SignedIn>
@@ -89,7 +94,49 @@ function App() {
                     </SignedOut>
                   </>
                 }
-              ></Route>
+              />
+
+              <Route
+                path='/settings'
+                element={
+                  <>
+                    <SignedIn>
+                      <SettingsPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              />
+
+              <Route
+                path='/reminders'
+                element={
+                  <>
+                    <SignedIn>
+                      <RemindersPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              />
+
+              <Route
+                path='/Documents'
+                element={
+                  <>
+                    <SignedIn>
+                      <DocumentsPage />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn></RedirectToSignIn>
+                    </SignedOut>
+                  </>
+                }
+              />
             </Routes>
           </div>
         </ClerkProvider>
