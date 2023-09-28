@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   changeSelectedJob,
   deleteJob
@@ -82,119 +83,153 @@ export default function SelectedJobModal() {
     dispatch(changeSelectedJob([false, null]));
   };
 
+  // for modal backdrop motionframer
+  const backdrop = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 }
+  };
+
+  const modal = {
+    hidden: {
+      // y: '-110vh',
+      opacity: 0
+    },
+    visible: {
+      opacity: 1,
+      // y: '100vh',
+      transition: { delay: 0.1 }
+    }
+  };
+
   return (
-    <div className={styles.wrapper}>
-      <div
-        className={styles.modalOuter}
-        onClick={() => handleClosingModal()}
-      ></div>
-      <div className={styles.modalContainer}>
-        <div className={styles.mainContainer}>
-          <div className={styles.actionButtonsContainer}>
-            {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
-            {/* <button onClick={() => handleClosingModal()}>Close</button> */}
-            <Button
-              type={'button'}
-              value={'Delete'}
-              color={'red'}
-              size={'small'}
-              onClick={() => setConfirmationToggle(true)}
-            />
-            <Button
-              type={'button'}
-              value={'Close'}
-              color={'white'}
-              size={'small'}
-              onClick={() => handleClosingModal()}
-            />
-          </div>
-          <div className={styles.header}>
-            <div className={styles.headerLogoContainer}>
-              <div className={styles.headerLogo}></div>
+    <AnimatePresence mode='wait'>
+      <motion.div
+        className={styles.wrapper}
+        variants={backdrop}
+        initial='hidden'
+        animate='visible'
+      >
+        <div
+          className={styles.modalOuter}
+          onClick={() => handleClosingModal()}
+        ></div>
+        <motion.div
+          className={styles.modalContainer}
+          variants={modal}
+          initial='hidden'
+          animate='visible'
+        >
+          <div className={styles.mainContainer}>
+            <div className={styles.actionButtonsContainer}>
+              {/* <button onClick={() => setConfirmationToggle(true)}>Delete</button> */}
+              {/* <button onClick={() => handleClosingModal()}>Close</button> */}
+              <Button
+                type={'button'}
+                value={'Delete'}
+                color={'red'}
+                size={'small'}
+                onClick={() => setConfirmationToggle(true)}
+              />
+              <Button
+                type={'button'}
+                value={'Close'}
+                color={'white'}
+                size={'small'}
+                onClick={() => handleClosingModal()}
+              />
             </div>
-            <div className={styles.headerInfo}>
-              <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
-              <div className={styles.headerSub}>
-                <p className={styles.textSub}>
-                  <i className='bi bi-building' />
-                  {selectedJob.company}
-                </p>
-
-                <p className={styles.textSub}>
-                  <i className='bi bi-geo-alt' />
-                  {selectedJob.location}
-                </p>
-                <p className={styles.textSubAdded}>
-                  <i className='bi bi-calendar3'></i>
-                  Added on {selectedJob.date_added}
-                </p>
+            <div className={styles.header}>
+              <div className={styles.headerLogoContainer}>
+                <div className={styles.headerLogo}></div>
               </div>
-            </div>
-          </div>
-          <div className={styles.subNavigation}>
-            <div className={styles.subNavigationItems}>
-              {navItems.map((item, index) => (
-                <div
-                  key={index}
-                  className={
-                    styles.subNavigationItem +
-                    ' ' +
-                    (activeItem === index && styles.subNavigationItemActive)
-                  }
-                  onClick={() => setActiveItem(index)}
-                >
-                  <p className={styles.subNavigationText}>
-                    <i className={item.icon}></i>
-                    {item.name}
+              <div className={styles.headerInfo}>
+                <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
+                <div className={styles.headerSub}>
+                  <p className={styles.textSub}>
+                    <i className='bi bi-building' />
+                    {selectedJob.company}
+                  </p>
 
-                    {item.itemL > 0 && (
-                      <span className={styles.itemCount}>{item.itemL}</span>
-                    )}
+                  <p className={styles.textSub}>
+                    <i className='bi bi-geo-alt' />
+                    {selectedJob.location}
+                  </p>
+                  <p className={styles.textSubAdded}>
+                    <i className='bi bi-calendar3'></i>
+                    Added on {selectedJob.date_added}
                   </p>
                 </div>
-              ))}
+              </div>
             </div>
+            <div className={styles.subNavigation}>
+              <div className={styles.subNavigationItems}>
+                {navItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`${styles.subNavigationItem} ${
+                      activeItem === index && styles.subNavigationItemActive
+                    }`}
+                    onClick={() => setActiveItem(index)}
+                  >
+                    <p className={styles.subNavigationText}>
+                      <i className={item.icon}></i>
+                      {item.name}
+
+                      {item.itemL > 0 && (
+                        <span className={styles.itemCount}>{item.itemL}</span>
+                      )}
+                    </p>
+                    {activeItem === index ? (
+                      <motion.div
+                        class={styles.underline}
+                        layoutId='underline'
+                      ></motion.div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* MAIN CONTENT BOX */}
+            {activeItem === 0 && (
+              <JobInfoTab
+                selectedJob={selectedJob}
+                selectedBoard_userId={selectedBoard.user_id}
+              />
+            )}
+            {activeItem === 1 && (
+              <NotesTab
+                selectedBoard_userId={selectedBoard.user_id}
+                jobId={selectedJob.id}
+              />
+            )}
+            {activeItem === 2 && <ContactsTab />}
+            {activeItem === 3 && <DocumentsTab />}
+            {activeItem === 4 && (
+              <TasksTab
+                selectedBoard_userId={selectedBoard.user_id}
+                jobId={selectedJob.id}
+              />
+            )}
+            {activeItem === 5 && (
+              <InterviewsTab
+                jobId={selectedJob.id}
+                selectedBoard_userId={selectedBoard.user_id}
+              />
+            )}
           </div>
-          {/* MAIN CONTENT BOX */}
-          {activeItem === 0 && (
-            <JobInfoTab
-              selectedJob={selectedJob}
-              selectedBoard_userId={selectedBoard.user_id}
+          <div className={styles.timelineContainer}>
+            <Timeline dateCreated={selectedJob.date_created} />
+          </div>
+          {confirmationToggle && (
+            <DeletePopup
+              handleDelete={handleDeleteJob}
+              closePopUp={() => setConfirmationToggle(false)}
+              mainText={'Are you sure delete this job?'}
+              subText={'This action cannot be undone'}
             />
           )}
-          {activeItem === 1 && (
-            <NotesTab
-              selectedBoard_userId={selectedBoard.user_id}
-              jobId={selectedJob.id}
-            />
-          )}
-          {activeItem === 2 && <ContactsTab />}
-          {activeItem === 3 && <DocumentsTab />}
-          {activeItem === 4 && (
-            <TasksTab
-              selectedBoard_userId={selectedBoard.user_id}
-              jobId={selectedJob.id}
-            />
-          )}
-          {activeItem === 5 && (
-            <InterviewsTab
-              jobId={selectedJob.id}
-              selectedBoard_userId={selectedBoard.user_id}
-            />
-          )}
-        </div>
-        <div className={styles.timelineContainer}>
-          <Timeline dateCreated={selectedJob.date_created} />
-        </div>
-        {confirmationToggle && (
-          <DeletePopup
-            handleDelete={handleDeleteJob}
-            closePopUp={() => setConfirmationToggle(false)}
-            mainText={'Are you sure delete this job?'}
-            subText={'This action cannot be undone'}
-          />
-        )}
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

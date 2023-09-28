@@ -191,15 +191,16 @@
   height: 100%;
   width: 100%;
   line-height: 5rem;
-  border-top: 2px solid #bdbdcc;
+  // border-top: 2px solid #bdbdcc;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 /* ACTIVE TAB... MAKE THIS PRETTY LATER */
 .subNavigationItemActive {
   /* font-size: 20px; */
   font-weight: 600;
-  border-top: 2px solid red;
+  // border-top: 2px solid red;
   background-color: #fdfdff;
 }
 
@@ -233,4 +234,13 @@
   @include mixin.phone {
     display: none;
   }
+}
+
+.underline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgb(236, 77, 77);
 }
