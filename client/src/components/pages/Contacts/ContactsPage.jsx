@@ -94,7 +94,8 @@ export default function ContactsPage() {
   // }
 
   // Filter for V1
-  const searchSubmit = () => {
+  const searchSubmit = e => {
+    e.preventDefault();
     dispatch(
       getContactsSearch({ type: searchType, keyword: searchParams.strValue })
     );
@@ -171,25 +172,34 @@ export default function ContactsPage() {
       <div className={styles.contactsContainer}>
         <nav className={styles.menuContainer}>
           <section className={styles.searchBar}>
-            <input
-              onChange={e => updateSearchString(e)}
-              type='text'
-              inputMode='search'
-              name='searchBar'
-              className={styles.contactSearchInput}
-              value={searchParams.strValue}
-              placeholder={searchType}
-            />
-            <button className={styles.searchButton} onClick={searchSubmit}>
-              <i
-                className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
-              ></i>
-            </button>
-            <Dropdown
-              items={['name', 'company', 'city', 'current_job_title']}
-              header={'options'}
-              setSearchType={setSearchType}
-            />
+            <form onSubmit={e => searchSubmit(e)}>
+              <input
+                onChange={e => updateSearchString(e)}
+                type='text'
+                inputMode='search'
+                name='searchBar'
+                className={styles.contactSearchInput}
+                value={searchParams.strValue}
+                placeholder={searchType}
+              />
+              <button
+                type='submit'
+                className={styles.searchButton}
+                // onClick={}
+              >
+                <i
+                  className={
+                    'fa-solid fa-magnifying-glass ' + styles.searchIcon
+                  }
+                ></i>
+              </button>
+
+              <Dropdown
+                items={['name', 'company', 'city', 'current_job_title']}
+                header={'options'}
+                setSearchType={setSearchType}
+              />
+            </form>
           </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>
