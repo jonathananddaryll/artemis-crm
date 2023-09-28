@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   changeSelectedJob,
   deleteJob
@@ -136,11 +137,9 @@ export default function SelectedJobModal() {
               {navItems.map((item, index) => (
                 <div
                   key={index}
-                  className={
-                    styles.subNavigationItem +
-                    ' ' +
-                    (activeItem === index && styles.subNavigationItemActive)
-                  }
+                  className={`${styles.subNavigationItem} ${
+                    activeItem === index && styles.subNavigationItemActive
+                  }`}
                   onClick={() => setActiveItem(index)}
                 >
                   <p className={styles.subNavigationText}>
@@ -151,6 +150,12 @@ export default function SelectedJobModal() {
                       <span className={styles.itemCount}>{item.itemL}</span>
                     )}
                   </p>
+                  {activeItem === index ? (
+                    <motion.div
+                      class={styles.underline}
+                      layoutId='underline'
+                    ></motion.div>
+                  ) : null}
                 </div>
               ))}
             </div>
