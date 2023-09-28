@@ -1,0 +1,17 @@
+@use '../../../styles/mixins.scss' as mixin;
+.container {
+  background-color: #ffff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+
+  @include mixin.phone {
+    padding-bottom: 13rem;
+  }
+}
+
+.marginTop {
+  margin-top: 10rem;
+}
