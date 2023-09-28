@@ -19,18 +19,19 @@
 .modal {
   width: 500px;
   background-color: #fff;
+  margin: 0 auto;
 
   /* center */
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  // position: absolute;
+  // top: 35%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
 
   border-radius: 10px;
 
   @include mixin.phone {
     width: 100%;
-    top: 45%;
+    // top: 45%;
   }
 }
 
