@@ -52,12 +52,6 @@ router.get('/:user_id/board/:board_id', async (req, res) => {
     boardId
   );
 
-  // const query = format(
-  //   'SELECT * FROM board WHERE user_id = %L and id = %s',
-  //   userId,
-  //   boardId
-  // );
-
   const client = new Client(config);
   client.connect();
 
@@ -98,11 +92,6 @@ router.post('/', boardInputValidator, validateRequest, async (req, res) => {
     userId
   );
 
-  // returns errors to use for Alert components later
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json({ errors: errors.array() });
-  // }
-
   try {
     client.query(query, (err, response) => {
       if (err) {
@@ -127,9 +116,6 @@ router.patch(
   addColumnInputValidator,
   validateRequest,
   async (req, res) => {
-    // do the calculating of what colum to add to. have a keeper of first empty column in redux
-
-    // const errors = validationResult(req);
     const client = new Client(config);
     client.connect();
     const { columnStatus, totalCols, userId } = req.body;
@@ -191,9 +177,6 @@ router.patch(
   myRequestHeaders,
   validateRequest,
   async (req, res) => {
-    // do the calculating of what colum to add to. have a keeper of first empty column in redux
-
-    // const errors = validationResult(req);
     const client = new Client(config);
     client.connect();
     const {
@@ -207,7 +190,6 @@ router.patch(
 
     const boardId = req.params.board_id;
     const newTotalCol = totalCols - 1;
-    // const newTotalCol = parseInt(totalCols) - 1;
 
     // Decode the token
     const decodedToken = decodeToken(req.headers.authorization);
@@ -299,7 +281,6 @@ router.patch(
   addColumnInputValidator,
   validateRequest,
   async (req, res) => {
-    // const errors = validationResult(req);
     const client = new Client(config);
     client.connect();
     const { columnStatus, columnToUpdate, userId, oldColumnStatus } = req.body;

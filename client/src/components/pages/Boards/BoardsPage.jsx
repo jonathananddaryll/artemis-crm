@@ -27,7 +27,6 @@ export default function BoardsPage() {
     }
   }, []);
 
-  // this is how to use the action in the extrareducer.
   const dispatch = useDispatch();
 
   const toggleHandler = () => {

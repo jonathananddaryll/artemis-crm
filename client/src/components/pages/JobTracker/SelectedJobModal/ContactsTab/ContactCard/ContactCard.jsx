@@ -197,11 +197,3 @@ export default function ContactCard({
     </div>
   );
 }
-
-// {isLinkingContact ? (
-//   <button onClick={() => linkContactHandler(id, user_id)}>Link</button>
-// ) : (
-//   <button onClick={() => unlinkContactHandler(id, contact_id, user_id)}>
-//     Unlink
-//   </button>
-// )}

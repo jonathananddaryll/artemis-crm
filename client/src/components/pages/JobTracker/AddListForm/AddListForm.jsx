@@ -26,8 +26,6 @@ export default function AddListForm({
   const onSubmit = async e => {
     e.preventDefault();
 
-    // IMPORTANT..... MAKE SURE THIS PART OF ADDING TOKEN TO THE FORMDATA IS UNIFORM ACROSS EVERY FORMDATA. FIX THIS LATER, MAKE SURE IT'S CODED BETTER AND CLEANER
-    // const token = await session.getToken();
     const formD = formData;
     formD.token = await session.getToken();
 

@@ -1,15 +1,12 @@
 @use '../../../styles//mixins.scss' as mixin;
 
-/* make this global later on since we are gonna reuse this a lot */
 .pageWrapper {
-  /* margin-left: 305px; */
   padding: 0.5rem 3rem;
   width: 100%;
 }
 
 .header {
   padding: 2rem 0;
-  // margin-bottom: 2rem;
 }
 
 .boardsContainer {
@@ -22,11 +19,9 @@
 }
 
 .flexBox {
-  /* width: 350px; */
   flex: 0 0 19%;
 
   height: 20rem;
-  /* background-color: red; */
   margin-bottom: 2rem;
   cursor: pointer;
   position: relative;

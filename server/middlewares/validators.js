@@ -4,9 +4,8 @@ const { header, validationResult, check } = require('express-validator');
 const myRequestHeaders = [
   header('authorization')
     .exists({ checkFalsy: true })
-    .withMessage('Missing Authorization Header') // you can specify the message to show if a validation has failed
-    .bail() // not necessary, but it stops execution if previous validation failed
-    //you can chain different validation rules
+    .withMessage('Missing Authorization Header')
+    .bail()
     .contains('Bearer')
     .withMessage('Authorization Token is not Bearer')
 ];
@@ -117,7 +116,7 @@ const contactUpdateValidator = [
   check('linked_job_opening', 'Please provide a valid job ID number')
     .optional()
     .isNumeric()
-]
+];
 
 const contactInputValidator = [
   ...myRequestHeaders,

@@ -70,22 +70,3 @@ ORDER: Base + typography > general layout + grid > page layout > components
 //     @content;
 //   }
 // }
-
-// FOR LATER USE. SEE IF IT MAKE SENSE TO DO THIS INSTEAD OF INSIDE CSS MODULE -- DELETE IF ITS NOT GONNA BE USED
-// .container {
-//   padding: 0 2rem;
-//   margin: 0 auto;
-//   max-width: 1200px;
-
-//   @include respond(tab-landscape) {
-//     padding: 0 5rem !important;
-//   }
-
-//   @include respond(tab-portrait) {
-//     padding: 0 5rem !important;
-//   }
-
-//   @include respond(phone) {
-//     padding: 0 2.5rem !important;
-//   }
-// }

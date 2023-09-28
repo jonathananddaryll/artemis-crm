@@ -12,7 +12,7 @@ import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceh
 import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';
 
-export default function ContactsTab({ jobId }) {
+export default function ContactsTab() {
   const {
     linkedContacts,
     availableContacts,
@@ -25,12 +25,6 @@ export default function ContactsTab({ jobId }) {
   const { session } = useSession();
   const { userId } = useAuth();
   const [showAvailableContacts, setShowAvailableContacts] = useState(false);
-
-  // Maybe have a backup like this runs if the initial run from SelectedJobModal useEffect doesnt load all the contacts
-  // useEffect(() => {
-  //   console.log('useeffect triggered');
-  //   dispatch(getAllLinkedContactsWithJobId(jobId));
-  // }, []);
 
   // Gets contacts available to link
   const showUserContacts = async () => {

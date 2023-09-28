@@ -13,7 +13,6 @@ export default function AvailableContacts({
   return (
     <div className={styles.container}>
       {availableContactsLoading ? (
-        // <p>available contacts are loading</p>
         <Loader
           text={'Available Contacts are loading'}
           img={loadingInfinity}
@@ -52,8 +51,6 @@ export default function AvailableContacts({
               color={'white'}
               onClick={() => setShowAvailableContacts(false)}
             />
-
-            {/* <button onClick={() => setShowAvailableContacts(false)}>Cancel</button> */}
           </div>
         </>
       )}
