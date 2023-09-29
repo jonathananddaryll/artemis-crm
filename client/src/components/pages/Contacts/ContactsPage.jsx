@@ -7,12 +7,13 @@ import {
   getUserContactsTable,
   getContactsPriority,
   getRecentContacts,
-  updateSearchQuery,
   updateContactInFocus,
   updateContactSelected,
   // setNewContactStaging
 } from '../../../reducers/ContactReducer';
+
 import { useAuth } from '@clerk/clerk-react';
+import { toast } from 'react-toastify';
 
 import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';
@@ -50,7 +51,6 @@ export default function ContactsPage() {
   // name, company, city - Which are you searching for?
   const [searchType, setSearchType] = useState('name');
   const [searchParams, setSearchParams] = useState({
-    type: 'name',
     strValue: ''
   });
 
@@ -60,37 +60,21 @@ export default function ContactsPage() {
   function updateSearchString(e) {
     setSearchParams(oldParams => {
       return {
-        ...oldParams,
         strValue: e.target.value
       };
     });
   }
 
-  // Client side input validation/sanitizer
-  const validateSearchParams = searchObj => {
-    const validated = {
-      type: searchObj.type,
-      strValue: ''
-    };
-    if (searchObj.strValue === '') {
-      console.log('you didnt type anything valid');
-      return false;
-    } else {
-      const stringTrimmed = searchObj.strValue.trim();
-      validated.strValue = stringTrimmed;
-      return validated;
-    }
-  };
-
   // Initiate the contacts search for the string value in the search input box
   function searchSubmit(e) {
-    const validated = validateSearchParams(searchParams);
-    if (!validated) {
-      console.log('please enter valid text to search with');
-    } else {
-      dispatch(updateSearchQuery(validated));
-      dispatch(getContactsSearch());
-    }
+    const validated = {
+      type: searchType,
+      strValue: searchParams.strValue
+    };
+    const stringTrimmed = validated.strValue.trim();
+    validated.strValue = stringTrimmed;
+    console.log(validated)
+    dispatch(getContactsSearch(validated));
   }
 
   // Add a new contact using a form
@@ -153,12 +137,12 @@ export default function ContactsPage() {
         <section className={styles.searchBar}>
           <input
             onChange={e => updateSearchString(e)}
-            type='text'
-            inputMode='search'
+            type='search'
             name='searchBar'
             className={styles.contactSearchInput}
             value={searchParams.strValue}
             placeholder={searchType}
+            autoFocus
           />
           <button className={styles.searchButton} onClick={searchSubmit}>
             <i
@@ -173,7 +157,8 @@ export default function ContactsPage() {
         </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>
-              <a
+              <a 
+                tabIndex={0}
                 onClick={() => {
                   addContact();
                 }}
@@ -182,7 +167,8 @@ export default function ContactsPage() {
               </a>
             </li>
             <li className={styles.menuLinks}>
-              <a
+              <a 
+                tabIndex={0}
                 onClick={() => {
                   priorityContacts();
                 }}
@@ -192,6 +178,7 @@ export default function ContactsPage() {
             </li>
             <li className={styles.menuLinks}>
               <a
+                tabIndex={0}
                 onClick={() => {
                   contactHistory();
                 }}
@@ -208,7 +195,7 @@ export default function ContactsPage() {
                 // a business card.
                 <ContactCard 
                   contactInfo={contact}
-                  key={contact.id} 
+                  key={contact?.id ?? 1} 
                   />
               );
             })}

@@ -37,7 +37,7 @@ export default function Dropdown(props) {
       onMouseEnter={() => setVisible()}
       onMouseLeave={() => setHidden()}
     >
-      <div
+      <div tabIndex={0}
         className={
           menuHiding ? styles.menuHiddenHeader : styles.menuShownHeader
         }
@@ -47,6 +47,7 @@ export default function Dropdown(props) {
       {items.map((element) => {
         return (
           <a
+            tabIndex={0}
             className={
               menuHiding ? styles.menuHiddenItem : styles.menuShownItem
             }
