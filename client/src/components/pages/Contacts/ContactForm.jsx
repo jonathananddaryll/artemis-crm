@@ -14,6 +14,8 @@ import {
 import Dropdown from './Dropdown';
 import styles from './ContactForm.module.scss';
 
+import timeSince from '../../../helpers/convertDate';
+
 export default function ContactForm({ newContactStaging }) {
   // All-purpose contact form, is used for create, update, delete and read for all fields except
   // for the immutables (created timestamp, id, etc)
@@ -59,14 +61,15 @@ export default function ContactForm({ newContactStaging }) {
     if (updatedColumns.length > 0) {
       updatedColumns.map(element => updatedValues.push(contactForm[element]));
       if (newContactStaging) {
+        const filledFields = {}
+        for(let eachField = 0; eachField < updatedColumns.length; eachField++){
+          filledFields[updatedColumns[eachField]] = updatedValues[eachField];
+        }
         const createForm = {
-          user_id: userId,
-          names: updatedColumns,
-          values: updatedValues,
-          token: await session.getToken()
+          ...filledFields,
+          token: await session.getToken(),
         };
         dispatch(createContact(createForm));
-        dispatch(updateContactInFocus(contactForm));
       } else {
         const updateForm = {
           user_id: userId,
@@ -132,10 +135,8 @@ export default function ContactForm({ newContactStaging }) {
   // Depending on whether or not the contact is a new one or an existing one, make sure
   // This is for when the user is looking at an existing contact.
   useEffect(() => {
-    if (!newContactStaging) {
-      setContactForm(contactInFocus);
-    }
-  }, [newContactStaging, contactInFocus]);
+    setContactForm(contactInFocus);
+  }, [newContactStaging]);
 
   // for modal backdrop motionframer
   const backdrop = {
@@ -232,123 +233,124 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </label>
-            <label className={styles.formLabels}>
-              priority
-              <input
-                type='checkbox'
-                name='is_priority'
-                ischecked={contactForm.linked_job_opening ?? ''}
-                onChange={e => onChangeHandler(e)}
-                className={styles.checksInput}
-                readOnly={!isEditing}
+          </label>
+          <label className={styles.formLabels}>
+            priority
+            <input
+              type='checkbox'
+              name='is_priority'
+              checked={contactForm.is_priority}
+              onChange={(e) => onChangeHandler(e)}
+              className={styles.checksInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <p>added {timeSince(contactForm.date_created)}</p>
+        </div>
+        <div className={styles.directContact}>
+          <label className={styles.formLabels}>
+            phone
+            <input
+              type='tel'
+              name='phone'
+              value={contactForm.phone ?? ''}
+              placeholder='Add contact phone'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <label className={styles.formLabels}>
+            email
+            <input
+              type='email'
+              name='email'
+              value={contactForm.email ?? ''}
+              placeholder='Add contact email'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+        </div>
+        <div className={styles.social}>
+          <label className={styles.formLabels}>
+            linkedin
+            <input
+              type='url'
+              name='linkedin'
+              value={contactForm.linkedin ?? ''}
+              placeholder='Add contact linkedin'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <label className={styles.formLabels}>
+            twitter
+            <input
+              type='url'
+              name='twitter'
+              value={contactForm.twitter ?? ''}
+              placeholder='Add contact name'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <label className={styles.formLabels}>
+            instagram
+            <input
+              type='url'
+              name='instagram'
+              value={contactForm.instagram ?? ''}
+              placeholder='Add contact name'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <label className={styles.formLabels}>
+            other social
+            <input
+              type='url'
+              name='other_social'
+              value={contactForm.other_social ?? ''}
+              placeholder='Add contact name'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+          <label className={styles.formLabels}>
+            personal site
+            <input
+              type='url'
+              name='personal_site'
+              value={contactForm.personal_site ?? ''}
+              placeholder='Add contact name'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
+              />
+          </label>
+        </div>
+        {/* 
+        // connect your contact to a job from inside contacts organizer
+        <div className={styles.connectedJob}>
+          <label className={styles.formLabels}>
+            related job
+            <input
+              type='text'
+              name='linked_job_opening'
+              value={contactForm.linked_job_opening ?? ''}
+              placeholder='Add contact name'
+              onChange={e => onChangeHandler(e)}
+              className={styles.formInput}
+              readOnly={!isEditing}
               />
             </label>
-            <p>Added on {contactForm.date_created}</p>
-          </div>
-          <div className={styles.directContact}>
-            <label className={styles.formLabels}>
-              phone
-              <input
-                type='text'
-                name='phone'
-                value={contactForm.phone ?? ''}
-                placeholder='Add contact phone'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <label className={styles.formLabels}>
-              email
-              <input
-                type='text'
-                name='email'
-                value={contactForm.email ?? ''}
-                placeholder='Add contact email'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-          </div>
-          <div className={styles.social}>
-            <label className={styles.formLabels}>
-              linkedin
-              <input
-                type='text'
-                name='linkedin'
-                value={contactForm.linkedin ?? ''}
-                placeholder='Add contact linkedin'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <label className={styles.formLabels}>
-              twitter
-              <input
-                type='text'
-                name='twitter'
-                value={contactForm.twitter ?? ''}
-                placeholder='Add contact name'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <label className={styles.formLabels}>
-              instagram
-              <input
-                type='text'
-                name='instagram'
-                value={contactForm.instagram ?? ''}
-                placeholder='Add contact name'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <label className={styles.formLabels}>
-              other social
-              <input
-                type='text'
-                name='other_social'
-                value={contactForm.other_social ?? ''}
-                placeholder='Add contact name'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <label className={styles.formLabels}>
-              personal site
-              <input
-                type='text'
-                name='personal_site'
-                value={contactForm.personal_site ?? ''}
-                placeholder='Add contact name'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-          </div>
-          <div className={styles.connectedJob}>
-            <label className={styles.formLabels}>
-              related job
-              <input
-                type='text'
-                name='linked_job_opening'
-                value={contactForm.linked_job_opening ?? ''}
-                placeholder='Add contact name'
-                onChange={e => onChangeHandler(e)}
-                className={styles.formInput}
-                readOnly={!isEditing}
-              />
-            </label>
-            <Link />
-          </div>
+            </div> */}
           <div className={styles.manage}>
             <button
               className={isEditing ? styles.notEditable : styles.editable}

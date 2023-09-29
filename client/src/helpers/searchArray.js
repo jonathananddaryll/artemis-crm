@@ -27,6 +27,7 @@ export default function SearchArray(searchString, searchArray, searchType) {
     .join('');
 
   if (trimmed === '') {
+    const resetResults = searchArray.forEach((element, index) => index)
     return [searchArray];
   }
   function includesTLC(bigString, littleString) {
