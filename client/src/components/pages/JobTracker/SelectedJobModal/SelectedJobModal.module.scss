@@ -38,7 +38,12 @@
 
 .mainContainer {
   width: 100%;
-  overflow-y: scroll;
+
+  @include mixin.tabLandscape {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+  }
 }
 
 /* BUTTONS IN HEADER SECTION */
@@ -78,25 +83,36 @@
   }
 }
 
+.headerLogoContainer {
+  flex: 0 0 8rem;
+
+  @include mixin.phone {
+    flex: 0 0 7rem;
+  }
+}
+
 .headerLogo {
   width: 8rem;
-  background: rgb(230, 230, 236);
   height: 8rem;
+  background: rgb(230, 230, 236);
   border-radius: 1rem;
 
   @include mixin.phone {
-    width: 6rem;
-    height: 6rem;
+    width: 7rem;
+    height: 7rem;
   }
 }
 
 .headerInfo {
+  flex: 0 0 1;
   margin-left: 2rem;
   text-align: left;
 }
 
 .headerSub {
   display: flex;
+  flex-wrap: wrap;
+  // row-gap: 1rem;
 }
 
 .textJobTitle {
@@ -105,7 +121,7 @@
   margin: 0 0 0.5rem;
 
   @include mixin.phone {
-    font-size: 2.3rem;
+    font-size: 2.6rem;
     line-height: 1;
   }
 }
@@ -135,7 +151,9 @@
   margin: 0 2rem 0 0;
 
   @include mixin.phone {
+    // flex: 0 0 100%;
     font-size: 1.8rem;
+    // display: none;
   }
 }
 

@@ -3,21 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import {
   changeSelectedJob,
-  deleteJob,
-  updateJobInfo
+  deleteJob
 } from '../../../../reducers/BoardReducer';
 import {
   getAllTimelines,
   resetSelectedJobItems,
-  createNote,
   getAllNotes,
-  deleteNote,
-  updateNote,
   getAllTasks,
-  createTask,
-  updateTaskStatus,
-  deleteTask,
-  updateTask
+  getAllLinkedContactsWithJobId
 } from '../../../../reducers/SelectedJobReducer';
 
 import Button from '../../../layout/Button/Button';
@@ -32,27 +25,16 @@ import Timeline from './Timeline/Timeline';
 import styles from './SelectedJobModal.module.scss';
 
 export default function SelectedJobModal() {
+  const { tasks, notes, interviews, linkedContacts } = useSelector(state => ({
+    ...state.selectedJob
+  }));
+  const { selectedJob, selectedBoard } = useSelector(state => ({
+    ...state.board
+  }));
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const { session } = useSession();
   const dispatch = useDispatch();
-  const { selectedJob, selectedBoard } = useSelector(state => ({
-    ...state.board
-  }));
-
-  const {
-    timelines,
-    timelinesLoading,
-    notes,
-    notesLoading,
-    tasks,
-    completedTasks,
-    tasksLoading,
-    interviews,
-    completedInterviews
-  } = useSelector(state => ({
-    ...state.selectedJob
-  }));
 
   useEffect(() => {
     // dispatch(getAllTimelines(selectedJob.id));
@@ -63,12 +45,14 @@ export default function SelectedJobModal() {
     dispatch(getAllTimelines(selectedJob.id));
     dispatch(getAllNotes(selectedJob.id));
     dispatch(getAllTasks(selectedJob.id));
+    dispatch(getAllLinkedContactsWithJobId(selectedJob.id));
   };
 
+  // Navigation Items for the subNav inside Selected Job Modal
   const navItems = [
     { name: 'job info', icon: 'bi bi-info-circle' },
     { name: 'notes', icon: 'bi bi-journal', itemL: notes.length },
-    { name: 'contacts', icon: 'bi bi-people' },
+    { name: 'contacts', icon: 'bi bi-people', itemL: linkedContacts.length },
     { name: 'documents', icon: 'bi bi-file-earmark-text' },
     { name: 'tasks', icon: 'bi bi-list-task', itemL: tasks.length },
     {
@@ -125,7 +109,9 @@ export default function SelectedJobModal() {
             />
           </div>
           <div className={styles.header}>
-            <div className={styles.headerLogo}></div>
+            <div className={styles.headerLogoContainer}>
+              <div className={styles.headerLogo}></div>
+            </div>
             <div className={styles.headerInfo}>
               <h2 className={styles.textJobTitle}>{selectedJob.job_title}</h2>
               <div className={styles.headerSub}>
@@ -174,52 +160,31 @@ export default function SelectedJobModal() {
             <JobInfoTab
               selectedJob={selectedJob}
               selectedBoard_userId={selectedBoard.user_id}
-              updateJobInfo={updateJobInfo}
-              jobId={selectedJob.id}
             />
           )}
           {activeItem === 1 && (
             <NotesTab
-              createNote={createNote}
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
-              notes={notes}
-              notesLoading={notesLoading}
-              deleteNote={deleteNote}
-              updateNote={updateNote}
             />
           )}
           {activeItem === 2 && <ContactsTab />}
           {activeItem === 3 && <DocumentsTab />}
           {activeItem === 4 && (
             <TasksTab
-              tasks={tasks}
-              completedTasks={completedTasks}
-              tasksLoading={tasksLoading}
-              createTask={createTask}
               selectedBoard_userId={selectedBoard.user_id}
               jobId={selectedJob.id}
-              updateTaskStatus={updateTaskStatus}
-              deleteTask={deleteTask}
-              updateTask={updateTask}
             />
           )}
           {activeItem === 5 && (
             <InterviewsTab
-              interviews={interviews}
-              completedInterviews={completedInterviews}
-              createTask={createTask}
               jobId={selectedJob.id}
               selectedBoard_userId={selectedBoard.user_id}
             />
           )}
         </div>
         <div className={styles.timelineContainer}>
-          <Timeline
-            timelines={timelines}
-            timelinesLoading={timelinesLoading}
-            dateCreated={selectedJob.date_created}
-          />
+          <Timeline dateCreated={selectedJob.date_created} />
         </div>
         {confirmationToggle && (
           <DeletePopup

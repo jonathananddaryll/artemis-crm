@@ -44,7 +44,7 @@ export default function Dropdown(props) {
       >
         {header}
       </div>
-      {items.map((element) => {
+      {items.map(element => {
         return (
           <a
             tabIndex={0}

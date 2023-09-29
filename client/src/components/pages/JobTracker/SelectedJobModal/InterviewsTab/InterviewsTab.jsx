@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { createTask } from '../../../../../reducers/SelectedJobReducer';
 import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import { interviewCategories } from '../../../../../data/taskCategories';
@@ -10,13 +11,10 @@ import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceh
 import noInterviews from '../../../../../assets/nointerviews.svg';
 import styles from './InterviewsTab.module.scss';
 
-export default function InteviewTab({
-  interviews,
-  completedInterviews,
-  jobId,
-  createTask,
-  selectedBoard_userId
-}) {
+export default function InteviewTab({ jobId, selectedBoard_userId }) {
+  const { interviews, completedInterviews } = useSelector(state => ({
+    ...state.selectedJob
+  }));
   const [formToggle, setFormToggle] = useState(false);
   const [formData, setFormData] = useState({
     title: '',

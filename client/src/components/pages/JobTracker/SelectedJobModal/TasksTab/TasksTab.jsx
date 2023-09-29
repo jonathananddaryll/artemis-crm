@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import {
+  createTask,
+  updateTaskStatus,
+  deleteTask,
+  updateTask
+} from '../../../../../reducers/SelectedJobReducer';
+
 import timeSince from '../../../../../helpers/convertDate';
 import Button from '../../../../layout/Button/Button';
 import DeletePopup from '../../../../layout/DeletePopup/DeletePopup';
@@ -11,16 +18,10 @@ import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceh
 import noTasks from '../../../../../assets/notasks.svg';
 import styles from './TasksTab.module.scss';
 
-export default function TasksTab({
-  tasks,
-  completedTasks,
-  createTask,
-  selectedBoard_userId,
-  jobId,
-  updateTaskStatus,
-  deleteTask,
-  updateTask
-}) {
+export default function TasksTab({ selectedBoard_userId, jobId }) {
+  const { tasks, completedTasks } = useSelector(state => ({
+    ...state.selectedJob
+  }));
   const [formToggle, setFormToggle] = useState(false);
   const [confirmationToggle, setConfirmationToggle] = useState(false);
   const [selectedTask, setSelectedTask] = useState({
@@ -93,6 +94,7 @@ export default function TasksTab({
   const onSubmitHandler = async e => {
     e.preventDefault();
 
+    // Need to change this naming (every formData needs to be uniformed)
     const formD = {
       title: title,
       category: category,
@@ -111,13 +113,14 @@ export default function TasksTab({
     } else {
       //add dispatch here for update
       dispatch(updateTask(formD));
-      console.log('THIS IS AN UPDATE!!!!!!!!!!!!!!!!');
     }
 
     // hide the form after creating a new task
     setFormToggle(false);
 
-    // Resets formData
+    // Resets formData ----> maybe create a object that I can import to set the
+    // resetFormData or create the resetFormData on top so I can just reuse it,
+    // since I've reset formData twice(for successful create/update and for canceling the form)
     const resetFormData = {
       title: '',
       category: '',

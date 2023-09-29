@@ -3,9 +3,9 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import SearchArray from '../helpers/searchArray';
+import filterContacts from '../helpers/filterContacts';
 
 // State for contact organizer:
-
 // ASYNC thunks
 
 // Return values: All thunks that change the db get a return copy of the item
@@ -184,6 +184,18 @@ const contactSlice = createSlice({
       }
       state.searchResults = [...results];
     },
+
+    // SIMPLIFIED WAY just gotta change the way the parameters/arguments are passed. instead of using redux to save the search queries and the whole shabang, use local state (useState)
+    // getContactsSearch: (state, action) => {
+    //   const filteredContacts = filterContacts(
+    //     state.searchQuery.type,
+    //     state.contactsCache,
+    //     state.searchQuery.strValue
+    //   );
+
+    //   state.searchResults = filteredContacts;
+    // },
+
     // Filter out all the contacts that aren't is_priority === true
     getContactsPriority: (state, action) => {
       state.searchResults = state.contactsCache.filter(

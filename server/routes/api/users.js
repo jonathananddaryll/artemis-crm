@@ -11,11 +11,6 @@ router.post('/new', async (req, res) => {
   const client = new Client(config);
   client.connect();
   const clerk_id = req.body.data.id;
-  // console.log(req.body);
-  // console.log(req.body.data.user_id);
-
-  console.log('create user after creating clerk account is triggered');
-
   const query = format(
     'INSERT INTO users (user_id) VALUES(%L) RETURNING *',
     clerk_id

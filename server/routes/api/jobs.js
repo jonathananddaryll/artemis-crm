@@ -98,7 +98,6 @@ router.get('/board/:board_id', async (req, res) => {
     boardId
   );
 
-  // console.log(query);
   const client = new Client(config);
   client.connect();
 
@@ -149,7 +148,7 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board' });
     } else {
       const query = format(
-        `UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)`,
+        'UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)',
         newStatus,
         jobId,
         boardId,
@@ -211,7 +210,7 @@ router.patch(
         .json({ msg: 'Error: The user does not own the board' });
     } else {
       const query = format(
-        `UPDATE job SET company = %L, job_title = %L, location = %L, rate_of_pay = %L, job_url = %L, description = %L  WHERE id = %s RETURNING *;`,
+        'UPDATE job SET company = %L, job_title = %L, location = %L, rate_of_pay = %L, job_url = %L, description = %L  WHERE id = %s RETURNING *',
         company,
         job_title,
         location,
@@ -259,7 +258,7 @@ router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
       .json({ msg: 'Error: The user does not own the board and the job' });
   } else {
     const query = format(
-      `DELETE FROM job WHERE id = %s and board_id = %s RETURNING *`,
+      'DELETE FROM job WHERE id = %s and board_id = %s RETURNING *',
       id,
       selectedBoard_id
     );
