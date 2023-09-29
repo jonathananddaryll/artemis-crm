@@ -39,52 +39,40 @@ export default function ContactCard(props) {
       <div className={styles.contactFrame}>
         <section className={styles.cardHero} onClick={() => openCard()}>
           <p className={styles.contactName}>{name}</p>
-          {contactInfo?.current_job_title !== null || '' ? (
-            <p className={styles.contactTitle}>{contactInfo?.current_job_title}</p>
-          ) : (
-            ''
+          {contactInfo?.current_job_title && (
+            <p className={styles.contactTitle}>{contactInfo.current_job_title}</p>
           )}
-          {contactInfo?.city !== null || '' ? (
-            <p className={styles.contactLocation}>{contactInfo?.city}</p>
-          ) : (
-            ''
+          {contactInfo?.city && (
+            <p className={styles.contactLocation}>{contactInfo.city}</p>
           )}
         </section>
         <section className={styles.cardDetails} onClick={() => openCard()}>
           <div className={styles.contactInfo}>
             <div className={styles.infoText}>
-            {contactInfo?.phone !== null || '' ? (
-              <a className={styles.contactPhone} href={`tel:${contactInfo?.phone}`}>{contactInfo?.phone}</a>
-            ) : (
-              ''
+            {contactInfo?.phone && (
+              <a className={styles.contactPhone} href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
             )}
-            {contactInfo?.email !== null || '' ? (
-              <a className={styles.contactEmail} href={`mailto:${contactInfo?.email}`}>{contactInfo?.email.length > 40 ? contactInfo?.email.slice(0, 40) + "..." : contactInfo?.email }</a>
-            ) : (
-              ''
+            {contactInfo?.email && (
+              <a className={styles.contactEmail} href={`mailto:${contactInfo.email}`}>{contactInfo.email.length > 40 ? contactInfo.email.slice(0, 40) + "..." : contactInfo.email }</a>
             )}
             </div>
-            {contactInfo?.linkedin !== null || '' ? (
+            {contactInfo?.linkedin && (
               <button
                 type='button'
-                onClick={() => window.open(contactInfo?.linkedin)}
+                onClick={() => window.open(contactInfo.linkedin)}
                 className={styles.contactLinkedin}
               >
                 <i className='fa-brands fa-linkedin'></i>
               </button>
-            ) : (
-              ''
             )}
-            {contactInfo?.other_social !== null || '' ? (
+            {contactInfo?.other_social && (
               <button
                 type='button'
-                onClick={() => window.open(contactInfo?.other_social)}
+                onClick={() => window.open(contactInfo.other_social)}
                 className={styles.contactSocial}
               >
                 <i className='fa-solid fa-link'></i>
               </button>
-            ) : (
-              ''
             )}
           </div>
         </section>

@@ -316,6 +316,8 @@ export default function ContactForm({ newContactStaging }) {
               />
           </label>
         </div>
+        {/* 
+        // connect your contact to a job from inside contacts organizer
         <div className={styles.connectedJob}>
           <label className={styles.formLabels}>
             related job
@@ -329,8 +331,7 @@ export default function ContactForm({ newContactStaging }) {
               readOnly={!isEditing}
               />
           </label>
-          <Link />
-        </div>
+        </div> */}
         <div className={styles.manage}>
           <button
             className={isEditing ? styles.notEditable : styles.editable}
