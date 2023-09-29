@@ -11,8 +11,10 @@ router.post('/new', async (req, res) => {
   const client = new Client(config);
   client.connect();
   const clerk_id = req.body.data.id;
+
+  console.log(req.body);
   const query = format(
-    'INSERT INTO users (user_id) VALUES(%L) RETURNING *',
+    'INSERT INTO users (user_id) VALUES(%L) ON CONFLICT (user_id) DO NOTHING RETURNING *',
     clerk_id
   );
 
