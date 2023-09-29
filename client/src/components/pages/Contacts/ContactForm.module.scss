@@ -18,6 +18,10 @@
   border-radius: 10px;
   z-index: 3;
   padding: 5rem;
+
+  & input:read-only {
+    border: solid red 1px;
+  }
 }
 .formContainer > * {
 }
@@ -47,9 +51,6 @@
   border: solid green 1px;
 }
 
-input:read-only {
-  border: solid red 1px;
-}
 input:required {
   font-weight: 500;
 }

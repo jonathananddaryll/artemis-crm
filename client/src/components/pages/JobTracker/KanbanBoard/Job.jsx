@@ -36,11 +36,11 @@ export default function Job({ job, index }) {
             <h5 className={styles.textJobTitle}>{job.job_title}</h5>
             <div className={styles.jobInfoFlex}>
               <p className={styles.textCompany}>
-                <i className='bi bi-building-fill'></i>
+                <i className='bi bi-building' />
                 {job.company}
               </p>
               <p className={styles.textCompany}>
-                <i className='bi bi-geo-alt-fill'></i>
+                <i className='bi bi-geo-alt' />
                 {job.location}
               </p>
             </div>

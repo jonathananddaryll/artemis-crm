@@ -183,10 +183,11 @@ export default function NewJobForm({ toggleJobForm }) {
                     required
                   />
                 </div>
-                <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
+                {/* IMPLEMENT THIS LATER FOR V2 */}
+                {/* <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
                   <label>Link Contact</label>
                   <input type='text' name='contact' readOnly />
-                </div>
+                </div> */}
               </div>
               <div className={styles.buttonsContainer}>
                 <Button

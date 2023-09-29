@@ -36,6 +36,10 @@
   max-width: 100%;
   // min-height: 60%;
   min-height: 12rem;
+
+  @include mixin.phone {
+    min-height: 11rem;
+  }
 }
 
 .cardDetails {
@@ -121,6 +125,7 @@
     background: transparent;
     border: none;
     border-bottom: transparent solid 1px;
+    padding: 0;
 
     &:hover {
       border-bottom: black solid 1px;
