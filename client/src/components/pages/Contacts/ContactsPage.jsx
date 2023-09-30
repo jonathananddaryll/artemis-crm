@@ -12,20 +12,14 @@ import {
   resetFilter
   // setNewContactStaging
 } from '../../../reducers/ContactReducer';
+
 import { useAuth } from '@clerk/clerk-react';
+import { toast } from 'react-toastify';
 
 import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
 import styles from './ContactsPage.module.scss';
-
-// TODO: update .map(element => {
-//   return <></> etc etc
-// })
-// to .map(contact)
-
-// TODO: move searchQuery out of redux into contactsPage
-// TODO: fix search type company
 
 export default function ContactsPage() {
   // A Contacts organizer. Main features are:
@@ -50,7 +44,6 @@ export default function ContactsPage() {
   // name, company, city - Which are you searching for?
   const [searchType, setSearchType] = useState('name');
   const [searchParams, setSearchParams] = useState({
-    type: 'name',
     strValue: ''
   });
 
@@ -60,38 +53,23 @@ export default function ContactsPage() {
   function updateSearchString(e) {
     setSearchParams(oldParams => {
       return {
-        ...oldParams,
         strValue: e.target.value
       };
     });
   }
 
-  // Client side input validation/sanitizer
-  const validateSearchParams = searchObj => {
-    const validated = {
-      type: searchObj.type,
-      strValue: ''
-    };
-    if (searchObj.strValue === '') {
-      console.log('you didnt type anything valid');
-      return false;
-    } else {
-      const stringTrimmed = searchObj.strValue.trim();
-      validated.strValue = stringTrimmed;
-      return validated;
-    }
-  };
-
-  // // Initiate the contacts search for the string value in the search input box
+  // Initiate the contacts search for the string value in the search input box
   // function searchSubmit(e) {
-  //   const validated = validateSearchParams(searchParams);
-  //   if (!validated) {
-  //     console.log('please enter valid text to search with');
-  //   } else {
-  //     dispatch(updateSearchQuery(validated));
-  //     dispatch(getContactsSearch());
-  //   }
+  //   const validated = {
+  //     type: searchType,
+  //     strValue: searchParams.strValue
+  //   };
+  //   const stringTrimmed = validated.strValue.trim();
+  //   validated.strValue = stringTrimmed;
+  //   console.log(validated)
+  //   dispatch(getContactsSearch(validated));
   // }
+  // // Initiate the contacts search for the string value in the search input box
 
   // Filter for V1
   const searchSubmit = e => {
@@ -171,35 +149,32 @@ export default function ContactsPage() {
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
         <nav className={styles.menuContainer}>
-          <section className={styles.searchBar}>
-            <form onSubmit={e => searchSubmit(e)}>
-              <input
-                onChange={e => updateSearchString(e)}
-                type='text'
-                inputMode='search'
-                name='searchBar'
-                className={styles.contactSearchInput}
-                value={searchParams.strValue}
-                placeholder={searchType}
-              />
-              <button
-                type='submit'
-                className={styles.searchButton}
-                // onClick={}
-              >
-                <i
-                  className={
-                    'fa-solid fa-magnifying-glass ' + styles.searchIcon
-                  }
-                ></i>
-              </button>
-
-              <Dropdown
-                items={['name', 'company', 'city', 'current_job_title']}
-                header={'options'}
-                setSearchType={setSearchType}
-              />
-            </form>
+        <section className={styles.searchBar}>
+          <form onSubmit={e => searchSubmit(e)}>
+          <input
+            onChange={e => updateSearchString(e)}
+            type='search'
+            name='searchBar'
+            className={styles.contactSearchInput}
+            value={searchParams.strValue}
+            placeholder={searchType}
+            autoFocus
+          />
+          <button 
+            type='submit'
+            className={styles.searchButton} 
+            // onClick={searchSubmit}
+            >
+            <i
+              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
+            ></i>
+          </button>
+          <Dropdown
+            items={['name', 'company', 'city', 'current_job_title']}
+            header={'options'}
+            setSearchType={setSearchType}
+          />
+          </form>
           </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>

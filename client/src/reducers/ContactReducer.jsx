@@ -77,14 +77,18 @@ export const updateContact = createAsyncThunk(
           authorization: `Bearer ${token}`
         }
       };
-      const body = {
-        updateWhat: updateWhat,
-        updateTo: updateTo
-      };
-      const res = await axios.patch(`/api/contacts/${id}`, body, config);
-      // Response object should include the row that was successfully updated, so
-      // to confirm contactsCache is synced.
-      return res.data;
+      if(!updateWhat.length || !updateTo.length){
+        return []
+      }else{
+        const body = {}
+        for(let eachField = 0; eachField < updateWhat.length; eachField++){
+          if(updateTo[eachField] !== "" || null){
+            body[updateWhat[eachField]] = updateTo[eachField]
+          }
+        }
+        const res = await axios.patch(`/api/contacts/${id}`, body, config);
+        return res.data;
+      }
     } catch (err) {
       const errors = err.response.data.errors;
       return thunkAPI.rejectWithValue(errors);
@@ -103,7 +107,8 @@ export const createContact = createAsyncThunk(
       }
     };
     try {
-      const res = await axios.post('/api/contacts/', createRequest, config);
+      const { token, ...body } = createRequest;
+      const res = await axios.post('/api/contacts/', body, config);
       // returns a copy of the new record (with timestamp! important!)
       return res.data;
     } catch (err) {
@@ -267,14 +272,14 @@ const contactSlice = createSlice({
       // Find the contacts in the contactsCache and searchResults, then
       // update the values if they exist with the return value from
       // async thunk
-      state.contactInFocus = action.payload[0];
+      state.contactInFocus = action.payload;
       const contactsCacheIndex = SearchArray(
-        `${action.payload[0].id}`,
+        `${action.payload.id}`,
         state.contactsCache,
         'id'
       );
       const searchResultsIndex = SearchArray(
-        `${action.payload[0].id}`,
+        `${action.payload.id}`,
         state.searchResults,
         'id'
       );
@@ -282,10 +287,10 @@ const contactSlice = createSlice({
         // weird error?
         toast('contact not found on client side copy');
       } else if (searchResultsIndex === -1) {
-        state.contactsCache[contactsCacheIndex] = action.payload[0];
+        state.contactsCache[contactsCacheIndex] = action.payload;
       } else {
-        state.contactsCache[contactsCacheIndex] = action.payload[0];
-        state.searchResults[searchResultsIndex] = action.payload[0];
+        state.contactsCache[contactsCacheIndex] = action.payload;
+        state.searchResults[searchResultsIndex] = action.payload;
       }
       state.contactSelected = false;
       toast.dismiss('updateContact');
@@ -307,8 +312,9 @@ const contactSlice = createSlice({
       // Reset the variable that says the user is in process of creating a contact
       // add the return value from async thunk to both arrays contactsCache/searchResults
       state.newContactStaging = false;
-      state.contactsCache.push(action.payload[0]);
-      state.searchResults.push(action.payload[0]);
+      state.contactsCache.push(action.payload);
+      state.searchResults.push(action.payload);
+      state.contactInFocus = action.payload
       state.contactSelected = false;
       toast.dismiss('createContact');
     });

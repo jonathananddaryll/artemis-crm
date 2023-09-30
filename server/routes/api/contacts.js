@@ -7,8 +7,8 @@ const format = require('pg-format');
 // middleware for request server validation and string input sanitization
 const {
   myRequestHeaders,
-  contactInputValidator,
-  contactUpdateValidator,
+  newContactValidator,
+  updateContactValidator,
   validateRequest
 } = require('../../middlewares/validators');
 
@@ -17,7 +17,7 @@ const { decodeToken } = require('../../middlewares/decodeToken');
 // @ROUTE  GET api/contacts/
 // @DESC   READ api for individual users contacts table
 // @ACCESS Private
-router.get('/', myRequestHeaders, async (req, res) => {
+router.get('/', myRequestHeaders, validateRequest, async (req, res) => {
   // Pass in your headers an auth token, along with the user_id
   // Response object in res.data an array of objects [{}, {}, {}]
 
@@ -34,9 +34,11 @@ router.get('/', myRequestHeaders, async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         res.status(500).json(err);
+        client.end();
+      }else{
+        res.status(200).json(response.rows);
+        client.end();
       }
-      res.status(200).json(response.rows);
-      client.end();
     });
   } catch (err) {
     res.status(500).json(err);
@@ -46,22 +48,21 @@ router.get('/', myRequestHeaders, async (req, res) => {
 // @ROUTE  POST /api/contacts/
 // @DESC   CREATE contact api for individual users
 // @ACCESS Private
-router.post('/', myRequestHeaders, async (req, res) => {
-  // contactInputValidator, validateRequest, 
-
+router.post('/', newContactValidator, validateRequest, async (req, res) => {
+  // newContactValidator, validateRequest, 
   // req.body needs names and values of the postgres columns to fill in the new record
 
   // using the user_id that was authenticated via token
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
 
-  const { names, values } = req.body;
+  const filledOutFields = req.body;
   const query = format(
-    `INSERT INTO %I(user_id, ${names.join(
+    `INSERT INTO %I(user_id, ${Object.keys(filledOutFields).join(
       ', '
     )}) VALUES('${user_id}', %L) RETURNING *;`,
     'contact',
-    values
+    Object.values(filledOutFields)
   );
   try {
     const client = new Client(config);
@@ -69,9 +70,11 @@ router.post('/', myRequestHeaders, async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         res.status(500).json(err);
+        client.end();
+      }else{
+        res.json(response.rows[0]);
+        client.end();
       }
-      res.json(response. rows);
-      client.end();
     });
   } catch (err) {
     res.status(500).json(err);
@@ -81,8 +84,7 @@ router.post('/', myRequestHeaders, async (req, res) => {
 // @ROUTE  PATCH /api/contacts/:id
 // @DESC   UPDATE api for individual users contacts
 // @ACCESS Private
-router.patch('/:id', myRequestHeaders, async (req, res) => {
-  // contactUpdateValidator,  validateRequest,
+router.patch('/:id', updateContactValidator,  validateRequest, async (req, res) => {
   try {
     // use the token authenticated user_id
     const decodedToken = decodeToken(req.headers.authorization);
@@ -91,24 +93,27 @@ router.patch('/:id', myRequestHeaders, async (req, res) => {
     // req.params needs the id of the contact
     // req.body the columns to update, and the values to replace with
     const id = req.params.id;
-    const { updateWhat, updateTo } = req.body;
+    const updates = req.body;
     // merge two arrays strings, together throwing in the formatting for SQL updates for updating
     // a type STRING column to a new value.
-    const setUpdate = updateWhat.map((element, index, array) => {
+    const setUpdate = Object.keys(updates).map((element, index, array) => {
       // EXAMPLE:  <row_name> = '<new_row_value>'
-      return `${element} = '${updateTo[index]}'`;
+      return `${element} = '${Object.values(updates)[index]}'`;
     });
     const query = `UPDATE contact SET ${setUpdate.join(
       ', '
     )} WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
+    console.log(query)
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {
       if (err) {
         res.status(500).json(err);
+        client.end();
+      }else{
+        res.status(200).json(response.rows[0]);
+        client.end();
       }
-      res.status(200).json(response.rows);
-      client.end();
     });
   } catch (err) {
     res.status(500).json(err);
@@ -118,7 +123,7 @@ router.patch('/:id', myRequestHeaders, async (req, res) => {
 // @ROUTE  DELETE /api/contacts/:id
 // @DESC   DELETE api for individual users contacts
 // @ACCESS Private
-router.delete('/:id', myRequestHeaders, async (req, res) => {
+router.delete('/:id', myRequestHeaders, validateRequest, async (req, res) => {
   // use the token authenticated user_id
   const decodedToken = decodeToken(req.headers.authorization);
   const user_id = decodedToken.userId;
@@ -132,9 +137,11 @@ router.delete('/:id', myRequestHeaders, async (req, res) => {
     client.query(query, (err, response) => {
       if (err) {
         res.status(500).json(err);
+        client.end();
+      }else{
+        res.status(200).json(response.rows[0]);
+        client.end();
       }
-      res.status(200).json(response.rows);
-      client.end();
     });
   } catch (err) {
     res.status(500).json(err);

@@ -7,7 +7,7 @@
   height: 100%;
   font-size: 1.4rem;
 }
-.formContainer {
+.formContainer {  
   width: 60rem;
   min-height: 40rem;
   background-color: rgb(253, 249, 249);
@@ -24,18 +24,30 @@
   }
 }
 .formContainer > * {
+  border-bottom: solid blue 1px;
+}
+.formContainer > *:last-child{
+  border-bottom: none;
 }
 .title {
   border-bottom: solid black 1px;
+  display: flex;
+  flex-direction: row;
 }
 .about {
   border-bottom: solid black 1px;
+  display: flex;
+  flex-direction: column;
 }
 .directContact {
   border-bottom: solid black 1px;
+  display: flex;
+  flex-direction: column;
 }
 .social {
   border-bottom: solid black 1px;
+  display: flex;
+  flex-direction: column;
 }
 .connectedJob {
   border-bottom: solid black 1px;

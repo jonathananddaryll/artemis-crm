@@ -16,12 +16,10 @@
     flex: 0 0 49%;
   }
 }
-
-.ContactCard:hover {
-  border-bottom: solid rgba(0, 0, 0, 1) 1px;
-  border-top: solid rgba(0, 0, 0, 1) 1px;
-}
-
+// .ContactCard:hover {
+//   border-bottom: solid rgba(0, 0, 0, 1) 1px;
+//   border-top: solid rgba(0, 0, 0, 1) 1px;
+// }
 .ContactCard:active {
 }
 
@@ -126,7 +124,7 @@
     border: none;
     border-bottom: transparent solid 1px;
     padding: 0;
-
+    
     &:hover {
       border-bottom: black solid 1px;
     }
