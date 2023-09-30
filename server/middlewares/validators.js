@@ -23,11 +23,11 @@ const jobInputValidator = [
     .isEmpty()
     .trim()
     .isLength({ min: 5 }),
-  check('location', 'Please enter a Location with atleast 5 characters')
+  check('location', 'Please enter a Location with atleast 2 characters')
     .not()
     .isEmpty()
     .trim()
-    .isLength({ min: 5 })
+    .isLength({ min: 2 })
 ];
 
 const boardInputValidator = [
