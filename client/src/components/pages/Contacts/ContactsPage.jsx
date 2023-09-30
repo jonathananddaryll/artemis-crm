@@ -149,32 +149,34 @@ export default function ContactsPage() {
     <div className={styles.pageWrapper}>
       <div className={styles.contactsContainer}>
         <nav className={styles.menuContainer}>
-        <section className={styles.searchBar}>
-          <form onSubmit={e => searchSubmit(e)}>
-          <input
-            onChange={e => updateSearchString(e)}
-            type='search'
-            name='searchBar'
-            className={styles.contactSearchInput}
-            value={searchParams.strValue}
-            placeholder={searchType}
-            autoFocus
-          />
-          <button 
-            type='submit'
-            className={styles.searchButton} 
-            // onClick={searchSubmit}
-            >
-            <i
-              className={'fa-solid fa-magnifying-glass ' + styles.searchIcon}
-            ></i>
-          </button>
-          <Dropdown
-            items={['name', 'company', 'city', 'current_job_title']}
-            header={'options'}
-            setSearchType={setSearchType}
-          />
-          </form>
+          <section className={styles.searchBar}>
+            <form onSubmit={e => searchSubmit(e)}>
+              <input
+                onChange={e => updateSearchString(e)}
+                type='search'
+                name='searchBar'
+                className={styles.contactSearchInput}
+                value={searchParams.strValue}
+                placeholder={searchType}
+                autoFocus
+              />
+              <button
+                type='submit'
+                className={styles.searchButton}
+                // onClick={searchSubmit}
+              >
+                <i
+                  className={
+                    'fa-solid fa-magnifying-glass ' + styles.searchIcon
+                  }
+                ></i>
+              </button>
+              <Dropdown
+                items={['name', 'company', 'city', 'current_job_title']}
+                header={'options'}
+                setSearchType={setSearchType}
+              />
+            </form>
           </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>
@@ -215,14 +217,16 @@ export default function ContactsPage() {
             </li>
           </ul>
         </nav>
-        <section className={styles.searchResultsContainer}>
+        <section className={styles.flexContainer}>
           {!!searchResults && (
-            <div className={styles.flexContainer}>
+            <>
+              {/* <div className={styles.flexContainer}> */}
               {searchResults.map(contact => (
                 <ContactCard contactInfo={contact} key={contact.id} />
               ))}
               <div className={styles.flexFiller}></div>
-            </div>
+              {/* </div> */}
+            </>
           )}
         </section>
         {!!contactSelected && (
