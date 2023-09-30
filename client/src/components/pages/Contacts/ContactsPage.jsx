@@ -21,14 +21,6 @@ import ContactCard from './ContactCard';
 import ContactForm from './ContactForm';
 import styles from './ContactsPage.module.scss';
 
-// TODO: update .map(element => {
-//   return <></> etc etc
-// })
-// to .map(contact)
-
-// TODO: move searchQuery out of redux into contactsPage
-// TODO: fix search type company
-
 export default function ContactsPage() {
   // A Contacts organizer. Main features are:
 
@@ -67,26 +59,17 @@ export default function ContactsPage() {
   }
 
   // Initiate the contacts search for the string value in the search input box
-  function searchSubmit(e) {
-    const validated = {
-      type: searchType,
-      strValue: searchParams.strValue
-    };
-    const stringTrimmed = validated.strValue.trim();
-    validated.strValue = stringTrimmed;
-    console.log(validated)
-    dispatch(getContactsSearch(validated));
-  }
-  // // Initiate the contacts search for the string value in the search input box
   // function searchSubmit(e) {
-  //   const validated = validateSearchParams(searchParams);
-  //   if (!validated) {
-  //     console.log('please enter valid text to search with');
-  //   } else {
-  //     dispatch(updateSearchQuery(validated));
-  //     dispatch(getContactsSearch());
-  //   }
+  //   const validated = {
+  //     type: searchType,
+  //     strValue: searchParams.strValue
+  //   };
+  //   const stringTrimmed = validated.strValue.trim();
+  //   validated.strValue = stringTrimmed;
+  //   console.log(validated)
+  //   dispatch(getContactsSearch(validated));
   // }
+  // // Initiate the contacts search for the string value in the search input box
 
   // Filter for V1
   const searchSubmit = e => {
@@ -187,40 +170,11 @@ export default function ContactsPage() {
             ></i>
           </button>
           <Dropdown
-            items={['name', 'company', 'city']}
+            items={['name', 'company', 'city', 'current_job_title']}
             header={'options'}
             setSearchType={setSearchType}
           />
-        </section>
-          <section className={styles.searchBar}>
-            <form onSubmit={e => searchSubmit(e)}>
-              <input
-                onChange={e => updateSearchString(e)}
-                type='text'
-                inputMode='search'
-                name='searchBar'
-                className={styles.contactSearchInput}
-                value={searchParams.strValue}
-                placeholder={searchType}
-              />
-              <button
-                type='submit'
-                className={styles.searchButton}
-                // onClick={}
-              >
-                <i
-                  className={
-                    'fa-solid fa-magnifying-glass ' + styles.searchIcon
-                  }
-                ></i>
-              </button>
-
-              <Dropdown
-                items={['name', 'company', 'city', 'current_job_title']}
-                header={'options'}
-                setSearchType={setSearchType}
-              />
-            </form>
+          </form>
           </section>
           <ul className={styles.menu}>
             <li className={styles.menuLinks}>

@@ -122,9 +122,9 @@ export default function ContactCard(props) {
                 </button>
               )}
             </div>
-          </div>
+
         </section>
-      </div>
+        </div>
     </section>
   );
 }

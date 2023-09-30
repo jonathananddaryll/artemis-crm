@@ -119,7 +119,8 @@
     background: transparent;
     border: none;
     border-bottom: transparent solid 1px;
-
+    padding: 0;
+    
     &:hover {
       border-bottom: black solid 1px;
     }
