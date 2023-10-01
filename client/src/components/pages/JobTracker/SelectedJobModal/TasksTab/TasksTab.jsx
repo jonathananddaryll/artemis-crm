@@ -186,17 +186,18 @@ export default function TasksTab({ selectedBoard_userId, jobId }) {
         <div className={styles.newTaskForm}>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
-              <label>Title</label>
+              <label htmlFor='title'>Title</label>
               <input
                 type='text'
                 name='title'
+                id='title'
                 placeholder={category !== '' ? category : 'Enter Title'}
                 value={title}
                 onChange={e => onChangeHandler(e)}
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Category</label>
+              <label htmlFor='category'>Category</label>
               <div className={styles.categoriesInput}>
                 {taskCategories.map((task, idx) => (
                   <p
@@ -210,7 +211,7 @@ export default function TasksTab({ selectedBoard_userId, jobId }) {
               </div>
             </div>
             <div className={styles.formGroup}>
-              <label>
+              <label htmlFor='categorytype'>
                 {category.includes('e Interview') || category.includes('Screen')
                   ? 'Interview Date'
                   : 'Finish Task By'}
@@ -226,10 +227,11 @@ export default function TasksTab({ selectedBoard_userId, jobId }) {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Note</label>
+              <label htmlFor='note'>Note</label>
 
               <textarea
                 name='note'
+                id='note'
                 placeholder='Enter Note'
                 value={note}
                 onChange={e => onChangeHandler(e)}
@@ -248,7 +250,7 @@ export default function TasksTab({ selectedBoard_userId, jobId }) {
                     onClick={() => setFormData({ ...formData, is_done: true })}
                   ></i>
                 )}
-                <label>Mark as completed</label>
+                <label htmlFor='current_status'>Mark as completed</label>
               </div>
             </div>
             <div className={styles.formButtonsContainer}>

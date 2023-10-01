@@ -16,7 +16,7 @@
 }
 
 .modalContainer {
-  height: 85dvh;
+  height: 85vh;
   max-width: 110rem;
   width: 90%;
   background-color: #ffffff;
@@ -37,11 +37,15 @@
 
   @include mixin.phone {
     //fix this later
+    top: 43%;
+
+    height: 80dvh;
   }
 }
 
 .mainContainer {
   width: 100%;
+  overflow-y: auto;
 
   @include mixin.tabLandscape {
     width: 100%;
@@ -55,6 +59,7 @@
   /* background: green; */
   display: flex;
   justify-content: end;
+  -webkit-justify-content: flex-end;
   padding: 0 1.5rem;
   align-items: center;
 

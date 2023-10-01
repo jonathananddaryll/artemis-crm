@@ -27,12 +27,12 @@
   position: relative;
 
   @include mixin.tabLandscape {
-    flex: 0 0 23.8%;
-  }
-
-  @include mixin.tabPortrait {
     flex: 0 0 32%;
   }
+
+  // @include mixin.tabPortrait {
+  //   flex: 0 0 32%;
+  // }
 
   @include mixin.phone {
     flex: 0 0 48%;

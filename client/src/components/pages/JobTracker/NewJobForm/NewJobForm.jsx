@@ -123,12 +123,13 @@ export default function NewJobForm({ toggleJobForm }) {
           <div className={styles.formContainer}>
             <form onSubmit={e => onSubmitHandler(e)}>
               <div className={styles.formGroup}>
-                <label>
+                <label htmlFor='company'>
                   Company<span> *</span>
                 </label>
                 <input
                   type='text'
                   name='company'
+                  id='company'
                   value={company}
                   placeholder='Add company name'
                   onChange={e => onChangeHandler(e)}
@@ -136,12 +137,13 @@ export default function NewJobForm({ toggleJobForm }) {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>
+                <label htmlFor='job_title'>
                   Job Title<span> *</span>
                 </label>
                 <input
                   type='text'
                   name='job_title'
+                  id='job_title'
                   value={job_title}
                   placeholder='Add a new job name'
                   onChange={e => onChangeHandler(e)}
@@ -149,12 +151,13 @@ export default function NewJobForm({ toggleJobForm }) {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>
+                <label htmlFor='location'>
                   Location<span> *</span>
                 </label>
                 <input
                   type='text'
                   name='location'
+                  id='location'
                   value={location}
                   placeholder='Add Location'
                   onChange={e => onChangeHandler(e)}
@@ -162,10 +165,11 @@ export default function NewJobForm({ toggleJobForm }) {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>Job URL</label>
+                <label htmlFor='job_url'>Job URL</label>
                 <input
                   type='text'
                   name='job_url'
+                  id='job_url'
                   value={job_url}
                   placeholder='Add job url'
                   onChange={e => onChangeHandler(e)}
@@ -174,10 +178,11 @@ export default function NewJobForm({ toggleJobForm }) {
 
               <div className={styles.formFlex}>
                 <div className={`${styles.formGroup} ${styles.formGroupFlex}`}>
-                  <label>Status</label>
+                  <label htmlFor='status'>Status</label>
                   <input
                     type='text'
                     name='status'
+                    id='status'
                     value={status}
                     readOnly
                     required

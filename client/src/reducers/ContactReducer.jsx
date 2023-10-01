@@ -77,13 +77,13 @@ export const updateContact = createAsyncThunk(
           authorization: `Bearer ${token}`
         }
       };
-      if(!updateWhat.length || !updateTo.length){
-        return []
-      }else{
-        const body = {}
-        for(let eachField = 0; eachField < updateWhat.length; eachField++){
-          if(updateTo[eachField] !== "" || null){
-            body[updateWhat[eachField]] = updateTo[eachField]
+      if (!updateWhat.length || !updateTo.length) {
+        return [];
+      } else {
+        const body = {};
+        for (let eachField = 0; eachField < updateWhat.length; eachField++) {
+          if (updateTo[eachField] !== '' || null) {
+            body[updateWhat[eachField]] = updateTo[eachField];
           }
         }
         const res = await axios.patch(`/api/contacts/${id}`, body, config);
@@ -219,7 +219,7 @@ const contactSlice = createSlice({
       toast.dismiss('getUserContactsTable');
     });
     builder.addCase(getUserContactsTable.pending, (state, action) => {
-      toast.loading('loading contacts...', {
+      toast.loading('Loading Contacts...', {
         toastId: 'getUserContactsTable'
       });
     });
@@ -245,7 +245,7 @@ const contactSlice = createSlice({
       );
       state.contactSelected = false;
       toast.update('deleteContact', {
-        render: 'delete successful',
+        render: 'Successfully Deleted a Contact',
         type: toast.TYPE.SUCCESS,
         isLoading: false,
         autoClose: 2000
@@ -262,9 +262,10 @@ const contactSlice = createSlice({
       // Delete failed, leave the state as is, but maybe log this somewhere
       // for us to notice.
       toast.update('deleteContact', {
-        render: 'there was a problem deleting this contact',
+        render: 'There was a problem deleting this contact',
         type: toast.TYPE.ERROR,
-        isLoading: false
+        isLoading: false,
+        autoClose: 4000
       });
       action.payload.forEach(error => toast.error(error));
     });
@@ -297,13 +298,13 @@ const contactSlice = createSlice({
     });
     builder.addCase(updateContact.pending, (state, action) => {
       // While updating, make sure components render with updated info.
-      toast.loading('updating contact...', {
+      toast.loading('Updating Contact...', {
         toastId: 'updateContact'
       });
     });
     builder.addCase(updateContact.rejected, (state, action) => {
       toast.update('updateContact', {
-        render: 'update unsuccessful, please try again',
+        render: 'Update unsuccessful, please try again',
         isLoading: false
       });
       action.payload.forEach(error => toast.error(error));
@@ -314,19 +315,20 @@ const contactSlice = createSlice({
       state.newContactStaging = false;
       state.contactsCache.push(action.payload);
       state.searchResults.push(action.payload);
-      state.contactInFocus = action.payload
+      state.contactInFocus = action.payload;
       state.contactSelected = false;
       toast.dismiss('createContact');
     });
     builder.addCase(createContact.pending, (state, action) => {
-      toast.loading('adding to contacts...', {
+      toast.loading('Creating New Contact...', {
         toastId: 'createContact'
       });
     });
     builder.addCase(createContact.rejected, (state, action) => {
       toast.update('createContact', {
-        render: 'there was a problem adding to contacts, please try again',
-        isLoading: false
+        render: 'There was a problem adding to contacts, please try again',
+        isLoading: false,
+        autoClose: 4000
       });
       action.payload.forEach(error => toast.error(error));
     });

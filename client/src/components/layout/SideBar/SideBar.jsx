@@ -96,6 +96,7 @@ export default function SideBar() {
             <ul className={styles.navMenu}>
               {menuItems.map(({ index, text, icon, link }) => (
                 <li
+                  key={index}
                   className={`${styles.menuItem} ${styles.menuItemDesktop} ${
                     activeItem === index && styles.activeDesktop
                   } ${activeItem === index && styles.active}`}

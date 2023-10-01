@@ -1,12 +1,19 @@
+@use '../../../../../../styles/mixins.scss' as mixin;
+
 .availableContactsContainer {
   margin-top: 2rem;
 }
+
 .contactsFlex {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 1rem;
   row-gap: 5rem;
+
+  @include mixin.phone {
+    row-gap: 7rem;
+  }
 }
 
 .buttonContainer {
