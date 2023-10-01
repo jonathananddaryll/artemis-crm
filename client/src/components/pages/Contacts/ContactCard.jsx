@@ -30,17 +30,17 @@ export default function ContactCard(props) {
   }
 
   return (
-    <section className={styles.ContactCard} >
-      <h2 className={styles.contactInitialsLink}>
-              <div className={styles.contactInitialPointer}>
-              {name[0].toUpperCase() + name.split(' ')[1][0].toUpperCase()}
-              </div>
-        </h2>
+    <section className={styles.contactCard}>
+      <h6 className={styles.contactInitialsLink}>
+        {name[0].toUpperCase() + name.split(' ')[1][0].toUpperCase()}
+      </h6>
       <div className={styles.contactFrame}>
         <section className={styles.cardHero} onClick={() => openCard()}>
           <p className={styles.contactName}>{name}</p>
           {contactInfo?.current_job_title && (
-            <p className={styles.contactTitle}>{contactInfo.current_job_title}</p>
+            <p className={styles.contactTitle}>
+              {contactInfo.current_job_title}
+            </p>
           )}
           {contactInfo?.city && (
             <p className={styles.contactLocation}>{contactInfo.city}</p>
@@ -49,32 +49,25 @@ export default function ContactCard(props) {
         <section className={styles.cardDetails} onClick={() => openCard()}>
           <div className={styles.contactInfo}>
             <div className={styles.infoText}>
-            {contactInfo?.phone && (
-              <a className={styles.contactPhone} href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
-            )}
-            {contactInfo?.email && (
-              <a className={styles.contactEmail} href={`mailto:${contactInfo.email}`}>{contactInfo.email.length > 40 ? contactInfo.email.slice(0, 40) + "..." : contactInfo.email }</a>
-            )}
+              {contactInfo?.phone && (
+                <a
+                  className={styles.contactPhone}
+                  href={`tel:${contactInfo.phone}`}
+                >
+                  {contactInfo.phone}
+                </a>
+              )}
+              {contactInfo?.email && (
+                <a
+                  className={styles.contactEmail}
+                  href={`mailto:${contactInfo.email}`}
+                >
+                  {contactInfo.email.length > 40
+                    ? contactInfo.email.slice(0, 40) + '...'
+                    : contactInfo.email}
+                </a>
+              )}
             </div>
-            {contactInfo?.linkedin && (
-              <button
-                type='button'
-                onClick={() => window.open(contactInfo.linkedin)}
-                className={styles.contactLinkedin}
-              >
-                <i className='fa-brands fa-linkedin'></i>
-              </button>
-            )}
-            {contactInfo?.other_social && (
-              <button
-                type='button'
-                onClick={() => window.open(contactInfo.other_social)}
-                className={styles.contactSocial}
-              >
-                <i className='fa-solid fa-link'></i>
-              </button>
-            )}
-          </div>
             <div className={styles.socialMedias}>
               {(contactInfo.linkedin !== null || '') && (
                 <button
@@ -122,9 +115,9 @@ export default function ContactCard(props) {
                 </button>
               )}
             </div>
-
+          </div>
         </section>
-        </div>
+      </div>
     </section>
   );
 }

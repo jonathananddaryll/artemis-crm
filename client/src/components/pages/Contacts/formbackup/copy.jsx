@@ -173,9 +173,9 @@ export default function ContactForm({ newContactStaging }) {
           initial='hidden'
           animate='visible'
         >
-          <div className={styles.formFlex}>
-            <div className={`${styles.formGroup} ${styles.flex2}`}>
-              <label className={styles.formLabels}>First Name</label>
+          <div className={styles.title}>
+            <label className={styles.formLabels}>
+              first name
               <input
                 type='text'
                 name='first_name'
@@ -186,9 +186,9 @@ export default function ContactForm({ newContactStaging }) {
                 required
                 readOnly={!isEditing}
               />
-            </div>
-            <div className={`${styles.formGroup} ${styles.flex2}`}>
-              <label className={styles.formLabels}>Last Name </label>
+            </label>
+            <label className={styles.formLabels}>
+              last name
               <input
                 type='text'
                 name='last_name'
@@ -199,12 +199,11 @@ export default function ContactForm({ newContactStaging }) {
                 required
                 readOnly={!isEditing}
               />
-            </div>
+            </label>
           </div>
-
-          <div className={styles.formFlex}>
-            <div className={`${styles.formGroup} ${styles.flex3}`}>
-              <label className={styles.formLabels}>Company </label>
+          <div className={styles.about}>
+            <label className={styles.formLabels}>
+              company
               <input
                 type='text'
                 name='company'
@@ -214,9 +213,9 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </div>
-            <div className={`${styles.formGroup} ${styles.flex3}`}>
-              <label className={styles.formLabels}>Current Job Title </label>
+            </label>
+            <label className={styles.formLabels}>
+              current job title
               <input
                 type='text'
                 name='current_job_title'
@@ -226,9 +225,9 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </div>
-            <div className={`${styles.formGroup} ${styles.flex3}`}>
-              <label className={styles.formLabels}>City </label>
+            </label>
+            <label className={styles.formLabels}>
+              city
               <input
                 type='text'
                 name='city'
@@ -238,26 +237,23 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </div>
-          </div>
-          <label className={styles.formLabels}>
-            priority
-            <input
-              type='checkbox'
-              name='is_priority'
-              checked={contactForm.is_priority}
-              onChange={e => onChangeHandler(e)}
-              className={styles.checksInput}
-              readOnly={!isEditing}
-            />
-          </label>
-          {contactForm.date_created && (
+            </label>
+            <label className={styles.formLabels}>
+              priority
+              <input
+                type='checkbox'
+                name='is_priority'
+                checked={contactForm.is_priority}
+                onChange={e => onChangeHandler(e)}
+                className={styles.checksInput}
+                readOnly={!isEditing}
+              />
+            </label>
             <p>added {timeSince(contactForm.date_created)}</p>
-          )}
-
-          <div className={styles.formFlex}>
-            <div className={`${styles.formGroup} ${styles.flex2}`}>
-              <label className={styles.formLabels}>Phone </label>
+          </div>
+          <div className={styles.directContact}>
+            <label className={styles.formLabels}>
+              phone
               <input
                 type='tel'
                 name='phone'
@@ -267,9 +263,9 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </div>
-            <div className={`${styles.formGroup} ${styles.flex2}`}>
-              <label className={styles.formLabels}>Email </label>
+            </label>
+            <label className={styles.formLabels}>
+              email
               <input
                 type='email'
                 name='email'
@@ -279,67 +275,66 @@ export default function ContactForm({ newContactStaging }) {
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
-            </div>
+            </label>
           </div>
-
           <div className={styles.social}>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              linkedin
               <input
                 type='url'
                 name='linkedin'
                 value={contactForm.linkedin ?? ''}
-                placeholder='linkedin handle'
+                placeholder='Add contact linkedin'
                 onChange={e => onChangeHandler(e)}
-                className={styles.socialsInput}
+                className={styles.formInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              twitter
               <input
                 type='url'
                 name='twitter'
                 value={contactForm.twitter ?? ''}
-                placeholder='twitter handle'
+                placeholder='Add contact name'
                 onChange={e => onChangeHandler(e)}
-                className={styles.socialsInput}
+                className={styles.formInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              instagram
               <input
                 type='url'
                 name='instagram'
                 value={contactForm.instagram ?? ''}
-                placeholder='instagram handle'
+                placeholder='Add contact name'
                 onChange={e => onChangeHandler(e)}
-                className={styles.socialsInput}
+                className={styles.formInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              other social
               <input
                 type='url'
                 name='other_social'
                 value={contactForm.other_social ?? ''}
-                placeholder='other social media'
+                placeholder='Add contact name'
                 onChange={e => onChangeHandler(e)}
-                className={styles.socialsInput}
+                className={styles.formInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              personal site
               <input
                 type='url'
                 name='personal_site'
                 value={contactForm.personal_site ?? ''}
-                placeholder='personal website'
+                placeholder='Add contact name'
                 onChange={e => onChangeHandler(e)}
-                className={styles.socialsInput}
+                className={styles.formInput}
                 readOnly={!isEditing}
               />
             </label>
