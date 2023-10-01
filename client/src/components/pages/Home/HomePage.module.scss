@@ -2,7 +2,11 @@
 
 .wrapper {
   width: 100%;
-  height: 100vdh;
+  height: 100vh;
+
+  @include mixin.tabPortrait {
+    height: 100dvh;
+  }
 }
 
 .container {

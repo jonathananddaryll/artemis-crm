@@ -83,10 +83,11 @@ export default function InteviewTab({ jobId, selectedBoard_userId }) {
         <div className={styles.newTaskForm}>
           <form onSubmit={e => onSubmitHandler(e)}>
             <div className={styles.formGroup}>
-              <label>Title</label>
+              <label htmlFor='title'>Title</label>
               <input
                 type='text'
                 name='title'
+                id='title'
                 placeholder={category !== '' ? category : 'Enter Title'}
                 value={title}
                 onChange={e => onChangeHandler(e)}
@@ -107,7 +108,7 @@ export default function InteviewTab({ jobId, selectedBoard_userId }) {
               </div>
             </div>
             <div className={styles.formGroup}>
-              <label>Interview Date</label>
+              <label htmlFor='start_date'>Interview Date</label>
               <DatePicker
                 className={styles.datePicker}
                 selected={start_date}
@@ -119,9 +120,10 @@ export default function InteviewTab({ jobId, selectedBoard_userId }) {
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Note</label>
+              <label htmlFor='note'>Note</label>
               <textarea
                 name='note'
+                id='note'
                 placeholder='Enter Note'
                 value={note}
                 onChange={e => onChangeHandler(e)}

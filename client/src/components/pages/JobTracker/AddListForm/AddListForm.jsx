@@ -72,6 +72,7 @@ export default function AddListForm({
               className={styles.columnStatusInput}
               type='text'
               name='columnStatus'
+              id='column-status'
               value={columnStatus}
               onChange={e => onChangeHandler(e)}
               required

@@ -72,20 +72,22 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
         <form onSubmit={e => onSubmitHandler(e)}>
           <div className={styles.formFlex}>
             <div className={styles.formGroup}>
-              <label>Company</label>
+              <label htmlFor='company'>Company</label>
               <input
                 type='text'
                 name='company'
+                id='company'
                 value={company}
                 placeholder={company}
                 onChange={e => onChangeHandler(e)}
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Job Title</label>
+              <label htmlFor='job_title'>Job Title</label>
               <input
                 type='text'
                 name='job_title'
+                id='job_title'
                 value={job_title}
                 placeholder={job_title}
                 onChange={e => onChangeHandler(e)}
@@ -94,20 +96,22 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
           </div>
           <div className={styles.formFlex}>
             <div className={styles.formGroup}>
-              <label>Location</label>
+              <label htmlFor='location'>Location</label>
               <input
                 type='text'
                 name='location'
+                id='location'
                 value={location}
                 placeholder={location}
                 onChange={e => onChangeHandler(e)}
               />
             </div>
             <div className={styles.formGroup}>
-              <label>Salary</label>
+              <label htmlFor='rate_of_pay'>Salary</label>
               <input
                 type='number'
                 name='rate_of_pay'
+                id='rate_of_pay'
                 value={rate_of_pay}
                 placeholder={rate_of_pay !== '' ? rate_of_pay : 'Add Salary'}
                 onChange={e => onChangeHandler(e)}
@@ -115,11 +119,12 @@ export default function JobInfoTab({ selectedJob, selectedBoard_userId }) {
             </div>
           </div>
           <div className={styles.formGroup}>
-            <label>Job URL</label>
+            <label htmlFor='job_url'>Job URL</label>
             {!showUrl ? (
               <input
                 type='text'
                 name='job_url'
+                id='job_url'
                 value={job_url}
                 placeholder={job_url !== '' ? job_url : 'Add URL'}
                 onChange={e => onChangeHandler(e)}
