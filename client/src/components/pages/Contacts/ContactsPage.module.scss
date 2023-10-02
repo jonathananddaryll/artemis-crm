@@ -54,7 +54,6 @@
   @include mixin.phone {
     height: 5rem;
     font-size: 2.5rem;
-    
   }
 }
 
@@ -72,11 +71,10 @@
   @include mixin.phone {
     height: 5rem;
     font-size: 2.5rem;
-    
   }
 }
-.menuButtons:hover{
-  background-color:  rgb(172, 172, 172);
+.menuButtons:hover {
+  background-color: rgb(172, 172, 172);
   color: black;
 }
 .searchBar {
@@ -149,10 +147,11 @@
 }
 
 .flexFiller {
-  flex: 0 0 24.5%;
+  flex: 1;
 }
 
 .flexContainer {
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
