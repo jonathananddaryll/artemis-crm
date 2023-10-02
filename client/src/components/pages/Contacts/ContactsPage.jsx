@@ -74,9 +74,9 @@ export default function ContactsPage() {
   // Filter for V1
   const searchSubmit = e => {
     e.preventDefault();
-    if(searchParams.strValue === ""){
-      dispatch(resetFilterHandler())
-    }else{
+    if (searchParams.strValue === '') {
+      dispatch(resetFilterHandler());
+    } else {
       dispatch(
         getContactsSearch({ type: searchType, keyword: searchParams.strValue })
       );
@@ -120,7 +120,6 @@ export default function ContactsPage() {
     // this could be from events table where sort top 10 recent events with
     // an event type of '{tbd}', pull the contact for that linked job on the event
     // const token = await getToken();
-
     // not built yet...
     // dispatch(getRecentContacts(userId, token));
   }
@@ -182,17 +181,19 @@ export default function ContactsPage() {
             </form>
           </section>
           <ul className={styles.menu}>
-          <li className={styles.menuLinks}>
-              <button className={styles.menuButtons}
+            <li className={styles.menuLinks}>
+              <button
+                className={styles.menuButtons}
                 onClick={() => {
                   dispatch(resetFilterHandler());
                 }}
               >
                 reset
-              </button >
+              </button>
             </li>
             <li className={styles.menuLinks}>
-              <button className={styles.menuButtons}
+              <button
+                className={styles.menuButtons}
                 onClick={() => {
                   addContact();
                 }}
@@ -201,7 +202,8 @@ export default function ContactsPage() {
               </button>
             </li>
             <li className={styles.menuLinks}>
-              <button className={styles.menuButtons}
+              <button
+                className={styles.menuButtons}
                 onClick={() => {
                   priorityContacts();
                 }}

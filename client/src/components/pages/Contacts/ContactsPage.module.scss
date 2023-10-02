@@ -21,35 +21,39 @@
   margin: auto;
   display: flex;
   flex-wrap: wrap;
-  @include mixin.phone {
-    flex-direction: column-reverse;
-  }
-  @include mixin.tabPortrait {
-    flex-direction: column-reverse;
-  }
-  @include mixin.tabLandscape {
-    flex-direction: column-reverse;
-  }
+
+  // @include mixin.phone {
+  //   flex-direction: column-reverse;
+  // }
+  // @include mixin.tabPortrait {
+  //   flex-direction: column-reverse;
+  // }
+  // @include mixin.tabLandscape {
+  //   flex-direction: column-reverse;
+  // }
 }
 
 .menu {
   padding-top: 0.5rem;
   display: flex;
   flex-direction: row;
-  column-gap: 5rem;
+  column-gap: 2rem;
   justify-content: center;
   flex: 0 0 25%;
   height: 100%;
   position: relative;
+  // width: 100%;
 
-  @include mixin.phone {
+  @include mixin.tabPortrait {
     flex: 0 0 100%;
-    padding: 1rem 0;
+    padding: 2rem 0 1rem 0;
   }
 }
+
 .menuLinks {
   text-decoration: none;
   list-style-type: none;
+
   cursor: pointer;
   @include mixin.phone {
     height: 5rem;
@@ -64,14 +68,15 @@
   background-color: white;
   color: rgb(20, 19, 19);
   border-radius: 10px;
-  padding: 2% 20%;
+  // padding: 2% 20%;
+  padding: 2px 15px;
 
   transition: all 80ms linear;
 
   cursor: pointer;
   @include mixin.phone {
     height: 5rem;
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
@@ -99,9 +104,11 @@
   color: black;
 }
 .searchBar {
-  @include mixin.phone {
+  @include mixin.tabPortrait {
     height: 7rem;
     padding-top: 1rem;
+
+    order: 1;
   }
 }
 // just make this pretty later. did a quick .searchBar form just to have them lined up
