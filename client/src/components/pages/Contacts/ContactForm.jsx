@@ -423,7 +423,7 @@ export default function ContactForm({ newContactStaging }) {
               />
             </label>
             </div> */}
-              {/* <div className={styles.manage}>
+              <div className={styles.manage}>
                 <button
                   className={isEditing ? styles.notEditable : styles.editable}
                   type='button'
@@ -449,8 +449,8 @@ export default function ContactForm({ newContactStaging }) {
                 >
                   Delete
                 </button>
-              </div> */}
-              <div className={styles.manage}>
+              </div>
+              {/* <div className={styles.manage}>
                 <Button
                   type={'button'}
                   value={'Edit'}
@@ -471,7 +471,7 @@ export default function ContactForm({ newContactStaging }) {
                   color={'red'}
                   onClick={deleteContactStart}
                 />
-              </div>
+              </div> */}
             </form>
           </div>
         </motion.div>
