@@ -88,7 +88,7 @@ h6 {
 
 .flex {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
 
   @include mixin.phone {
     max-height: 100dvh;
