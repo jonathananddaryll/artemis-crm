@@ -98,14 +98,26 @@ const updateContactValidator = [
     .optional()
     .not()
     .isAlpha(),
-  check('email', 'Please enter a valid email address').optional({nullable: true, checkFalsy: true}).isEmail(),
-  check('linkedin', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('twitter', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('instagram', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('other_social', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('personal_site', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
+  check('email', 'Please enter a valid email address')
+    .optional({ nullable: true, checkFalsy: true })
+    .isEmail(),
+  check('linkedin', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('twitter', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('instagram', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('other_social', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('personal_site', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
   check('linked_job_opening', 'Please provide a valid job ID number')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
 ];
 
@@ -120,33 +132,47 @@ const newContactValidator = [
     .isEmpty()
     .isLength({ min: 1 }),
   check('company', 'Please use letters or numbers only')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isAlphanumeric()
     .isLength(),
   check('current_job_title', 'Please use letters or numbers only')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isAlphanumeric()
     .isLength(),
   check('city', 'Please use letters or numbers only')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isAlphanumeric()
     .isLength(),
   check('is_priority', 'This is only designed for true/false values')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isBoolean(),
   check('phone', 'Please use numbers and ( ) - + characters only')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .escape()
     .not()
     .isAlpha(),
-  check('email', 'Please enter a valid email address').optional({nullable: true, checkFalsy: true}).isEmail(),
-  check('linkedin', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('twitter', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('instagram', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('other_social', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
-  check('personal_site', 'Please enter a valid URL').optional({nullable: true, checkFalsy: true}).isURL(),
+  // .isLength({ min: 10, max: 10 })
+  // .withMessage('Phone number is a 10 digits'),
+  check('email', 'Please enter a valid email address')
+    .optional({ nullable: true, checkFalsy: true })
+    .isEmail(),
+  check('linkedin', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('twitter', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('instagram', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('other_social', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
+  check('personal_site', 'Please enter a valid URL')
+    .optional({ nullable: true, checkFalsy: true })
+    .isURL(),
   check('linked_job_opening', 'Please provide a valid job ID number')
-    .optional({nullable: true, checkFalsy: true})
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
 ];
 

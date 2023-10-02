@@ -9,6 +9,7 @@ import {
   updateContactInFocus,
   updateContactSelected
 } from '../../../reducers/ContactReducer';
+import Button from '../../layout/Button/Button';
 
 import styles from './ContactForm.module.scss';
 
@@ -422,7 +423,7 @@ export default function ContactForm({ newContactStaging }) {
               />
             </label>
             </div> */}
-              <div className={styles.manage}>
+              {/* <div className={styles.manage}>
                 <button
                   className={isEditing ? styles.notEditable : styles.editable}
                   type='button'
@@ -448,6 +449,28 @@ export default function ContactForm({ newContactStaging }) {
                 >
                   Delete
                 </button>
+              </div> */}
+              <div className={styles.manage}>
+                <Button
+                  type={'button'}
+                  value={'Edit'}
+                  color={'green'}
+                  onClick={() => setIsEditing(true)}
+                />
+
+                <Button
+                  type={'button'}
+                  value={'Save'}
+                  color={'blue'}
+                  onClick={submitUpdate}
+                />
+
+                <Button
+                  type={'button'}
+                  value={'Delete'}
+                  color={'red'}
+                  onClick={deleteContactStart}
+                />
               </div>
             </form>
           </div>
