@@ -179,7 +179,7 @@ export default function SelectedJobModal() {
                     </p>
                     {activeItem === index ? (
                       <motion.div
-                        class={styles.underline}
+                        className={styles.underline}
                         layoutId='underline'
                       ></motion.div>
                     ) : null}
