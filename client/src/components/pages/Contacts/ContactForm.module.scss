@@ -316,6 +316,8 @@
     min-width: 5rem;
     cursor: pointer;
 
+    transition: all 80ms linear;
+
     &:hover {
       background: gray;
     }
