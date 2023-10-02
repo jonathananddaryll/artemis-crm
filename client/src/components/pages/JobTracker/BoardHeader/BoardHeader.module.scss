@@ -7,7 +7,7 @@
   justify-content: space-between;
   /* height: 50px; */
   align-items: center;
-  z-index: 0;
+  z-index: 1;
 
   @include mixin.phone {
     flex-wrap: wrap;

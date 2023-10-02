@@ -1,13 +1,13 @@
 @use '../../../styles/mixins.scss' as mixin;
 
 .popupWrapper {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background-color: #483375ea;
   top: 0;
   left: 0;
-  // z-index: 9;
+  z-index: 99;
 }
 
 .popupOuter {
