@@ -306,13 +306,14 @@
 
   & button {
     height: 4rem;
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
     text-decoration: none;
     list-style-type: none;
-    background-color: white;
+    background-color: transparent;
     color: rgb(20, 19, 19);
     border-radius: 10px;
+    min-width: 5rem;
     cursor: pointer;
 
     &:hover {
@@ -324,16 +325,21 @@
       color: white;
     }
 
-    @include mixin.phone {
-      height: 5rem;
-      font-size: 2.5rem;
-    }
+    // @include mixin.phone {
+    //   height: 5rem;
+    //   font-size: 2.5rem;
+    // }
   }
 }
 
 .dateCreatedText {
   font-size: 1.6rem;
   margin-bottom: 1rem;
+}
+
+.formInput:read-only,
+.socialsInput:read-only {
+  border: 2px solid rgb(233, 76, 76);
 }
 
 .notEditable {
