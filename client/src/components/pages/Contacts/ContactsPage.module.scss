@@ -1,11 +1,7 @@
 @use '../../../styles/mixins.scss' as mixin;
 .pageWrapper {
-  /* margin-left: 305px; */
-  // padding: 5px 30px;
   width: 100%;
-  // max-height: 100vh;
   height: 100%;
-  // overflow-x: hidden;
   overflow: hidden;
   font-family: 'Alata';
 
@@ -18,62 +14,86 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  // background-color: red;
   overflow-x: hidden;
 }
 
 .menuContainer {
   margin: auto;
-  // height: 3rem;
-  // width: 100%;
   display: flex;
-  // flex-direction: row;
   flex-wrap: wrap;
+  @include mixin.phone {
+    flex-direction: column-reverse;
+  }
+  @include mixin.tabPortrait {
+    flex-direction: column-reverse;
+  }
+  @include mixin.tabLandscape {
+    flex-direction: column-reverse;
+  }
 }
 
 .menu {
+  padding-top: 0.5rem;
   display: flex;
   flex-direction: row;
-  column-gap: 2rem;
+  column-gap: 5rem;
+  justify-content: center;
   flex: 0 0 25%;
   height: 100%;
-  padding: 0 2rem;
   position: relative;
 
   @include mixin.phone {
-    padding-top: 1rem;
     flex: 0 0 100%;
     padding: 1rem 0;
   }
 }
-
 .menuLinks {
-  height: 3rem;
-  // width: 8rem;
+  text-decoration: none;
+  list-style-type: none;
+  cursor: pointer;
+  @include mixin.phone {
+    height: 5rem;
+    font-size: 2.5rem;
+    
+  }
+}
+
+.menuButtons {
+  height: 4rem;
   font-size: 2rem;
-  line-height: 3rem;
+  line-height: 2rem;
   text-decoration: none;
   list-style-type: none;
   background-color: white;
   color: rgb(20, 19, 19);
-  border-bottom: solid 2px transparent;
+  border-radius: 10px;
+  padding: 2% 20%;
   cursor: pointer;
+  @include mixin.phone {
+    height: 5rem;
+    font-size: 2.5rem;
+    
+  }
 }
-
-.menuLinks:hover {
-  border-bottom: solid 2px black;
-  border-radius: 5px 5px 0 0;
+.menuButtons:hover{
+  background-color:  rgb(172, 172, 172);
+  color: black;
 }
-
+.searchBar {
+  @include mixin.phone {
+    height: 7rem;
+    padding-top: 1rem;
+  }
+}
 // just make this pretty later. did a quick .searchBar form just to have them lined up
 .searchBar form {
-  // padding: 0em 0.5em 0 1em;
   padding: 5px 30px;
-  height: 4rem;
+  height: 5rem;
   max-width: 40%;
   display: flex;
   position: relative;
-  // z-index: 2;
+  // This affects the dropdown menu interactivity due to stacking context
+  z-index: 2;
 }
 
 .contactSearchInput {
@@ -123,21 +143,9 @@
 }
 
 .searchResultsContainer {
-  // position: relative;
-
-  // z-index: 0;
-  // margin-top: 5rem;
-  // padding: 5rem 0;
   height: 100%;
   border: solid 2px transparent;
-  transition: border 0.3s ease-in-out;
   margin-top: 5rem;
-  // overflow-y: auto;
-  // overflow: hidden;
-
-  @include mixin.phone {
-    margin-top: 2rem;
-  }
 }
 
 .flexFiller {

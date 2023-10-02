@@ -74,9 +74,13 @@ export default function ContactsPage() {
   // Filter for V1
   const searchSubmit = e => {
     e.preventDefault();
-    dispatch(
-      getContactsSearch({ type: searchType, keyword: searchParams.strValue })
-    );
+    if(searchParams.strValue === ""){
+      dispatch(resetFilterHandler())
+    }else{
+      dispatch(
+        getContactsSearch({ type: searchType, keyword: searchParams.strValue })
+      );
+    }
   };
 
   // Add a new contact using a form
@@ -108,7 +112,6 @@ export default function ContactsPage() {
   const priorityContacts = () => {
     // place in search results only the contacts with priority === true
     dispatch(getContactsPriority());
-    // TODO: custom html for <no results found>
   };
 
   // Recents
@@ -116,10 +119,10 @@ export default function ContactsPage() {
     // place in search results only the contacts with recent communications
     // this could be from events table where sort top 10 recent events with
     // an event type of '{tbd}', pull the contact for that linked job on the event
-    const token = await getToken();
-    // TODO: the query for getContactHistory has not been built yet.
-    // TODO: maybe also need custom html page for <no results found> because just empty results looks bad.
-    dispatch(getRecentContacts(userId, token));
+    // const token = await getToken();
+
+    // not built yet...
+    // dispatch(getRecentContacts(userId, token));
   }
 
   // On first load, grab all the users contacts at once and keep a copy locally(session)
@@ -179,8 +182,17 @@ export default function ContactsPage() {
             </form>
           </section>
           <ul className={styles.menu}>
+          <li className={styles.menuLinks}>
+              <button className={styles.menuButtons}
+                onClick={() => {
+                  dispatch(resetFilterHandler());
+                }}
+              >
+                reset
+              </button >
+            </li>
             <li className={styles.menuLinks}>
-              <button
+              <button className={styles.menuButtons}
                 onClick={() => {
                   addContact();
                 }}
@@ -189,7 +201,7 @@ export default function ContactsPage() {
               </button>
             </li>
             <li className={styles.menuLinks}>
-              <button
+              <button className={styles.menuButtons}
                 onClick={() => {
                   priorityContacts();
                 }}
@@ -197,24 +209,15 @@ export default function ContactsPage() {
                 priority
               </button>
             </li>
-            <li className={styles.menuLinks}>
-              <button
+            {/* <li className={styles.menuLinks}>
+              <button className={styles.menuButtons}
                 onClick={() => {
                   contactHistory();
                 }}
               >
-                history
+                recents
               </button>
-            </li>
-            <li className={styles.menuLinks}>
-              <button
-                onClick={() => {
-                  dispatch(resetFilterHandler());
-                }}
-              >
-                reset filter
-              </button>
-            </li>
+            </li> */}
           </ul>
         </nav>
         <section className={styles.flexContainer}>
