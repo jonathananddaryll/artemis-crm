@@ -1,78 +1,151 @@
 @use '../../../styles/mixins.scss' as mixin;
+// .wrapper {
+//   font-family: 'Aileron';
+//   background-color: #483375ea;
+//   position: absolute;
+//   left: 0;
+//   top: 0;
+//   width: 100%;
+//   height: 100%;
+//   font-size: 1.4rem;
+//   overflow: hidden;
+//   z-index: 3;
+// }
+
 .wrapper {
   font-family: 'Aileron';
   background-color: #483375ea;
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  font-size: 1.4rem;
-  overflow: hidden;
   z-index: 3;
 }
 
-.formContainer {
-  font-size: 2rem;
-  margin-top: 15rem;
-  width: 70rem;
-  min-height: 50rem;
-  max-height: 50rem;
-  overflow: scroll;
-  background-color: white;
-  position: relative;
-  top: 20%;
+.modal {
+  width: 700px;
+  background-color: #fff;
+  margin: 0 auto;
+  overflow-y: auto;
+
+  /* center */
+  position: absolute;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 10px;
-  padding: 5rem;
 
-  @include mixin.phone{
-    font-size: 2.5rem;
-    max-width: 50rem;
-    top: 20%;
+  border-radius: 10px;
+
+  @include mixin.tabLandscape {
+    top: 43%;
+    max-height: 80dvh;
   }
-  @include mixin.tabPortrait{
-    font-size: 2.5rem;
-    width: 60rem;
-    top: 20%;
-    min-height: 60rem;
-    max-height: 60rem;
-  }
-  @include mixin.tabLandscape{
-    top:20%;
+
+  @include mixin.phone {
+    width: 100%;
+    top: 45%;
   }
 }
-.social {
-  margin: 2rem 0;
+
+.formHeader {
+  padding: 12px;
+  border-bottom: 1px solid rgb(216, 210, 210);
   display: flex;
-  flex-direction: column;
-  row-gap: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.8rem;
+
+  // MAYBE CHANGE THIS LATER AND MAKE IT BETTER WITH BETTER FONT
+  @include mixin.phone {
+    font-size: 2rem;
+  }
+
+  > button {
+    border: none;
+    background-color: transparent;
+    font-size: 1.5rem;
+    /* height: 50px; */
+  }
 }
+
+.headerText {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: rgb(49, 39, 39);
+}
+
+.formContainer {
+  padding: 1rem 3rem 2rem 3rem;
+
+  @include mixin.phone {
+    padding: 2rem;
+  }
+}
+
+// .formContainer {
+//   font-size: 2rem;
+//   margin-top: 15rem;
+//   // width: 70rem;
+//   // min-height: 50rem;
+//   // max-height: 50rem;
+//   overflow: scroll;
+//   background-color: white;
+//   position: relative;
+//   top: 20%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   border-radius: 10px;
+//   padding: 5rem;
+
+//   & button {
+//     height: 4rem;
+//     font-size: 2rem;
+//     line-height: 2rem;
+//     text-decoration: none;
+//     list-style-type: none;
+//     background-color: white;
+//     color: rgb(20, 19, 19);
+//     border-radius: 10px;
+//     cursor: pointer;
+
+//     &:hover {
+//       background: gray;
+//     }
+
+//     &:active {
+//       background: black;
+//       color: white;
+//     }
+
+//     @include mixin.phone {
+//       height: 5rem;
+//       font-size: 2.5rem;
+//     }
+//   }
+
+//   @include mixin.phone {
+//     font-size: 2.5rem;
+//     max-width: 50rem;
+//     top: 20%;
+//   }
+//   @include mixin.tabPortrait {
+//     font-size: 2.5rem;
+//     width: 60rem;
+//     top: 20%;
+//     min-height: 60rem;
+//     max-height: 60rem;
+//   }
+//   @include mixin.tabLandscape {
+//     top: 20%;
+//   }
+// }
 
 .formGroup {
   width: 100%;
   text-align: left;
   margin-bottom: 0.5rem;
   padding: 0.5rem 0;
-  label {
-    display: block;
-    font-size: 1.4rem;
-    margin-bottom: 2px;
-    font-weight: 500;
-
-    span {
-      font-weight: 600;
-      color: rgb(180, 155, 155);
-      font-size: 16px;
-    }
-    @include mixin.phone{
-      font-size: 2rem;
-    }
-    @include mixin.tabLandscape{
-      font-size: 2rem;
-    }
-  }
 
   > input {
     width: 100%;
@@ -99,21 +172,102 @@
     &::placeholder {
       color: rgb(212, 190, 190);
     }
-    @include mixin.phone{
-      font-size: 2rem;
-    }
-    @include mixin.tabLandscape {
-      font-size: 2rem;
-    }  
+
+    // @include mixin.phone {
+    //   font-size: 2rem;
+    // }
+    // @include mixin.tabLandscape {
+    //   font-size: 2rem;
+    // }
+  }
+}
+
+.formLabels {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+  font-weight: 500;
+
+  span {
+    font-weight: 600;
+    color: rgb(180, 155, 155);
+    font-size: 16px;
   }
 
+  // @include mixin.phone {
+  //   font-size: 2rem;
+  // }
+
+  // @include mixin.tabLandscape {
+  //   font-size: 2rem;
+  // }
 }
 
 .formFlex {
   display: flex;
-  flex-direction: column;
-  .formGroupFlex {
-    flex: 0 0 48%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  // flex-direction: column;
+  // .formGroupFlex {
+  //   flex: 0 0 48%;
+  // }
+}
+
+.flex2 {
+  flex: 0 0 49%;
+
+  @include mixin.phone {
+    flex: 0 0 100%;
+  }
+}
+
+.flex3 {
+  flex: 0 0 32.3%;
+
+  @include mixin.phone {
+    flex: 0 0 100%;
+  }
+}
+
+.socials {
+  margin: 2rem 0;
+  // display: flex;
+  // flex-direction: column;
+  // row-gap: 1.5rem;
+}
+
+.formGroup2 {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  display: flex;
+  // align-items: flex-end;
+  // align-items: center;
+
+  align-items: center;
+}
+
+.socialLabel {
+  font-size: 3rem;
+  margin-right: 1rem;
+  padding-top: 1rem;
+}
+
+.formGroupSelect {
+  text-align: left;
+  position: relative;
+
+  .checkGroup {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+
+    & label {
+      margin-left: 5px;
+      line-height: 0;
+    }
   }
 }
 
@@ -144,54 +298,57 @@
   }
 }
 
-.manage{
+.manage {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  column-gap:1rem;
-}
-button { 
-  height: 4rem;
-  font-size: 2rem;
-  line-height: 2rem;
-  text-decoration: none;
-  list-style-type: none;
-  background-color: white;
-  color: rgb(20, 19, 19);
-  border-radius: 10px;
-  cursor: pointer;
-  @include mixin.phone {
-    height: 5rem;
-    font-size: 2.5rem;
-    
+  column-gap: 1rem;
+
+  & button {
+    height: 4rem;
+    font-size: 2rem;
+    line-height: 2rem;
+    text-decoration: none;
+    list-style-type: none;
+    background-color: white;
+    color: rgb(20, 19, 19);
+    border-radius: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: gray;
+    }
+
+    &:active {
+      background: black;
+      color: white;
+    }
+
+    @include mixin.phone {
+      height: 5rem;
+      font-size: 2.5rem;
+    }
   }
 }
-button:hover{
-  background: gray;
-}
-button:active{
-  background: black;
-  color: white;
-}
-.notEditable{
 
-}
-.editable{
-
+.dateCreatedText {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
 }
 
-.editsMade{
-
+.notEditable {
+}
+.editable {
 }
 
-.editsSaved{
-
+.editsMade {
 }
 
-.createInProgress{
-
+.editsSaved {
 }
 
-.deleteButton{
+.createInProgress {
+}
 
+.deleteButton {
 }
