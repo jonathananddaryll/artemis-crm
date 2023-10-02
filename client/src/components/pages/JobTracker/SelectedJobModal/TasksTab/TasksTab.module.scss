@@ -176,16 +176,16 @@
 }
 
 .taskCardFlexLeft {
-  flex: 0 0 41%;
+  flex: 0 0 40%;
 }
 
 .taskCardFlexMiddle {
-  flex: 0 0 25%;
+  flex: 0 0 1;
   text-align: center;
 }
 
 .taskCardFlexRight {
-  flex: 0 0 28%;
+  flex: 0 0 40%;
   text-align: right;
 }
 
@@ -214,13 +214,15 @@
 }
 
 .categoryText {
-  background: rgb(14, 139, 14);
-  border: 0;
+  // background: rgb(14, 139, 14);
+  // background: rgb(14, 139, 14);
+  color: rgb(14, 139, 14);
+  border: 1px solid rgb(14, 139, 14);
   border-radius: 5px;
   padding: 0.3rem 1.2rem;
 
-  color: white;
-  font-size: 1.4rem;
+  // color: white;
+  font-size: 1.3rem;
 }
 
 .completedTaskText {
