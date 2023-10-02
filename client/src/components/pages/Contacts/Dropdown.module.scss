@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   min-height: 3rem;
-  min-width: 15rem;
+  min-width: 19rem;
   line-height: 3rem;
   margin-left: 1.5rem;
   padding-left: 0;
@@ -12,9 +12,9 @@
 }
 .menuHiddenHeader {
   font-size: 2rem;
-  min-height: 3rem;
-  line-height: 3rem;
-  padding-left: 4rem;
+  min-height: 2rem;
+  line-height: 3.5rem;
+  padding-left: 0.5rem;
   cursor: pointer;
 }
 .menuShownHeader {
@@ -27,10 +27,10 @@
   min-height: 2em;
   line-height: 2em;
   min-width: 1em;
-  padding-left: 2em;
+  padding-left: 0.5em;
   background-color: rgba(236, 236, 236, 0.89);
   border: solid transparent 2px;
-  border-radius: 5px;
+  border-radius: px;
   cursor: pointer;
 }
 .menuShownItem:hover {

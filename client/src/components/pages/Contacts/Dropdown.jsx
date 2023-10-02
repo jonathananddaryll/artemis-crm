@@ -14,7 +14,7 @@ export default function Dropdown(props) {
 
   // Styling state to determine if the items are visible
   const [menuHiding, setMenuHiding] = useState(true);
-
+  const [menuHeader, setMenuHeader] = useState(header)
   // Make the dropdown menu visible (dropped down)
   function setVisible() {
     if (!menuHiding) {
@@ -26,9 +26,14 @@ export default function Dropdown(props) {
   // Make the menu hidden (hung up)
   function setHidden() {
     if (menuHiding) {
+
     } else {
       setMenuHiding(true);
     }
+  }
+
+  function chooseChoice(choice){
+    setMenuHeader(choice)
   }
 
   return (
@@ -42,7 +47,7 @@ export default function Dropdown(props) {
           menuHiding ? styles.menuHiddenHeader : styles.menuShownHeader
         }
       >
-        {header}
+        {menuHeader}
       </div>
       {items.map(element => {
         return (
@@ -52,6 +57,7 @@ export default function Dropdown(props) {
               menuHiding ? styles.menuHiddenItem : styles.menuShownItem
             }
             onClick={() => {
+              chooseChoice(element)
               setSearchType(element);
             }}
             key={element}

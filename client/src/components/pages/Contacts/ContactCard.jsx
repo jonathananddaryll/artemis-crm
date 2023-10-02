@@ -36,7 +36,14 @@ export default function ContactCard(props) {
       </h6>
       <div className={styles.contactFrame}>
         <section className={styles.cardHero} onClick={() => openCard()}>
-          <p className={styles.contactName}>{name}</p>
+          <p className={styles.contactName}>{
+            name.length > 30 
+              ?
+            name.slice(0, 30)
+              :
+            name
+          }
+          </p>
           {contactInfo?.current_job_title && (
             <p className={styles.contactTitle}>
               {contactInfo.current_job_title}
@@ -62,8 +69,8 @@ export default function ContactCard(props) {
                   className={styles.contactEmail}
                   href={`mailto:${contactInfo.email}`}
                 >
-                  {contactInfo.email.length > 40
-                    ? contactInfo.email.slice(0, 40) + '...'
+                  {contactInfo.email.length > 26
+                    ? contactInfo.email.slice(0, 26) + '...'
                     : contactInfo.email}
                 </a>
               )}

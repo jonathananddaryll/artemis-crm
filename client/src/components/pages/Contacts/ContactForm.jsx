@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuth, useSession } from '@clerk/clerk-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,10 +7,9 @@ import {
   updateContact,
   createContact,
   updateContactInFocus,
-  updateContactSelected
+  updateContactSelected,
 } from '../../../reducers/ContactReducer';
 
-import Dropdown from './Dropdown';
 import styles from './ContactForm.module.scss';
 
 import timeSince from '../../../helpers/convertDate';
@@ -25,7 +23,7 @@ export default function ContactForm({ newContactStaging }) {
   const dispatch = useDispatch();
 
   // The contact the user is currently dealing with is the contactInFocus(new or existing)
-  const contactInFocus = useSelector(state => state.contact.contactInFocus);
+  const contactInFocus = useSelector((state) => state.contact.contactInFocus);
   // If a new contact, automatically set to edit mode on initialization
   const formEditOnLoad = newContactStaging ? true : false;
   // Edit mode is initialized to true or false based on newContactStaging
@@ -46,7 +44,7 @@ export default function ContactForm({ newContactStaging }) {
     instagram: null,
     other_social: null,
     personal_site: null,
-    linked_job_opening: null
+    linked_job_opening: null,
   });
 
   // This can be used for new contacts or for updating existing ones, so there are
@@ -59,7 +57,7 @@ export default function ContactForm({ newContactStaging }) {
     // can't tell the difference between multiple edits resulting in the original
     // string, but it's an easy optimization.
     if (updatedColumns.length > 0) {
-      updatedColumns.map(element => updatedValues.push(contactForm[element]));
+      updatedColumns.map((element) => updatedValues.push(contactForm[element]));
       if (newContactStaging) {
         const filledFields = {};
         for (
@@ -71,7 +69,7 @@ export default function ContactForm({ newContactStaging }) {
         }
         const createForm = {
           ...filledFields,
-          token: await session.getToken()
+          token: await session.getToken(),
         };
         dispatch(createContact(createForm));
       } else {
@@ -80,7 +78,7 @@ export default function ContactForm({ newContactStaging }) {
           updateWhat: updatedColumns,
           updateTo: updatedValues,
           token: await session.getToken(),
-          id: contactForm.id
+          id: contactForm.id,
         };
         dispatch(updateContact(updateForm));
         const newVersion = { ...contactInFocus, ...contactForm };
@@ -93,12 +91,12 @@ export default function ContactForm({ newContactStaging }) {
   // Keeps the form in the loop with redux state
   function onChangeHandler(e) {
     const { name, value, type, checked } = e.target;
-    setContactForm(prevForm => ({
+    setContactForm((prevForm) => ({
       ...prevForm,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
     if (!updatedColumns.includes(name)) {
-      setUpdatedColumns(prevColumns => [...prevColumns, name]);
+      setUpdatedColumns((prevColumns) => [...prevColumns, name]);
     }
   }
 
@@ -130,7 +128,7 @@ export default function ContactForm({ newContactStaging }) {
       // it's a real contact, delete it
       const formData = {
         id: contactForm.id,
-        token: await session.getToken()
+        token: await session.getToken(),
       };
       dispatch(deleteContact(formData));
     }
@@ -145,23 +143,23 @@ export default function ContactForm({ newContactStaging }) {
   // for modal backdrop motionframer
   const backdrop = {
     visible: { opacity: 1 },
-    hidden: { opacity: 0 }
+    hidden: { opacity: 0 },
   };
 
   const modal = {
     hidden: {
-      opacity: 0
+      opacity: 0,
     },
     visible: {
       opacity: 1,
-      transition: { delay: 0.1 }
-    }
+      transition: { delay: 0.1 },
+    },
   };
   return (
     <AnimatePresence>
       <motion.div
         className={styles.wrapper}
-        onClick={e => exitForm(e)}
+        onClick={(e) => exitForm(e)}
         variants={backdrop}
         initial='hidden'
         animate='visible'
@@ -172,8 +170,35 @@ export default function ContactForm({ newContactStaging }) {
           variants={modal}
           initial='hidden'
           animate='visible'
+        ><div className={styles.manage}>
+        <button
+          className={isEditing ? styles.notEditable : styles.editable}
+          type='button'
+          onClick={() => setIsEditing(true)}
         >
+          Edit
+        </button>
+        <button
+          className={isEditing ? styles.editsMade : styles.editsSaved}
+          type='button'
+          onClick={submitUpdate}
+        >
+          Save
+        </button>
+        <button
+          className={
+            !contactForm.id ? styles.createInProgress : styles.deleteButton
+          }
+          type='button'
+          onClick={deleteContactStart}
+        >
+          Delete
+        </button>
+      </div>
           <div className={styles.formFlex}>
+            {contactForm.date_created && (
+              <p>added {timeSince(contactForm.date_created)}</p>
+            )}
             <div className={`${styles.formGroup} ${styles.flex2}`}>
               <label className={styles.formLabels}>First Name</label>
               <input
@@ -181,7 +206,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='first_name'
                 value={contactForm.first_name ?? ''}
                 placeholder='first name'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 required
                 readOnly={!isEditing}
@@ -194,7 +219,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='last_name'
                 value={contactForm.last_name ?? ''}
                 placeholder='last name'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 required
                 readOnly={!isEditing}
@@ -210,7 +235,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='company'
                 value={contactForm.company ?? ''}
                 placeholder='company'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
@@ -222,7 +247,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='current_job_title'
                 value={contactForm.current_job_title ?? ''}
                 placeholder='title'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
@@ -234,27 +259,23 @@ export default function ContactForm({ newContactStaging }) {
                 name='city'
                 value={contactForm.city ?? ''}
                 placeholder='city'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
             </div>
           </div>
           <label className={styles.formLabels}>
-            priority
+            make a priority
             <input
               type='checkbox'
               name='is_priority'
               checked={contactForm.is_priority}
-              onChange={e => onChangeHandler(e)}
+              onChange={(e) => onChangeHandler(e)}
               className={styles.checksInput}
               readOnly={!isEditing}
             />
           </label>
-          {contactForm.date_created && (
-            <p>added {timeSince(contactForm.date_created)}</p>
-          )}
-
           <div className={styles.formFlex}>
             <div className={`${styles.formGroup} ${styles.flex2}`}>
               <label className={styles.formLabels}>Phone </label>
@@ -263,7 +284,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='phone'
                 value={contactForm.phone ?? ''}
                 placeholder='Add contact phone'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
@@ -275,7 +296,7 @@ export default function ContactForm({ newContactStaging }) {
                 name='email'
                 value={contactForm.email ?? ''}
                 placeholder='Add contact email'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.formInput}
                 readOnly={!isEditing}
               />
@@ -284,25 +305,25 @@ export default function ContactForm({ newContactStaging }) {
 
           <div className={styles.social}>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              <ion-icon name='logo-linkedin'></ion-icon>
               <input
                 type='url'
                 name='linkedin'
                 value={contactForm.linkedin ?? ''}
                 placeholder='linkedin handle'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.socialsInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              <ion-icon name='logo-twitter'></ion-icon>
               <input
                 type='url'
                 name='twitter'
                 value={contactForm.twitter ?? ''}
                 placeholder='twitter handle'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.socialsInput}
                 readOnly={!isEditing}
               />
@@ -314,31 +335,31 @@ export default function ContactForm({ newContactStaging }) {
                 name='instagram'
                 value={contactForm.instagram ?? ''}
                 placeholder='instagram handle'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.socialsInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              <ion-icon name='link-outline'></ion-icon>
               <input
                 type='url'
                 name='other_social'
                 value={contactForm.other_social ?? ''}
                 placeholder='other social media'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.socialsInput}
                 readOnly={!isEditing}
               />
             </label>
             <label className={styles.formLabels}>
-              <ion-icon name='logo-instagram'></ion-icon>
+              <ion-icon name='link-outline'></ion-icon>
               <input
                 type='url'
                 name='personal_site'
                 value={contactForm.personal_site ?? ''}
                 placeholder='personal website'
-                onChange={e => onChangeHandler(e)}
+                onChange={(e) => onChangeHandler(e)}
                 className={styles.socialsInput}
                 readOnly={!isEditing}
               />
@@ -360,7 +381,7 @@ export default function ContactForm({ newContactStaging }) {
               />
             </label>
             </div> */}
-          <div className={styles.manage}>
+            <div className={styles.manage}>
             <button
               className={isEditing ? styles.notEditable : styles.editable}
               type='button'
