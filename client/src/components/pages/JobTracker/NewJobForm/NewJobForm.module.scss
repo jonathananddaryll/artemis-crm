@@ -29,6 +29,10 @@
 
   border-radius: 10px;
 
+  @include mixin.tabLandscape {
+    top: 43%;
+  }
+
   @include mixin.phone {
     width: 100%;
     top: 45%;

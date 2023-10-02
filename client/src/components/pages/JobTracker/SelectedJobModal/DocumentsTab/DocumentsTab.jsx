@@ -7,7 +7,7 @@ import styles from './DocumentsTab.module.scss';
 export default function DocumentsTab() {
   return (
     <div className={styles.documentsTabContainer}>
-      <div className={styles.buttonsContainer}>
+      {/* <div className={styles.buttonsContainer}>
         <Button
           type={'button'}
           value={'Link Document'}
@@ -20,7 +20,7 @@ export default function DocumentsTab() {
           color={'blue'}
           size={'small'}
         />
-      </div>
+      </div> */}
       <div className={styles.documentsContentContainer}>
         <NoDataPlaceholder
           image={noDocuments}
