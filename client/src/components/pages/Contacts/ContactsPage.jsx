@@ -160,7 +160,6 @@ export default function ContactsPage() {
                 className={styles.contactSearchInput}
                 value={searchParams.strValue}
                 placeholder={searchType}
-                autoFocus
               />
               <button
                 type='submit'

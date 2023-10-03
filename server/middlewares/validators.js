@@ -73,50 +73,50 @@ const taskInputValidator = [
 
 const updateContactValidator = [
   ...myRequestHeaders,
-  check('first_name', 'Please enter at least one letter for the first name')
+  check('first_name', 'First name: Please enter at least one letter')
     .optional()
     .isLength({ min: 1 }),
-  check('last_name', 'Please enter at least one letter for the last name')
+  check('last_name', 'Last name: Please enter at least one letter')
     .optional()
     .isLength({ min: 1 }),
-  check('company', 'Please use letters or numbers only')
+  check('company', 'Company: Please use letters or numbers only, "-" allowed')
     .optional()
-    .isAlphanumeric()
+    .isAlphanumeric('en-US', {'ignore': ' -'})
     .isLength({ min: 1 }),
-  check('current_job_title', 'Please use letters or numbers only')
+  check('current_job_title', 'Current Job Title: Please use letters or numbers only, "-" allowed')
     .optional()
-    .isAlphanumeric()
+    .isAlphanumeric('en-US', {'ignore': ' -'})
     .isLength({ min: 1 }),
-  check('city', 'Please use letters or numbers only')
+  check('city', 'Location: Please use letters or numbers only, "-" allowed')
     .optional()
-    .isAlphanumeric()
+    .isAlphanumeric('en-US', {'ignore': ' ,-'})
     .isLength({ min: 1 }),
-  check('is_priority', 'This is only designed for true/false values')
+  check('is_priority', 'Make a priority: This is only designed for true/false values')
     .optional()
     .isBoolean(),
-  check('phone', 'Please use numbers and ( ) - + characters only')
+  check('phone', 'Phone number: Please use numbers, ( ) - + characters only')
     .optional()
     .not()
     .isAlpha(),
-  check('email', 'Please enter a valid email address')
+  check('email', 'Email: Please enter a valid address')
     .optional({ nullable: true, checkFalsy: true })
     .isEmail(),
-  check('linkedin', 'Please enter a valid URL')
+  check('linkedin', 'LinkedIn: Please enter a valid URL')
     .optional({ nullable: true, checkFalsy: true })
     .isURL(),
-  check('twitter', 'Please enter a valid URL')
+  check('twitter', 'Twitter: Please enter a valid URL')
     .optional({ nullable: true, checkFalsy: true })
     .isURL(),
-  check('instagram', 'Please enter a valid URL')
+  check('instagram', 'Instagram: Please enter a valid URL')
     .optional({ nullable: true, checkFalsy: true })
     .isURL(),
-  check('other_social', 'Please enter a valid URL')
+  check('other_social', 'Other social: Please enter a valid URL')
     .optional({ nullable: true, checkFalsy: true })
     .isURL(),
-  check('personal_site', 'Please enter a valid URL')
+  check('personal_site', 'Personal site: Please enter a valid URL')
     .optional({ nullable: true, checkFalsy: true })
     .isURL(),
-  check('linked_job_opening', 'Please provide a valid job ID number')
+  check('linked_job_opening', 'Linked Job: Please provide a valid job ID number')
     .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
 ];
