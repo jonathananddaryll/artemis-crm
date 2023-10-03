@@ -185,6 +185,10 @@
   flex-wrap: wrap;
   row-gap: 1rem;
 
+  // CHANGE THIS AND FINALIZE THIS LATER
+  max-width: 1200px;
+  margin: 0 auto;
+
   @include mixin.phone {
     padding: 0 1rem;
   }
