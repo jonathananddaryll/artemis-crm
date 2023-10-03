@@ -18,6 +18,10 @@ const Container = styled.div`
   background-color: ${props => (props.isDragging ? '#b8d5fc' : 'white')};
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transition: all 80ms linear;
+  &:hover {
+    background-color: #b8d5fc;
+  }
 `;
 
 export default function Job({ job, index }) {
