@@ -27,3 +27,4 @@ dist-ssr
 
 package-lock.json
 node_modules/*
+admin.js
