@@ -22,14 +22,14 @@ const HomePage = () => {
             {user === null ? (
               <a
                 className={styles.loginButton}
-                href='https://artemis-crm.mintchip.space/boards'
+                href='https://adapting-osprey-11.accounts.dev/sign-in?redirect_url=https://artemis-crm.mintchip.space/boards'
               >
                 Log In
               </a>
             ) : (
               //   <a
               //   className={styles.loginButton}
-              //   href='https://adapting-osprey-11.accounts.dev/sign-in?redirect_url=https://artemis-crm.mintchip.space/boards'
+              //     href='https://artemis-crm.mintchip.space/boards'
               // >
               //   Log In
               // </a>
