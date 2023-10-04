@@ -40,8 +40,8 @@ function App() {
         <ClerkProvider
           publishableKey={clerkPubKey}
           navigate={to => navigate(to)}
-          afterSignInUrl='/board'
-          afterSignUpUrl='/board'
+          afterSignInUrl='/boards'
+          afterSignUpUrl='/boards'
         >
           <div className='flex'>
             <SideBar />
