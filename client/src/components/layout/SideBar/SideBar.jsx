@@ -128,7 +128,8 @@ export default function SideBar() {
 
             {isLoaded && user !== null && (
               <div className={styles.footer}>
-                <UserButton />
+                {user.emailAddresses[0].emailAddress !==
+                  'artemisdemoacc@gmail.com' && <UserButton />}
                 <div className={styles.footerUserInfo}>
                   <p className={styles.fullNameText}>{user.fullName}</p>
                   <p className={styles.emailText}>
