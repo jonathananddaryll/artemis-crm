@@ -31,15 +31,16 @@
 
   /* center */
   position: absolute;
-  top: 35%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
   border-radius: 10px;
+  max-height: 80dvh;
 
   @include mixin.tabLandscape {
     top: 43%;
-    max-height: 80dvh;
+    // max-height: 80dvh;
   }
 
   @include mixin.phone {
