@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createBoard } from '../../../../reducers/BoardReducer';
 import { useSession } from '@clerk/clerk-react';
 import Button from '../../../layout/Button/Button';
-
 import styles from './UpdateForm.module.scss';
 
 export default function NewBoardForm({ toggleHandler, setFormToggle }) {
