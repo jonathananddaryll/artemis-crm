@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { addColumn } from '../../../../reducers/BoardReducer';
@@ -48,6 +48,18 @@ export default function AddListForm({
       transition: { delay: 0.1 }
     }
   };
+
+  // Handles Escape to close the modal
+  useEffect(() => {
+    function handleEscapeKey(event) {
+      if (event.code === 'Escape') {
+        setAddListToggle(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
 
   return (
     <AnimatePresence>

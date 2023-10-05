@@ -48,13 +48,6 @@ export default function JobTrackerPage() {
     }
   }, [selectedBoard]);
 
-  // get all the jobs
-  // useEffect(() => {
-  //   if (selectedBoardStatusCols !== null && selectedBoard !== null) {
-  //     dispatch(getjobswithBoardId(board_id));
-  //   }
-  // }, []);
-
   // Board Loading
   if (
     selectedBoardLoading &&

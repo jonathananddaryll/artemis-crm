@@ -101,6 +101,18 @@ export default function SelectedJobModal() {
     }
   };
 
+  // Handles Escape to close the modal
+  useEffect(() => {
+    function handleEscapeKey(event) {
+      if (event.code === 'Escape') {
+        handleClosingModal();
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
   return (
     <AnimatePresence mode='wait'>
       <motion.div
