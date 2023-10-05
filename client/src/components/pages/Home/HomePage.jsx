@@ -26,12 +26,6 @@ const HomePage = () => {
                 Log In
               </a>
             ) : (
-              //   <a
-              //   className={styles.loginButton}
-              //     href='https://artemis-crm.mintchip.space/boards'
-              // >
-              //   Log In
-              // </a>
               <a className={styles.loginButton} href='/boards'>
                 Use CRM
               </a>
