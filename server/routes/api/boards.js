@@ -108,6 +108,7 @@ router.post('/', boardInputValidator, validateRequest, async (req, res) => {
   }
 });
 
+//////////// FIX THIS LATER...... colStatus.toLowerCase()
 // @route     POST api/boards/:id/add/column
 // @desc      Add a new column
 // @access    Private
@@ -123,6 +124,7 @@ router.patch(
     const newTotalCols = totalCols + 1;
     const boardId = req.params.board_id;
     const columnToAdd = 'column'.concat(newTotalCols);
+    const colStatus = columnStatus.toLowerCase();
 
     // Decode the token
     const decodedToken = decodeToken(req.headers.authorization);
@@ -143,7 +145,7 @@ router.patch(
       const query = format(
         'UPDATE BOARD SET %I = %L, %I = %s WHERE id = %s and user_id = %L RETURNING *',
         columnToAdd,
-        columnStatus.toLowerCase(),
+        colStatus,
         'total_cols',
         newTotalCols,
         boardId,
