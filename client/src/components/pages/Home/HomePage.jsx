@@ -1,7 +1,6 @@
 import React from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-
 import DemoSignIn from '../../layout/DemoSignIn/DemoSignIn';
 import styles from './HomePage.module.scss';
 
@@ -27,12 +26,6 @@ const HomePage = () => {
                 Log In
               </a>
             ) : (
-              //   <a
-              //   className={styles.loginButton}
-              //     href='https://artemis-crm.mintchip.space/boards'
-              // >
-              //   Log In
-              // </a>
               <a className={styles.loginButton} href='/boards'>
                 Use CRM
               </a>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSession } from '@clerk/clerk-react';
 import { useDispatch } from 'react-redux';
 import { updateJobInfo } from '../../../../../reducers/BoardReducer';
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Button from '../../../../layout/Button/Button';

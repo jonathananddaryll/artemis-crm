@@ -18,22 +18,12 @@ router.post('/new', async (req, res) => {
     clerk_id
   );
 
-  // const query = format(
-  //   'INSERT INTO users (clerk_id) VALUES(%L) ON CONFLICT RETURNING *',
-  //   clerk_id
-  // );
-
   try {
     client.query(query, (err, response) => {
       if (err) {
         console.error(err);
         res.status(500).json({ msg: 'query error' });
       }
-
-      // return the new column status that is added
-      // res.status(200).json(response.rows[0]);
-      // console.log(response.rows[0]);
-      // res.status(200).json(response.rows[0]);
 
       client.end();
     });
