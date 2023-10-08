@@ -50,7 +50,7 @@ Using your terminal:
 2) type <code>git clone https://github.com/jonathananddaryll/artemis-crm/</code>
 3) Navigate to both of these folders:
 
-/artemis-crm/client/
+/artemis-crm/client/  
 /artemis-crm/server/
 
 and for ***each folder***, install the npm packages for the server:
