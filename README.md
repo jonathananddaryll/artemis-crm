@@ -28,9 +28,9 @@ And once that's good and done, a little bit more to make it even more useful:
 - Some game-ification elements to help us stay focused on that hunt!
 
 Having experience with the MERN stack, we decided this was a better opportunity to use a
-relational database, and chose instead to use a service by neon.tech that provides a serverless 
-postgreSQL database instead of our usualy MongoDB. We also chose to use redux toolkit to manage
-complex state, as well as SASS and css modules.
+relational database, and chose instead of MongoDB to use a service by neon.tech that provides 
+a serverless postgreSQL database. We also chose to use redux toolkit to manage complex state, 
+as well as SASS and css modules.
 
 In the process, we found a few things out:
 
@@ -41,6 +41,8 @@ we decided to add this time around.
 2) 
 
 3)
+
+Happy job hunting!
 
 ## Installation (git)
 
