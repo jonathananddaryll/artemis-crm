@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
@@ -36,13 +36,8 @@ export default function ContactCard(props) {
       </h6>
       <div className={styles.contactFrame}>
         <section className={styles.cardHero} onClick={() => openCard()}>
-          <p className={styles.contactName}>{
-            name.length > 30 
-              ?
-            name.slice(0, 30)
-              :
-            name
-          }
+          <p className={styles.contactName}>
+            {name.length > 30 ? name.slice(0, 30) : name}
           </p>
           {contactInfo?.current_job_title && (
             <p className={styles.contactTitle}>

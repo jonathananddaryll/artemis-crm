@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getContactsSearch,
@@ -14,7 +13,6 @@ import {
 } from '../../../reducers/ContactReducer';
 
 import { useAuth } from '@clerk/clerk-react';
-import { toast } from 'react-toastify';
 
 import Dropdown from './Dropdown';
 import ContactCard from './ContactCard';

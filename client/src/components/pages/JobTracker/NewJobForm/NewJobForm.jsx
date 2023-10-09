@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '@clerk/clerk-react';
 import { handleToggleForm, addJob } from '../../../../reducers/BoardReducer';
@@ -7,7 +7,7 @@ import styles from './NewJobForm.module.scss';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function NewJobForm({ toggleJobForm }) {
+export default function NewJobForm() {
   const { selectedStatusToAdd, selectedBoard } = useSelector(state => ({
     ...state.board
   }));
@@ -84,17 +84,17 @@ export default function NewJobForm({ toggleJobForm }) {
     }
   };
 
-  // const modal = {
-  //   hidden: {
-  //     // y: '-110vh',
-  //     opacity: 0
-  //   },
-  //   visible: {
-  //     opacity: 1,
-  //     // y: '100vh',
-  //     transition: { delay: 0.1 }
-  //   }
-  // };
+  // Handles Escape to close the modal
+  useEffect(() => {
+    function handleEscapeKey(event) {
+      if (event.code === 'Escape') {
+        dispatch(handleToggleForm([false, null]));
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
 
   return (
     <AnimatePresence mode='wait'>

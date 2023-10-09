@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession, useAuth } from '@clerk/clerk-react';
-
 import { getContactsToLink } from '../../../../../reducers/SelectedJobReducer';
-
 import Button from '../../../../layout/Button/Button';
 import AvailableContacts from './AvailableContacts/AvailableContacts';
 import LinkedContacts from './LinkedContacts/LinkedContacts';
-
 import NoDataPlaceholder from '../../../../layout/NoDataPlaceholder/NoDataPlaceholder';
 import noContacts from '../../../../../assets/nocontacts.svg';
 import styles from './ContactsTab.module.scss';

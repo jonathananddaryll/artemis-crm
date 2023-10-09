@@ -88,9 +88,9 @@ h6 {
 
 .flex {
   display: flex;
-  height: 100dvh;
+  height: 100vh;
 
-  @include mixin.phone {
+  @include mixin.tabLandscape {
     max-height: 100dvh;
   }
 }

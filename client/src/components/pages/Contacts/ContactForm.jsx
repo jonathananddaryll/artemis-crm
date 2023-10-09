@@ -7,7 +7,7 @@ import {
   updateContact,
   createContact,
   updateContactInFocus,
-  updateContactSelected
+  updateContactSelected,
 } from '../../../reducers/ContactReducer';
 import Button from '../../layout/Button/Button';
 
@@ -24,7 +24,7 @@ export default function ContactForm({ newContactStaging }) {
   const dispatch = useDispatch();
 
   // The contact the user is currently dealing with is the contactInFocus(new or existing)
-  const contactInFocus = useSelector(state => state.contact.contactInFocus);
+  const contactInFocus = useSelector((state) => state.contact.contactInFocus);
   // If a new contact, automatically set to edit mode on initialization
   const formEditOnLoad = newContactStaging ? true : false;
   // Edit mode is initialized to true or false based on newContactStaging
@@ -45,11 +45,11 @@ export default function ContactForm({ newContactStaging }) {
     instagram: null,
     other_social: null,
     personal_site: null,
-    linked_job_opening: null
+    linked_job_opening: null,
   });
 
   // This can be used for new contacts or for updating existing ones, so there are
-  // two logic branches. Different branch calls a different async thunk and uses
+  // two options. Different option calls a different async thunk and uses
   // different headers and parameters.
   async function submitUpdate(e) {
     e.preventDefault();
@@ -58,7 +58,7 @@ export default function ContactForm({ newContactStaging }) {
     // can't tell the difference between multiple edits resulting in the original
     // string, but it's an easy optimization.
     if (updatedColumns.length > 0) {
-      updatedColumns.map(element => updatedValues.push(contactForm[element]));
+      updatedColumns.map((element) => updatedValues.push(contactForm[element]));
       if (newContactStaging) {
         const filledFields = {};
         for (
@@ -70,7 +70,7 @@ export default function ContactForm({ newContactStaging }) {
         }
         const createForm = {
           ...filledFields,
-          token: await session.getToken()
+          token: await session.getToken(),
         };
         dispatch(createContact(createForm));
       } else {
@@ -79,7 +79,7 @@ export default function ContactForm({ newContactStaging }) {
           updateWhat: updatedColumns,
           updateTo: updatedValues,
           token: await session.getToken(),
-          id: contactForm.id
+          id: contactForm.id,
         };
         dispatch(updateContact(updateForm));
         const newVersion = { ...contactInFocus, ...contactForm };
@@ -92,12 +92,12 @@ export default function ContactForm({ newContactStaging }) {
   // Keeps the form in the loop with redux state
   function onChangeHandler(e) {
     const { name, value, type, checked } = e.target;
-    setContactForm(prevForm => ({
+    setContactForm((prevForm) => ({
       ...prevForm,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
     if (!updatedColumns.includes(name)) {
-      setUpdatedColumns(prevColumns => [...prevColumns, name]);
+      setUpdatedColumns((prevColumns) => [...prevColumns, name]);
     }
   }
 
@@ -132,7 +132,7 @@ export default function ContactForm({ newContactStaging }) {
       // it's a real contact, delete it
       const formData = {
         id: contactForm.id,
-        token: await session.getToken()
+        token: await session.getToken(),
       };
       dispatch(deleteContact(formData));
     }
@@ -147,17 +147,17 @@ export default function ContactForm({ newContactStaging }) {
   // for modal backdrop motionframer
   const backdrop = {
     visible: { opacity: 1 },
-    hidden: { opacity: 0 }
+    hidden: { opacity: 0 },
   };
 
   const modal = {
     hidden: {
-      opacity: 0
+      opacity: 0,
     },
     visible: {
       opacity: 1,
-      transition: { delay: 0.1 }
-    }
+      transition: { delay: 0.1 },
+    },
   };
 
   return (
@@ -167,7 +167,7 @@ export default function ContactForm({ newContactStaging }) {
         variants={backdrop}
         initial='hidden'
         animate='visible'
-        onClick={e => exitForm(e)}
+        onClick={(e) => exitForm(e)}
       >
         <motion.div
           className={styles.modal}
@@ -177,14 +177,9 @@ export default function ContactForm({ newContactStaging }) {
         >
           <div className={styles.formHeader}>
             <p className={styles.headerText}>Contact Form</p>
-
-            {/* <button className={styles.closeButton} onClick={e => exitForm(e)}>
-              <i className='bi bi-x-lg'></i>
-            </button> */}
           </div>
 
           <div
-            // name='contactForm'
             className={styles.formContainer}
             variants={modal}
             initial='hidden'
@@ -229,7 +224,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='first_name'
                     value={contactForm.first_name ?? ''}
                     placeholder='first name'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     required
                     readOnly={!isEditing}
@@ -242,7 +237,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='last_name'
                     value={contactForm.last_name ?? ''}
                     placeholder='last name'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     required
                     readOnly={!isEditing}
@@ -258,7 +253,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='company'
                     value={contactForm.company ?? ''}
                     placeholder='company'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     readOnly={!isEditing}
                   />
@@ -272,7 +267,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='current_job_title'
                     value={contactForm.current_job_title ?? ''}
                     placeholder='title'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     readOnly={!isEditing}
                   />
@@ -284,7 +279,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='city'
                     value={contactForm.city ?? ''}
                     placeholder='city'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     readOnly={!isEditing}
                   />
@@ -299,7 +294,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='phone'
                     value={contactForm.phone ?? ''}
                     placeholder='Add contact phone'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     readOnly={!isEditing}
                   />
@@ -311,7 +306,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='email'
                     value={contactForm.email ?? ''}
                     placeholder='Add contact email'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.formInput}
                     readOnly={!isEditing}
                   />
@@ -324,7 +319,7 @@ export default function ContactForm({ newContactStaging }) {
                       type='checkbox'
                       name='is_priority'
                       checked={contactForm.is_priority}
-                      onChange={e => onChangeHandler(e)}
+                      onChange={(e) => onChangeHandler(e)}
                       className={styles.checksInput}
                       readOnly={!isEditing}
                     />
@@ -343,7 +338,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='linkedin'
                     value={contactForm.linkedin ?? ''}
                     placeholder='linkedin handle'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.socialsInput}
                     readOnly={!isEditing}
                   />
@@ -357,7 +352,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='twitter'
                     value={contactForm.twitter ?? ''}
                     placeholder='twitter handle'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.socialsInput}
                     readOnly={!isEditing}
                   />
@@ -372,7 +367,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='instagram'
                     value={contactForm.instagram ?? ''}
                     placeholder='instagram handle'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.socialsInput}
                     readOnly={!isEditing}
                   />
@@ -387,7 +382,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='other_social'
                     value={contactForm.other_social ?? ''}
                     placeholder='other social media'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.socialsInput}
                     readOnly={!isEditing}
                   />
@@ -401,7 +396,7 @@ export default function ContactForm({ newContactStaging }) {
                     name='personal_site'
                     value={contactForm.personal_site ?? ''}
                     placeholder='personal website'
-                    onChange={e => onChangeHandler(e)}
+                    onChange={(e) => onChangeHandler(e)}
                     className={styles.socialsInput}
                     readOnly={!isEditing}
                   />

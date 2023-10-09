@@ -22,11 +22,6 @@ import RemindersPage from './components/pages/Reminders/RemindersPage';
 
 import './styles/globals.scss';
 
-// if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
-//   throw new Error('Missing Publishable Key');
-// }
-// const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
-
 function App() {
   if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
     throw new Error('Missing Publishable Key');
@@ -40,6 +35,8 @@ function App() {
         <ClerkProvider
           publishableKey={clerkPubKey}
           navigate={to => navigate(to)}
+          afterSignInUrl='/boards'
+          afterSignUpUrl='/boards'
         >
           <div className='flex'>
             <SideBar />

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-
 import DemoSignIn from '../../layout/DemoSignIn/DemoSignIn';
 import styles from './HomePage.module.scss';
 
@@ -22,7 +21,7 @@ const HomePage = () => {
             {user === null ? (
               <a
                 className={styles.loginButton}
-                href='https://adapting-osprey-11.accounts.dev/sign-in'
+                href='https://adapting-osprey-11.accounts.dev/sign-in?redirect_url=https://artemis-crm.mintchip.space/boards'
               >
                 Log In
               </a>
@@ -34,7 +33,7 @@ const HomePage = () => {
 
             <a
               className={styles.registerButton}
-              href='https://adapting-osprey-11.accounts.dev/sign-up'
+              href='https://adapting-osprey-11.accounts.dev/sign-up?redirect_url=https://artemis-crm.mintchip.space/boards'
             >
               Sign up for free
             </a>

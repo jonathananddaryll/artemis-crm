@@ -140,7 +140,7 @@ router.patch(
     } else {
       const query = format(
         'UPDATE job SET status = %L WHERE id = %s and board_id = %s RETURNING *; INSERT INTO timeline (job_id, update_type, description) VALUES(%s, %L, %L)',
-        newStatus,
+        newStatus.toLowerCase(),
         jobId,
         boardId,
         jobId,
