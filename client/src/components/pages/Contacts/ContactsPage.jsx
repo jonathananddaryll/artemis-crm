@@ -53,15 +53,16 @@ export default function ContactsPage() {
         strValue: e.target.value
       };
     });
-    searchSubmit(e)
+    searchSubmit(e, e.target.value)
   }
 
   // Initiate the contacts search for the string value in the search input box
-  function searchSubmit(e) {
+  function searchSubmit(e, quickSearch=null) {
     e.preventDefault()
+    const searchString = quickSearch === null? searchParams: quickSearch
     const validated = {
       type: searchType,
-      strValue: searchParams.strValue
+      strValue: searchString,
     };
     const stringTrimmed = validated.strValue.trim();
     if(stringTrimmed === ''){
