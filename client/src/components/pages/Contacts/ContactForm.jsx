@@ -90,7 +90,7 @@ export default function ContactForm({ newContactStaging }) {
   }
 
   // Keeps the form in the loop with redux state
-  function onChangeHandler(e) {
+  const onChangeHandler = event => {
     const { name, value, type, checked } = e.target;
     setContactForm((prevForm) => ({
       ...prevForm,
@@ -102,7 +102,7 @@ export default function ContactForm({ newContactStaging }) {
   }
 
   // If the user clicks out or intends to cancel the whole thing
-  function exitForm(event) {
+  const exitForm = event => {
     if (
       event.target.className.includes('wrapper') ||
       event.target.className.includes('closeButton')
@@ -137,6 +137,10 @@ export default function ContactForm({ newContactStaging }) {
       dispatch(deleteContact(formData));
     }
   };
+
+  const pointerLeaving = event => {
+    console.log("the pointer has left the " + event.target + " component")
+  }
 
   // Depending on whether or not the contact is a new one or an existing one, make sure
   // This is for when the user is looking at an existing contact.

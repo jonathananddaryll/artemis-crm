@@ -172,29 +172,21 @@ const contactSlice = createSlice({
       }
     },
     // Trigger a search on the contacts db using the current searchQuery in store
-    // getContactsSearch: (state, action) => {
-    //   let searchResults = SearchArray(
-    //     action.payload.strValue,
-    //     state.contactsCache,
-    //     action.payload.type
-    //   );
-    //   let results = [];
-    //   for (let result = 0; result < searchResults.length; result++) {
-    //     results.push(state.contactsCache[searchResults[result]]);
-    //   }
-    //   state.searchResults = [...results];
-    // },
-
-    // SIMPLIFIED WAY of searching -> for name, it's for
-    // firstName || lastName. Didn't have a chance to build for full name
     getContactsSearch: (state, action) => {
-      const filteredContacts = filterContacts(
-        action.payload.type,
+      // Return value of SearchArray() is actually an array of object entries, with
+      // the first element the index of the contact inside of contactsCache,
+      // second element the value to be compared for sorting alphanumerically
+      // the second element isn't useful yet
+      let searchResults = SearchArray(
+        action.payload.strValue,
         state.contactsCache,
-        action.payload.keyword
+        action.payload.type
       );
-
-      state.searchResults = filteredContacts;
+      let results = [];
+      for (let result = 0; result < searchResults.length; result++) {
+        results.push(state.contactsCache[searchResults[result][0]]);
+      }
+      state.searchResults = [...results];
     },
 
     // reset the search filter and show all the cache contacts

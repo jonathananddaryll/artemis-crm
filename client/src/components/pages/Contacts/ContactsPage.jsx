@@ -9,7 +9,6 @@ import {
   updateContactInFocus,
   updateContactSelected,
   resetFilter
-  // setNewContactStaging
 } from '../../../reducers/ContactReducer';
 
 import { useAuth } from '@clerk/clerk-react';
@@ -54,32 +53,24 @@ export default function ContactsPage() {
         strValue: e.target.value
       };
     });
+    searchSubmit(e)
   }
 
   // Initiate the contacts search for the string value in the search input box
-  // function searchSubmit(e) {
-  //   const validated = {
-  //     type: searchType,
-  //     strValue: searchParams.strValue
-  //   };
-  //   const stringTrimmed = validated.strValue.trim();
-  //   validated.strValue = stringTrimmed;
-  //   console.log(validated)
-  //   dispatch(getContactsSearch(validated));
-  // }
-  // // Initiate the contacts search for the string value in the search input box
-
-  // Filter for V1
-  const searchSubmit = e => {
-    e.preventDefault();
-    if (searchParams.strValue === '') {
-      dispatch(resetFilterHandler());
-    } else {
-      dispatch(
-        getContactsSearch({ type: searchType, keyword: searchParams.strValue })
-      );
+  function searchSubmit(e) {
+    e.preventDefault()
+    const validated = {
+      type: searchType,
+      strValue: searchParams.strValue
+    };
+    const stringTrimmed = validated.strValue.trim();
+    if(stringTrimmed === ''){
+      dispatch(resetFilter());
+    }else{
+      validated.strValue = stringTrimmed;
+      dispatch(getContactsSearch(validated));
     }
-  };
+  }
 
   // Add a new contact using a form
   const addContact = () => {
@@ -158,6 +149,7 @@ export default function ContactsPage() {
                 className={styles.contactSearchInput}
                 value={searchParams.strValue}
                 placeholder={searchType}
+                autoFocus
               />
               <button
                 type='submit'
