@@ -90,7 +90,7 @@ export default function ContactForm({ newContactStaging }) {
   }
 
   // Keeps the form in the loop with redux state
-  const onChangeHandler = event => {
+  const onChangeHandler = e => {
     const { name, value, type, checked } = e.target;
     setContactForm((prevForm) => ({
       ...prevForm,

@@ -187,6 +187,13 @@ export default function SearchArray(searchString, searchArray, searchType) {
                 numberOfMatches[eachContact].hits + 1;
             }
           }
+        }else if(searchType === "id"){
+          if(searchArray[eachContact].id === searchString || Number(searchArray[eachContact].id === Number(searchString))){
+            numberOfMatches[eachContact] = {
+              id: searchArray[eachContact].id,
+              hits: 1
+            }
+          }
         }else{
       // This is the standard logic, much simpler:
       // if there is only one keyword, there's only one loop

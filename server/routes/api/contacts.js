@@ -103,7 +103,6 @@ router.patch('/:id', updateContactValidator,  validateRequest, async (req, res) 
     const query = `UPDATE contact SET ${setUpdate.join(
       ', '
     )} WHERE user_id = '${user_id}' AND id = '${id}' RETURNING *;`;
-    console.log(query)
     const client = new Client(config);
     client.connect();
     client.query(query, (err, response) => {

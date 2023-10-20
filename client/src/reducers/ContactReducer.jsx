@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import SearchArray from '../helpers/searchArray';
-import filterContacts from '../helpers/filterContacts';
 
 // State for contact organizer:
 // ASYNC thunks
@@ -152,7 +151,6 @@ const contactSlice = createSlice({
     contactSelected: false,
     contactsLoaded: false,
     searchFilters: [],
-    printout: {}
   },
   reducers: {
     // pass in a new contact to look at
@@ -270,12 +268,12 @@ const contactSlice = createSlice({
         `${action.payload.id}`,
         state.contactsCache,
         'id'
-      );
+      )[0];
       const searchResultsIndex = SearchArray(
         `${action.payload.id}`,
         state.searchResults,
         'id'
-      );
+      )[0];
       if (contactsCacheIndex === -1) {
         // weird error?
         toast('contact not found on client side copy');
