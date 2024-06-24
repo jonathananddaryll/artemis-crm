@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5432/api',
+        target: 'https://artemis-crm-bc583ed70424.herokuapp.com/api',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }
