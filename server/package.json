@@ -8,7 +8,7 @@
     "server": "nodemon index",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ../client && npm run build --prefix ../client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "",
   "license": "ISC",
@@ -21,9 +21,7 @@
     "express-validator": "^7.0.1",
     "pg": "^8.11.0",
     "pg-format": "^1.0.4",
-    "postgres": "^3.3.4"
-  },
-  "devDependencies": {
+    "postgres": "^3.3.4",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22"
   }
