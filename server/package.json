@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server",
+    "start": "node index.js",
+    "server": "nodemon index.js",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "digitalocean-build": "npm i && npm --prefix client install && npm --prefix client run build"
@@ -26,3 +26,4 @@
     "nodemon": "^2.0.22"
   }
 }
+
